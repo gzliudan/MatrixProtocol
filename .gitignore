@@ -1,0 +1,47 @@
+# IntelliJ IDE
+.idea/
+
+# mac OS
+.DS_Store
+
+# swap
+*.swp
+*.swo
+
+# Runtime data
+pids
+*.pid
+
+# log file
+logs
+*.log
+
+# log from npm
+npm-debug.log*
+
+# log from yarn
+yarn-debug.log*
+yarn-error.log*
+
+# dependency directory
+node_modules/
+
+# temp files
+temp/
+
+# env variables
+.env
+.env.local
+.env.dev
+.env.prod
+
+# solidity-coverage
+coverage.json
+coverage/
+
+# hardhat
+cache/
+artifacts/
+
+# npx hardhat flatten
+flatten/
