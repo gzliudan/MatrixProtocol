@@ -1,0 +1,28 @@
+{
+    "testCases": [
+        {
+            "name": "Test Token no transfer fee",
+            "symbol": "TT1",
+            "fee_percentage": 0,
+            "amounts": [0, 1, 10, 100, 1000]
+        },
+        {
+            "name": "Test Token with transfer fee 1%",
+            "symbol": "TT2",
+            "fee_percentage": 1,
+            "amounts": [0, 1, 10, 100, 1000]
+        },
+        {
+            "name": "Test Token with transfer fee 10%",
+            "symbol": "TT3",
+            "fee_percentage": 10,
+            "amounts": [0, 1, 10, 100, 1000]
+        },
+        {
+            "name": "Test Token with transfer fee 10%",
+            "symbol": "TT3",
+            "fee_percentage": 100,
+            "amounts": [0, 1, 10, 100, 1000]
+        }
+    ]
+}
