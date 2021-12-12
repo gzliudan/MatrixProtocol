@@ -1,0 +1,41 @@
+{
+  "name": "matrix-protocol",
+  "version": "1.0.0",
+  "description": "matrix protocol contracts",
+  "main": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitee.com/matrix-tech/MatrixProtocol"
+  },
+  "keywords": [
+    "matrix",
+    "protocol",
+    "fund",
+    "defi",
+    "solidity",
+    "ethereum",
+    "smart contracts"
+  ],
+  "author": "Daniel Liu",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://gitee.com/matrix-tech/MatrixProtocol/issues",
+    "email": "liudaniel@qq.com"
+  },
+  "homepage": "https://gitee.com/matrix-tech/MatrixProtocol#README",
+  "engines": {
+    "npm": "^8.1.0",
+    "node": "^16.13.0",
+    "yarn": "^1.22.17"
+  },
+  "devDependencies": {
+    "eslint": "^8.12.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-prettier": "^4.0.0",
+    "prettier": "^2.6.1",
+    "prettier-plugin-solidity": "^1.0.0-beta.19",
+    "solhint": "^3.3.7",
+    "solhint-plugin-prettier": "^0.0.5"
+  }
+}
