@@ -1,0 +1,18 @@
+# node packages
+node_modules
+
+# hardhat
+artifacts
+cache
+
+# solidity-coverage
+coverage*
+
+# hardhat-gas-reporter
+gasReporterOutput.json
+
+# external interface files
+contracts/interfaces/external/
+
+# external contract files
+contracts/external/
