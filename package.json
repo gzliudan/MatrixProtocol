@@ -33,8 +33,18 @@
     "compile": "hardhat compile",
     "size": "mkdir -p deploy && hardhat size-contracts --no-compile > deploy/size.txt",
     "test": "hardhat test",
-    "coverage": "yarn clean && hardhat coverage",
-    "build": "yarn clean && yarn compile && yarn size"
+    "test:gas": "REPORT_GAS=true yarn test",
+    "coverage": "yarn clean && COVERAGE=true hardhat coverage",
+    "make": "yarn clean && yarn compile && yarn test && yarn size",
+    "deploy:kovan": "hardhat run --network kovan ./deploy/deploy.js",
+    "deploy:mumbai": "hardhat run --network mumbai ./deploy/deploy.js",
+    "deploy:polygon": "hardhat run --network polygon ./deploy/deploy.js",
+    "verify:kovan": "hardhat run --network kovan ./deploy/verify.js",
+    "verify:mumbai": "hardhat run --network mumbai ./deploy/verify.js",
+    "verify:polygon": "hardhat run --network polygon ./deploy/verify.js",
+    "build:kovan": "yarn make && yarn deploy:kovan && yarn verify:kovan",
+    "build:mumbai": "yarn make && yarn deploy:mumbai && yarn verify:mumbai",
+    "build:polygon": "yarn make && yarn deploy:polygon && yarn verify:polygon"
   },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.5",
