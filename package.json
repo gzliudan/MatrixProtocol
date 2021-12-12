@@ -50,5 +50,8 @@
     "solhint": "^3.3.7",
     "solhint-plugin-prettier": "^0.0.5",
     "solidity-coverage": "^0.7.20"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.5.0"
   }
 }
