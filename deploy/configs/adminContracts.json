@@ -1,0 +1,5 @@
+[
+    { "name": "Controller", "key": "controller" },
+    { "name": "IntegrationRegistry", "key": "integration_registry" },
+    { "name": "PriceOracle", "key": "price_oracle" }
+]

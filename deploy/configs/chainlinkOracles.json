@@ -1,0 +1,1596 @@
+{
+    "mainnet": [
+        {
+            "feed": "0x98953e9C76573e06ec265Bdde1dbB89fa02d56d3",
+            "description": "TUSD / USD",
+            "base": "0x0000000000085d4780B73119b644AE5ecd22b376",
+            "name": "TrueUSD",
+            "symbol": "TUSD",
+            "decimals": 18
+        },
+        {
+            "feed": "0x9534df8F2C9289bbDB0c736E9FeF402B20f1828E",
+            "description": "TUSD / ETH",
+            "base": "0x0000000000085d4780B73119b644AE5ecd22b376",
+            "name": "TrueUSD",
+            "symbol": "TUSD",
+            "decimals": 18
+        },
+        {
+            "feed": "0xB82A0803DF982412dAeE9D82826395E3F0BeD1A2",
+            "description": "LON / ETH",
+            "base": "0x0000000000095413afC295d19EDeb1Ad7B71c952",
+            "name": "Tokenlon",
+            "symbol": "LON",
+            "decimals": 18
+        },
+        {
+            "feed": "0xB82A0803DF982412dAeE9D82826395E3F0BeD1A2",
+            "description": "LON / ETH",
+            "base": "0x0000000000095413afC295d19EDeb1Ad7B71c952",
+            "name": "Tokenlon",
+            "symbol": "LON",
+            "decimals": 18
+        },
+        {
+            "feed": "0x82550112a8093A04dEbEBC95D69718Ee133236b5",
+            "description": "ALBT / USD",
+            "base": "0x00a8b738E453fFd858a7edf03bcCfe20412f0Eb0",
+            "name": "AllianceBlock Token",
+            "symbol": "ALBT",
+            "decimals": 18
+        },
+        {
+            "feed": "0xcC2C81184844Ec42b7bB5Dae6959a0E6a08E0959",
+            "description": "UFT / USD",
+            "base": "0x0202Be363B8a4820f3F4DE7FaF5224fF05943AB1",
+            "name": "UniLend Finance Token",
+            "symbol": "UFT",
+            "decimals": 18
+        },
+        {
+            "feed": "0x782EE2B86316d04F226Ba416d5dF5358a2D6102f",
+            "description": "ORN / ETH",
+            "base": "0x0258F474786DdFd37ABCE6df6BBb1Dd5dfC4434a",
+            "name": "Orion Protocol",
+            "symbol": "ORN",
+            "decimals": 8
+        },
+        {
+            "feed": "0xa5d9A0247b75353f3D756d321E3F4db59528C82C",
+            "description": "BOND / ETH",
+            "base": "0x0391D2021f89DC339F60Fff84546EA23E337750f",
+            "name": "BarnBridge Governance Token",
+            "symbol": "BOND",
+            "decimals": 18
+        },
+        {
+            "feed": "0x2Abfc56AaA39be7a946ec39aAC5d452e30614dF1",
+            "description": "RAI / USD",
+            "base": "0x03ab458634910AaD20eF5f1C8ee96F1D6ac54919",
+            "name": "Rai Reflex Index",
+            "symbol": "RAI",
+            "decimals": 18
+        },
+        {
+            "feed": "0x8d6d808eC1f8803b54e2286BD6992f5601fCF3a8",
+            "description": "RAI / ETH",
+            "base": "0x03ab458634910AaD20eF5f1C8ee96F1D6ac54919",
+            "name": "Rai Reflex Index",
+            "symbol": "RAI",
+            "decimals": 18
+        },
+        {
+            "feed": "0x2935a4dc7643d6fbbcb70E33BF3F009614F076f9",
+            "description": "UMA / ETH",
+            "base": "0x04Fa0d235C4abf4BcF4787aF4CF447DE572eF828",
+            "name": "UMA Voting Token v1",
+            "symbol": "UMA",
+            "decimals": 18
+        },
+        {
+            "feed": "0x6a805f2580b8D75d40331c26C074c2c42961E7F2",
+            "description": "GUSD / USD",
+            "base": "0x056Fd409E1d7A124BD7017459dFEa2F387b6d5Cd",
+            "name": "Gemini dollar",
+            "symbol": "GUSD",
+            "decimals": 2
+        },
+        {
+            "feed": "0x9c2C487DAd6C8e5bb49dC6908a29D95a234FaAd8",
+            "description": "GUSD / ETH",
+            "base": "0x056Fd409E1d7A124BD7017459dFEa2F387b6d5Cd",
+            "name": "Gemini dollar",
+            "symbol": "GUSD",
+            "decimals": 2
+        },
+        {
+            "feed": "0x8640b23468815902e011948F3aB173E1E83f9879",
+            "description": "SPELL / USD",
+            "base": "0x090185f2135308BaD17527004364eBcC2D37e5F6",
+            "name": "Spell Token",
+            "symbol": "SPELL",
+            "decimals": 18
+        },
+        {
+            "feed": "0x8A25A79dc89e594D2E1209797Bf874172d3168c9",
+            "description": "DNT / ETH",
+            "base": "0x0AbdAce70D3790235af448C88547603b945604ea",
+            "name": "district0x Network Token",
+            "symbol": "DNT",
+            "decimals": 18
+        },
+        {
+            "feed": "0xDc193fA6f30635e569ae23F1bD61c9aa9F522044",
+            "description": "STAKE / ETH",
+            "base": "0x0Ae055097C6d159879521C384F1D2123D1f195e6",
+            "name": "STAKE",
+            "symbol": "STAKE",
+            "decimals": 18
+        },
+        {
+            "feed": "0x8a4D74003870064d41D4f84940550911FBfCcF04",
+            "description": "YFI / USD",
+            "base": "0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e",
+            "name": "yearn.finance",
+            "symbol": "YFI",
+            "decimals": 18
+        },
+        {
+            "feed": "0xAa5aa80e416f9d32ffE6C390e24410d02D203F70",
+            "description": "YFI / ETH",
+            "base": "0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e",
+            "name": "yearn.finance",
+            "symbol": "YFI",
+            "decimals": 18
+        },
+        {
+            "feed": "0xbd624B453d0a882B87Cbf85FeBdcf493cFFBd8D9",
+            "description": "WNXM / ETH",
+            "base": "0x0d438F3b5175Bebc262bF23753C1E53d03432bDE",
+            "name": "Wrapped NXM",
+            "symbol": "wNXM",
+            "decimals": 18
+        },
+        {
+            "feed": "0xd90CA9ac986e453CF51d958071D68B82d17a47E6",
+            "description": "BAT / USD",
+            "base": "0x0D8775F648430679A709E98d2b0Cb6250d2887EF",
+            "name": "Basic Attention Token",
+            "symbol": "BAT",
+            "decimals": 18
+        },
+        {
+            "feed": "0x821f24DAcA9Ad4910c1EdE316D2713fC923Da698",
+            "description": "BAT / ETH",
+            "base": "0x0D8775F648430679A709E98d2b0Cb6250d2887EF",
+            "name": "Basic Attention Token",
+            "symbol": "BAT",
+            "decimals": 18
+        },
+        {
+            "feed": "0x7Be21AeF96E2FAeB8Dc0d07306814319cA034cad",
+            "description": "MANA / USD",
+            "base": "0x0F5D2fB29fb7d3CFeE444a200298f468908cC942",
+            "name": "Decentraland MANA",
+            "symbol": "MANA",
+            "decimals": 18
+        },
+        {
+            "feed": "0x46b77070f9256523c2F31c333b72C3E102f8A8A7",
+            "description": "MANA / ETH",
+            "base": "0x0F5D2fB29fb7d3CFeE444a200298f468908cC942",
+            "name": "Decentraland MANA",
+            "symbol": "MANA",
+            "decimals": 18
+        },
+        {
+            "feed": "0xd2bdD1E01fd2F8d7d42b209c111c7b32158b5a42",
+            "description": "1INCH / USD",
+            "base": "0x111111111117dC0aa78b770fA6A738034120C302",
+            "name": "1INCH Token",
+            "symbol": "1INCH",
+            "decimals": 18
+        },
+        {
+            "feed": "0xb2F68c82479928669B0487D1dAeD6Ef47b63411e",
+            "description": "1INCH / ETH",
+            "base": "0x111111111117dC0aa78b770fA6A738034120C302",
+            "name": "1INCH Token",
+            "symbol": "1INCH",
+            "decimals": 18
+        },
+        {
+            "feed": "0x68f1B8317C19ff02fb68A8476C1D3f9Fc5139c0A",
+            "description": "DPI / USD",
+            "base": "0x1494CA1F11D487c2bBe4543E90080AeBa4BA3C2b",
+            "name": "DefiPulse Index",
+            "symbol": "DPI",
+            "decimals": 18
+        },
+        {
+            "feed": "0x36e4f71440EdF512EB410231e75B9281d4FcFC4c",
+            "description": "DPI / ETH",
+            "base": "0x1494CA1F11D487c2bBe4543E90080AeBa4BA3C2b",
+            "name": "DefiPulse Index",
+            "symbol": "DPI",
+            "decimals": 18
+        },
+        {
+            "feed": "0xe4E345594375B54F395B54C41bD8b370A302bf69",
+            "description": "NMR / USD",
+            "base": "0x1776e1F26f98b1A5dF9cD347953a26dd3Cb46671",
+            "name": "Numeraire",
+            "symbol": "NMR",
+            "decimals": 18
+        },
+        {
+            "feed": "0x861334DEC28b3ba71DFFb1ABf4E57D4AD3964b5f",
+            "description": "NMR / ETH",
+            "base": "0x1776e1F26f98b1A5dF9cD347953a26dd3Cb46671",
+            "name": "Numeraire",
+            "symbol": "NMR",
+            "decimals": 18
+        },
+        {
+            "feed": "0xd9B4Ac554e3eefE84Ae80F5Dee0D45926233160b",
+            "description": "AUDIO / USD",
+            "base": "0x18aAA7115705e8be94bfFEBDE57Af9BFc265B998",
+            "name": "Audius",
+            "symbol": "AUDIO",
+            "decimals": 18
+        },
+        {
+            "feed": "0x382db44bCfb92C398b93e5fF6Cc100FC321140c9",
+            "description": "BIT / USD",
+            "base": "0x1A4b46696b2bB4794Eb3D4c26f1c55F9170fa4C5",
+            "name": "BitDAO",
+            "symbol": "BIT",
+            "decimals": 18
+        },
+        {
+            "feed": "0x2E170d2B04099679ca347EF7E99fcEB59322851c",
+            "description": "VSP / ETH",
+            "base": "0x1b40183EFB4Dd766f11bDa7A7c3AD8982e998421",
+            "name": "VesperToken",
+            "symbol": "VSP",
+            "decimals": 18
+        },
+        {
+            "feed": "0xAe395258FbcE63ecEeB2Cc0B73D4875797F4598d",
+            "description": "USDK / USD",
+            "base": "0x1c48f86ae57291F7686349F12601910BD8D470bb",
+            "name": "USDK",
+            "symbol": "USDK",
+            "decimals": 18
+        },
+        {
+            "feed": "0x61B5793cd5f454D2B25bA1AcB5C1aA1728f67E1c",
+            "description": "KP3R / ETH",
+            "base": "0x1cEB5cB57C4D4E2b2433641b95Dd330A33185A44",
+            "name": "Keep3rV1",
+            "symbol": "KP3R",
+            "decimals": 18
+        },
+        {
+            "feed": "0x82263275FBF3fa92c6eE81632725b6BFbE4B02Da",
+            "description": "BNT / USD",
+            "base": "0x1F573D6Fb3F13d689FF844B4cE37794d79a7FF1C",
+            "name": "Bancor Network Token",
+            "symbol": "BNT",
+            "decimals": 18
+        },
+        {
+            "feed": "0x9A4458D02449eF9B42562205718679a8B4204962",
+            "description": "BNT / ETH",
+            "base": "0x1F573D6Fb3F13d689FF844B4cE37794d79a7FF1C",
+            "name": "Bancor Network Token",
+            "symbol": "BNT",
+            "decimals": 18
+        },
+        {
+            "feed": "0x68577f915131087199Fe48913d8b416b3984fd38",
+            "description": "UNI / USD",
+            "base": "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984",
+            "name": "Uniswap",
+            "symbol": "UNI",
+            "decimals": 18
+        },
+        {
+            "feed": "0xc1D1d0Da0fCf78157EA25D0E64e3BE679813a1F7",
+            "description": "UNI / ETH",
+            "base": "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984",
+            "name": "Uniswap",
+            "symbol": "UNI",
+            "decimals": 18
+        },
+        {
+            "feed": "0xf649bC5C0e99BDEb06702e3db242B9F93DE44462",
+            "description": "FOR / USD",
+            "base": "0x1FCdcE58959f536621d76f5b7FfB955baa5A672F",
+            "name": "The Force Token",
+            "symbol": "FOR",
+            "decimals": 18
+        },
+        {
+            "feed": "0x9AdF01321833A5Cba51B9f8A4C420C7e62481Ae5",
+            "description": "REP / USD",
+            "base": "0x221657776846890989a759BA2973e427DfF5C9bB",
+            "name": "Reputation",
+            "symbol": "REPv2",
+            "decimals": 18
+        },
+        {
+            "feed": "0xC2EAfb9Df3a063a3A610f66B30aD0185A6c34f9D",
+            "description": "REP / ETH",
+            "base": "0x221657776846890989a759BA2973e427DfF5C9bB",
+            "name": "Reputation",
+            "symbol": "REPv2",
+            "decimals": 18
+        },
+        {
+            "feed": "0x6951b03911592b3fC33d44F4ea5eA32A830E57D8",
+            "description": "YGG / ETH",
+            "base": "0x25f8087EAD173b73D6e8B84329989A8eEA16CF73",
+            "name": "Yield Guild Games Token",
+            "symbol": "YGG",
+            "decimals": 18
+        },
+        {
+            "feed": "0x57560eA88060739107399670d8905Ffca3B57d08",
+            "description": "CREAM / ETH",
+            "base": "0x2ba592F78dB6436527729929AAf6c908497cB200",
+            "name": "Cream",
+            "symbol": "CREAM",
+            "decimals": 18
+        },
+        {
+            "feed": "0xd591993d55037e14E0D7184fCD8E78BA8fA92A13",
+            "description": "TOKE / USD",
+            "base": "0x2e9d63788249371f1DFC918a52f8d799F4a38C94",
+            "name": "Tokemak",
+            "symbol": "TOKE",
+            "decimals": 18
+        },
+        {
+            "feed": "0xE65E6C462119C311D57Fd31bDeBA502CcCC504B4",
+            "description": "RUNE / USD",
+            "base": "0x3155BA85D5F96b2d030a4966AF206230e46849cb",
+            "name": "THORChain ETH.RUNE",
+            "symbol": "RUNE",
+            "decimals": 18
+        },
+        {
+            "feed": "0xa8156eFf735Dce35Eb01B119F6a7f4B55944184a",
+            "description": "RUNE / ETH",
+            "base": "0x3155BA85D5F96b2d030a4966AF206230e46849cb",
+            "name": "THORChain ETH.RUNE",
+            "symbol": "RUNE",
+            "decimals": 18
+        },
+        {
+            "feed": "0x5E3c7bdf06C35f88c6c0De739ed1c04767e330F9",
+            "description": "CTX / USD",
+            "base": "0x321C2fE4446C7c963dc41Dd58879AF648838f98D",
+            "name": "Cryptex",
+            "symbol": "CTX",
+            "decimals": 18
+        },
+        {
+            "feed": "0x9396244286769EE43E995404c59674a4b72Da064",
+            "description": "RAMP / USD",
+            "base": "0x33D0568941C0C64ff7e0FB4fbA0B11BD37deEd9f",
+            "name": "RAMP DEFI",
+            "symbol": "RAMP",
+            "decimals": 18
+        },
+        {
+            "feed": "0xC1DA2eF2D2A4f1D46A17032Ac4959E8619914029",
+            "description": "DATA / ETH",
+            "base": "0x33d63Ba1E57E54779F7dDAeaA7109349344cf5F1",
+            "name": "DATA Economy Index",
+            "symbol": "DATA",
+            "decimals": 18
+        },
+        {
+            "feed": "0x9d78092775DFE715dFe1b0d71aC1a4d6e3652559",
+            "description": "FXS / USD",
+            "base": "0x3432B6A60D23Ca0dFCa7761B7ab56459D9C964D0",
+            "name": "Frax Share",
+            "symbol": "FXS",
+            "decimals": 18
+        },
+        {
+            "feed": "0x8093150EC164753994A1F65616E04Ae92a9Ef8c5",
+            "description": "BADGER / USD",
+            "base": "0x3472A5A71965499acd81997a54BBA8D852C6E53d",
+            "name": "Badger",
+            "symbol": "BADGER",
+            "decimals": 18
+        },
+        {
+            "feed": "0x586524Ef790f7357c6cb8461b20d788Da14A636B",
+            "description": "BADGER / ETH",
+            "base": "0x3472A5A71965499acd81997a54BBA8D852C6E53d",
+            "name": "Badger",
+            "symbol": "BADGER",
+            "decimals": 18
+        },
+        {
+            "feed": "0x8c318F865790CA448B99Cd22160089F921060d5b",
+            "description": "OM / USD",
+            "base": "0x3593D125a4f7849a1B059E64F4517A86Dd60c95d",
+            "name": "MANTRA DAO",
+            "symbol": "OM",
+            "decimals": 18
+        },
+        {
+            "feed": "0x7009033C0d6702fd2dfAD3478d2AE4e3b6aCB966",
+            "description": "OHM / ETH",
+            "base": "0x383518188C0C6d7730D91b2c03a03C837814a899",
+            "name": "Olympus",
+            "symbol": "OHM",
+            "decimals": 9
+        },
+        {
+            "feed": "0xDF627aa5B9C024818c6950fDAD7e4C16D93b10Ca",
+            "description": "SAND / USD",
+            "base": "0x3845badAde8e6dFF049820680d1F14bD3903a5d0",
+            "name": "SAND",
+            "symbol": "SAND",
+            "decimals": 18
+        },
+        {
+            "feed": "0x10341666434880065495f5b3C69621CcAc43bc82",
+            "description": "PLA / USD",
+            "base": "0x3a4f40631a4f906c2BaD353Ed06De7A5D3fCb430",
+            "name": "PlayDapp Token",
+            "symbol": "PLA",
+            "decimals": 18
+        },
+        {
+            "feed": "0x6759193Ddf8E9A33B675C06E1b97D28B6BE45186",
+            "description": "VGX / ETH",
+            "base": "0x3C4B6E6e1eA3D4863700D7F76b36B7f3D3f13E3d",
+            "name": "Voyager Token",
+            "symbol": "VGX",
+            "decimals": 8
+        },
+        {
+            "feed": "0xeaF04b87122913d1661EA8Cd1E1356305d9E747D",
+            "description": "GHST / ETH",
+            "base": "0x3F382DbD960E3a9bbCeaE22651E88158d2791550",
+            "name": "Aavegotchi GHST Token",
+            "symbol": "GHST",
+            "decimals": 18
+        },
+        {
+            "feed": "0x3d0bB55D0D2F255d7A0EAb8A53a91b3369728E36",
+            "description": "REN / USD",
+            "base": "0x408e41876cCCDC0F92210600ef50372656052a38",
+            "name": "Republic Token",
+            "symbol": "REN",
+            "decimals": 18
+        },
+        {
+            "feed": "0xEe34b3Ce92A6B635450B9cC6FAa976F70a106BE7",
+            "description": "REN / ETH",
+            "base": "0x408e41876cCCDC0F92210600ef50372656052a38",
+            "name": "Republic Token",
+            "symbol": "REN",
+            "decimals": 18
+        },
+        {
+            "feed": "0x0D60A27891250D7a7f78D6c279689164d704189E",
+            "description": "DODO / USD",
+            "base": "0x43Dfc4159D86F3A37A5A4B3D4580b888ad7d4DDd",
+            "name": "DODO bird",
+            "symbol": "DODO",
+            "decimals": 18
+        },
+        {
+            "feed": "0x932354AeA65a17B265bf22D29f7132ECfE86747d",
+            "description": "OXT / USD",
+            "base": "0x4575f41308EC1483f3d399aa9a2826d74Da13Deb",
+            "name": "Orchid",
+            "symbol": "OXT",
+            "decimals": 18
+        },
+        {
+            "feed": "0x66d35ccD808317870198793a96b88ab69dCAe53B",
+            "description": "PAXG / ETH",
+            "base": "0x45804880De22913dAFE09f4980848ECE6EcbAf78",
+            "name": "Paxos Gold",
+            "symbol": "PAXG",
+            "decimals": 18
+        },
+        {
+            "feed": "0x5C3d1309D8b6e37EFF9FD6C258e1544549b39D22",
+            "description": "WOO / ETH",
+            "base": "0x4691937a7508860F876c9c0a2a617E7d9E945D4B",
+            "name": "Wootrade Network",
+            "symbol": "WOO",
+            "decimals": 18
+        },
+        {
+            "feed": "0x162aa56EF75ab11cE2573ECe62B579f4B40A58dB",
+            "description": "SRM / ETH",
+            "base": "0x476c5E26a75bd202a9683ffD34359C0CC15be0fF",
+            "name": "Serum",
+            "symbol": "SRM",
+            "decimals": 6
+        },
+        {
+            "feed": "0x720192921a4b6fb026fA52bf03F991b65b740147",
+            "description": "CTSI / ETH",
+            "base": "0x491604c0FDF08347Dd1fa4Ee062a822A5DD06B5D",
+            "name": "Cartesi Token",
+            "symbol": "CTSI",
+            "decimals": 18
+        },
+        {
+            "feed": "0xAbA1EACE8627c15324890315E942A4FBD73b70E0",
+            "description": "TRU / USD",
+            "base": "0x4C19596f5aAfF459fA38B0f7eD92F11AE6543784",
+            "name": "TrueFi",
+            "symbol": "TRU",
+            "decimals": 8
+        },
+        {
+            "feed": "0xbDb80D19dEA36EB7f63bdFD2bdD4033B2b7e8e4d",
+            "description": "FTM / ETH",
+            "base": "0x4E15361FD6b4BB609Fa63C81A2be19d873717870",
+            "name": "Fantom Token",
+            "symbol": "FTM",
+            "decimals": 18
+        },
+        {
+            "feed": "0x8d73Ac44Bf11CadCDc050BB2BcCaE8c519555f1a",
+            "description": "CVX / USD",
+            "base": "0x4e3FBD56CD56c3e72c1403e103b45Db9da5B9D2B",
+            "name": "Convex Token",
+            "symbol": "CVX",
+            "decimals": 18
+        },
+        {
+            "feed": "0x5382A9dd1036AD485809b247260fAC47B42CcA6F",
+            "description": "CELR / USD",
+            "base": "0x4F9254C83EB525f9FCf346490bbb3ed28a81C667",
+            "name": "CelerToken",
+            "symbol": "CELR",
+            "decimals": 18
+        },
+        {
+            "feed": "0x73dc1b226f7DfAc353bdB41A27C4212213e6aF07",
+            "description": "BUSD / USD",
+            "base": "0x4Fabb145d64652a948d72533023f6E7A623C7C53",
+            "name": "Binance USD",
+            "symbol": "BUSD",
+            "decimals": 18
+        },
+        {
+            "feed": "0x5952c7F1Ab270D22d677762Be3dAd0BA9e5cd23d",
+            "description": "BUSD / ETH",
+            "base": "0x4Fabb145d64652a948d72533023f6E7A623C7C53",
+            "name": "Binance USD",
+            "symbol": "BUSD",
+            "decimals": 18
+        },
+        {
+            "feed": "0x9565B54d720656508B14D3d19AB45e462a01338d",
+            "description": "NU / ETH",
+            "base": "0x4fE83213D56308330EC302a8BD641f1d0113A4Cc",
+            "name": "NuCypher",
+            "symbol": "NU",
+            "decimals": 18
+        },
+        {
+            "feed": "0x398381563cc93A0Cd62534D775F2207a307e9aDD",
+            "description": "FTT / USD",
+            "base": "0x50D1c9771902476076eCFc8B2A83Ad6b9355a4c9",
+            "name": "FTT",
+            "symbol": "FTX Token",
+            "decimals": 18
+        },
+        {
+            "feed": "0x2006d56F8DDB210ad009cf8d71aEe4F6488cFA49",
+            "description": "FTT / ETH",
+            "base": "0x50D1c9771902476076eCFc8B2A83Ad6b9355a4c9",
+            "name": "FTT",
+            "symbol": "FTX Token",
+            "decimals": 18
+        },
+        {
+            "feed": "0xDfd03BfC3465107Ce570a0397b247F546a42D0fA",
+            "description": "LINK / USD",
+            "base": "0x514910771AF9Ca656af840dff83E8264EcF986CA",
+            "name": "ChainLink Token",
+            "symbol": "LINK",
+            "decimals": 18
+        },
+        {
+            "feed": "0xbba12740DE905707251525477bAD74985DeC46D2",
+            "description": "LINK / ETH",
+            "base": "0x514910771AF9Ca656af840dff83E8264EcF986CA",
+            "name": "ChainLink Token",
+            "symbol": "LINK",
+            "decimals": 18
+        },
+        {
+            "feed": "0x1187272A0E3A603eC4734CeC73a0880055eCC593",
+            "description": "sUSD / USD",
+            "base": "0x57Ab1ec28D129707052df4dF418D58a2D46d5f51",
+            "name": "Synth sUSD",
+            "symbol": "sUSD",
+            "decimals": 18
+        },
+        {
+            "feed": "0x45bb69B89D60878d1e42522342fFCa9F2077dD84",
+            "description": "SUSD / ETH",
+            "base": "0x57Ab1ec28D129707052df4dF418D58a2D46d5f51",
+            "name": "Synth sUSD",
+            "symbol": "sUSD",
+            "decimals": 18
+        },
+        {
+            "feed": "0x3679DA959892f0B87E66F08626842F48be1956A2",
+            "description": "HEGIC / USD",
+            "base": "0x584bC13c7D411c00c01A62e8019472dE68768430",
+            "name": "Hegic",
+            "symbol": "HEGIC",
+            "decimals": 18
+        },
+        {
+            "feed": "0xad940Ed1a74878c7BB0FA2678E2FBFc24dF11b9d",
+            "description": "HEGIC / ETH",
+            "base": "0x584bC13c7D411c00c01A62e8019472dE68768430",
+            "name": "Hegic",
+            "symbol": "HEGIC",
+            "decimals": 18
+        },
+        {
+            "feed": "0x7898AcCC83587C3C55116c5230C17a6Cd9C71bad",
+            "description": "LDO / ETH",
+            "base": "0x5A98FcBEA516Cf06857215779Fd812CA3beF1B32",
+            "name": "Lido DAO Token",
+            "symbol": "LDO",
+            "decimals": 18
+        },
+        {
+            "feed": "0x27b97a63091d185cE056e1747624b9B92BAAD056",
+            "description": "LUSD / USD",
+            "base": "0x5f98805A4E8be255a32880FDeC7F6728C6568bA0",
+            "name": "LUSD Stablecoin",
+            "symbol": "LUSD",
+            "decimals": 18
+        },
+        {
+            "feed": "0xd7Fc11b34D7BaE2E94B958C4ab06D950f0bD4C3E",
+            "description": "RLC / ETH",
+            "base": "0x607F4C5BB672230e8672085532f7e901544a7375",
+            "name": "iEx.ec Network Token",
+            "symbol": "RLC",
+            "decimals": 9
+        },
+        {
+            "feed": "0x9Aae856973A0Cafa084b82F7BC4C6C2893A9139b",
+            "description": "OHMv2 / ETH",
+            "base": "0x64aa3364F17a4D01c6f1751Fd97C2BD3D7e7f1D5",
+            "name": "Olympus",
+            "symbol": "OHM",
+            "decimals": 9
+        },
+        {
+            "feed": "0x6a1Ef9bF93048533c49a1Eed984c080608f7DB6A",
+            "description": "USDN / USD",
+            "base": "0x674C6Ad92Fd080e4004b2312b45f796a192D27a0",
+            "name": "Neutrino USD",
+            "symbol": "USDN",
+            "decimals": 18
+        },
+        {
+            "feed": "0x299e74895b4De8dF505C43146D0555983859034B",
+            "description": "GNO / ETH",
+            "base": "0x6810e776880C02933D47DB1b9fc05908e5386b96",
+            "name": "Gnosis Token",
+            "symbol": "GNO",
+            "decimals": 18
+        },
+        {
+            "feed": "0x9DcED5f7F7cc675Dbea34AcFE45f05033aD83454",
+            "description": "MASK / USD",
+            "base": "0x69af81e73A73B40adF4f3d4223Cd9b1ECE623074",
+            "name": "Mask Network",
+            "symbol": "MASK",
+            "decimals": 18
+        },
+        {
+            "feed": "0xDEc0a100eaD1fAa37407f0Edc76033426CF90b82",
+            "description": "DAI / USD",
+            "base": "0x6B175474E89094C44Da98b954EedeAC495271d0F",
+            "name": "Dai Stablecoin",
+            "symbol": "DAI",
+            "decimals": 18
+        },
+        {
+            "feed": "0x158228e08C52F3e2211Ccbc8ec275FA93f6033FC",
+            "description": "DAI / ETH",
+            "base": "0x6B175474E89094C44Da98b954EedeAC495271d0F",
+            "name": "Dai Stablecoin",
+            "symbol": "DAI",
+            "decimals": 18
+        },
+        {
+            "feed": "0x7213536a36094cD8a768a5E45203Ec286Cba2d74",
+            "description": "SUSHI / USD",
+            "base": "0x6B3595068778DD592e39A122f4f5a5cF09C90fE2",
+            "name": "SushiToken",
+            "symbol": "SUSHI",
+            "decimals": 18
+        },
+        {
+            "feed": "0xd01BBB3Afed2cb5ca92Ca3834d441dc737F0Da70",
+            "description": "SUSHI / ETH",
+            "base": "0x6B3595068778DD592e39A122f4f5a5cF09C90fE2",
+            "name": "SushiToken",
+            "symbol": "SUSHI",
+            "decimals": 18
+        },
+        {
+            "feed": "0xCB00334A422FC8538794f3CE0149540a95f9e228",
+            "description": "PHA / USD",
+            "base": "0x6c5bA91642F10282b576d91922Ae6448C9d52f4E",
+            "name": "Phala",
+            "symbol": "PHA",
+            "decimals": 18
+        },
+        {
+            "feed": "0x7a4297b2fd0Ba2F5687EFAC4df487B1C7B71392b",
+            "description": "HT / USD",
+            "base": "0x6f259637dcD74C767781E37Bc6133cd6A68aa161",
+            "name": "HuobiToken",
+            "symbol": "HT",
+            "decimals": 18
+        },
+        {
+            "feed": "0x46F030f9A570aBB4BF21bAc93042d97059bd0350",
+            "description": "OKB / USD",
+            "base": "0x75231F58b43240C9718Dd58B4967c5114342a86c",
+            "name": "OKB",
+            "symbol": "OKB",
+            "decimals": 18
+        },
+        {
+            "feed": "0xc1F2929b9449Ef97c5A75fd10fD0542984422f8b",
+            "description": "ILV / ETH",
+            "base": "0x767FE9EDC9E0dF98E07454847909b5E959D7ca0E",
+            "name": "Illuvium",
+            "symbol": "ILV",
+            "decimals": 18
+        },
+        {
+            "feed": "0x4B35F7854e1fd8291f4EC714aC3EBB1DeA450585",
+            "description": "MATIC / USD",
+            "base": "0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0",
+            "name": "Matic Token",
+            "symbol": "MATIC",
+            "decimals": 18
+        },
+        {
+            "feed": "0xa39b675ECc48E0681163f8788430e16b750d0f69",
+            "description": "GLM / USD",
+            "base": "0x7DD9c5Cba05E151C895FDe1CF355C9A1D5DA6429",
+            "name": "Golem Network Token",
+            "symbol": "GLM",
+            "decimals": 18
+        },
+        {
+            "feed": "0xe3f0dEdE4B499c07e12475087AB1A084b5F93bc0",
+            "description": "AAVE / USD",
+            "base": "0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9",
+            "name": "Aave Token",
+            "symbol": "AAVE",
+            "decimals": 18
+        },
+        {
+            "feed": "0xdF0da6B3d19E4427852F2112D0a963d8A158e9c7",
+            "description": "AAVE / ETH",
+            "base": "0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9",
+            "name": "Aave Token",
+            "symbol": "AAVE",
+            "decimals": 18
+        },
+        {
+            "feed": "0x51aa283a37771B33101e88658C440951ee0AE02d",
+            "description": "OGN / ETH",
+            "base": "0x8207c1FfC5B6804F6024322CcF34F29c3541Ae26",
+            "name": "OriginToken",
+            "symbol": "OGN",
+            "decimals": 18
+        },
+        {
+            "feed": "0xBbC9Ab3F66d0b934089FdCceda3615a6bb879633",
+            "description": "ANKR / USD",
+            "base": "0x8290333ceF9e6D528dD5618Fb97a76f268f3EDD4",
+            "name": "Ankr Network",
+            "symbol": "ANKR",
+            "decimals": 18
+        },
+        {
+            "feed": "0xfB1a282F901dD905a57D863f7B46FEbCd2B4a8e3",
+            "description": "ANKR / ETH",
+            "base": "0x8290333ceF9e6D528dD5618Fb97a76f268f3EDD4",
+            "name": "Ankr Network",
+            "symbol": "ANKR",
+            "decimals": 18
+        },
+        {
+            "feed": "0x61eB091ea16A32ea5B880d0b3D09d518c340D750",
+            "description": "FRAX / USD",
+            "base": "0x853d955aCEf822Db058eb8505911ED77F175b99e",
+            "name": "Frax",
+            "symbol": "FRAX",
+            "decimals": 18
+        },
+        {
+            "feed": "0x56f98706C14DF5C290b02Cec491bB4c20834Bb51",
+            "description": "FRAX / ETH",
+            "base": "0x853d955aCEf822Db058eb8505911ED77F175b99e",
+            "name": "Frax",
+            "symbol": "FRAX",
+            "decimals": 18
+        },
+        {
+            "feed": "0xA27CfD69345a6e121284a3C0ae07BB64b707cDD2",
+            "description": "RSR / USD",
+            "base": "0x8762db106B2c2A0bccB3A80d1Ed41273552616E8",
+            "name": "Reserve Rights",
+            "symbol": "RSR",
+            "decimals": 18
+        },
+        {
+            "feed": "0x09b6943C790bD4fDD550B2432b42B4FE5cA4Ee96",
+            "description": "XSUSHI / ETH",
+            "base": "0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272",
+            "name": "SushiBar",
+            "symbol": "xSUSHI",
+            "decimals": 18
+        },
+        {
+            "feed": "0x1c8C38602067268b6c518F9F41e59b832422cc56",
+            "description": "AKRO / USD",
+            "base": "0x8Ab7404063Ec4DBcfd4598215992DC3F8EC853d7",
+            "name": "Akropolis",
+            "symbol": "AKRO",
+            "decimals": 18
+        },
+        {
+            "feed": "0xCFC1C64e721bC034ab894302B78149b3C7a1066d",
+            "description": "SXP / USD",
+            "base": "0x8CE9137d39326AD0cD6491fb5CC0CbA0e089b6A9",
+            "name": "Swipe",
+            "symbol": "SXP",
+            "decimals": 18
+        },
+        {
+            "feed": "0xF3d70857B489Ecc6768D0982B773E1Cba9E1f00b",
+            "description": "USDP / USD",
+            "base": "0x8E870D67F660D95d5be530380D0eC0bd388289E1",
+            "name": "Pax Dollar",
+            "symbol": "USDP",
+            "decimals": 18
+        },
+        {
+            "feed": "0x8034d486Fc2620F87A9C32a1fB746D20Ed9BFB96",
+            "description": "PAX / ETH",
+            "base": "0x8E870D67F660D95d5be530380D0eC0bd388289E1",
+            "name": "Pax Dollar",
+            "symbol": "USDP",
+            "decimals": 18
+        },
+        {
+            "feed": "0x8127087BaD4fd28e1DAcbAfc3d3040E701b2B9A2",
+            "description": "REQ / USD",
+            "base": "0x8f8221aFbB33998d8584A2B05749bA73c37a938a",
+            "name": "Request Token",
+            "symbol": "REQ",
+            "decimals": 18
+        },
+        {
+            "feed": "0xe28371cd7a0c1687d2D956a567946688B48e5629",
+            "description": "DYDX / USD",
+            "base": "0x92D6C1e31e14520e676a687F0a93788B716BEff5",
+            "name": "dYdX",
+            "symbol": "DYDX",
+            "decimals": 18
+        },
+        {
+            "feed": "0x1D244648d5a63618751d006886268Ae3550d0Dfd",
+            "description": "FEI / USD",
+            "base": "0x956F47F50A910163D8BF957Cf5846D573E7f87CA",
+            "name": "Fei USD",
+            "symbol": "FEI",
+            "decimals": 18
+        },
+        {
+            "feed": "0x4bE991B4d560BBa8308110Ed1E0D7F8dA60ACf6A",
+            "description": "FEI / ETH",
+            "base": "0x956F47F50A910163D8BF957Cf5846D573E7f87CA",
+            "name": "Fei USD",
+            "symbol": "FEI",
+            "decimals": 18
+        },
+        {
+            "feed": "0xB895192F5a49914ae760F01Ef92DB285d94C783E",
+            "description": "SHIB / ETH",
+            "base": "0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE",
+            "name": "SHIBA INU",
+            "symbol": "SHIB",
+            "decimals": 18
+        },
+        {
+            "feed": "0x06812A2035BDa4707107539725902e065622CEE7",
+            "description": "OCEAN / USD",
+            "base": "0x967da4048cD07aB37855c090aAF366e4ce1b9F48",
+            "name": "Ocean Token",
+            "symbol": "OCEAN",
+            "decimals": 18
+        },
+        {
+            "feed": "0x4b75FE6e4a53A510AbC39c7328B0b06E74a3F624",
+            "description": "OCEAN / ETH",
+            "base": "0x967da4048cD07aB37855c090aAF366e4ce1b9F48",
+            "name": "Ocean Token",
+            "symbol": "OCEAN",
+            "decimals": 18
+        },
+        {
+            "feed": "0x18f0112E30769961AF90FDEe0D1c6B27E6d72D92",
+            "description": "MIM / USD",
+            "base": "0x99D8a9C45b2ecA8864373A26D1459e3Dff1e17F3",
+            "name": "Magic Internet Money",
+            "symbol": "MIM",
+            "decimals": 18
+        },
+        {
+            "feed": "0x883Ba661FD9824778FF14a97F3A03eb324540201",
+            "description": "FARM / ETH",
+            "base": "0xa0246c9032bC3A600820415aE600c6388619A14D",
+            "name": "FARM Reward Token",
+            "symbol": "FARM",
+            "decimals": 18
+        },
+        {
+            "feed": "0xb2aD164c008Da54FCEaC79Ef18C0a8fE2d935865",
+            "description": "CRO / USD",
+            "base": "0xA0b73E1Ff0B80914AB6fe0444E65848C4C34450b",
+            "name": "CRO",
+            "symbol": "CRO",
+            "decimals": 8
+        },
+        {
+            "feed": "0x3dAfE91e795409576Ddb983D891E5fb5c61439a1",
+            "description": "CRO / ETH",
+            "base": "0xA0b73E1Ff0B80914AB6fe0444E65848C4C34450b",
+            "name": "CRO",
+            "symbol": "CRO",
+            "decimals": 8
+        },
+        {
+            "feed": "0x789190466E21a8b78b8027866CBBDc151542A26C",
+            "description": "USDC / USD",
+            "base": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+            "name": "USD Coin",
+            "symbol": "USDC",
+            "decimals": 6
+        },
+        {
+            "feed": "0xe5BbBdb2Bb953371841318E1Edfbf727447CeF2E",
+            "description": "USDC / ETH",
+            "base": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+            "name": "USD Coin",
+            "symbol": "USDC",
+            "decimals": 6
+        },
+        {
+            "feed": "0x7b14dF2fb3e02215Fa5525aC8A5abdAaA6314aC0",
+            "description": "ANT / ETH",
+            "base": "0xa117000000f279D81A1D3cc75430fAA017FA5A2e",
+            "name": "Aragon Network Token",
+            "symbol": "ANT",
+            "decimals": 18
+        },
+        {
+            "feed": "0x20dF77bB4cE1478e89a7461CAcE8dc016f9198e4",
+            "description": "YFII / ETH",
+            "base": "0xa1d0E215a23d7030842FC67cE582a6aFa3CCaB83",
+            "name": "YFII.finance",
+            "symbol": "YFII",
+            "decimals": 18
+        },
+        {
+            "feed": "0x71c8D42d35eD9276543FCa95d80Ae0858553Bf44",
+            "description": "ALPHA / ETH",
+            "base": "0xa1faa113cbE53436Df28FF0aEe54275c13B40975",
+            "name": "AlphaToken",
+            "symbol": "ALPHA",
+            "decimals": 18
+        },
+        {
+            "feed": "0xd86e1fEDB7120369fF5175b74F4413Cb74FCAcDB",
+            "description": "MTA / USD",
+            "base": "0xa3BeD4E1c75D00fa6f4E5E6922DB7261B5E9AcD2",
+            "name": "Meta",
+            "symbol": "MTA",
+            "decimals": 18
+        },
+        {
+            "feed": "0xDc0a51C45A670c7d32384B0fd970f9F2D678D75A",
+            "description": "MTA / ETH",
+            "base": "0xa3BeD4E1c75D00fa6f4E5E6922DB7261B5E9AcD2",
+            "name": "Meta",
+            "symbol": "MTA",
+            "decimals": 18
+        },
+        {
+            "feed": "0x5EDd5F803b831b47715aD3e11a90dD244F0cD0a9",
+            "description": "UST / USD",
+            "base": "0xa47c8bf37f92aBed4A126BDA807A7b7498661acD",
+            "name": "Wrapped UST Token",
+            "symbol": "UST",
+            "decimals": 18
+        },
+        {
+            "feed": "0xf14278039b6fd72Dd3ddBC994FF7E071c81C1890",
+            "description": "UST / ETH",
+            "base": "0xa47c8bf37f92aBed4A126BDA807A7b7498661acD",
+            "name": "Wrapped UST Token",
+            "symbol": "UST",
+            "decimals": 18
+        },
+        {
+            "feed": "0x2ecAF21f39E9074Cb45eC4742AB264cA0A0cbb59",
+            "description": "AUCTION / USD",
+            "base": "0xA9B1Eb5908CfC3cdf91F9B8B3a74108598009096",
+            "name": "Bounce Token",
+            "symbol": "Auction",
+            "decimals": 18
+        },
+        {
+            "feed": "0xb864d98a8D5f16D41f021a5BA9d3d26e78D0d1Fa",
+            "description": "CEL / ETH",
+            "base": "0xaaAEBE6Fe48E54f431b0C390CfaF0b017d09D42d",
+            "name": "Celsius",
+            "symbol": "CEL",
+            "decimals": 4
+        },
+        {
+            "feed": "0x910e014bBA427e9FCB48B4D314Dc81f840d7b6E3",
+            "description": "ADX / USD",
+            "base": "0xADE00C28244d5CE17D72E40330B1c318cD12B7c3",
+            "name": "AdEx Network",
+            "symbol": "ADX",
+            "decimals": 18
+        },
+        {
+            "feed": "0x468F99A1fCDf25B508D256a25698FB7c4E6Dd649",
+            "description": "C98 / USD",
+            "base": "0xAE12C5930881c53715B369ceC7606B70d8EB229f",
+            "name": "Coin98",
+            "symbol": "C98",
+            "decimals": 18
+        },
+        {
+            "feed": "0xdA31bc2B08F22AE24aeD5F6EB1E71E96867BA196",
+            "description": "STETH / USD",
+            "base": "0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84",
+            "name": "Liquid staked Ether 2.0",
+            "symbol": "stETH",
+            "decimals": 18
+        },
+        {
+            "feed": "0x716BB759A5f6faCdfF91F0AfB613133d510e1573",
+            "description": "STETH / ETH",
+            "base": "0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84",
+            "name": "Liquid staked Ether 2.0",
+            "symbol": "stETH",
+            "decimals": 18
+        },
+        {
+            "feed": "0x8fF1d1c1f5Af922E40756c82bB6b6ab8d84F1869",
+            "description": "FET / USD",
+            "base": "0xaea46A60368A7bD060eec7DF8CBa43b7EF41Ad85",
+            "name": "Fetch",
+            "symbol": "FET",
+            "decimals": 18
+        },
+        {
+            "feed": "0xFE549D227B8054B7d1E121624a32f4E9468a2E7B",
+            "description": "SFI / ETH",
+            "base": "0xb753428af26E81097e7fD17f40c88aaA3E04902c",
+            "name": "Spice",
+            "symbol": "SFI",
+            "decimals": 18
+        },
+        {
+            "feed": "0x647323612C9daE101a69791710f4FEfD5Ef4a015",
+            "description": "ZCN / USD",
+            "base": "0xb9EF770B6A5e12E45983C5D80545258aA38F3B78",
+            "name": "0chain",
+            "symbol": "ZCN",
+            "decimals": 10
+        },
+        {
+            "feed": "0xb289368f0Db6A74037618d3aD1064B14F8605bfA",
+            "description": "ZCN / ETH",
+            "base": "0xb9EF770B6A5e12E45983C5D80545258aA38F3B78",
+            "name": "0chain",
+            "symbol": "ZCN",
+            "decimals": 10
+        },
+        {
+            "feed": "0xbd9350a3a2fd6e3Ad0a053a567f2609a1bf6c505",
+            "description": "BAL / USD",
+            "base": "0xba100000625a3754423978a60c9317c58a424e3D",
+            "name": "Balancer",
+            "symbol": "BAL",
+            "decimals": 18
+        },
+        {
+            "feed": "0x2f2c0C1727Ce8C429A237DDFBBb87357893fBD5D",
+            "description": "BAL / ETH",
+            "base": "0xba100000625a3754423978a60c9317c58a424e3D",
+            "name": "Balancer",
+            "symbol": "BAL",
+            "decimals": 18
+        },
+        {
+            "feed": "0x35C04c3983879cCE777fb2Ef793A210BB0221a89",
+            "description": "BAND / USD",
+            "base": "0xBA11D00c5f74255f56a5E366F4F77f5A186d7f55",
+            "name": "BandToken",
+            "symbol": "BAND",
+            "decimals": 18
+        },
+        {
+            "feed": "0xDF9F750A94bF2Faea84Ab783927290FE5e0F7606",
+            "description": "BAND / ETH",
+            "base": "0xBA11D00c5f74255f56a5E366F4F77f5A186d7f55",
+            "name": "BandToken",
+            "symbol": "BAND",
+            "decimals": 18
+        },
+        {
+            "feed": "0x29D9CEA993A2d54B1C959cCF233023B853098ac8",
+            "description": "ARPA / USD",
+            "base": "0xBA50933C268F567BDC86E1aC131BE072C6B0b71a",
+            "name": "ARPA Token",
+            "symbol": "ARPA",
+            "decimals": 18
+        },
+        {
+            "feed": "0x16423B2B6873225e26564b182b3318aFCdBFcade",
+            "description": "AXS / ETH",
+            "base": "0xBB0E17EF65F82Ab018d8EDd776e8DD940327B28b",
+            "name": "Axie Infinity Shard",
+            "symbol": "AXS",
+            "decimals": 18
+        },
+        {
+            "feed": "0x2715D13c40F322094311C282F58B021DF64456ce",
+            "description": "LRC / USD",
+            "base": "0xBBbbCA6A901c926F240b89EacB641d8Aec7AEafD",
+            "name": "LoopringCoin V2",
+            "symbol": "LRC",
+            "decimals": 18
+        },
+        {
+            "feed": "0x9405e02996Aa6f2176E2748EEfbCedd405870cee",
+            "description": "LRC / ETH",
+            "base": "0xBBbbCA6A901c926F240b89EacB641d8Aec7AEafD",
+            "name": "LoopringCoin V2",
+            "symbol": "LRC",
+            "decimals": 18
+        },
+        {
+            "feed": "0xbDa0c715E5F153092A0d9d6dBBbDCc2beF892618",
+            "description": "ERN / USD",
+            "base": "0xBBc2AE13b23d715c30720F079fcd9B4a74093505",
+            "name": "@EthernityChain $ERN Token",
+            "symbol": "ERN",
+            "decimals": 18
+        },
+        {
+            "feed": "0x37674e9881f173D4f5441e6Fc7ed3C6Cf57435ce",
+            "description": "BORING / USD",
+            "base": "0xBC19712FEB3a26080eBf6f2F7849b417FdD792CA",
+            "name": "BoringDAO",
+            "symbol": "BORING",
+            "decimals": 18
+        },
+        {
+            "feed": "0x608D4724F725845C2bbb1A27D7DCe341C9F85B00",
+            "description": "PERP / USD",
+            "base": "0xbC396689893D065F41bc2C6EcbeE5e0085233447",
+            "name": "Perpetual",
+            "symbol": "PERP",
+            "decimals": 18
+        },
+        {
+            "feed": "0xC4aA0d2237A823f99fe2Dc74F993eEbDf5524489",
+            "description": "PERP / ETH",
+            "base": "0xbC396689893D065F41bc2C6EcbeE5e0085233447",
+            "name": "Perpetual",
+            "symbol": "PERP",
+            "decimals": 18
+        },
+        {
+            "feed": "0xD0C576383d8479407eAb872a08DeabcF69602fFd",
+            "description": "ALUSD / USD",
+            "base": "0xBC6DA0FE9aD5f3b0d58160288917AA56653660E9",
+            "name": "Alchemix USD",
+            "symbol": "alUSD",
+            "decimals": 18
+        },
+        {
+            "feed": "0xe0dbBd0a861fDC0Bf9bd7dd5E56c0ca5a69aa090",
+            "description": "WOM / ETH",
+            "base": "0xBd356a39BFf2cAda8E9248532DD879147221Cf76",
+            "name": "WOM Token",
+            "symbol": "WOM",
+            "decimals": 18
+        },
+        {
+            "feed": "0xCC0Ae233B21A820ED550B2e23C146114E06A3a47",
+            "description": "BETA / ETH",
+            "base": "0xBe1a001FE942f96Eea22bA08783140B9Dcc09D28",
+            "name": "Beta Token",
+            "symbol": "BETA",
+            "decimals": 18
+        },
+        {
+            "feed": "0x724D08F4688Cda05d8e3243db9Db1B20C90f3a05",
+            "description": "STMX / USD",
+            "base": "0xbE9375C6a420D2eEB258962efB95551A5b722803",
+            "name": "StormX",
+            "symbol": "STMX",
+            "decimals": 18
+        },
+        {
+            "feed": "0x6eaC850f531d0588c0114f1E93F843B78669E6d2",
+            "description": "COMP / USD",
+            "base": "0xc00e94Cb662C3520282E6f5717214004A7f26888",
+            "name": "Compound",
+            "symbol": "COMP",
+            "decimals": 18
+        },
+        {
+            "feed": "0x9D6acD34D481512586844fD65328BD358d306752",
+            "description": "COMP / ETH",
+            "base": "0xc00e94Cb662C3520282E6f5717214004A7f26888",
+            "name": "Compound",
+            "symbol": "COMP",
+            "decimals": 18
+        },
+        {
+            "feed": "0x06ce8Be8729B6bA18dD3416E3C223a5d4DB5e755",
+            "description": "SNX / USD",
+            "base": "0xC011a73ee8576Fb46F5E1c5751cA3B9Fe0af2a6F",
+            "name": "Synthetix Network Token",
+            "symbol": "SNX",
+            "decimals": 18
+        },
+        {
+            "feed": "0xBAFe3CB0E563E914806A99D547bdBF2Cfcf5fDF6",
+            "description": "SNX / ETH",
+            "base": "0xC011a73ee8576Fb46F5E1c5751cA3B9Fe0af2a6F",
+            "name": "Synthetix Network Token",
+            "symbol": "SNX",
+            "decimals": 18
+        },
+        {
+            "feed": "0xadcD1B19a0190E18d961993c5671d3F5D47c13Ea",
+            "description": "TRY / USD",
+            "base": "0xc12eCeE46ed65D970EE5C899FCC7AE133AfF9b03",
+            "name": "TRYfinance",
+            "symbol": "TRY",
+            "decimals": 18
+        },
+        {
+            "feed": "0x780f1bD91a5a22Ede36d4B2b2c0EcCB9b1726a28",
+            "description": "ENS / USD",
+            "base": "0xC18360217D8F7Ab5e7c516566761Ea12Ce7F9D72",
+            "name": "Ethereum Name Service",
+            "symbol": "ENS",
+            "decimals": 18
+        },
+        {
+            "feed": "0x920E5DC12E7500c6571C63D4Bba19c62e99d6883",
+            "description": "EURT / USD",
+            "base": "0xC581b735A1688071A1746c968e0798D642EDE491",
+            "name": "Euro Tether",
+            "symbol": "EURT",
+            "decimals": 6
+        },
+        {
+            "feed": "0xc1D757bee6BCDD45093979bFE60d341B833B2dB0",
+            "description": "TRIBE / ETH",
+            "base": "0xc7283b66Eb1EB5FB86327f08e1B5816b0720212B",
+            "name": "Tribe",
+            "symbol": "TRIBE",
+            "decimals": 18
+        },
+        {
+            "feed": "0x02E59cE2921e982A481c6ddb709B76C33397Eb14",
+            "description": "FOX / USD",
+            "base": "0xc770EEfAd204B5180dF6a14Ee197D99d808ee52d",
+            "name": "FOX",
+            "symbol": "FOX",
+            "decimals": 18
+        },
+        {
+            "feed": "0xA6FA156482a3028846c886Fcc94cA8ec607187B4",
+            "description": "GRT / USD",
+            "base": "0xc944E90C64B2c07662A292be6244BDf05Cda44a7",
+            "name": "Graph Token",
+            "symbol": "GRT",
+            "decimals": 18
+        },
+        {
+            "feed": "0x91401cedCBFd9680cE193A5F54E716504233e998",
+            "description": "GRT / ETH",
+            "base": "0xc944E90C64B2c07662A292be6244BDf05Cda44a7",
+            "name": "Graph Token",
+            "symbol": "GRT",
+            "decimals": 18
+        },
+        {
+            "feed": "0x2c9A8c2caEb80FEb24048587a10BFB6aeFF601c5",
+            "description": "WING / USD",
+            "base": "0xcB3df3108635932D912632ef7132d03EcFC39080",
+            "name": "Wings",
+            "symbol": "WING",
+            "decimals": 18
+        },
+        {
+            "feed": "0x29236dFcae0aEE2D6da157F3B6835830c75875Ad",
+            "description": "SWAP / ETH",
+            "base": "0xCC4304A31d09258b0029eA7FE63d032f52e44EFe",
+            "name": "TrustSwap Token",
+            "symbol": "SWAP",
+            "decimals": 18
+        },
+        {
+            "feed": "0xCd4Ee1110707D79704d6881A4fEf158e5FdB334b",
+            "description": "SLP / ETH",
+            "base": "0xCC8Fa225D80b9c7D42F96e9570156c65D6cAAa25",
+            "name": "Smooth Love Potion",
+            "symbol": "SLP",
+            "decimals": 0
+        },
+        {
+            "feed": "0x34B41725Cf934866A4b89d65395F15af2Cb9aE89",
+            "description": "OMG / USD",
+            "base": "0xd26114cd6EE289AccF82350c8d8487fedB8A0C07",
+            "name": "OMGToken",
+            "symbol": "OMG",
+            "decimals": 18
+        },
+        {
+            "feed": "0xA1b2e83815723e4e4BBF437E56f65b6AAFd5754b",
+            "description": "OMG / ETH",
+            "base": "0xd26114cd6EE289AccF82350c8d8487fedB8A0C07",
+            "name": "OMGToken",
+            "symbol": "OMG",
+            "decimals": 18
+        },
+        {
+            "feed": "0x1a8AC67A1B64F7fd71bB91c21581f036AbE6AEc2",
+            "description": "LUNA / ETH",
+            "base": "0xd2877702675e6cEb975b4A1dFf9fb7BAF4C91ea9",
+            "name": "Wrapped LUNA Token",
+            "symbol": "LUNA",
+            "decimals": 18
+        },
+        {
+            "feed": "0x1Ee7399b07E626A42D8D87Dc4A2a0C2D952C1BBB",
+            "description": "RGT / ETH",
+            "base": "0xD291E7a03283640FDc51b121aC401383A46cC623",
+            "name": "Rari Governance Token",
+            "symbol": "RGT",
+            "decimals": 18
+        },
+        {
+            "feed": "0xd5090674b4653240cd94eE886484ca808c6E6694",
+            "description": "AMPL / USD",
+            "base": "0xD46bA6D942050d489DBd938a2C909A5d5039A161",
+            "name": "Ampleforth",
+            "symbol": "AMPL",
+            "decimals": 9
+        },
+        {
+            "feed": "0xb92EE05E7514FfEDDDbcd76F5e3064691F6eC79e",
+            "description": "AMPL / ETH",
+            "base": "0xD46bA6D942050d489DBd938a2C909A5d5039A161",
+            "name": "Ampleforth",
+            "symbol": "AMPL",
+            "decimals": 9
+        },
+        {
+            "feed": "0xb4c4a493AB6356497713A78FFA6c60FB53517c63",
+            "description": "CRV / USD",
+            "base": "0xD533a949740bb3306d119CC777fa900bA034cd52",
+            "name": "Curve DAO Token",
+            "symbol": "CRV",
+            "decimals": 18
+        },
+        {
+            "feed": "0x7f67Ca2ce5299a67acd83D52A064C5b8e41dDb80",
+            "description": "CRV / ETH",
+            "base": "0xD533a949740bb3306d119CC777fa900bA034cd52",
+            "name": "Curve DAO Token",
+            "symbol": "CRV",
+            "decimals": 18
+        },
+        {
+            "feed": "0xa964273552C1dBa201f5f000215F5BD5576e8f93",
+            "description": "USDT / USD",
+            "base": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+            "name": "Tether USD",
+            "symbol": "USDT",
+            "decimals": 6
+        },
+        {
+            "feed": "0x7De0d6fce0C128395C488cb4Df667cdbfb35d7DE",
+            "description": "USDT / ETH",
+            "base": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+            "name": "Tether USD",
+            "symbol": "USDT",
+            "decimals": 6
+        },
+        {
+            "feed": "0x64a119DCf78E7E3FcED89c429f6F47Bf0cd80250",
+            "description": "ALCX / ETH",
+            "base": "0xdBdb4d16EdA451D0503b854CF79D55697F90c8DF",
+            "name": "Alchemix",
+            "symbol": "ALCX",
+            "decimals": 18
+        },
+        {
+            "feed": "0xbC60258F775683eA28048030806Ad3A80c4A33Ae",
+            "description": "KNC / USD",
+            "base": "0xdd974D5C2e2928deA5F71b9825b8b646686BD200",
+            "name": "Kyber Network Crystal",
+            "symbol": "KNC",
+            "decimals": 18
+        },
+        {
+            "feed": "0xB3B1882C0A7eB5097F12547bCD20Dc6FAE7aC8a6",
+            "description": "KNC / ETH",
+            "base": "0xdd974D5C2e2928deA5F71b9825b8b646686BD200",
+            "name": "Kyber Network Crystal",
+            "symbol": "KNC",
+            "decimals": 18
+        },
+        {
+            "feed": "0x0E27a36B2dFc0935A99Ba0c9C8E0F764c2da606C",
+            "description": "GTC / ETH",
+            "base": "0xDe30da39c46104798bB5aA3fe8B9e0e1F348163F",
+            "name": "Gitcoin",
+            "symbol": "GTC",
+            "decimals": 18
+        },
+        {
+            "feed": "0x05b83A5209BEd4299f056Ef1CF4F1283EbB1dD27",
+            "description": "HUSD / ETH",
+            "base": "0xdF574c24545E5FfEcb9a659c229253D4111d87e1",
+            "name": "HUSD",
+            "symbol": "HUSD",
+            "decimals": 8
+        },
+        {
+            "feed": "0x04cdE3a52a72C2d56923C94242bFc15a8D9d9E36",
+            "description": "sDEFI / USD",
+            "base": "0xe1aFe1Fd76Fd88f78cBf599ea1846231B8bA3B6B",
+            "name": "Synth sDEFI",
+            "symbol": "sDEFI",
+            "decimals": 18
+        },
+        {
+            "feed": "0x6D479C888D29aEF7Ed210F202f49c0b22c03601E",
+            "description": "INJ / USD",
+            "base": "0xe28b3B32B6c345A34Ff64674606124Dd5Aceca30",
+            "name": "Injective Token",
+            "symbol": "INJ",
+            "decimals": 18
+        },
+        {
+            "feed": "0x3d47eF9690Bd00C77c568b73140dC20F34453766",
+            "description": "ZRX / USD",
+            "base": "0xE41d2489571d322189246DaFA5ebDe1F4699F498",
+            "name": "0x Protocol Token",
+            "symbol": "ZRX",
+            "decimals": 18
+        },
+        {
+            "feed": "0x6B39588D2FC7990CC81544DFd4674C909E9EFeea",
+            "description": "ZRX / ETH",
+            "base": "0xE41d2489571d322189246DaFA5ebDe1F4699F498",
+            "name": "0x Protocol Token",
+            "symbol": "ZRX",
+            "decimals": 18
+        },
+        {
+            "feed": "0x751d87122c81f0eCe576338C400ebB978D039188",
+            "description": "MLN / ETH",
+            "base": "0xec67005c4E498Ec7f55E092bd1d35cbC47C91892",
+            "name": "Melon Token",
+            "symbol": "MLN",
+            "decimals": 18
+        },
+        {
+            "feed": "0x86979C7c9cDf64687Ba8077857B8840fd4616F4f",
+            "description": "ACH / USD",
+            "base": "0xEd04915c23f00A313a544955524EB7DBD823143d",
+            "name": "Alchemy",
+            "symbol": "ACH",
+            "decimals": 8
+        },
+        {
+            "feed": "0x8f226FDC030B8ea27FCdff5c3D4810D0bF8DDcAa",
+            "description": "BICO / USD",
+            "base": "0xF17e65822b568B3903685a7c9F496CF7656Cc6C2",
+            "name": "Biconomy Token",
+            "symbol": "BICO",
+            "decimals": 18
+        },
+        {
+            "feed": "0x3f00247Dc3bc14A8dCfA682318Ce566b1f34343A",
+            "description": "IMX / USD",
+            "base": "0xF57e7e7C23978C3cAEC3C3548E3D615c346e79fF",
+            "name": "Immutable X",
+            "symbol": "IMX",
+            "decimals": 18
+        },
+        {
+            "feed": "0xCBbe4ff0d8add07CCe71afC0CcdF3492b8eaA76A",
+            "description": "ENJ / USD",
+            "base": "0xF629cBd94d3791C9250152BD8dfBDF380E2a3B9c",
+            "name": "Enjin Coin",
+            "symbol": "ENJ",
+            "decimals": 18
+        },
+        {
+            "feed": "0xdBd66e8D31F506e0cc8CB2f346De4C7FA3f655DE",
+            "description": "ENJ / ETH",
+            "base": "0xF629cBd94d3791C9250152BD8dfBDF380E2a3B9c",
+            "name": "Enjin Coin",
+            "symbol": "ENJ",
+            "decimals": 18
+        },
+        {
+            "feed": "0x1692c66463C88dB0F945D17Fb16ba4f1B6fb64d9",
+            "description": "FRONT / USD",
+            "base": "0xf8C3527CC04340b208C854E985240c02F7B7793f",
+            "name": "Frontier Token",
+            "symbol": "FRONT",
+            "decimals": 18
+        },
+        {
+            "feed": "0x511Bbc68Cc94cE769115bd735B74039F5d9dc8D0",
+            "description": "RARI / ETH",
+            "base": "0xFca59Cd816aB1eaD66534D82bc21E7515cE441CF",
+            "name": "Rarible",
+            "symbol": "RARI",
+            "decimals": 18
+        },
+        {
+            "feed": "0xfAaA7460eD59C12E204349766CE73Cf5202e6aD6",
+            "description": "AMP / USD",
+            "base": "0xfF20817765cB7f73d4bde2e66e067E58D11095C2",
+            "name": "Amp",
+            "symbol": "AMP",
+            "decimals": 18
+        }
+    ]
+}
