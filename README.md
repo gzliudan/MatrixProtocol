@@ -1,42 +1,94 @@
-# Advanced Sample Hardhat Project
+# Matrix Protocol
 
-This project demonstrates an advanced Hardhat use case, integrating other tools commonly used alongside Hardhat in the ecosystem.
+This project is forked from [set-protocol-v2](https://github.com/SetProtocol/set-protocol-v2).
 
-The project comes with a sample contract, a test for that contract, a sample script that deploys that contract, and an example of a task implementation, which simply lists the available accounts. It also comes with a variety of other tools, preconfigured to work with the project code.
-
-Try running some of the following tasks:
+## Install
 
 ```shell
-npx hardhat accounts
-npx hardhat compile
-npx hardhat clean
-npx hardhat test
-npx hardhat node
-npx hardhat help
-REPORT_GAS=true npx hardhat test
-npx hardhat coverage
-npx hardhat run scripts/deploy.js
-node scripts/deploy.js
-npx eslint '**/*.js'
-npx eslint '**/*.js' --fix
-npx prettier '**/*.{json,sol,md}' --check
-npx prettier '**/*.{json,sol,md}' --write
-npx solhint 'contracts/**/*.sol'
-npx solhint 'contracts/**/*.sol' --fix
+git clone https://gitee.com/matrix-tech/MatrixProtocol
+cd MatrixProtocol
+yarn
 ```
 
-# Etherscan verification
-
-To try out Etherscan verification, you first need to deploy a contract to an Ethereum network that's supported by Etherscan, such as Ropsten.
-
-In this project, copy the .env.example file to a file named .env, and then edit it to fill in the details. Enter your Etherscan API key, your Ropsten node URL (eg from Alchemy), and the private key of the account which will send the deployment transaction. With a valid .env file in place, first deploy your contract:
+## Compile
 
 ```shell
-hardhat run --network ropsten scripts/deploy.js
+yarn compile
 ```
 
-Then, copy the deployment address and paste it in to replace `DEPLOYED_CONTRACT_ADDRESS` in this command:
+## Test
 
 ```shell
-npx hardhat verify --network ropsten DEPLOYED_CONTRACT_ADDRESS "Hello, Hardhat!"
+yarn test
+```
+
+## Setup config file
+
+Create config file .env from .env.example, and edit it:
+
+```shell
+cp .env.example .env
+vi .env
+```
+
+## Deploy
+
+```shell
+# for testnet mumbai
+yarn deploy:mumbai
+
+# for mainnet polygon
+yarn deploy:polygon
+```
+
+## Verify
+
+```shell
+# for testnet mumbai
+yarn verify:mumbai
+
+# for mainnet polygon
+yarn verify:polygon
+```
+
+## Setup admin roles
+
+### 1. grant admin role to an account
+
+```shell
+# for testnet mumbai
+yarn grantAdmin:mumbai ${ACCOUNT_ADDRESS}
+
+# for mainnet polygon
+yarn grantAdmin:polygon ${ACCOUNT_ADDRESS}
+```
+
+### 2. grant default admin role to an account
+
+```shell
+# for testnet mumbai
+yarn grantDefaultAdmin:mumbai ${ACCOUNT_ADDRESS}
+
+# for mainnet polygon
+yarn grantDefaultAdmin:polygon ${ACCOUNT_ADDRESS}
+```
+
+### 3. revoke an account from admin role
+
+```shell
+# for testnet mumbai
+yarn revokeAdmin:mumbai ${ACCOUNT_ADDRESS}
+
+# for mainnet polygon
+yarn revokeAdmin:polygon ${ACCOUNT_ADDRESS}
+```
+
+### 4. revoke an account from default admin role
+
+```shell
+# for testnet mumbai
+yarn revokeDefaultAdmin:mumbai ${ACCOUNT_ADDRESS}
+
+# for mainnet polygon
+yarn revokeDefaultAdmin:polygon ${ACCOUNT_ADDRESS}
 ```
