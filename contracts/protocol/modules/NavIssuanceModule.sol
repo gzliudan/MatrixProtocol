@@ -78,11 +78,11 @@ contract NavIssuanceModule is ModuleBase, ReentrancyGuard {
     }
 
     struct ActionInfo {
-        uint256 preFeeReserveQuantity; // Reserve value before fees; During issuance, represents raw quantity during redeem, represents post-premium value
+        uint256 preFeeReserveQuantity; // Reserve value before fees: represents raw quantity when issuance; represents post-premium value when redeem
         uint256 protocolFees; // Total protocol fees (direct + manager revenue share)
         uint256 managerFee; // Total manager fee paid in reserve asset
-        uint256 netFlowQuantity; // When issuing, quantity of reserve asset sent to MatrixToken when redeeming, quantity of reserve asset sent to redeemer
-        uint256 matrixTokenQuantity; // When issuing, quantity of minted to mintee; When redeeming, quantity of redeemed
+        uint256 netFlowQuantity; // quantity of reserve asset sent to MatrixToken when issuing; quantity of reserve asset sent to redeemer when redeeming
+        uint256 matrixTokenQuantity; // quantity of minted to mintee when issuing; quantity of redeemed When redeeming;
         uint256 previousMatrixTokenSupply; // supply prior to issue/redeem action
         uint256 newMatrixTokenSupply; // supply after issue/redeem action
         uint256 newReservePositionUnit; // MatrixToken reserve asset position unit after issue/redeem
@@ -102,9 +102,10 @@ contract NavIssuanceModule is ModuleBase, ReentrancyGuard {
 
     event IssueMatrixTokenNav(
         IMatrixToken indexed matrixToken,
-        address issuer,
-        address to,
+        address indexed issuer,
+        address indexed to,
         address reserveAsset,
+        uint256 reserveAssetQuantity,
         address hookContract,
         uint256 matrixTokenQuantity,
         uint256 managerFee,
@@ -113,9 +114,10 @@ contract NavIssuanceModule is ModuleBase, ReentrancyGuard {
 
     event RedeemMatrixTokenNav(
         IMatrixToken indexed matrixToken,
-        address redeemer,
-        address to,
+        address indexed redeemer,
+        address indexed to,
         address reserveAsset,
+        uint256 reserveReceiveQuantity,
         address hookContract,
         uint256 matrixTokenQuantity,
         uint256 managerFee,
@@ -735,6 +737,7 @@ contract NavIssuanceModule is ModuleBase, ReentrancyGuard {
             msg.sender,
             to,
             reserveAsset,
+            issueInfo.preFeeReserveQuantity,
             address(_issuanceSettings[matrixToken].managerIssuanceHook),
             issueInfo.matrixTokenQuantity,
             issueInfo.managerFee,
@@ -756,6 +759,7 @@ contract NavIssuanceModule is ModuleBase, ReentrancyGuard {
             msg.sender,
             to,
             reserveAsset,
+            redeemInfo.netFlowQuantity,
             address(_issuanceSettings[matrixToken].managerRedemptionHook),
             redeemInfo.matrixTokenQuantity,
             redeemInfo.managerFee,

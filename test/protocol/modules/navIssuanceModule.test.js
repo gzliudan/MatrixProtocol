@@ -606,7 +606,7 @@ describe('contract NavIssuanceModule', async () => {
       const matrixTokenQuantity = ethToWei(1);
 
       const matrixTokenValuation = await systemFixture.matrixValuer.calculateMatrixTokenValuation(matrixTokenAddress, reserveAsset);
-      const expected = getExpectedReserveRedeemQuantity(
+      const expectedRedeemQuantity = getExpectedReserveRedeemQuantity(
         matrixTokenQuantity,
         matrixTokenValuation,
         usdToWei(1), // USDC base units
@@ -616,7 +616,7 @@ describe('contract NavIssuanceModule', async () => {
       );
 
       const result = await systemFixture.navIssuanceModule.getExpectedReserveRedeemQuantity(matrixTokenAddress, reserveAsset, matrixTokenQuantity);
-      expect(result).eq(expected);
+      expect(result).eq(expectedRedeemQuantity);
     });
   });
 
@@ -947,7 +947,7 @@ describe('contract NavIssuanceModule', async () => {
           );
           await expect(issue())
             .emit(systemFixture.navIssuanceModule, 'IssueMatrixTokenNav')
-            .withArgs(matrixTokenAddress, caller.address, to.address, reserveAsset, ZERO_ADDRESS, expectedTokenIssued, ZERO, ZERO);
+            .withArgs(matrixTokenAddress, caller.address, to.address, reserveAsset, reserveQuantity, ZERO_ADDRESS, expectedTokenIssued, ZERO, ZERO);
         });
 
         it('case 1: should reconcile balances', async () => {
@@ -1012,10 +1012,10 @@ describe('contract NavIssuanceModule', async () => {
           });
 
           it('case 1.1: should have deposited the reserve asset into the MatrixToken', async () => {
-            const oldUSDCBalance = await systemFixture.usdc.balanceOf(matrixToken.address);
+            const oldUsdcBalance = await systemFixture.usdc.balanceOf(matrixToken.address);
             await issue();
-            const newUSDCBalance = await systemFixture.usdc.balanceOf(matrixToken.address);
-            expect(newUSDCBalance.sub(oldUSDCBalance)).eq(reserveQuantity);
+            const newUsdcBalance = await systemFixture.usdc.balanceOf(matrixToken.address);
+            expect(newUsdcBalance.sub(oldUsdcBalance)).eq(reserveQuantity);
           });
 
           it('case 1.1: should have updated the reserve asset position correctly', async () => {
@@ -1146,11 +1146,11 @@ describe('contract NavIssuanceModule', async () => {
         });
 
         it('case 2: should have deposited the reserve asset into the MatrixToken', async () => {
-          const oldUSDCBalance = await systemFixture.usdc.balanceOf(matrixToken.address);
+          const oldUsdcBalance = await systemFixture.usdc.balanceOf(matrixToken.address);
           await issue();
-          const newUSDCBalance = await systemFixture.usdc.balanceOf(matrixToken.address);
+          const newUsdcBalance = await systemFixture.usdc.balanceOf(matrixToken.address);
           const postFeeQuantity = getExpectedPostFeeQuantity(issueQuantity, managerFees[0], protocolDirectFee);
-          expect(newUSDCBalance.sub(oldUSDCBalance)).eq(postFeeQuantity);
+          expect(newUsdcBalance.sub(oldUsdcBalance)).eq(postFeeQuantity);
         });
 
         it('case 2: should have updated the reserve asset position correctly', async () => {
@@ -1387,7 +1387,7 @@ describe('contract NavIssuanceModule', async () => {
           );
           await expect(issueWithEther())
             .emit(systemFixture.navIssuanceModule, 'IssueMatrixTokenNav')
-            .withArgs(matrixTokenAddress, caller.address, to.address, systemFixture.weth.address, ZERO_ADDRESS, expectedTokenIssued, ZERO, ZERO);
+            .withArgs(matrixTokenAddress, caller.address, to.address, systemFixture.weth.address, value, ZERO_ADDRESS, expectedTokenIssued, ZERO, ZERO);
         });
 
         it('case 1: should reconcile balances', async () => {
@@ -1684,11 +1684,7 @@ describe('contract NavIssuanceModule', async () => {
 
         it('case 1: should have redeemed the reserve asset to the recipient', async () => {
           const matrixTokenValuation = await systemFixture.matrixValuer.calculateMatrixTokenValuation(matrixTokenAddress, reserveAsset);
-          const oldBalance = await systemFixture.usdc.balanceOf(recipient.address);
-          await redeem();
-          const newBalance = await systemFixture.usdc.balanceOf(recipient.address);
-
-          const expectedUSDCBalance = getExpectedReserveRedeemQuantity(
+          const expectedRedeemQuantity = getExpectedReserveRedeemQuantity(
             matrixTokenQuantity,
             matrixTokenValuation,
             usdToWei(1), // USDC base units
@@ -1696,7 +1692,12 @@ describe('contract NavIssuanceModule', async () => {
             ZERO, // Protocol fee percentage
             premiumPercentage
           );
-          expect(newBalance.sub(oldBalance)).eq(expectedUSDCBalance);
+
+          const oldBalance = await systemFixture.usdc.balanceOf(recipient.address);
+          await redeem();
+          const newBalance = await systemFixture.usdc.balanceOf(recipient.address);
+
+          expect(newBalance.sub(oldBalance)).eq(expectedRedeemQuantity);
         });
 
         it('case 1: should have updated the reserve asset position correctly', async () => {
@@ -1734,9 +1735,19 @@ describe('contract NavIssuanceModule', async () => {
         });
 
         it('case 1: should emit the RedeemMatrixTokenNav event', async () => {
+          const matrixTokenValuation = await systemFixture.matrixValuer.calculateMatrixTokenValuation(matrixTokenAddress, reserveAsset);
+          const expectedRedeemQuantity = getExpectedReserveRedeemQuantity(
+            matrixTokenQuantity,
+            matrixTokenValuation,
+            usdToWei(1), // USDC base units
+            managerFees[1],
+            ZERO, // Protocol fee percentage
+            premiumPercentage
+          );
+
           await expect(redeem())
             .emit(systemFixture.navIssuanceModule, 'RedeemMatrixTokenNav')
-            .withArgs(matrixTokenAddress, caller.address, to.address, reserveAsset, ZERO_ADDRESS, matrixTokenQuantity, ZERO, ZERO);
+            .withArgs(matrixTokenAddress, caller.address, to.address, reserveAsset, expectedRedeemQuantity, ZERO_ADDRESS, matrixTokenQuantity, ZERO, ZERO);
         });
 
         it('case 1: should reconcile balances', async () => {
@@ -1806,10 +1817,6 @@ describe('contract NavIssuanceModule', async () => {
 
           it('case 1.1: should have redeemed the reserve asset to the recipient', async () => {
             const matrixTokenValuation = await systemFixture.matrixValuer.calculateMatrixTokenValuation(matrixTokenAddress, reserveAsset);
-            const oldUSDCBalance = await systemFixture.usdc.balanceOf(recipient.address);
-            await redeem();
-            const newUSDCBalance = await systemFixture.usdc.balanceOf(recipient.address);
-
             const expectedRedeemQuantity = getExpectedReserveRedeemQuantity(
               matrixTokenQuantity,
               matrixTokenValuation,
@@ -1819,7 +1826,11 @@ describe('contract NavIssuanceModule', async () => {
               premiumPercentage
             );
 
-            expect(newUSDCBalance.sub(oldUSDCBalance)).eq(expectedRedeemQuantity);
+            const oldUsdcBalance = await systemFixture.usdc.balanceOf(recipient.address);
+            await redeem();
+            const newUsdcBalance = await systemFixture.usdc.balanceOf(recipient.address);
+
+            expect(newUsdcBalance.sub(oldUsdcBalance)).eq(expectedRedeemQuantity);
           });
 
           it('case 1.1: should have updated the reserve asset position correctly', async () => {
@@ -1953,9 +1964,7 @@ describe('contract NavIssuanceModule', async () => {
 
         it('case 2: should have redeemed the reserve asset to the recipient', async () => {
           const matrixTokenValuation = await systemFixture.matrixValuer.calculateMatrixTokenValuation(matrixTokenAddress, reserveAsset);
-          await redeem();
-          const newUSDCBalance = await systemFixture.usdc.balanceOf(recipient.address);
-          const expectedUSDCBalance = getExpectedReserveRedeemQuantity(
+          const expectedRedeemQuantity = getExpectedReserveRedeemQuantity(
             matrixTokenQuantity,
             matrixTokenValuation,
             usdToWei(1), // USDC base units
@@ -1963,7 +1972,12 @@ describe('contract NavIssuanceModule', async () => {
             protocolDirectFee, // Protocol fee percentage
             premiumPercentage
           );
-          expect(newUSDCBalance).eq(expectedUSDCBalance);
+
+          const oldUsdcBalance = await systemFixture.usdc.balanceOf(recipient.address);
+          await redeem();
+          const newUsdcBalance = await systemFixture.usdc.balanceOf(recipient.address);
+
+          expect(newUsdcBalance.sub(oldUsdcBalance)).eq(expectedRedeemQuantity);
         });
 
         it('case 2: should have updated the reserve asset position correctly', async () => {
@@ -2155,11 +2169,6 @@ describe('contract NavIssuanceModule', async () => {
 
         it('case 1: should have redeemed the reserve asset to the recipient', async () => {
           const matrixTokenValuation = await systemFixture.matrixValuer.calculateMatrixTokenValuation(matrixTokenAddress, systemFixture.weth.address);
-
-          const oldEthBalance = await getEthBalance(recipient.address);
-          await redeemIntoEther();
-          const newEthBalance = await getEthBalance(recipient.address);
-
           const expectedRedeemQuantity = getExpectedReserveRedeemQuantity(
             matrixTokenQuantity,
             matrixTokenValuation,
@@ -2168,6 +2177,10 @@ describe('contract NavIssuanceModule', async () => {
             ZERO, // Protocol fee percentage
             premiumPercentage
           );
+
+          const oldEthBalance = await getEthBalance(recipient.address);
+          await redeemIntoEther();
+          const newEthBalance = await getEthBalance(recipient.address);
 
           expect(newEthBalance.sub(oldEthBalance)).eq(expectedRedeemQuantity);
         });
@@ -2206,9 +2219,30 @@ describe('contract NavIssuanceModule', async () => {
         });
 
         it('case 1: should emit the RedeemMatrixTokenNav event', async () => {
+          const reserveAsset = systemFixture.weth.address;
+          const matrixTokenValuation = await systemFixture.matrixValuer.calculateMatrixTokenValuation(matrixTokenAddress, reserveAsset);
+          const expectedRedeemQuantity = getExpectedReserveRedeemQuantity(
+            matrixTokenQuantity,
+            matrixTokenValuation,
+            ethToWei(1), // ETH base units
+            managerFees[1],
+            ZERO, // Protocol fee percentage
+            premiumPercentage
+          );
+
           await expect(redeemIntoEther())
             .emit(systemFixture.navIssuanceModule, 'RedeemMatrixTokenNav')
-            .withArgs(matrixTokenAddress, caller.address, to.address, systemFixture.weth.address, ZERO_ADDRESS, matrixTokenQuantity, ZERO, ZERO);
+            .withArgs(
+              matrixTokenAddress,
+              caller.address,
+              to.address,
+              systemFixture.weth.address,
+              expectedRedeemQuantity,
+              ZERO_ADDRESS,
+              matrixTokenQuantity,
+              ZERO,
+              ZERO
+            );
         });
 
         it('case 1: should reconcile balances', async () => {
