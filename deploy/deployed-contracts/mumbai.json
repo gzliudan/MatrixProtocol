@@ -7,7 +7,7 @@
     "matrix_valuer": "0xaf7ef1af98dFb112Da1c7D02E188E5E7b50A55C1",
     "matrix_token_factory": "0xa472b9b6D864134Dba29C4Af927e6a0689C7fb33",
     "integration_registry": "0x9934539686D5F6005A64221b0FC3dCDb5eC41F52",
-    "basic_issuance_module": "0x0862DCE8Cc086eFAF88BC9deb6EB6fe0c2554685",
+    "basic_issuance_module": "0x1B113c7f4c1F43452916BABD2CB09DC4Ab8B5Ea4",
     "streaming_fee_module": "0xAa9a3C0D4225EeA8622a1Ff608ad28786352aaa9",
     "trade_module": "0xB84C545B5416eF3D628F98DeDaB63580deab22Ba",
     "airdrop_module": "0xFf16D96F103D21083DaD3012ec352842F4B22207",
