@@ -39,8 +39,24 @@ contract BasicIssuanceModule is ModuleBase, ReentrancyGuard {
 
     // ==================== Events ====================
 
-    event IssueMatrixToken(address indexed matrixToken, address indexed issuer, address indexed to, address hookContract, uint256 quantity);
-    event RedeemMatrixToken(address indexed matrixToken, address indexed redeemer, address indexed to, uint256 quantity);
+    event IssueMatrixToken(
+        address indexed matrixToken,
+        address indexed issuer,
+        address indexed to,
+        address hookContract,
+        uint256 quantity,
+        address[] components,
+        uint256[] componentQuantities
+    );
+
+    event RedeemMatrixToken(
+        address indexed matrixToken,
+        address indexed redeemer,
+        address indexed to,
+        uint256 quantity,
+        address[] components,
+        uint256[] componentQuantities
+    );
 
     // ==================== Constructor function ====================
 
@@ -106,7 +122,7 @@ contract BasicIssuanceModule is ModuleBase, ReentrancyGuard {
         // Mint the MatrixToken
         matrixToken.mint(to, quantity);
 
-        emit IssueMatrixToken(address(matrixToken), msg.sender, to, hookContract, quantity);
+        emit IssueMatrixToken(address(matrixToken), msg.sender, to, hookContract, quantity, components, componentQuantities);
     }
 
     /**
@@ -127,8 +143,10 @@ contract BasicIssuanceModule is ModuleBase, ReentrancyGuard {
         // Burn the MatrixToken - ERC20's internal burn already checks that the user has enough balance
         matrixToken.burn(msg.sender, quantity);
 
-        // For each position, invoke the MatrixToken to transfer the tokens to the user
         address[] memory components = matrixToken.getComponents();
+        uint256[] memory componentQuantities = new uint256[](components.length);
+
+        // For each position, invoke the MatrixToken to transfer the tokens to the user
         for (uint256 i = 0; i < components.length; i++) {
             address component = components[i];
             require(!matrixToken.hasExternalPosition(component), "BI2b"); // "Only default positions are supported"
@@ -136,13 +154,13 @@ contract BasicIssuanceModule is ModuleBase, ReentrancyGuard {
             uint256 unit = matrixToken.getDefaultPositionRealUnit(component).toUint256();
 
             // Use preciseMul to round down to ensure overcollateration when small redeem quantities are provided
-            uint256 componentQuantity = quantity.preciseMul(unit);
+            componentQuantities[i] = quantity.preciseMul(unit);
 
             // Instruct the MatrixToken to transfer the component to the user
-            matrixToken.invokeExactSafeTransfer(component, to, componentQuantity);
+            matrixToken.invokeExactSafeTransfer(component, to, componentQuantities[i]);
         }
 
-        emit RedeemMatrixToken(address(matrixToken), msg.sender, to, quantity);
+        emit RedeemMatrixToken(address(matrixToken), msg.sender, to, quantity, components, componentQuantities);
     }
 
     // ==================== Public functions ====================
