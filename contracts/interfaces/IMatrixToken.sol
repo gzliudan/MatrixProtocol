@@ -108,6 +108,8 @@ interface IMatrixToken is IERC20 {
 
     function getExternalPositionData(address component, address positionModule) external view returns (bytes memory);
 
+    function isManager(address account) external view returns (bool);
+
     function isExternalPositionModule(address component, address module) external view returns (bool);
 
     function isComponent(address component) external view returns (bool);

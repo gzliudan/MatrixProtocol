@@ -240,6 +240,10 @@ contract MatrixToken is ERC20, IMatrixToken {
         return totalUnits;
     }
 
+    function isManager(address account) external view returns (bool) {
+        return _manager == account;
+    }
+
     /**
      * @dev Only ModuleStates of INITIALIZED modules are considered enabled.
      */
