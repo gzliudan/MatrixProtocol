@@ -103,6 +103,7 @@ describe('contract BasicIssuanceModule', async () => {
   describe('issue', async () => {
     const units = [ethToWei(1), btcToWei(2)];
 
+    let components;
     let issueQuantity;
     let preIssueHookAddress;
 
@@ -113,8 +114,9 @@ describe('contract BasicIssuanceModule', async () => {
     let snapshotId;
     before(async () => {
       snapshotId = await snapshotBlockchain();
-      const components = [systemFixture.weth.address, systemFixture.wbtc.address];
+
       const modules = [systemFixture.basicIssuanceModule.address];
+      components = [systemFixture.weth.address, systemFixture.wbtc.address];
       matrixToken = await systemFixture.createMatrixToken(components, units, modules, owner.address);
 
       // Approve tokens to the issuance mdoule
@@ -182,9 +184,11 @@ describe('contract BasicIssuanceModule', async () => {
       });
 
       it('should emit the IssueMatrixToken event', async () => {
+        const componentQuantities = [preciseMul(units[0], issueQuantity), preciseMul(units[1], issueQuantity)];
+
         await expect(issue())
           .emit(systemFixture.basicIssuanceModule, 'IssueMatrixToken')
-          .withArgs(matrixTokenAddress, caller.address, recipient.address, ZERO_ADDRESS, issueQuantity);
+          .withArgs(matrixTokenAddress, caller.address, recipient.address, ZERO_ADDRESS, issueQuantity, components, componentQuantities);
       });
 
       it('should deposited correct quantity WETH into the MatrixToken when issue extremely small', async () => {
@@ -255,9 +259,11 @@ describe('contract BasicIssuanceModule', async () => {
       });
 
       it('should emit the IssueMatrixToken event', async () => {
+        const componentQuantities = [preciseMul(units[0], issueQuantity), preciseMul(units[1], issueQuantity)];
+
         await expect(issue())
           .emit(systemFixture.basicIssuanceModule, 'IssueMatrixToken')
-          .withArgs(matrixTokenAddress, caller.address, recipient.address, preIssueHookContract.address, issueQuantity);
+          .withArgs(matrixTokenAddress, caller.address, recipient.address, preIssueHookContract.address, issueQuantity, components, componentQuantities);
       });
     });
   });
@@ -265,8 +271,8 @@ describe('contract BasicIssuanceModule', async () => {
   describe('redeem', async () => {
     const units = [ethToWei(1), btcToWei(2)];
 
+    let components;
     let redeemQuantity;
-    // let preIssueHookAddress;
 
     async function redeem() {
       return systemFixture.basicIssuanceModule.connect(caller).redeem(matrixTokenAddress, redeemQuantity, recipient.address);
@@ -275,8 +281,9 @@ describe('contract BasicIssuanceModule', async () => {
     let snapshotId;
     before(async () => {
       snapshotId = await snapshotBlockchain();
-      const components = [systemFixture.weth.address, systemFixture.wbtc.address];
+
       const modules = [systemFixture.basicIssuanceModule.address];
+      components = [systemFixture.weth.address, systemFixture.wbtc.address];
       matrixToken = await systemFixture.createMatrixToken(components, units, modules, owner.address);
 
       // Approve tokens to the issuance module
@@ -339,7 +346,7 @@ describe('contract BasicIssuanceModule', async () => {
     it('should emit the RedeemMatrixToken event', async () => {
       await expect(redeem())
         .emit(systemFixture.basicIssuanceModule, 'RedeemMatrixToken')
-        .withArgs(matrixTokenAddress, caller.address, recipient.address, redeemQuantity);
+        .withArgs(matrixTokenAddress, caller.address, recipient.address, redeemQuantity, components, units);
     });
 
     it('should deposited correct quantity WETH to recipient account when redeem extremely small', async () => {
