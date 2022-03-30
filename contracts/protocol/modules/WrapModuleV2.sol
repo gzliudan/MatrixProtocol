@@ -10,6 +10,8 @@ import { ReentrancyGuard } from "@openzeppelin/contracts/security/ReentrancyGuar
 
 // ==================== Internal Imports ====================
 
+import { PreciseUnitMath } from "../../lib/PreciseUnitMath.sol";
+
 import { ModuleBase } from "../lib/ModuleBase.sol";
 import { PositionUtil } from "../lib/PositionUtil.sol";
 
@@ -26,6 +28,7 @@ import { IWrapV2Adapter } from "../../interfaces/IWrapV2Adapter.sol";
  */
 contract WrapModuleV2 is ModuleBase, ReentrancyGuard {
     using SafeCast for int256;
+    using PreciseUnitMath for uint256;
     using PositionUtil for IMatrixToken;
 
     // ==================== Variables ====================
@@ -221,7 +224,10 @@ contract WrapModuleV2 is ModuleBase, ReentrancyGuard {
     ) internal view {
         require(transactPositionUnits > 0, "WMb1a"); // "Target position units must be > 0"
         require(matrixToken.hasDefaultPosition(transactPosition), "WMb1b"); // "Target default position must be component"
-        require(matrixToken.hasSufficientDefaultUnits(transactPosition, transactPositionUnits), "WMb1c"); // "Unit cant be greater than existing"
+
+        if (transactPositionUnits != type(uint256).max) {
+            require(matrixToken.hasSufficientDefaultUnits(transactPosition, transactPositionUnits), "WMb1c"); // "Unit cant be greater than existing"
+        }
     }
 
     /**
@@ -241,12 +247,12 @@ contract WrapModuleV2 is ModuleBase, ReentrancyGuard {
         bool usesEther
     ) internal returns (uint256, uint256) {
         _validateInputs(matrixToken, underlyingToken, underlyingUnits);
+        IWrapV2Adapter wrapAdapter = IWrapV2Adapter(getAndValidateAdapter(integrationName));
 
         // Snapshot pre wrap balances
         (uint256 preActionUnderlyingNotional, uint256 preActionWrapNotional) = _snapshotTargetAssetsBalance(matrixToken, underlyingToken, wrappedToken);
-        uint256 notionalUnderlying = PositionUtil.getDefaultTotalNotional(matrixToken.totalSupply(), underlyingUnits);
 
-        IWrapV2Adapter wrapAdapter = IWrapV2Adapter(getAndValidateAdapter(integrationName));
+        uint256 notionalUnderlying = underlyingUnits.preciseMul(matrixToken.totalSupply());
 
         // Execute any pre-wrap actions depending on if using raw ETH or not
         if (usesEther) {
@@ -291,14 +297,14 @@ contract WrapModuleV2 is ModuleBase, ReentrancyGuard {
         bool usesEther
     ) internal returns (uint256, uint256) {
         _validateInputs(matrixToken, wrappedToken, wrappedTokenUnits);
-
-        (uint256 preActionUnderlyingNotional, uint256 preActionWrapNotional) = _snapshotTargetAssetsBalance(matrixToken, underlyingToken, wrappedToken);
-        uint256 notionalWrappedToken = PositionUtil.getDefaultTotalNotional(matrixToken.totalSupply(), wrappedTokenUnits);
-
         IWrapV2Adapter wrapAdapter = IWrapV2Adapter(getAndValidateAdapter(integrationName));
 
+        (uint256 preActionUnderlyingNotional, uint256 preActionWrapNotional) = _snapshotTargetAssetsBalance(matrixToken, underlyingToken, wrappedToken);
+
+        uint256 notionalWrappedToken = (wrappedTokenUnits == type(uint256).max) ? type(uint256).max : wrappedTokenUnits.preciseMul(matrixToken.totalSupply());
+
         // Approve wrapped token for spending in case protocols require approvals to transfer wrapped tokens
-        matrixToken.invokeSafeIncreaseAllowance(wrappedToken, wrapAdapter.getSpenderAddress(underlyingToken, wrappedToken), notionalWrappedToken);
+        matrixToken.invokeApprove(wrappedToken, wrapAdapter.getSpenderAddress(underlyingToken, wrappedToken), notionalWrappedToken);
 
         // Get function call data and invoke on MatrixToken
         _createUnwrapDataAndInvoke(

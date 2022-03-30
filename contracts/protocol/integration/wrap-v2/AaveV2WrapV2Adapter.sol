@@ -141,6 +141,11 @@ contract AaveV2WrapV2Adapter {
             bytes memory callData
         )
     {
+        // Use type(uint).max to withdraw the entire balance
+        if (wrappedTokenUnits != type(uint256).max) {
+            --wrappedTokenUnits;
+        }
+
         value = 0;
         target = ADDRESSES_PROVIDER.getLendingPool();
         callData = abi.encodeWithSignature("withdraw(address,uint256,address)", underlyingToken, wrappedTokenUnits, to);
