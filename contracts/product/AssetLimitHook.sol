@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 
 // ==================== External Imports ====================
 
-import { AccessControl } from "@openzeppelin/contracts/access/AccessControl.sol";
+import { AccessControlEnumerable } from "@openzeppelin/contracts/access/AccessControlEnumerable.sol";
 
 // ==================== Internal Imports ====================
 
@@ -18,7 +18,7 @@ import { INavIssuanceHook } from "../interfaces/INavIssuanceHook.sol";
  *
  * @dev NavIssuanceModule hook that checks the issue and redeem amounts are lower than a given limit.
  */
-contract AssetLimitHook is INavIssuanceHook, AccessControl {
+contract AssetLimitHook is INavIssuanceHook, AccessControlEnumerable {
     using AddressArrayUtil for address[];
 
     // ==================== Constants ====================

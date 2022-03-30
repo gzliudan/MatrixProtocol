@@ -5,7 +5,7 @@ pragma solidity ^0.8.0;
 // ==================== External Imports ====================
 
 import { ERC20 } from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import { AccessControl } from "@openzeppelin/contracts/access/AccessControl.sol";
+import { AccessControlEnumerable } from "@openzeppelin/contracts/access/AccessControlEnumerable.sol";
 
 // ==================== Internal Imports ====================
 
@@ -16,7 +16,7 @@ import { IPriceOracle } from "../../../interfaces/IPriceOracle.sol";
 import { IOracleAdapter } from "../../../interfaces/IOracleAdapter.sol";
 import { IUniswapV2Pair } from "../../../interfaces/external/uniswap-v2/IUniswapV2Pair.sol";
 
-contract UniswapV2PairPriceAdapter is AccessControl, IOracleAdapter {
+contract UniswapV2PairPriceAdapter is AccessControlEnumerable, IOracleAdapter {
     using PreciseUnitMath for uint256;
     using AddressArrayUtil for address[];
 

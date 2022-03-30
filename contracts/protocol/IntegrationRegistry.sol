@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 
 // ==================== External Imports ====================
 
-import { AccessControl } from "@openzeppelin/contracts/access/AccessControl.sol";
+import { AccessControlEnumerable } from "@openzeppelin/contracts/access/AccessControlEnumerable.sol";
 
 // ==================== Internal Imports ====================
 
@@ -17,7 +17,7 @@ import { IIntegrationRegistry } from "../interfaces/IIntegrationRegistry.sol";
  * @dev IntegrationRegistry holds state relating to the Modules and the integrations they are connected with.
  * The state is combined into a single Registry to allow governance updates to be aggregated to one contract.
  */
-contract IntegrationRegistry is AccessControl, IIntegrationRegistry {
+contract IntegrationRegistry is AccessControlEnumerable, IIntegrationRegistry {
     // ==================== Constants ====================
 
     bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");

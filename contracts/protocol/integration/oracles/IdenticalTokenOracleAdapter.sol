@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 
 // ==================== External Imports ====================
 
-import { AccessControl } from "@openzeppelin/contracts/access/AccessControl.sol";
+import { AccessControlEnumerable } from "@openzeppelin/contracts/access/AccessControlEnumerable.sol";
 
 // ==================== Internal Imports ====================
 
@@ -20,7 +20,7 @@ import { IOracleAdapter } from "../../../interfaces/IOracleAdapter.sol";
  *
  * @dev IdenticalTokenOracleAdapter returns token's price which is identical with other token
  */
-contract IdenticalTokenOracleAdapter is AccessControl, IOracleAdapter {
+contract IdenticalTokenOracleAdapter is AccessControlEnumerable, IOracleAdapter {
     using PreciseUnitMath for uint256;
     using AddressArrayUtil for address[];
 

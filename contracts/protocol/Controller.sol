@@ -5,7 +5,7 @@ pragma solidity ^0.8.0;
 // ==================== External Imports ====================
 
 import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import { AccessControl } from "@openzeppelin/contracts/access/AccessControl.sol";
+import { AccessControlEnumerable } from "@openzeppelin/contracts/access/AccessControlEnumerable.sol";
 
 // ==================== Internal Imports ====================
 
@@ -24,7 +24,7 @@ import { IIntegrationRegistry } from "../interfaces/IIntegrationRegistry.sol";
  * @dev houses state for approvals and system contracts such as added matrix,
  * modules, factories, resources (like price oracles), and protocol fee configurations.
  */
-contract Controller is AccessControl, IController {
+contract Controller is AccessControlEnumerable, IController {
     using AddressArrayUtil for address[];
 
     // ==================== Constants ====================

@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 
 // ==================== External Imports ====================
 
-import { AccessControl } from "@openzeppelin/contracts/access/AccessControl.sol";
+import { AccessControlEnumerable } from "@openzeppelin/contracts/access/AccessControlEnumerable.sol";
 
 // ==================== Internal Imports ====================
 
@@ -21,7 +21,7 @@ import { IOracleAdapter } from "../interfaces/IOracleAdapter.sol";
  *
  * @notice Prices are 18 decimals of precision
  */
-contract PriceOracle is AccessControl, IPriceOracle {
+contract PriceOracle is AccessControlEnumerable, IPriceOracle {
     using PreciseUnitMath for uint256;
     using AddressArrayUtil for address[];
 

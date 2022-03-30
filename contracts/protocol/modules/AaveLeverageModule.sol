@@ -7,7 +7,7 @@ pragma solidity ^0.8.0;
 import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import { SafeCast } from "@openzeppelin/contracts/utils/math/SafeCast.sol";
 import { SignedMath } from "@openzeppelin/contracts/utils/math/SignedMath.sol";
-import { AccessControl } from "@openzeppelin/contracts/access/AccessControl.sol";
+import { AccessControlEnumerable } from "@openzeppelin/contracts/access/AccessControlEnumerable.sol";
 import { ReentrancyGuard } from "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
 // ==================== Internal Imports ====================
@@ -39,7 +39,7 @@ import { IModuleIssuanceHook } from "../../interfaces/IModuleIssuanceHook.sol";
  * @notice Do not use this module in conjunction with other debt modules that allow Aave debt positions
  * as it could lead to double counting of debt when borrowed assets are the same.
  */
-contract AaveLeverageModule is ModuleBase, ReentrancyGuard, AccessControl, IModuleIssuanceHook {
+contract AaveLeverageModule is ModuleBase, ReentrancyGuard, AccessControlEnumerable, IModuleIssuanceHook {
     using SafeCast for int256;
     using SafeCast for uint256;
     using SignedMath for int256;

@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 
 // ==================== External Imports ====================
 
-import { AccessControl } from "@openzeppelin/contracts/access/AccessControl.sol";
+import { AccessControlEnumerable } from "@openzeppelin/contracts/access/AccessControlEnumerable.sol";
 
 // ==================== Internal Imports ====================
 
@@ -16,7 +16,7 @@ import { INavIssuanceHook } from "../interfaces/INavIssuanceHook.sol";
 /**
  * @title UniswapYieldHook
  */
-contract UniswapYieldHook is INavIssuanceHook, AccessControl {
+contract UniswapYieldHook is INavIssuanceHook, AccessControlEnumerable {
     using AddressArrayUtil for address[];
 
     // ==================== Constants ====================

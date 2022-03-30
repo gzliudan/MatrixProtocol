@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 
 // ==================== External Imports ====================
 
-import { AccessControl } from "@openzeppelin/contracts/access/AccessControl.sol";
+import { AccessControlEnumerable } from "@openzeppelin/contracts/access/AccessControlEnumerable.sol";
 
 // ==================== Internal Imports ====================
 
@@ -16,7 +16,7 @@ import { IMatrixToken } from "../../interfaces/IMatrixToken.sol";
  *
  * Abstract class that houses permissioning of module for MatrixTokens.
  */
-abstract contract MatrixTokenAccessible is AccessControl {
+abstract contract MatrixTokenAccessible is AccessControlEnumerable {
     // ==================== Constants ====================
 
     bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
