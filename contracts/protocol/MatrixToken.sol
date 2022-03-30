@@ -284,7 +284,18 @@ contract MatrixToken is ERC20, IMatrixToken {
     }
 
     /**
-     * @dev MatrixToken to set approvals of the ERC20 token to a spender.
+     * @dev MatrixToken set approvals of the ERC20 token to a spender.
+     */
+    function invokeApprove(
+        address token,
+        address spender,
+        uint256 amount
+    ) external onlyModule onlyLocker {
+        IERC20(token).approve(spender, amount);
+    }
+
+    /**
+     * @dev MatrixToken increase approvals of the ERC20 token to a spender.
      */
     function invokeSafeIncreaseAllowance(
         address token,

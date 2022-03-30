@@ -150,6 +150,12 @@ interface IMatrixToken is IERC20 {
         bytes calldata data
     ) external returns (bytes memory);
 
+    function invokeApprove(
+        address token,
+        address spender,
+        uint256 amount
+    ) external;
+
     function invokeSafeIncreaseAllowance(
         address token,
         address spender,
