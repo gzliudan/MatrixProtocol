@@ -145,8 +145,8 @@ abstract contract ModuleBase is IModule {
     /**
      * @return Whether the address is the MatrixToken's manager.
      */
-    function isMatrixManager(IMatrixToken matrixToken, address addr) internal view returns (bool) {
-        return matrixToken.getManager() == addr;
+    function isMatrixManager(IMatrixToken matrixToken, address account) internal view returns (bool) {
+        return matrixToken.isManager(account);
     }
 
     /**
