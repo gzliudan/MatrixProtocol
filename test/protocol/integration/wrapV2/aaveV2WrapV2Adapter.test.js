@@ -110,7 +110,7 @@ describe('contract AaveV2WrapV2Adapter', async () => {
 
     it('should return correct data for valid pair', async () => {
       const { target, value, callData } = await getUnwrapCallData();
-      const expectedCallData = aaveV2Fixture.lendingPool.interface.encodeFunctionData('withdraw', [underlyingTokenAddress, wrappedTokenUnits, to]);
+      const expectedCallData = aaveV2Fixture.lendingPool.interface.encodeFunctionData('withdraw', [underlyingTokenAddress, wrappedTokenUnits.sub(1), to]);
 
       expect(target).eq(aaveV2Fixture.lendingPool.address);
       expect(value).eq(ZERO);
