@@ -24,9 +24,9 @@
   },
   "homepage": "https://gitee.com/matrix-tech/MatrixProtocol#README",
   "engines": {
-    "npm": "^8.1.0",
-    "node": "^16.13.0",
-    "yarn": "^1.22.17"
+    "node": ">=14.15.0",
+    "npm": ">=6.14.8",
+    "yarn": ">=1.22.0"
   },
   "scripts": {
     "clean": "rm -rf coverage.json coverage cache artifacts",
