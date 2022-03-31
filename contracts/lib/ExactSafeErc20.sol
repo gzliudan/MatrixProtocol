@@ -25,13 +25,12 @@ library ExactSafeErc20 {
         address to,
         uint256 amount
     ) internal {
-        if (amount > 0) {
+        if ((amount > 0) && (address(this) != to)) {
             uint256 oldBalance = token.balanceOf(to);
             token.safeTransfer(to, amount);
+            uint256 newBalance = token.balanceOf(to);
 
-            if (msg.sender != to) {
-                require(token.balanceOf(to) == oldBalance + amount, "ES0"); // "Invalid post transfer balance"
-            }
+            require(newBalance >= (oldBalance + amount), "ES0"); // "Invalid post transfer balance"
         }
     }
 
@@ -44,13 +43,12 @@ library ExactSafeErc20 {
         address to,
         uint256 amount
     ) internal {
-        if (amount > 0) {
+        if ((amount > 0) && (from != to)) {
             uint256 oldBalance = token.balanceOf(to);
             token.safeTransferFrom(from, to, amount);
+            uint256 newBalance = token.balanceOf(to);
 
-            if (from != to) {
-                require(token.balanceOf(to) == oldBalance + amount, "ES1"); // "Invalid post transfer balance"
-            }
+            require(newBalance >= (oldBalance + amount), "ES1"); // "Invalid post transfer balance"
         }
     }
 }
