@@ -163,7 +163,7 @@
  ·····································································································································|·············|················
  |  contracts/mocks/lib/AddressArrayMock.sol:AddressArrayMock                                                                         ·      3.392  ·       +3.392  │
  ·····································································································································|·············|················
- |  contracts/mocks/lib/ExactSafeErc20Mock.sol:ExactSafeErc20Mock                                                                     ·      2.129  ·       +2.129  │
+ |  contracts/mocks/lib/ExactSafeErc20Mock.sol:ExactSafeErc20Mock                                                                     ·      2.138  ·       +2.138  │
  ·····································································································································|·············|················
  |  contracts/mocks/lib/PreciseUnitMathMock.sol:PreciseUnitMathMock                                                                   ·      1.990  ·       +1.990  │
  ·····································································································································|·············|················
@@ -175,7 +175,7 @@
  ·····································································································································|·············|················
  |  contracts/mocks/protocol/lib/InvokeMock.sol:InvokeMock                                                                            ·      0.957  ·       +0.957  │
  ·····································································································································|·············|················
- |  contracts/mocks/protocol/lib/ModuleBaseMock.sol:ModuleBaseMock                                                                    ·      4.859  ·       +4.859  │
+ |  contracts/mocks/protocol/lib/ModuleBaseMock.sol:ModuleBaseMock                                                                    ·      4.842  ·       +4.842  │
  ·····································································································································|·············|················
  |  contracts/mocks/protocol/modules/DebtIssuanceMock.sol:DebtIssuanceMock                                                            ·      0.462  ·       +0.462  │
  ·····································································································································|·············|················
@@ -195,9 +195,9 @@
  ·····································································································································|·············|················
  |  contracts/product/AmmSplitter.sol:AmmSplitter                                                                                     ·      6.236  ·       +6.236  │
  ·····································································································································|·············|················
- |  contracts/product/AssetLimitHook.sol:AssetLimitHook                                                                               ·      3.948  ·       +3.948  │
+ |  contracts/product/AssetLimitHook.sol:AssetLimitHook                                                                               ·      4.627  ·       +4.627  │
  ·····································································································································|·············|················
- |  contracts/product/UniswapYieldHook.sol:UniswapYieldHook                                                                           ·      3.986  ·       +3.986  │
+ |  contracts/product/UniswapYieldHook.sol:UniswapYieldHook                                                                           ·      4.665  ·       +4.665  │
  ·····································································································································|·············|················
  |  contracts/protocol-viewers/Erc20Viewer.sol:Erc20Viewer                                                                            ·      3.293  ·       +3.293  │
  ·····································································································································|·············|················
@@ -207,7 +207,7 @@
  ·····································································································································|·············|················
  |  contracts/protocol-viewers/StreamingFeeModuleViewer.sol:StreamingFeeModuleViewer                                                  ·      1.276  ·       +1.276  │
  ·····································································································································|·············|················
- |  contracts/protocol/Controller.sol:Controller                                                                                      ·      8.583  ·       +8.583  │
+ |  contracts/protocol/Controller.sol:Controller                                                                                      ·      9.262  ·       +9.262  │
  ·····································································································································|·············|················
  |  contracts/protocol/integration/amm/UniswapV2AmmAdapter.sol:UniswapV2AmmAdapter                                                    ·      4.261  ·       +4.261  │
  ·····································································································································|·············|················
@@ -253,73 +253,73 @@
  ·····································································································································|·············|················
  |  contracts/protocol/integration/oracles/ConstantPriceOracle.sol:ConstantPriceOracle                                                ·      0.150  ·       +0.150  │
  ·····································································································································|·············|················
- |  contracts/protocol/integration/oracles/IdenticalTokenOracleAdapter.sol:IdenticalTokenOracleAdapter                                ·      4.248  ·       +4.248  │
+ |  contracts/protocol/integration/oracles/IdenticalTokenOracleAdapter.sol:IdenticalTokenOracleAdapter                                ·      5.623  ·       +5.623  │
  ·····································································································································|·············|················
  |  contracts/protocol/integration/oracles/KyberV1Oracle.sol:KyberV1Oracle                                                            ·      1.298  ·       +1.298  │
  ·····································································································································|·············|················
  |  contracts/protocol/integration/oracles/SerialOracle.sol:SerialOracle                                                              ·      0.981  ·       +0.981  │
  ·····································································································································|·············|················
- |  contracts/protocol/integration/oracles/UniswapV2PairPriceAdapter.sol:UniswapV2PairPriceAdapter                                    ·      7.407  ·       +7.407  │
+ |  contracts/protocol/integration/oracles/UniswapV2PairPriceAdapter.sol:UniswapV2PairPriceAdapter                                    ·      8.092  ·       +8.092  │
  ·····································································································································|·············|················
  |  contracts/protocol/integration/staking/CurveStakingAdapter.sol:CurveStakingAdapter                                                ·      0.953  ·       +0.953  │
  ·····································································································································|·············|················
- |  contracts/protocol/integration/wrap-v2/AaveV2WrapV2Adapter.sol:AaveV2WrapV2Adapter                                                ·      5.096  ·       +5.096  │
+ |  contracts/protocol/integration/wrap-v2/AaveV2WrapV2Adapter.sol:AaveV2WrapV2Adapter                                                ·      5.145  ·       +5.145  │
  ·····································································································································|·············|················
  |  contracts/protocol/integration/wrap/AaveMigrationWrapAdapter.sol:AaveMigrationWrapAdapter                                         ·      1.048  ·       +1.048  │
  ·····································································································································|·············|················
  |  contracts/protocol/integration/wrap/AaveWrapAdapter.sol:AaveWrapAdapter                                                           ·      1.213  ·       +1.213  │
  ·····································································································································|·············|················
- |  contracts/protocol/IntegrationRegistry.sol:IntegrationRegistry                                                                    ·      5.239  ·       +5.239  │
+ |  contracts/protocol/IntegrationRegistry.sol:IntegrationRegistry                                                                    ·      5.962  ·       +5.962  │
  ·····································································································································|·············|················
  |  contracts/protocol/lib/IssuanceValidationUtil.sol:IssuanceValidationUtil                                                          ·      0.086  ·       +0.086  │
  ·····································································································································|·············|················
  |  contracts/protocol/lib/PositionUtil.sol:PositionUtil                                                                              ·      0.086  ·       +0.086  │
  ·····································································································································|·············|················
- |  contracts/protocol/MatrixToken.sol:MatrixToken                                                                                    ·     15.249  ·      +15.249  │
+ |  contracts/protocol/MatrixToken.sol:MatrixToken                                                                                    ·     15.483  ·      +15.483  │
  ·····································································································································|·············|················
- |  contracts/protocol/MatrixTokenFactory.sol:MatrixTokenFactory                                                                      ·     19.696  ·      +19.696  │
+ |  contracts/protocol/MatrixTokenFactory.sol:MatrixTokenFactory                                                                      ·     19.930  ·      +19.930  │
  ·····································································································································|·············|················
  |  contracts/protocol/MatrixValuer.sol:MatrixValuer                                                                                  ·      2.499  ·       +2.499  │
  ·····································································································································|·············|················
- |  contracts/protocol/modules/AaveLeverageModule.sol:AaveLeverageModule                                                              ·     23.012  ·      +23.012  │
+ |  contracts/protocol/modules/AaveLeverageModule.sol:AaveLeverageModule                                                              ·     23.673  ·      +23.673  │
  ·····································································································································|·············|················
- |  contracts/protocol/modules/AirdropModule.sol:AirdropModule                                                                        ·      9.599  ·       +9.599  │
+ |  contracts/protocol/modules/AirdropModule.sol:AirdropModule                                                                        ·      9.582  ·       +9.582  │
  ·····································································································································|·············|················
- |  contracts/protocol/modules/AmmModule.sol:AmmModule                                                                                ·     10.324  ·      +10.324  │
+ |  contracts/protocol/modules/AmmModule.sol:AmmModule                                                                                ·     10.307  ·      +10.307  │
  ·····································································································································|·············|················
- |  contracts/protocol/modules/BasicIssuanceModule.sol:BasicIssuanceModule                                                            ·      5.558  ·       +5.558  │
+ |  contracts/protocol/modules/BasicIssuanceModule.sol:BasicIssuanceModule                                                            ·      5.799  ·       +5.799  │
  ·····································································································································|·············|················
- |  contracts/protocol/modules/ClaimModule.sol:ClaimModule                                                                            ·      8.517  ·       +8.517  │
+ |  contracts/protocol/modules/ClaimModule.sol:ClaimModule                                                                            ·      8.500  ·       +8.500  │
  ·····································································································································|·············|················
- |  contracts/protocol/modules/CompoundLeverageModule.sol:CompoundLeverageModule                                                      ·     21.768  ·      +21.768  │
+ |  contracts/protocol/modules/CompoundLeverageModule.sol:CompoundLeverageModule                                                      ·     22.439  ·      +22.439  │
  ·····································································································································|·············|················
- |  contracts/protocol/modules/CustomOracleNavIssuanceModule.sol:CustomOracleNavIssuanceModule                                        ·     17.349  ·      +17.349  │
+ |  contracts/protocol/modules/CustomOracleNavIssuanceModule.sol:CustomOracleNavIssuanceModule                                        ·     17.332  ·      +17.332  │
  ·····································································································································|·············|················
- |  contracts/protocol/modules/DebtIssuanceModule.sol:DebtIssuanceModule                                                              ·     11.565  ·      +11.565  │
+ |  contracts/protocol/modules/DebtIssuanceModule.sol:DebtIssuanceModule                                                              ·     11.548  ·      +11.548  │
  ·····································································································································|·············|················
- |  contracts/protocol/modules/DebtIssuanceModuleV2.sol:DebtIssuanceModuleV2                                                          ·     13.513  ·      +13.513  │
+ |  contracts/protocol/modules/DebtIssuanceModuleV2.sol:DebtIssuanceModuleV2                                                          ·     13.496  ·      +13.496  │
  ·····································································································································|·············|················
- |  contracts/protocol/modules/GeneralIndexModule.sol:GeneralIndexModule                                                              ·     20.364  ·      +20.364  │
+ |  contracts/protocol/modules/GeneralIndexModule.sol:GeneralIndexModule                                                              ·     20.347  ·      +20.347  │
  ·····································································································································|·············|················
- |  contracts/protocol/modules/GovernanceModule.sol:GovernanceModule                                                                  ·      4.844  ·       +4.844  │
+ |  contracts/protocol/modules/GovernanceModule.sol:GovernanceModule                                                                  ·      4.827  ·       +4.827  │
  ·····································································································································|·············|················
- |  contracts/protocol/modules/IssuanceModule.sol:IssuanceModule                                                                      ·      6.311  ·       +6.311  │
+ |  contracts/protocol/modules/IssuanceModule.sol:IssuanceModule                                                                      ·      6.265  ·       +6.265  │
  ·····································································································································|·············|················
- |  contracts/protocol/modules/NavIssuanceModule.sol:NavIssuanceModule                                                                ·     19.832  ·      +19.832  │
+ |  contracts/protocol/modules/NavIssuanceModule.sol:NavIssuanceModule                                                                ·     19.821  ·      +19.821  │
  ·····································································································································|·············|················
- |  contracts/protocol/modules/SingleIndexModule.sol:SingleIndexModule                                                                ·     14.326  ·      +14.326  │
+ |  contracts/protocol/modules/SingleIndexModule.sol:SingleIndexModule                                                                ·     14.280  ·      +14.280  │
  ·····································································································································|·············|················
- |  contracts/protocol/modules/SlippageIssuanceModule.sol:SlippageIssuanceModule                                                      ·     15.222  ·      +15.222  │
+ |  contracts/protocol/modules/SlippageIssuanceModule.sol:SlippageIssuanceModule                                                      ·     15.205  ·      +15.205  │
  ·····································································································································|·············|················
- |  contracts/protocol/modules/StakingModule.sol:StakingModule                                                                        ·     10.710  ·      +10.710  │
+ |  contracts/protocol/modules/StakingModule.sol:StakingModule                                                                        ·     10.693  ·      +10.693  │
  ·····································································································································|·············|················
- |  contracts/protocol/modules/StreamingFeeModule.sol:StreamingFeeModule                                                              ·      4.450  ·       +4.450  │
+ |  contracts/protocol/modules/StreamingFeeModule.sol:StreamingFeeModule                                                              ·      4.433  ·       +4.433  │
  ·····································································································································|·············|················
- |  contracts/protocol/modules/TradeModule.sol:TradeModule                                                                            ·      6.575  ·       +6.575  │
+ |  contracts/protocol/modules/TradeModule.sol:TradeModule                                                                            ·      6.558  ·       +6.558  │
  ·····································································································································|·············|················
- |  contracts/protocol/modules/WrapModule.sol:WrapModule                                                                              ·      7.083  ·       +7.083  │
+ |  contracts/protocol/modules/WrapModule.sol:WrapModule                                                                              ·      7.066  ·       +7.066  │
  ·····································································································································|·············|················
- |  contracts/protocol/modules/WrapModuleV2.sol:WrapModuleV2                                                                          ·      7.554  ·       +7.554  │
+ |  contracts/protocol/modules/WrapModuleV2.sol:WrapModuleV2                                                                          ·      7.553  ·       +7.553  │
  ·····································································································································|·············|················
- |  contracts/protocol/PriceOracle.sol:PriceOracle                                                                                    ·      5.807  ·       +5.807  │
+ |  contracts/protocol/PriceOracle.sol:PriceOracle                                                                                    ·      6.614  ·       +6.614  │
  ·------------------------------------------------------------------------------------------------------------------------------------|-------------|---------------·

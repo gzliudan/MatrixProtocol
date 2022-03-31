@@ -28,8 +28,10 @@ library ExactSafeErc20 {
         if (amount > 0) {
             uint256 oldBalance = token.balanceOf(to);
             token.safeTransfer(to, amount);
-            uint256 newBalance = token.balanceOf(to);
-            require(newBalance == oldBalance + amount, "ES0"); // "Invalid post transfer balance"
+
+            if (msg.sender != to) {
+                require(token.balanceOf(to) == oldBalance + amount, "ES0"); // "Invalid post transfer balance"
+            }
         }
     }
 
