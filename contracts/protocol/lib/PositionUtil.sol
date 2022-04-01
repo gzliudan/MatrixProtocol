@@ -234,8 +234,14 @@ library PositionUtil {
         uint256 postTotalNotional,
         uint256 prePositionUnit
     ) internal pure returns (uint256) {
+        uint256 preTotal = prePositionUnit.preciseMul(matrixTokenSupply);
+
+        require(preTotalNotional >= preTotal, "P1a");
+
         // If pre action total notional amount is greater then subtract post action total notional and calculate new position units
-        uint256 airdroppedAmount = preTotalNotional - prePositionUnit.preciseMul(matrixTokenSupply);
+        uint256 airdroppedAmount = preTotalNotional - preTotal;
+
+        require(postTotalNotional >= airdroppedAmount, "P1b");
 
         return (postTotalNotional - airdroppedAmount).preciseDiv(matrixTokenSupply);
     }
