@@ -131,7 +131,7 @@ abstract contract ModuleBase is IModule {
      */
     function payProtocolFeeFromMatrixToken(IMatrixToken matrixToken, address token, uint256 feeQuantity) internal {
         if (feeQuantity > 0) {
-            matrixToken.invokeExactSafeTransfer(token, _controller.getFeeRecipient(), feeQuantity);
+            matrixToken.invokeSafeTransfer(token, _controller.getFeeRecipient(), feeQuantity);
         }
     } // prettier-ignore
 

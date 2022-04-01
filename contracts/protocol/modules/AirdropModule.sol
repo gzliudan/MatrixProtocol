@@ -332,7 +332,7 @@ contract AirdropModule is ModuleBase, ReentrancyGuard {
             protocolTake = getModuleFee(AIRDROP_MODULE_PROTOCOL_FEE_INDEX, totalFees);
             netManagerTake = totalFees - protocolTake;
 
-            matrixToken.invokeExactSafeTransfer(address(component), _airdropSettings[matrixToken].feeRecipient, netManagerTake);
+            matrixToken.invokeSafeTransfer(address(component), _airdropSettings[matrixToken].feeRecipient, netManagerTake);
             payProtocolFeeFromMatrixToken(matrixToken, address(component), protocolTake);
         }
     }
