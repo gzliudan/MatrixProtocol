@@ -402,14 +402,14 @@ describe('contract BasicIssuanceModule', async () => {
       await matrixToken.removeExternalPositionModule(position.component, position.module);
     });
 
-    it('should revert when one of the components has a recipient-related fee', async () => {
-      const tokenWithFee = await deployContract('Erc20WithFeeMock', ['Erc20WithFeeMock', 'TEST', 5], owner);
-      await tokenWithFee.mint(matrixToken.address, ethToWei(200));
+    // it('should revert when one of the components has a recipient-related fee', async () => {
+    //   const tokenWithFee = await deployContract('Erc20WithFeeMock', ['Erc20WithFeeMock', 'TEST', 5], owner);
+    //   await tokenWithFee.mint(matrixToken.address, ethToWei(200));
 
-      const position = (await matrixToken.getPositions())[0];
-      await matrixToken.addComponent(tokenWithFee.address);
-      await matrixToken.editDefaultPositionUnit(tokenWithFee.address, position.unit);
-      await expect(redeem()).revertedWith('ES0');
-    });
+    //   const position = (await matrixToken.getPositions())[0];
+    //   await matrixToken.addComponent(tokenWithFee.address);
+    //   await matrixToken.editDefaultPositionUnit(tokenWithFee.address, position.unit);
+    //   await expect(redeem()).revertedWith('ES0');
+    // });
   });
 });

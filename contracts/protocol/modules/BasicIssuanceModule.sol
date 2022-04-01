@@ -157,7 +157,7 @@ contract BasicIssuanceModule is ModuleBase, ReentrancyGuard {
             componentQuantities[i] = quantity.preciseMul(unit);
 
             // Instruct the MatrixToken to transfer the component to the user
-            matrixToken.invokeExactSafeTransfer(component, to, componentQuantities[i]);
+            matrixToken.invokeSafeTransfer(component, to, componentQuantities[i]);
         }
 
         emit RedeemMatrixToken(address(matrixToken), msg.sender, to, quantity, components, componentQuantities);
