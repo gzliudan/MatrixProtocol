@@ -274,8 +274,8 @@ contract WrapModuleV2 is ModuleBase, ReentrancyGuard {
         // Snapshot post wrap balances
         (uint256 postActionUnderlyingNotional, uint256 postActionWrapNotional) = _snapshotTargetAssetsBalance(matrixToken, underlyingToken, wrappedToken);
 
-        _updatePosition(matrixToken, underlyingToken, preActionUnderlyingNotional, postActionUnderlyingNotional);
-        _updatePosition(matrixToken, wrappedToken, preActionWrapNotional, postActionWrapNotional);
+        _updatePosition(matrixToken, underlyingToken, postActionUnderlyingNotional);
+        _updatePosition(matrixToken, wrappedToken, postActionWrapNotional);
 
         return (preActionUnderlyingNotional - postActionUnderlyingNotional, postActionWrapNotional - preActionWrapNotional);
     }
@@ -322,8 +322,8 @@ contract WrapModuleV2 is ModuleBase, ReentrancyGuard {
 
         (uint256 postActionUnderlyingNotional, uint256 postActionWrapNotional) = _snapshotTargetAssetsBalance(matrixToken, underlyingToken, wrappedToken);
 
-        _updatePosition(matrixToken, underlyingToken, preActionUnderlyingNotional, postActionUnderlyingNotional);
-        _updatePosition(matrixToken, wrappedToken, preActionWrapNotional, postActionWrapNotional);
+        _updatePosition(matrixToken, underlyingToken, postActionUnderlyingNotional);
+        _updatePosition(matrixToken, wrappedToken, postActionWrapNotional);
 
         return (postActionUnderlyingNotional - preActionUnderlyingNotional, preActionWrapNotional - postActionWrapNotional);
     }
@@ -380,15 +380,9 @@ contract WrapModuleV2 is ModuleBase, ReentrancyGuard {
     function _updatePosition(
         IMatrixToken matrixToken,
         address token,
-        uint256 preActionTokenBalance,
         uint256 postActionTokenBalance
     ) internal {
-        uint256 newUnit = PositionUtil.calculateDefaultEditPositionUnit(
-            matrixToken.totalSupply(),
-            preActionTokenBalance,
-            postActionTokenBalance,
-            matrixToken.getDefaultPositionRealUnit(token).toUint256()
-        );
+        uint256 newUnit = postActionTokenBalance.preciseDiv(matrixToken.totalSupply());
 
         matrixToken.editDefaultPosition(token, newUnit);
     }
