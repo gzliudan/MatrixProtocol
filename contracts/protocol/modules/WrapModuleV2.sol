@@ -57,7 +57,11 @@ contract WrapModuleV2 is ModuleBase, ReentrancyGuard {
 
     // ==================== Constructor function ====================
 
-    constructor(IController controller, address weth) ModuleBase(controller) {
+    constructor(
+        IController controller,
+        address weth,
+        string memory name
+    ) ModuleBase(controller, name) {
         _weth = weth;
     }
 

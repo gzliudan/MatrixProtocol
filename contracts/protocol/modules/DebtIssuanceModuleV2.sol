@@ -51,7 +51,7 @@ contract DebtIssuanceModuleV2 is DebtIssuanceModule {
 
     // ==================== Constructor function ====================
 
-    constructor(IController controller) DebtIssuanceModule(controller) {}
+    constructor(IController controller, string memory name) DebtIssuanceModule(controller, name) {}
 
     // ==================== External functions ====================
 

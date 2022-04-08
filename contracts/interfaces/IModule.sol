@@ -8,6 +8,10 @@ pragma solidity ^0.8.0;
  * @dev Interface for interacting with Modules.
  */
 interface IModule {
+    // ==================== Events ====================
+
+    event DeployModule(address indexed creater, address indexed controller, string name);
+
     // ==================== External functions ====================
 
     /**

@@ -63,7 +63,7 @@ contract BasicIssuanceModule is ModuleBase, ReentrancyGuard {
     /**
      * @param controller    Address of controller contract
      */
-    constructor(IController controller) ModuleBase(controller) {}
+    constructor(IController controller, string memory name) ModuleBase(controller, name) {}
 
     // ==================== External functions ====================
 

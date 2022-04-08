@@ -86,7 +86,7 @@ describe('contract AaveLeverageModule', async () => {
 
     aaveLeverageModule = await deployContractAndLinkLibraries(
       'AaveLeverageModule',
-      [systemFixture.controller.address, aaveV2Fixture.lendingPoolAddressesProvider.address],
+      [systemFixture.controller.address, aaveV2Fixture.lendingPoolAddressesProvider.address, 'AaveLeverageModule'],
       { AaveV2: aaveV2Library.address },
       owner
     );

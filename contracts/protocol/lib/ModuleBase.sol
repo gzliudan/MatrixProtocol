@@ -35,11 +35,15 @@ abstract contract ModuleBase is IModule {
     // ==================== Variables ====================
 
     IController internal immutable _controller;
+    string internal _name;
 
     // ==================== Constructor function ====================
 
-    constructor(IController controller) {
+    constructor(IController controller, string memory name) {
         _controller = controller;
+        _name = name;
+
+        emit DeployModule(msg.sender, address(controller), name);
     }
 
     // ==================== Modifier functions ====================
@@ -79,6 +83,10 @@ abstract contract ModuleBase is IModule {
     }
 
     // ==================== Internal functions ====================
+
+    function getName() external view returns (string memory) {
+        return _name;
+    }
 
     /**
      * @dev Transfers tokens from an address (that has set allowance on the module).

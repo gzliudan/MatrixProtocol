@@ -106,8 +106,9 @@ contract SingleIndexModule is ModuleBase, ReentrancyGuard {
         IWETH weth,
         address uniswapRouter,
         address sushiswapRouter,
-        address balancerProxy
-    ) ModuleBase(controller) {
+        address balancerProxy,
+        string memory name
+    ) ModuleBase(controller, name) {
         _weth = weth;
         _uniswapRouter = uniswapRouter;
         _sushiswapRouter = sushiswapRouter;

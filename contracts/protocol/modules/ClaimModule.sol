@@ -64,7 +64,7 @@ contract ClaimModule is ModuleBase {
 
     // ==================== Constructor function ====================
 
-    constructor(IController controller) ModuleBase(controller) {}
+    constructor(IController controller, string memory name) ModuleBase(controller, name) {}
 
     // ==================== Modifier functions ====================
 

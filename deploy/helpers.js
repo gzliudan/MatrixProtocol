@@ -105,7 +105,34 @@ function getDataTime() {
   return dayjs().format('YYYY-MM-DD HH:mm:ss');
 }
 
+function isModule(name) {
+  const MODULES = [
+    'AaveLeverageModule',
+    'AmmModule',
+    'ClaimModule',
+    'CustomOracleNavIssuanceModule',
+    'DebtIssuanceModuleV2',
+    'GovernanceModule',
+    'NavIssuanceModule',
+    'SlippageIssuanceModule',
+    'StreamingFeeModule',
+    'WrapModuleV2',
+    'AirdropModule',
+    'BasicIssuanceModule',
+    'CompoundLeverageModule',
+    'DebtIssuanceModule',
+    'GeneralIndexModule',
+    'IssuanceModule',
+    'SingleIndexModule',
+    'StakingModule',
+    'TradeModule',
+  ];
+
+  return MODULES.indexOf(name) >= 0;
+}
+
 module.exports = {
+  isModule,
   sleep,
   getDeployer,
   deployContract,

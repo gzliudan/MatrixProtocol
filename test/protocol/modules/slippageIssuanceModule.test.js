@@ -38,7 +38,7 @@ describe('contract SlippageIssuanceModule', async () => {
     snapshotId = await snapshotBlockchain();
     await systemFixture.initAll();
 
-    slippageIssuance = await deployContract('SlippageIssuanceModule', [systemFixture.controller.address], owner);
+    slippageIssuance = await deployContract('SlippageIssuanceModule', [systemFixture.controller.address, 'SlippageIssuanceModule'], owner);
     debtModuleMock = await deployContract('DebtModuleMock', [systemFixture.controller.address, slippageIssuance.address], owner);
     externalPositionModule = await deployContract('ModuleIssuanceHookMock', [], owner);
     managerIssuanceHookMock = await deployContract('ManagerIssuanceHookMock', [], owner);

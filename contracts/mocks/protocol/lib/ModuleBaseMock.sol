@@ -19,7 +19,7 @@ contract ModuleBaseMock is ModuleBase {
 
     // ==================== Constructor function ====================
 
-    constructor(IController controller) ModuleBase(controller) {}
+    constructor(IController controller) ModuleBase(controller, "ModuleBaseMock") {}
 
     // ==================== External functions ====================
 

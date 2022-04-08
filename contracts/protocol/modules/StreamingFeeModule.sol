@@ -40,7 +40,7 @@ contract StreamingFeeModule is ModuleBase, IStreamingFeeModule, ReentrancyGuard 
 
     // ==================== Constructor function ====================
 
-    constructor(IController controller) ModuleBase(controller) {}
+    constructor(IController controller, string memory name) ModuleBase(controller, name) {}
 
     // ==================== External functions ====================
 

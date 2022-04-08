@@ -189,7 +189,7 @@ contract AaveLeverageModule is ModuleBase, ReentrancyGuard, AccessControlEnumera
 
     // ==================== Constructor function ====================
 
-    constructor(IController controller, ILendingPoolAddressesProvider lendingPoolAddressesProvider) ModuleBase(controller) {
+    constructor(IController controller, ILendingPoolAddressesProvider lendingPoolAddressesProvider, string memory name) ModuleBase(controller, name) {
         _grantRole(DEFAULT_ADMIN_ROLE, _msgSender());
         _grantRole(ADMIN_ROLE, _msgSender());
 

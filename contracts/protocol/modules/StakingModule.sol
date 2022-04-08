@@ -76,7 +76,7 @@ contract StakingModule is ModuleBase, IModuleIssuanceHook {
 
     // ==================== Constructor function ====================
 
-    constructor(IController controller) ModuleBase(controller) {}
+    constructor(IController controller, string memory name) ModuleBase(controller, name) {}
 
     // ==================== External functions ====================
 

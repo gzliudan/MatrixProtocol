@@ -35,7 +35,7 @@ describe('contract DebtIssuanceModuleV2', async () => {
     await systemFixture.initAll();
 
     errorErc20 = await deployContract('Erc20ErrorMock', [owner.address, ethToWei(1000000), ZERO, 'Token', 'Symbol', 8], owner);
-    debtIssuanceModuleV2 = await deployContract('DebtIssuanceModuleV2', [systemFixture.controller.address], owner);
+    debtIssuanceModuleV2 = await deployContract('DebtIssuanceModuleV2', [systemFixture.controller.address, 'DebtIssuanceModuleV2'], owner);
     debtModuleMock = await deployContract('DebtModuleMock', [systemFixture.controller.address, debtIssuanceModuleV2.address], owner);
     externalPositionModule = await deployContract('ModuleIssuanceHookMock', [], owner);
     managerIssuanceHookMock = await deployContract('ManagerIssuanceHookMock', [], owner);

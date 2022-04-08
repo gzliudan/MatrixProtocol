@@ -28,7 +28,7 @@ describe('contract WrapModuleV2', async () => {
 
     await systemFixture.initAll();
 
-    wrapV2Module = await deployContract('WrapModuleV2', [systemFixture.controller.address, systemFixture.weth.address], owner);
+    wrapV2Module = await deployContract('WrapModuleV2', [systemFixture.controller.address, systemFixture.weth.address, 'WrapModuleV2'], owner);
     await systemFixture.controller.addModule(wrapV2Module.address);
 
     wrapV2Adapter = await deployContract('WrapV2AdapterMock', [], owner);

@@ -36,7 +36,7 @@ contract DebtModuleMock is ModuleBase {
 
     // ==================== Constructor function ====================
 
-    constructor(IController controller, address module) ModuleBase(controller) {
+    constructor(IController controller, address module) ModuleBase(controller, "DebtModuleMock") {
         _module = module;
     }
 

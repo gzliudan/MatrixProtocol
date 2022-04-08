@@ -31,7 +31,7 @@ describe('contract IssuanceModule', async () => {
     snapshotId = await snapshotBlockchain();
     await systemFixture.initAll();
 
-    issuanceModule = await deployContract('IssuanceModule', [systemFixture.controller.address], owner);
+    issuanceModule = await deployContract('IssuanceModule', [systemFixture.controller.address, 'IssuanceModule'], owner);
     moduleIssuanceHook = await deployContract('ModuleIssuanceHookMock', [], owner);
     await systemFixture.controller.addModule(issuanceModule.address);
     await systemFixture.controller.addModule(moduleIssuanceHook.address);

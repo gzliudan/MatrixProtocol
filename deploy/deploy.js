@@ -22,6 +22,7 @@ const {
   getDeployedAddresses,
   writeDeployedAddresses,
   getDataTime,
+  isModule,
 } = require('./helpers');
 
 dotenv.config();
@@ -103,7 +104,7 @@ async function deployWithController(name, key) {
   const { controller, [key]: oldAddress } = contractAddresses;
 
   if (!controller) {
-    throw new Error(`deployWithController: controller is not set in file ${filename} !`);
+    throw new Error(`deploy ${name}: controller is not set in file ${filename} !`);
   }
 
   if (oldAddress) {
@@ -113,7 +114,8 @@ async function deployWithController(name, key) {
 
   // Deploy contract
   console.log(`[${getDataTime()}] DO: Deploy ${name} to ${CHAIN_NAME}`);
-  const instance = await deployContract(deployer, name, [controller]);
+  const args = isModule(name) ? [controller, name] : [controller];
+  const instance = await deployContract(deployer, name, args);
   console.log(`[${getDataTime()}] OK: ${name} is deployed at ${instance.address}`);
 
   // update addresses
@@ -153,7 +155,7 @@ async function deployWithControllerAndWeth(name, key) {
   const { controller, [key]: oldAddress } = contractAddresses;
 
   if (!controller) {
-    throw new Error(`deployWithControllerAndWeth: must set controller in file ${filename} !`);
+    throw new Error(`deploy ${name}: must set controller in file ${filename} !`);
   }
 
   if (oldAddress) {
@@ -163,7 +165,7 @@ async function deployWithControllerAndWeth(name, key) {
 
   // Deploy contract
   console.log(`[${getDataTime()}] DO: Deploy ${name} to ${CHAIN_NAME}`);
-  const instance = await deployContract(deployer, name, [controller, weth]);
+  const instance = await deployContract(deployer, name, [controller, weth, name]);
   console.log(`[${getDataTime()}] OK: ${name} is deployed at ${instance.address}`);
 
   // update the addresses

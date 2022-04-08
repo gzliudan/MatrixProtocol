@@ -59,7 +59,7 @@ describe('contract TradeModule', async () => {
     await uniswapFixture.init(systemFixture.weth.address, systemFixture.wbtc.address, systemFixture.dai.address);
     await kyberV1Fixture.init(systemFixture.weth.address, systemFixture.wbtc.address, systemFixture.dai.address);
 
-    tradeModule = await deployContract('TradeModule', [systemFixture.controller.address], owner);
+    tradeModule = await deployContract('TradeModule', [systemFixture.controller.address, 'TradeModule'], owner);
     await systemFixture.controller.addModule(tradeModule.address);
 
     // Mock Kyber reserve only allows trading from/to WETH

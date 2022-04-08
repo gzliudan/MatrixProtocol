@@ -31,7 +31,7 @@ describe('contract AirdropModule', async () => {
 
     await systemFixture.initAll();
 
-    airdropModule = await deployContract('AirdropModule', [systemFixture.controller.address], owner);
+    airdropModule = await deployContract('AirdropModule', [systemFixture.controller.address, 'AirdropModule'], owner);
     await systemFixture.controller.addModule(airdropModule.address);
   });
 

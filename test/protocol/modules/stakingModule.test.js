@@ -32,7 +32,7 @@ describe('contract StakingModule', async () => {
 
     await systemFixture.initAll();
 
-    stakingModule = await deployContract('StakingModule', [systemFixture.controller.address], owner);
+    stakingModule = await deployContract('StakingModule', [systemFixture.controller.address, 'StakingModule'], owner);
     await systemFixture.controller.addModule(stakingModule.address);
     await systemFixture.controller.addModule(dummyIssuanceModule.address);
 

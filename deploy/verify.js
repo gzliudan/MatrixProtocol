@@ -10,7 +10,7 @@ const hre = require('hardhat');
 const { WEI_PER_ETHER } = require('./constants');
 const oracles = require('./configs/oracles.json');
 const testTokens = require('./configs/testTokens.json');
-const { getWeth, getDeployedAddresses, getDataTime } = require('./helpers');
+const { getWeth, getDeployedAddresses, getDataTime, isModule } = require('./helpers');
 
 const CHAIN_NAME = hre.network.name;
 const CHAIN_ID = hre.network.config.chainId;
@@ -92,7 +92,8 @@ async function verifyWithController(name, key) {
   }
 
   console.log(`[${getDataTime()}] Verify ${name} at ${contractAddress}`);
-  await verifyContract(contractAddress, [controller]);
+  const args = isModule(name) ? [controller, name] : [controller];
+  await verifyContract(contractAddress, args);
 }
 
 async function verifyWithControllerAndWeth(name, key) {
@@ -106,7 +107,7 @@ async function verifyWithControllerAndWeth(name, key) {
   }
 
   console.log(`[${getDataTime()}] Verify ${name} at ${contractAddress}`);
-  await verifyContract(contractAddress, [controller, weth]);
+  await verifyContract(contractAddress, [controller, weth, name]);
 }
 
 async function verifyAaveLeverageModule() {

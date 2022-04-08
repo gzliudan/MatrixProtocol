@@ -65,13 +65,13 @@ class SystemFixture {
     this.controller = await deployContract('Controller', [this.feeRecipient.address], this.owner);
     this.matrixValuer = await deployContract('MatrixValuer', [this.controller.address], this.owner);
     this.factory = await deployContract('MatrixTokenFactory', [this.controller.address], this.owner);
-    this.streamingFeeModule = await deployContract('StreamingFeeModule', [this.controller.address], this.owner);
-    this.basicIssuanceModule = await deployContract('BasicIssuanceModule', [this.controller.address], this.owner);
+    this.streamingFeeModule = await deployContract('StreamingFeeModule', [this.controller.address, 'StreamingFeeModule'], this.owner);
+    this.basicIssuanceModule = await deployContract('BasicIssuanceModule', [this.controller.address, 'BasicIssuanceModule'], this.owner);
     this.integrationRegistry = await deployContract('IntegrationRegistry', [this.controller.address], this.owner);
 
     await this.initComponents();
 
-    this.navIssuanceModule = await deployContract('NavIssuanceModule', [this.controller.address, this.weth.address], this.owner);
+    this.navIssuanceModule = await deployContract('NavIssuanceModule', [this.controller.address, this.weth.address, 'NavIssuanceModule'], this.owner);
 
     this.priceOracle = await deployContract(
       'PriceOracle',

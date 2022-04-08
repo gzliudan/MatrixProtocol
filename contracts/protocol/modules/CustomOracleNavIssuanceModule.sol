@@ -133,7 +133,7 @@ contract CustomOracleNavIssuanceModule is ModuleBase, ReentrancyGuard {
 
     // ==================== Constructor function ====================
 
-    constructor(IController controller, IWETH weth) ModuleBase(controller) {
+    constructor(IController controller, IWETH weth, string memory name) ModuleBase(controller, name) {
         _weth = weth;
     }
 

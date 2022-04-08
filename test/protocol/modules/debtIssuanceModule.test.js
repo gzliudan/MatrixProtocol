@@ -32,7 +32,7 @@ describe('contract DebtIssuanceModule', async () => {
     snapshotId = await snapshotBlockchain();
     await systemFixture.initAll();
 
-    debtIssuanceModule = await deployContract('DebtIssuanceModule', [systemFixture.controller.address], owner);
+    debtIssuanceModule = await deployContract('DebtIssuanceModule', [systemFixture.controller.address, 'DebtIssuanceModule'], owner);
     debtModuleMock = await deployContract('DebtModuleMock', [systemFixture.controller.address, debtIssuanceModule.address], owner);
     externalPositionModule = await deployContract('ModuleIssuanceHookMock', [], owner);
     managerIssuanceHookMock = await deployContract('ManagerIssuanceHookMock', [], owner);

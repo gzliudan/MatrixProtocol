@@ -154,8 +154,9 @@ contract CompoundLeverageModule is ModuleBase, ReentrancyGuard, AccessControlEnu
         IERC20 compToken,
         IComptroller comptroller,
         ICErc20 cEther,
-        IERC20 weth
-    ) ModuleBase(controller) {
+        IERC20 weth,
+        string memory name
+    ) ModuleBase(controller, name) {
         _grantRole(DEFAULT_ADMIN_ROLE, _msgSender());
         _grantRole(ADMIN_ROLE, _msgSender());
 
