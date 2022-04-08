@@ -14,6 +14,7 @@ import { IIntegrationRegistry } from "../interfaces/IIntegrationRegistry.sol";
 interface IController {
     // ==================== Events ====================
 
+    event DeployController(address indexed creater, address indexed feeRecipient);
     event AddFactory(address indexed factory);
     event RemoveFactory(address indexed factory);
     event AddFee(address indexed module, uint256 indexed feeType, uint256 feePercentage);

@@ -81,6 +81,8 @@ contract Controller is AccessControlEnumerable, IController {
         _grantRole(ADMIN_ROLE, _msgSender());
 
         _feeRecipient = feeRecipient;
+
+        emit DeployController(_msgSender(), feeRecipient);
     }
 
     // ==================== Modifier functions ====================
