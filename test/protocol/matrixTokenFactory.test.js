@@ -125,7 +125,9 @@ describe('contract MatrixTokenFactory', async () => {
     it('should emit the correct CreateMatrixToken event', async () => {
       const promise = create();
       const matrixAddress = await getCreatedMatrixTokenAddress((await promise).hash);
-      await expect(promise).emit(factoryMock, 'CreateMatrixToken').withArgs(matrixAddress, tokenManager, tokenName, tokenSymbol);
+      await expect(promise)
+        .emit(factoryMock, 'CreateMatrixToken')
+        .withArgs(owner.address, matrixAddress, components, units, modules, controller.address, tokenManager, tokenName, tokenSymbol);
     });
 
     it('should enable the MatrixToken on the controller', async () => {

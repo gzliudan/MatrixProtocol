@@ -26,7 +26,18 @@ contract MatrixTokenFactory {
     // ==================== Events ====================
 
     event DeployMatrixTokenFactory(address indexed creater, address indexed controller);
-    event CreateMatrixToken(address indexed matrixToken, address indexed manager, string name, string symbol);
+
+    event CreateMatrixToken(
+        address indexed creater,
+        address indexed matrixToken,
+        address[] components,
+        int256[] units,
+        address[] modules,
+        address controller,
+        address indexed manager,
+        string name,
+        string symbol
+    );
 
     // ==================== Constructor function ====================
 
@@ -74,14 +85,15 @@ contract MatrixTokenFactory {
             require(units[i] > 0, "F0g");
         }
 
+        IController controller = _controller; // for save gas
         for (uint256 j = 0; j < modules.length; j++) {
-            require(_controller.isModule(modules[j]), "F0h");
+            require(controller.isModule(modules[j]), "F0h");
         }
 
-        MatrixToken matrixToken = new MatrixToken(components, units, modules, _controller, manager, name, symbol);
-        _controller.addMatrix(address(matrixToken));
+        MatrixToken matrixToken = new MatrixToken(components, units, modules, controller, manager, name, symbol);
+        controller.addMatrix(address(matrixToken));
 
-        emit CreateMatrixToken(address(matrixToken), manager, name, symbol);
+        emit CreateMatrixToken(msg.sender, address(matrixToken), components, units, modules, address(controller), manager, name, symbol);
 
         return address(matrixToken);
     }
