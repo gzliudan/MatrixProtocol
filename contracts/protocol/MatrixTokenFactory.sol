@@ -25,12 +25,15 @@ contract MatrixTokenFactory {
 
     // ==================== Events ====================
 
+    event DeployMatrixTokenFactory(address indexed creater, address indexed controller);
     event CreateMatrixToken(address indexed matrixToken, address indexed manager, string name, string symbol);
 
     // ==================== Constructor function ====================
 
     constructor(IController controller) {
         _controller = controller;
+
+        emit DeployMatrixTokenFactory(msg.sender, address(controller));
     }
 
     // ==================== External functions ====================
