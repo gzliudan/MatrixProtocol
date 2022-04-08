@@ -327,7 +327,7 @@ describe('contract Controller', async () => {
 
       shouldRevertWhenNotOwner(addFactory);
 
-      it('should emit the FactoryAdded event', async () => {
+      it('should emit the AddFactory event', async () => {
         await expect(addFactory()).emit(controller, 'AddFactory').withArgs(factory);
       });
 
