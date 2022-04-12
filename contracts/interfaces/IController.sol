@@ -19,7 +19,7 @@ interface IController {
     event RemoveFactory(address indexed factory);
     event AddFee(address indexed module, uint256 indexed feeType, uint256 feePercentage);
     event EditFee(address indexed module, uint256 indexed feeType, uint256 feePercentage);
-    event EditFeeRecipient(address newFeeRecipient);
+    event EditFeeRecipient(address indexed controller, address indexed oldFeeRecipient, address indexed newFeeRecipient);
     event AddModule(address indexed module);
     event RemoveModule(address indexed module);
     event AddResource(address indexed resource, uint256 id);

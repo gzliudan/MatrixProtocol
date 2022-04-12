@@ -401,9 +401,10 @@ contract Controller is AccessControlEnumerable, IController {
     function editFeeRecipient(address newFeeRecipient) external onlyInitialized onlyAdmin {
         require(newFeeRecipient != address(0), "C11");
 
+        address oldFeeRecipient = _feeRecipient;
         _feeRecipient = newFeeRecipient;
 
-        emit EditFeeRecipient(newFeeRecipient);
+        emit EditFeeRecipient(address(this), oldFeeRecipient, newFeeRecipient);
     }
 
     // ==================== Private functions ====================

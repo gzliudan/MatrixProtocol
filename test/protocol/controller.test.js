@@ -809,7 +809,8 @@ describe('contract Controller', async () => {
       shouldRevertWhenNotOwner(editFeeRecipient);
 
       it('should emit the EditFeeRecipient event', async () => {
-        await expect(editFeeRecipient()).emit(controller, 'EditFeeRecipient').withArgs(protocolFeeRecipient);
+        const oldFeeRecipient = await controller.getFeeRecipient();
+        await expect(editFeeRecipient()).emit(controller, 'EditFeeRecipient').withArgs(controller.address, oldFeeRecipient, protocolFeeRecipient);
       });
 
       it('should edit the fee recipient', async () => {
