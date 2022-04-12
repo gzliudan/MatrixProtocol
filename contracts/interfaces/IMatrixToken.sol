@@ -69,7 +69,7 @@ interface IMatrixToken is IERC20 {
     event AddModule(address indexed module);
     event RemoveModule(address indexed module);
     event InitializeModule(address indexed module);
-    event EditManager(address newManager, address oldManager);
+    event EditManager(address indexed oldManager, address indexed newManager);
     event RemovePendingModule(address indexed module);
     event EditPositionMultiplier(int256 newMultiplier);
     event AddComponent(address indexed component);

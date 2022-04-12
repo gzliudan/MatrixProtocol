@@ -523,10 +523,11 @@ contract MatrixToken is ERC20, IMatrixToken {
      */
     function setManager(address newManager) external onlyManager {
         require(!_isLocked, "T5"); // "Only when unlocked"
+
         address oldManager = _manager;
         _manager = newManager;
 
-        emit EditManager(newManager, oldManager);
+        emit EditManager(oldManager, newManager);
     }
 
     // ==================== Public functions ====================

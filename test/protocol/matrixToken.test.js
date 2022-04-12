@@ -1089,7 +1089,7 @@ describe('contract MatrixToken', async () => {
       }
 
       it('should emit the EditManager event', async () => {
-        await expect(setManager()).emit(matrixToken, 'EditManager').withArgs(testManager, manager.address);
+        await expect(setManager()).emit(matrixToken, 'EditManager').withArgs(manager.address, testManager);
       });
 
       it('should change the manager', async () => {
