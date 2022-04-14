@@ -53,6 +53,7 @@ contract BasicIssuanceModule is ModuleBase, ReentrancyGuard {
         address indexed matrixToken,
         address indexed redeemer,
         address indexed to,
+        address hookContract,
         uint256 quantity,
         address[] components,
         uint256[] componentQuantities
@@ -140,6 +141,8 @@ contract BasicIssuanceModule is ModuleBase, ReentrancyGuard {
     ) external nonReentrant onlyValidAndInitializedMatrix(matrixToken) {
         require(quantity > 0, "BI2a"); // "Redeem quantity must be > 0"
 
+        address hookContract = _callPreRedeemHooks(matrixToken, quantity, msg.sender, to);
+
         // Burn the MatrixToken - ERC20's internal burn already checks that the user has enough balance
         matrixToken.burn(msg.sender, quantity);
 
@@ -160,7 +163,7 @@ contract BasicIssuanceModule is ModuleBase, ReentrancyGuard {
             matrixToken.invokeSafeTransfer(component, to, componentQuantities[i]);
         }
 
-        emit RedeemMatrixToken(address(matrixToken), msg.sender, to, quantity, components, componentQuantities);
+        emit RedeemMatrixToken(address(matrixToken), msg.sender, to, hookContract, quantity, components, componentQuantities);
     }
 
     // ==================== Public functions ====================
@@ -201,13 +204,30 @@ contract BasicIssuanceModule is ModuleBase, ReentrancyGuard {
         address caller,
         address to
     ) internal returns (address) {
-        IManagerIssuanceHook preIssueHook = _managerIssuanceHooks[matrixToken];
+        IManagerIssuanceHook hook = _managerIssuanceHooks[matrixToken];
 
-        address result = address(preIssueHook);
-        if (result != address(0)) {
-            preIssueHook.invokePreIssueHook(matrixToken, quantity, caller, to);
+        if (address(hook) != address(0)) {
+            hook.invokePreIssueHook(matrixToken, quantity, caller, to);
         }
 
-        return result;
+        return address(hook);
+    }
+
+    /**
+     * If a pre-redeem hook has been configured, call the external-protocol contract.
+     */
+    function _callPreRedeemHooks(
+        IMatrixToken matrixToken,
+        uint256 quantity,
+        address caller,
+        address to
+    ) internal returns (address) {
+        IManagerIssuanceHook hook = _managerIssuanceHooks[matrixToken];
+
+        if (address(hook) != address(0)) {
+            hook.invokePreRedeemHook(matrixToken, quantity, caller, to);
+        }
+
+        return address(hook);
     }
 }

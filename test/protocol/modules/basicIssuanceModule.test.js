@@ -346,7 +346,7 @@ describe('contract BasicIssuanceModule', async () => {
     it('should emit the RedeemMatrixToken event', async () => {
       await expect(redeem())
         .emit(systemFixture.basicIssuanceModule, 'RedeemMatrixToken')
-        .withArgs(matrixTokenAddress, caller.address, recipient.address, redeemQuantity, components, units);
+        .withArgs(matrixTokenAddress, caller.address, recipient.address, ZERO_ADDRESS, redeemQuantity, components, units);
     });
 
     it('should deposited correct quantity WETH to recipient account when redeem extremely small', async () => {
