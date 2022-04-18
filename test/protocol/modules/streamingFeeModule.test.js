@@ -318,7 +318,9 @@ describe('contract StreamingFeeModule', async () => {
       const feeInflation = getStreamingFeeInflationAmount(expectedFeeInflation, oldTotalSupply);
       const protocolFeeAmount = preciseMul(feeInflation, protocolFee);
       const managerFee = feeInflation.sub(protocolFeeAmount);
-      await expect(promise).emit(systemFixture.streamingFeeModule, 'ActualizeFee').withArgs(matrixToken.address, managerFee, protocolFeeAmount);
+      await expect(promise)
+        .emit(systemFixture.streamingFeeModule, 'ActualizeFee')
+        .withArgs(matrixToken.address, feeRecipient.address, managerFee, systemFixture.feeRecipient.address, protocolFeeAmount);
     });
 
     it('update totalSupply correctly', async () => {
@@ -467,7 +469,9 @@ describe('contract StreamingFeeModule', async () => {
 
       it('case 1.3: emits the correct ActualizeFee event', async () => {
         const promise = actualizeFee();
-        await expect(promise).emit(systemFixture.streamingFeeModule, 'ActualizeFee').withArgs(matrixToken.address, ZERO, ZERO);
+        await expect(promise)
+          .emit(systemFixture.streamingFeeModule, 'ActualizeFee')
+          .withArgs(matrixToken.address, feeRecipient.address, ZERO, systemFixture.feeRecipient.address, ZERO);
       });
     });
 
@@ -562,7 +566,9 @@ describe('contract StreamingFeeModule', async () => {
     });
 
     it('emits the UpdateStreamingFee event', async () => {
-      await expect(updateStreamingFee()).emit(systemFixture.streamingFeeModule, 'UpdateStreamingFee').withArgs(matrixTokenAddress, newFee);
+      await expect(updateStreamingFee())
+        .emit(systemFixture.streamingFeeModule, 'UpdateStreamingFee')
+        .withArgs(matrixTokenAddress, feeStateSetting.streamingFeePercentage, newFee);
     });
 
     it('sets the new fee percentage when the streaming fee is initially 0', async () => {
@@ -658,7 +664,9 @@ describe('contract StreamingFeeModule', async () => {
     });
 
     it('emits the UpdateFeeRecipient event', async () => {
-      await expect(updateFeeRecipient()).emit(systemFixture.streamingFeeModule, 'UpdateFeeRecipient').withArgs(matrixTokenAddress, newFeeRecipient);
+      await expect(updateFeeRecipient())
+        .emit(systemFixture.streamingFeeModule, 'UpdateFeeRecipient')
+        .withArgs(matrixTokenAddress, feeRecipient.address, newFeeRecipient);
     });
 
     it('should revert when feeRecipient is zero address', async () => {

@@ -21,9 +21,16 @@ interface IStreamingFeeModule {
 
     // ==================== Events ====================
 
-    event ActualizeFee(address indexed matrixToken, uint256 managerFee, uint256 protocolFee);
-    event UpdateStreamingFee(address indexed matrixToken, uint256 newStreamingFee);
-    event UpdateFeeRecipient(address indexed matrixToken, address newFeeRecipient);
+    event ActualizeFee(
+        address indexed matrixToken,
+        address indexed managerRecipient,
+        uint256 managerFee,
+        address indexed protocolRecipient,
+        uint256 protocolFee
+    );
+
+    event UpdateStreamingFee(address indexed matrixToken, uint256 oldStreamingFee, uint256 newStreamingFee);
+    event UpdateFeeRecipient(address indexed matrixToken, address oldFeeRecipient, address newFeeRecipient);
 
     // ==================== External functions ====================
 

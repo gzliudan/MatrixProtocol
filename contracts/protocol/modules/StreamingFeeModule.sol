@@ -92,9 +92,11 @@ contract StreamingFeeModule is ModuleBase, IStreamingFeeModule, ReentrancyGuard 
     {
         require(newFee <= _maxStreamingFeePercentage(matrixToken), "SF1"); // "Fee must be less than max"
         actualizeFee(matrixToken);
+
+        uint256 oldFee = _feeStates[matrixToken].streamingFeePercentage;
         _feeStates[matrixToken].streamingFeePercentage = newFee;
 
-        emit UpdateStreamingFee(address(matrixToken), newFee);
+        emit UpdateStreamingFee(address(matrixToken), oldFee, newFee);
     }
 
     /**
@@ -110,9 +112,10 @@ contract StreamingFeeModule is ModuleBase, IStreamingFeeModule, ReentrancyGuard 
     {
         require(newFeeRecipient != address(0), "SF2"); // "Fee Recipient must be non-zero address")
 
+        address oldFeeRecipient = _feeStates[matrixToken].feeRecipient;
         _feeStates[matrixToken].feeRecipient = newFeeRecipient;
 
-        emit UpdateFeeRecipient(address(matrixToken), newFeeRecipient);
+        emit UpdateFeeRecipient(address(matrixToken), oldFeeRecipient, newFeeRecipient);
     }
 
     /**
@@ -137,6 +140,8 @@ contract StreamingFeeModule is ModuleBase, IStreamingFeeModule, ReentrancyGuard 
     function actualizeFee(IMatrixToken matrixToken) public nonReentrant onlyValidAndInitializedMatrix(matrixToken) {
         uint256 managerFee;
         uint256 protocolFee;
+        address managerRecipient = _feeRecipient(matrixToken);
+        address protocolRecipient = _controller.getFeeRecipient();
 
         if (_streamingFeePercentage(matrixToken) > 0) {
             uint256 inflationFeePercentage = _calculateStreamingFee(matrixToken);
@@ -145,14 +150,14 @@ contract StreamingFeeModule is ModuleBase, IStreamingFeeModule, ReentrancyGuard 
             uint256 feeQuantity = _calculateStreamingFeeInflation(matrixToken, inflationFeePercentage);
 
             // Mint new MatrixToken to manager and protocol
-            (managerFee, protocolFee) = _mintManagerAndProtocolFee(matrixToken, feeQuantity);
+            (managerFee, protocolFee) = _mintManagerAndProtocolFee(matrixToken, feeQuantity, managerRecipient, protocolRecipient);
 
             _editPositionMultiplier(matrixToken, inflationFeePercentage);
         }
 
         _feeStates[matrixToken].lastStreamingFeeTimestamp = block.timestamp;
 
-        emit ActualizeFee(address(matrixToken), managerFee, protocolFee);
+        emit ActualizeFee(address(matrixToken), managerRecipient, managerFee, protocolRecipient, protocolFee);
     }
 
     // ==================== Internal functions ====================
@@ -204,14 +209,18 @@ contract StreamingFeeModule is ModuleBase, IStreamingFeeModule, ReentrancyGuard 
      * @return uint256       Amount of MatrixToken accrued to manager as fee
      * @return uint256       Amount of MatrixToken accrued to protocol as fee
      */
-    function _mintManagerAndProtocolFee(IMatrixToken matrixToken, uint256 feeQuantity) internal returns (uint256, uint256) {
-        address protocolFeeRecipient = _controller.getFeeRecipient();
+    function _mintManagerAndProtocolFee(
+        IMatrixToken matrixToken,
+        uint256 feeQuantity,
+        address managerFeeRecipient,
+        address protocolFeeRecipient
+    ) internal returns (uint256, uint256) {
         uint256 protocolFee = _controller.getModuleFee(address(this), PROTOCOL_STREAMING_FEE_INDEX);
 
         uint256 protocolFeeAmount = feeQuantity.preciseMul(protocolFee);
         uint256 managerFeeAmount = feeQuantity - protocolFeeAmount;
 
-        matrixToken.mint(_feeRecipient(matrixToken), managerFeeAmount);
+        matrixToken.mint(managerFeeRecipient, managerFeeAmount);
 
         if (protocolFeeAmount > 0) {
             matrixToken.mint(protocolFeeRecipient, protocolFeeAmount);
