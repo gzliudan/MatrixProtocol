@@ -5,7 +5,7 @@
 const fs = require('fs');
 const dayjs = require('dayjs');
 
-const DIR = './deploy/deployed-contracts';
+const DIR = './deploy/deployed';
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));

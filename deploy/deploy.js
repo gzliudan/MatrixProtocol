@@ -51,7 +51,7 @@ async function deployTestErc20(name, symbol, decimals) {
   }
 
   // Deploy contract
-  console.log(`[${getDataTime()}] DO: Deploy "${name}" to ${CHAIN_NAME}`);
+  console.log(`[${getDataTime()}] DO: Deploy ${name} to ${CHAIN_NAME}`);
   const instance = await deployContract(deployer, 'Erc20Mock', [name, symbol, decimals]);
   console.log(`[${getDataTime()}] OK: "${name}" is deployed at ${instance.address}`);
 
@@ -73,39 +73,9 @@ async function deployAllMocks() {
   }
 }
 
-async function deployController() {
-  const { fee_recipient: feeRecipient } = config;
-  if (!feeRecipient) {
-    throw new Error(`deploy Controller: fee_recipient is not set in file ${CONFIG_FILE} !`);
-  }
-
+async function quickDeployContract(name, key, args = []) {
   const { directory, filename, contractAddresses } = getDeployedAddresses(CHAIN_NAME, CHAIN_ID);
-  const controllerAddress = contractAddresses['controller'];
-  if (controllerAddress) {
-    console.log(`[${getDataTime()}] SKIP: Controller is already deployed at ${controllerAddress}\n`);
-    return controllerAddress;
-  }
-
-  // Deploy contract Controller
-  console.log(`[${getDataTime()}] DO: Deploy Controller to ${CHAIN_NAME}`);
-  const controller = await deployContract(deployer, 'Controller', [feeRecipient]);
-  console.log(`[${getDataTime()}] OK: Controller is deployed at ${controller.address}`);
-
-  // update the Controller addresses
-  contractAddresses['controller'] = controller.address;
-  writeDeployedAddresses(directory, filename, contractAddresses);
-  console.log(`[${getDataTime()}] OK: Write controller to file ${filename}\n`);
-
-  return controller.address;
-}
-
-async function deployWithController(name, key) {
-  const { directory, filename, contractAddresses } = getDeployedAddresses(CHAIN_NAME, CHAIN_ID);
-  const { controller, [key]: oldAddress } = contractAddresses;
-
-  if (!controller) {
-    throw new Error(`deploy ${name}: controller is not set in file ${filename} !`);
-  }
+  const oldAddress = contractAddresses[key];
 
   if (oldAddress) {
     console.log(`[${getDataTime()}] SKIP: ${name} is already deployed at ${oldAddress}\n`);
@@ -114,7 +84,6 @@ async function deployWithController(name, key) {
 
   // Deploy contract
   console.log(`[${getDataTime()}] DO: Deploy ${name} to ${CHAIN_NAME}`);
-  const args = isModule(name) ? [controller, name] : [controller];
   const instance = await deployContract(deployer, name, args);
   console.log(`[${getDataTime()}] OK: ${name} is deployed at ${instance.address}`);
 
@@ -126,59 +95,48 @@ async function deployWithController(name, key) {
   return instance.address;
 }
 
-async function deployWithoutController(name, key) {
-  const { directory, filename, contractAddresses } = getDeployedAddresses(CHAIN_NAME, CHAIN_ID);
-  const oldAddress = contractAddresses[key];
-
-  if (oldAddress) {
-    console.log(`[${getDataTime()}] SKIP: ${name} is already deployed at ${oldAddress}\n`);
-    return oldAddress;
+function deployController() {
+  const { fee_recipient: feeRecipient } = config;
+  if (!feeRecipient) {
+    throw new Error(`deploy Controller: fee_recipient is not set in file ${CONFIG_FILE} !`);
   }
 
-  // Deploy contract
-  console.log(`[${getDataTime()}] DO: Deploy ${name} to ${CHAIN_NAME}`);
-  const instance = await deployContract(deployer, name);
-  console.log(`[${getDataTime()}] OK: ${name} is deployed at ${instance.address}`);
+  const name = 'Controller';
+  const key = 'controller';
+  const args = [feeRecipient];
 
-  // update addresses
-  contractAddresses[key] = instance.address;
-  writeDeployedAddresses(directory, filename, contractAddresses);
-  console.log(`[${getDataTime()}] OK: Write ${key} to file ${filename}\n`);
+  return quickDeployContract(name, key, args);
+}
 
-  return instance.address;
+function getController() {
+  const { filename, contractAddresses } = getDeployedAddresses(CHAIN_NAME, CHAIN_ID);
+  const { controller } = contractAddresses;
+
+  if (!controller) {
+    throw new Error(`must set controller in file ${filename} !`);
+  }
+
+  return controller;
+}
+
+async function deployWithController(name, key) {
+  const controller = getController();
+  const args = isModule(name) ? [controller, name] : [controller];
+
+  return quickDeployContract(name, key, args);
 }
 
 async function deployWithControllerAndWeth(name, key) {
   const weth = getWeth(config, CHAIN_NAME);
+  const controller = getController();
+  const args = [controller, weth, name];
 
-  const { directory, filename, contractAddresses } = getDeployedAddresses(CHAIN_NAME, CHAIN_ID);
-  const { controller, [key]: oldAddress } = contractAddresses;
-
-  if (!controller) {
-    throw new Error(`deploy ${name}: must set controller in file ${filename} !`);
-  }
-
-  if (oldAddress) {
-    console.log(`[${getDataTime()}] SKIP: ${name} is already deployed at ${oldAddress}\n`);
-    return oldAddress;
-  }
-
-  // Deploy contract
-  console.log(`[${getDataTime()}] DO: Deploy ${name} to ${CHAIN_NAME}`);
-  const instance = await deployContract(deployer, name, [controller, weth, name]);
-  console.log(`[${getDataTime()}] OK: ${name} is deployed at ${instance.address}`);
-
-  // update the addresses
-  contractAddresses[key] = instance.address;
-  writeDeployedAddresses(directory, filename, contractAddresses);
-  console.log(`[${getDataTime()}] OK: Write ${key} to file ${filename}\n`);
-
-  return instance.address;
+  return quickDeployContract(name, key, args);
 }
 
 // eslint-disable-next-line no-unused-vars
 async function deployAaveLeverageModule() {
-  const { aave_v2_lending_pool_addresses_provider: lpap } = config;
+  const lpap = config.aave_v2_lending_pool_addresses_provider;
   if (!lpap) {
     throw new Error(`deploy AaveLeverageModule: must set aave_v2_lending_pool_addresses_provider in file ${CONFIG_FILE} !`);
   }
@@ -205,7 +163,7 @@ async function deployAaveLeverageModule() {
   console.log(`[${getDataTime()}] OK: AaveLeverageModule is deployed at ${aaveLeverageModule.address}`);
 
   // update the AaveLeverageModule addresses
-  contractAddresses['aave_leverage_module'] = aaveLeverageModule.address;
+  contractAddresses.aave_leverage_module = aaveLeverageModule.address;
   writeDeployedAddresses(directory, filename, contractAddresses);
   console.log(`[${getDataTime()}] OK: Write aave_leverage_module to file ${filename}\n`);
 
@@ -218,50 +176,12 @@ async function deployPriceOracle() {
     throw new Error(`deploy PriceOracle: must set "tokens"."usd" in file ${CONFIG_FILE} !`);
   }
 
-  const { directory, filename, contractAddresses } = getDeployedAddresses(CHAIN_NAME, CHAIN_ID);
-  const { controller, price_oracle: oldAddress } = contractAddresses;
+  const controller = getController();
+  const name = 'PriceOracle';
+  const key = 'price_oracle';
+  const args = [controller, usd, [], [], [], []];
 
-  if (!controller) {
-    throw new Error(`deployPriceOracle: must set controller in file ${filename} !`);
-  }
-
-  if (oldAddress) {
-    console.log(`[${getDataTime()}] SKIP: PriceOracle is already deployed at ${oldAddress}\n`);
-    return;
-  }
-
-  // Deploy contract PriceOracle
-  console.log(`[${getDataTime()}] DO: Deploy PriceOracle to ${CHAIN_NAME}`);
-  const priceOracle = await deployContract(deployer, 'PriceOracle', [controller, usd, [], [], [], []]);
-  console.log(`[${getDataTime()}] OK: PriceOracle is deployed at ${priceOracle.address}`);
-
-  // update the PriceOracle addresses
-  contractAddresses['price_oracle'] = priceOracle.address;
-  writeDeployedAddresses(directory, filename, contractAddresses);
-  console.log(`[${getDataTime()}] OK: Write price_oracle to file ${filename}\n`);
-}
-
-async function deployChainlinkOracle(name, key, priceFeed) {
-  const { directory, filename, contractAddresses } = getDeployedAddresses(CHAIN_NAME, CHAIN_ID);
-
-  const task = `Deploy ChainlinkOracle ${name} ${key} to ${CHAIN_NAME}`;
-  const oldAddress = contractAddresses[key];
-  if (oldAddress) {
-    console.log(`[${getDataTime()}] SKIP: ${task} at ${oldAddress}\n`);
-    return oldAddress;
-  }
-
-  // Deploy contract
-  console.log(`[${getDataTime()}] DO: ${task}`);
-  const oracle = await deployContract(deployer, 'ChainlinkOracle', [name, priceFeed]);
-  console.log(`[${getDataTime()}] OK: ${task}`);
-
-  // update addresses
-  contractAddresses[key] = oracle.address;
-  writeDeployedAddresses(directory, filename, contractAddresses);
-  console.log(`[${getDataTime()}] OK: Write ${key} to file ${filename}\n`);
-
-  return oracle.address;
+  return quickDeployContract(name, key, args);
 }
 
 function getPriceFeed(oracleKey) {
@@ -276,108 +196,55 @@ function getPriceFeed(oracleKey) {
   throw new Error(`${oracleKey} is not exist in chainlink_oracle[${CHAIN_NAME}] !`);
 }
 
-async function deployChainlinkSerialOracle(name, key, path) {
-  const task = `deploy ChainlinkSerialOracle(${name}, ${key}, [${path}]) to ${CHAIN_NAME}`;
-
+async function deployChainlinkSerialOracle(oracleName, key, path) {
   if (path.length != 3) {
-    throw new Error(`${task}: length of [${path}] is not 3 !`);
+    throw new Error(`deploy ChainlinkSerialOracle(${oracleName}/${key}): length of [${path}] is not 3 !`);
   }
 
-  const oracle1 = `${path[0]}_${path[1]}_oracle`;
-  const oracle2 = `${path[1]}_${path[2]}_oracle`;
+  const name = 'ChainlinkSerialOracle';
+  const priceFeed1 = getPriceFeed(`${path[0]}_${path[1]}_oracle`);
+  const priceFeed2 = getPriceFeed(`${path[1]}_${path[2]}_oracle`);
+  const args = [oracleName, priceFeed1, priceFeed2];
 
-  const priceFeed1 = getPriceFeed(oracle1);
-  const priceFeed2 = getPriceFeed(oracle2);
-
-  const { directory, filename, contractAddresses } = getDeployedAddresses(CHAIN_NAME, CHAIN_ID);
-  const { [key]: oldAddress } = contractAddresses;
-
-  if (oldAddress) {
-    console.log(`[${getDataTime()}] SKIP: ${task} at ${oldAddress}\n`);
-    return oldAddress;
-  }
-
-  // Deploy contract
-  console.log(`[${getDataTime()}] DO: ${task}`);
-  const oracle = await deployContract(deployer, 'ChainlinkSerialOracle', [name, priceFeed1, priceFeed2]);
-  console.log(`[${getDataTime()}] OK: ${task}`);
-
-  // update addresses
-  contractAddresses[key] = oracle.address;
-  writeDeployedAddresses(directory, filename, contractAddresses);
-  console.log(`[${getDataTime()}] OK: Write ${key} to file ${filename}\n`);
-
-  return oracle.address;
+  return quickDeployContract(name, key, args);
 }
 
 async function deployChainlinkOracleAdapter() {
-  const task = `deploy ChainlinkOracleAdapter to ${CHAIN_NAME}`;
-
   const { chainlink_feed_registry: registry } = config;
   if (!registry) {
-    throw new Error(`${task}: must set chainlink_feed_registry in file ${CONFIG_FILE} !`);
+    throw new Error(`deploy ChainlinkOracleAdapter: must set chainlink_feed_registry in file ${CONFIG_FILE} !`);
   }
 
-  const { directory, filename, contractAddresses } = getDeployedAddresses(CHAIN_NAME, CHAIN_ID);
-  const { chainlink_oracle_adapter: oldAddress } = contractAddresses;
+  const name = 'ChainlinkOracleAdapter';
+  const key = 'chainlink_oracle_adapter';
+  const args = [registry];
 
-  if (oldAddress) {
-    console.log(`[${getDataTime()}] SKIP: ${task} at ${oldAddress}\n`);
-    return oldAddress;
-  }
-
-  // Deploy contract
-  console.log(`[${getDataTime()}] DO: ${task}`);
-  const instance = await deployContract(deployer, 'ChainlinkOracleAdapter', [registry]);
-  console.log(`[${getDataTime()}] OK: ${task}`);
-
-  // update addresses
-  contractAddresses['chainlink_oracle_adapter'] = instance.address;
-  writeDeployedAddresses(directory, filename, contractAddresses);
-  console.log(`[${getDataTime()}] OK: Write chainlink_oracle_adapter to file ${filename}\n`);
-
-  return instance.address;
+  return quickDeployContract(name, key, args);
 }
 
 async function deployChainlinkSerialOracleAdapter() {
-  const task = `deploy ChainlinkSerialOracleAdapter to ${CHAIN_NAME}`;
-
   const { chainlink_feed_registry: registry } = config;
   if (!registry) {
-    throw new Error(`${task}: must set chainlink_feed_registry in file ${CONFIG_FILE} !`);
+    throw new Error(`deploy ChainlinkSerialOracleAdapter: must set chainlink_feed_registry in file ${CONFIG_FILE} !`);
   }
 
   const { eth } = config['tokens'];
   if (!eth) {
-    throw new Error(`${task}: must set "tokens"."eth" in file ${CONFIG_FILE} !`);
+    throw new Error(`deploy ChainlinkSerialOracleAdapter: must set "tokens"."eth" in file ${CONFIG_FILE} !`);
   }
 
-  const { directory, filename, contractAddresses } = getDeployedAddresses(CHAIN_NAME, CHAIN_ID);
-  const { chainlink_serial_oracle_adapter: oldAddress } = contractAddresses;
+  const name = 'ChainlinkSerialOracleAdapter';
+  const key = 'chainlink_serial_oracle_adapter';
+  const args = [registry, eth];
 
-  if (oldAddress) {
-    console.log(`[${getDataTime()}] SKIP: ${task} at ${oldAddress}\n`);
-    return oldAddress;
-  }
-
-  // Deploy contract
-  console.log(`[${getDataTime()}] DO: ${task}`);
-  const instance = await deployContract(deployer, 'ChainlinkSerialOracleAdapter', [registry, eth]);
-  console.log(`[${getDataTime()}] OK: ${task}`);
-
-  // update addresses
-  contractAddresses['chainlink_serial_oracle_adapter'] = instance.address;
-  writeDeployedAddresses(directory, filename, contractAddresses);
-  console.log(`[${getDataTime()}] OK: Write chainlink_serial_oracle_adapter to file ${filename}\n`);
-
-  return instance.address;
+  return quickDeployContract(name, key, args);
 }
 
 async function deployOracles() {
   const { chainlink_oracle: chainlinkOracles, chainlink_serial_oracle: chainlinkSerialOracles } = oracles[CHAIN_NAME];
 
   for (const oracle of chainlinkOracles) {
-    await deployChainlinkOracle(oracle.name, oracle.key, oracle.address);
+    await quickDeployContract('ChainlinkOracle', oracle.key, [oracle.name, oracle.address]);
   }
 
   for (const oracle of chainlinkSerialOracles) {
@@ -391,51 +258,22 @@ async function deployExchangeAdapter(name, key, routerKey) {
     throw new Error(`deploy ExchangeAdapter: must set ${routerKey} in file ${CONFIG_FILE} !`);
   }
 
-  const { directory, filename, contractAddresses } = getDeployedAddresses(CHAIN_NAME, CHAIN_ID);
-  const oldAddress = contractAddresses[key];
+  const args = [router];
 
-  if (oldAddress) {
-    console.log(`[${getDataTime()}] SKIP: ${name} ${key} is already deployed at ${oldAddress}\n`);
-    return oldAddress;
-  }
-
-  // Deploy contract
-  console.log(`[${getDataTime()}] DO: Deploy ${name} ${key} to ${CHAIN_NAME}`);
-  const instance = await deployContract(deployer, name, [router]);
-  console.log(`[${getDataTime()}] OK: ${name} ${key} is deployed at ${instance.address}`);
-
-  // update addresses
-  contractAddresses[key] = instance.address;
-  writeDeployedAddresses(directory, filename, contractAddresses);
-  console.log(`[${getDataTime()}] OK: Write ${key} to file ${filename}\n`);
-
-  return instance.address;
+  return quickDeployContract(name, key, args);
 }
 
 async function deployWithPriceOracle(name, key) {
-  const { directory, filename, contractAddresses } = getDeployedAddresses(CHAIN_NAME, CHAIN_ID);
-  const { [key]: oldAddress, price_oracle: priceOracle } = contractAddresses;
+  const { filename, contractAddresses } = getDeployedAddresses(CHAIN_NAME, CHAIN_ID);
+  const { price_oracle: priceOracle } = contractAddresses;
 
   if (!priceOracle) {
     throw new Error(`deploy ${name}: must set price_oracle in file ${filename} !`);
   }
 
-  if (oldAddress) {
-    console.log(`[${getDataTime()}] SKIP: ${name} ${key} is already deployed at ${oldAddress}\n`);
-    return oldAddress;
-  }
+  const args = [priceOracle];
 
-  // Deploy contract
-  console.log(`[${getDataTime()}] DO: Deploy ${name} ${key} to ${CHAIN_NAME}`);
-  const instance = await deployContract(deployer, name, [priceOracle]);
-  console.log(`[${getDataTime()}] OK: ${name} ${key} is deployed at ${instance.address}`);
-
-  // update addresses
-  contractAddresses[key] = instance.address;
-  writeDeployedAddresses(directory, filename, contractAddresses);
-  console.log(`[${getDataTime()}] OK: Write ${key} to file ${filename}\n`);
-
-  return instance.address;
+  return quickDeployContract(name, key, args);
 }
 
 async function addPairToIdenticalTokenOracleAdapter(identicalTokenKey, underlyingTokenKey) {
@@ -518,30 +356,16 @@ async function addQuoteAssetToUniswapV2PairPriceAdapter(assetKey) {
 }
 
 async function deployAaveV2WrapV2Adapter() {
-  const { aave_v2_lending_pool_addresses_provider: lpap } = config;
+  const lpap = config['aave_v2_lending_pool_addresses_provider'];
   if (!lpap) {
     throw new Error(`deploy AaveV2WrapV2Adapter: must set aave_v2_lending_pool_addresses_provider in file ${CONFIG_FILE} !`);
   }
 
-  const { directory, filename, contractAddresses } = getDeployedAddresses(CHAIN_NAME, CHAIN_ID);
-  const { aave_v2_wrap_v2_adapter: oldAddress } = contractAddresses;
+  const name = 'AaveV2WrapV2Adapter';
+  const key = 'aave_v2_wrap_v2_adapter';
+  const args = [lpap];
 
-  if (oldAddress) {
-    console.log(`[${getDataTime()}] SKIP: AaveV2WrapV2Adapter is already deployed at ${oldAddress}\n`);
-    return oldAddress;
-  }
-
-  // Deploy contract AaveV2WrapV2Adapter
-  console.log(`[${getDataTime()}] DO: Deploy AaveV2WrapV2Adapter to ${CHAIN_NAME}`);
-  const aaveV2WrapV2Adapter = await deployContractAndLinkLibraries(deployer, 'AaveV2WrapV2Adapter', [lpap]);
-  console.log(`[${getDataTime()}] OK: AaveV2WrapV2Adapter is deployed at ${aaveV2WrapV2Adapter.address}`);
-
-  // update the AaveV2WrapV2Adapter addresses
-  contractAddresses['aave_v2_wrap_v2_adapter'] = aaveV2WrapV2Adapter.address;
-  writeDeployedAddresses(directory, filename, contractAddresses);
-  console.log(`[${getDataTime()}] OK: Write aave_v2_wrap_v2_adapter to file ${filename}\n`);
-
-  return aaveV2WrapV2Adapter.address;
+  return quickDeployContract(name, key, args);
 }
 
 async function deployAdapters() {
@@ -773,7 +597,7 @@ async function addAdapterToPriceOracle(priceOracle, adapterKey) {
 
 async function setupPriceOracle() {
   const { filename, contractAddresses } = getDeployedAddresses(CHAIN_NAME, CHAIN_ID);
-  const priceOracleAddress = contractAddresses['price_oracle'];
+  const { price_oracle: priceOracleAddress } = contractAddresses;
 
   if (!priceOracleAddress) {
     throw new Error(`setupPriceOracle: must set price_oracle in file ${filename} !`);
@@ -929,35 +753,23 @@ async function setupWrapModuleV2() {
 }
 
 async function deployMatrixToken() {
-  const name = 'MatrixToken';
-  const key = 'test_matrix_token';
+  const unit = WEI_PER_ETHER;
   const manager = config['fee_recipient'];
   const weth = getWeth(config, CHAIN_NAME);
-  const unit = WEI_PER_ETHER;
+  const { contractAddresses } = getDeployedAddresses(CHAIN_NAME, CHAIN_ID);
+  const { controller, basic_issuance_module } = contractAddresses;
 
-  const { directory, filename, contractAddresses } = getDeployedAddresses(CHAIN_NAME, CHAIN_ID);
-  const { controller, basic_issuance_module: module, [key]: oldAddress } = contractAddresses;
+  const name = 'MatrixToken';
+  const key = 'test_matrix_token';
+  const args = [[weth], [unit], [basic_issuance_module], controller, manager, 'Matrix Token', 'MT'];
 
-  if (oldAddress) {
-    console.log(`[${getDataTime()}] SKIP: ${name} is already deployed at ${oldAddress}\n`);
-    return oldAddress;
-  }
-
-  console.log(`[${getDataTime()}] DO: deploy ${name} to ${CHAIN_NAME}`);
-  const instance = await deployContract(deployer, 'MatrixToken', [[weth], [unit], [module], controller, manager, 'Matrix Token', 'MT']);
-  console.log(`[${getDataTime()}] OK: ${name} is deployed at ${instance.address}`);
-
-  contractAddresses[key] = instance.address;
-  writeDeployedAddresses(directory, filename, contractAddresses);
-  console.log(`[${getDataTime()}] OK: Write ${key} to file ${filename}\n`);
-
-  return instance.address;
+  return quickDeployContract(name, key, args);
 }
 
 async function deployAll() {
   await deployAllMocks();
-  await deployWithoutController('ProtocolViewer', 'protocol_viewer');
-  await deployWithoutController('AaveV2', 'aave_v2');
+  await quickDeployContract('ProtocolViewer', 'protocol_viewer');
+  await quickDeployContract('AaveV2', 'aave_v2');
   await deployController();
   await deployWithController('MatrixValuer', 'matrix_valuer');
   await deployWithController('MatrixTokenFactory', 'matrix_token_factory');
