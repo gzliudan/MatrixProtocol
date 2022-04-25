@@ -1,323 +1,323 @@
  ·------------------------------------------------------------------------------------------------------------------------------------|-------------|---------------·
  |  Contract Name                                                                                                                     ·  Size (KB)  ·  Change (KB)  │
  ·····································································································································|·············|················
- |  @openzeppelin/contracts/token/ERC20/ERC20.sol:ERC20                                                                               ·      2.253  ·       +2.253  │
+ |  @openzeppelin/contracts/token/ERC20/ERC20.sol:ERC20                                                                               ·      2.253  ·               │
  ·····································································································································|·············|················
- |  @openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol:SafeERC20                                                                 ·      0.086  ·       +0.086  │
+ |  @openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol:SafeERC20                                                                 ·      0.086  ·               │
  ·····································································································································|·············|················
- |  @openzeppelin/contracts/utils/Address.sol:Address                                                                                 ·      0.086  ·       +0.086  │
+ |  @openzeppelin/contracts/utils/Address.sol:Address                                                                                 ·      0.086  ·               │
  ·····································································································································|·············|················
- |  @openzeppelin/contracts/utils/math/Math.sol:Math                                                                                  ·      0.086  ·       +0.086  │
+ |  @openzeppelin/contracts/utils/math/Math.sol:Math                                                                                  ·      0.086  ·               │
  ·····································································································································|·············|················
- |  @openzeppelin/contracts/utils/math/SafeCast.sol:SafeCast                                                                          ·      0.086  ·       +0.086  │
+ |  @openzeppelin/contracts/utils/math/SafeCast.sol:SafeCast                                                                          ·      0.086  ·               │
  ·····································································································································|·············|················
- |  @openzeppelin/contracts/utils/math/SafeMath.sol:SafeMath                                                                          ·      0.086  ·       +0.086  │
+ |  @openzeppelin/contracts/utils/math/SafeMath.sol:SafeMath                                                                          ·      0.086  ·               │
  ·····································································································································|·············|················
- |  @openzeppelin/contracts/utils/math/SignedMath.sol:SignedMath                                                                      ·      0.086  ·       +0.086  │
+ |  @openzeppelin/contracts/utils/math/SignedMath.sol:SignedMath                                                                      ·      0.086  ·               │
  ·····································································································································|·············|················
- |  @openzeppelin/contracts/utils/Strings.sol:Strings                                                                                 ·      0.086  ·       +0.086  │
+ |  @openzeppelin/contracts/utils/Strings.sol:Strings                                                                                 ·      0.086  ·               │
  ·····································································································································|·············|················
- |  @openzeppelin/contracts/utils/structs/EnumerableSet.sol:EnumerableSet                                                             ·      0.086  ·       +0.086  │
+ |  @openzeppelin/contracts/utils/structs/EnumerableSet.sol:EnumerableSet                                                             ·      0.086  ·               │
  ·····································································································································|·············|················
- |  contracts/external/aave-v2/AaveOracle.sol:AaveOracle                                                                              ·      2.792  ·       +2.792  │
+ |  contracts/external/aave-v2/AaveOracle.sol:AaveOracle                                                                              ·      2.792  ·               │
  ·····································································································································|·············|················
- |  contracts/external/aave-v2/AaveProtocolDataProvider.sol:AaveProtocolDataProvider                                                  ·      6.628  ·       +6.628  │
+ |  contracts/external/aave-v2/AaveProtocolDataProvider.sol:AaveProtocolDataProvider                                                  ·      6.628  ·               │
  ·····································································································································|·············|················
- |  contracts/external/aave-v2/AaveV2PriceOracle.sol:AaveV2PriceOracle                                                                ·      0.522  ·       +0.522  │
+ |  contracts/external/aave-v2/AaveV2PriceOracle.sol:AaveV2PriceOracle                                                                ·      0.522  ·               │
  ·····································································································································|·············|················
- |  contracts/external/aave-v2/AToken.sol:AToken                                                                                      ·      9.386  ·       +9.386  │
+ |  contracts/external/aave-v2/AToken.sol:AToken                                                                                      ·      9.386  ·               │
  ·····································································································································|·············|················
- |  contracts/external/aave-v2/DefaultReserveInterestRateStrategy.sol:DefaultReserveInterestRateStrategy                              ·      3.325  ·       +3.325  │
+ |  contracts/external/aave-v2/DefaultReserveInterestRateStrategy.sol:DefaultReserveInterestRateStrategy                              ·      3.325  ·               │
  ·····································································································································|·············|················
- |  contracts/external/aave-v2/DistributionManager.sol:DistributionManager                                                            ·      0.924  ·       +0.924  │
+ |  contracts/external/aave-v2/DistributionManager.sol:DistributionManager                                                            ·      0.924  ·               │
  ·····································································································································|·············|················
- |  contracts/external/aave-v2/LendingPool.sol:LendingPool                                                                            ·     21.614  ·      +21.614  │
+ |  contracts/external/aave-v2/LendingPool.sol:LendingPool                                                                            ·     21.614  ·               │
  ·····································································································································|·············|················
- |  contracts/external/aave-v2/LendingPoolAddressesProvider.sol:LendingPoolAddressesProvider                                          ·      6.546  ·       +6.546  │
+ |  contracts/external/aave-v2/LendingPoolAddressesProvider.sol:LendingPoolAddressesProvider                                          ·      6.546  ·               │
  ·····································································································································|·············|················
- |  contracts/external/aave-v2/LendingPoolCollateralManager.sol:LendingPoolCollateralManager                                          ·     10.144  ·      +10.144  │
+ |  contracts/external/aave-v2/LendingPoolCollateralManager.sol:LendingPoolCollateralManager                                          ·     10.144  ·               │
  ·····································································································································|·············|················
- |  contracts/external/aave-v2/LendingPoolConfigurator.sol:LendingPoolConfigurator                                                    ·     16.262  ·      +16.262  │
+ |  contracts/external/aave-v2/LendingPoolConfigurator.sol:LendingPoolConfigurator                                                    ·     16.262  ·               │
  ·····································································································································|·············|················
- |  contracts/external/aave-v2/LendingPoolStorage.sol:LendingPoolStorage                                                              ·      0.063  ·       +0.063  │
+ |  contracts/external/aave-v2/LendingPoolStorage.sol:LendingPoolStorage                                                              ·      0.063  ·               │
  ·····································································································································|·············|················
- |  contracts/external/aave-v2/LendingRateOracle.sol:LendingRateOracle                                                                ·      1.122  ·       +1.122  │
+ |  contracts/external/aave-v2/LendingRateOracle.sol:LendingRateOracle                                                                ·      1.122  ·               │
  ·····································································································································|·············|················
- |  contracts/external/aave-v2/lib/BaseImmutableAdminUpgradeabilityProxy.sol:BaseImmutableAdminUpgradeabilityProxy                    ·      1.375  ·       +1.375  │
+ |  contracts/external/aave-v2/lib/BaseImmutableAdminUpgradeabilityProxy.sol:BaseImmutableAdminUpgradeabilityProxy                    ·      1.375  ·               │
  ·····································································································································|·············|················
- |  contracts/external/aave-v2/lib/DataTypes.sol:DataTypes                                                                            ·      0.086  ·       +0.086  │
+ |  contracts/external/aave-v2/lib/DataTypes.sol:DataTypes                                                                            ·      0.086  ·               │
  ·····································································································································|·············|················
- |  contracts/external/aave-v2/lib/DistributionTypes.sol:DistributionTypes                                                            ·      0.086  ·       +0.086  │
+ |  contracts/external/aave-v2/lib/DistributionTypes.sol:DistributionTypes                                                            ·      0.086  ·               │
  ·····································································································································|·············|················
- |  contracts/external/aave-v2/lib/Errors.sol:Errors                                                                                  ·      3.959  ·       +3.959  │
+ |  contracts/external/aave-v2/lib/Errors.sol:Errors                                                                                  ·      3.959  ·               │
  ·····································································································································|·············|················
- |  contracts/external/aave-v2/lib/GenericLogic.sol:GenericLogic                                                                      ·      3.687  ·       +3.687  │
+ |  contracts/external/aave-v2/lib/GenericLogic.sol:GenericLogic                                                                      ·      3.687  ·               │
  ·····································································································································|·············|················
- |  contracts/external/aave-v2/lib/Helpers.sol:Helpers                                                                                ·      0.086  ·       +0.086  │
+ |  contracts/external/aave-v2/lib/Helpers.sol:Helpers                                                                                ·      0.086  ·               │
  ·····································································································································|·············|················
- |  contracts/external/aave-v2/lib/InitializableImmutableAdminUpgradeabilityProxy.sol:InitializableImmutableAdminUpgradeabilityProxy  ·      1.963  ·       +1.963  │
+ |  contracts/external/aave-v2/lib/InitializableImmutableAdminUpgradeabilityProxy.sol:InitializableImmutableAdminUpgradeabilityProxy  ·      1.963  ·               │
  ·····································································································································|·············|················
- |  contracts/external/aave-v2/lib/MathUtils.sol:MathUtils                                                                            ·      0.086  ·       +0.086  │
+ |  contracts/external/aave-v2/lib/MathUtils.sol:MathUtils                                                                            ·      0.086  ·               │
  ·····································································································································|·············|················
- |  contracts/external/aave-v2/lib/PercentageMath.sol:PercentageMath                                                                  ·      0.086  ·       +0.086  │
+ |  contracts/external/aave-v2/lib/PercentageMath.sol:PercentageMath                                                                  ·      0.086  ·               │
  ·····································································································································|·············|················
- |  contracts/external/aave-v2/lib/ReserveConfiguration.sol:ReserveConfiguration                                                      ·      0.086  ·       +0.086  │
+ |  contracts/external/aave-v2/lib/ReserveConfiguration.sol:ReserveConfiguration                                                      ·      0.086  ·               │
  ·····································································································································|·············|················
- |  contracts/external/aave-v2/lib/ReserveLogic.sol:ReserveLogic                                                                      ·      0.571  ·       +0.571  │
+ |  contracts/external/aave-v2/lib/ReserveLogic.sol:ReserveLogic                                                                      ·      0.571  ·               │
  ·····································································································································|·············|················
- |  contracts/external/aave-v2/lib/UserConfiguration.sol:UserConfiguration                                                            ·      0.086  ·       +0.086  │
+ |  contracts/external/aave-v2/lib/UserConfiguration.sol:UserConfiguration                                                            ·      0.086  ·               │
  ·····································································································································|·············|················
- |  contracts/external/aave-v2/lib/ValidationLogic.sol:ValidationLogic                                                                ·      8.313  ·       +8.313  │
+ |  contracts/external/aave-v2/lib/ValidationLogic.sol:ValidationLogic                                                                ·      8.313  ·               │
  ·····································································································································|·············|················
- |  contracts/external/aave-v2/lib/WadRayMath.sol:WadRayMath                                                                          ·      0.086  ·       +0.086  │
+ |  contracts/external/aave-v2/lib/WadRayMath.sol:WadRayMath                                                                          ·      0.086  ·               │
  ·····································································································································|·············|················
- |  contracts/external/aave-v2/MintableERC20.sol:MintableERC20                                                                        ·      2.551  ·       +2.551  │
+ |  contracts/external/aave-v2/MintableERC20.sol:MintableERC20                                                                        ·      2.551  ·               │
  ·····································································································································|·············|················
- |  contracts/external/aave-v2/StableDebtToken.sol:StableDebtToken                                                                    ·      6.758  ·       +6.758  │
+ |  contracts/external/aave-v2/StableDebtToken.sol:StableDebtToken                                                                    ·      6.758  ·               │
  ·····································································································································|·············|················
- |  contracts/external/aave-v2/StakedTokenIncentivesController.sol:StakedTokenIncentivesController                                    ·      8.552  ·       +8.552  │
+ |  contracts/external/aave-v2/StakedTokenIncentivesController.sol:StakedTokenIncentivesController                                    ·      8.552  ·               │
  ·····································································································································|·············|················
- |  contracts/external/aave-v2/upgradeability/BaseAdminUpgradeabilityProxy.sol:BaseAdminUpgradeabilityProxy                           ·      1.626  ·       +1.626  │
+ |  contracts/external/aave-v2/upgradeability/BaseAdminUpgradeabilityProxy.sol:BaseAdminUpgradeabilityProxy                           ·      1.626  ·               │
  ·····································································································································|·············|················
- |  contracts/external/aave-v2/upgradeability/BaseUpgradeabilityProxy.sol:BaseUpgradeabilityProxy                                     ·      0.154  ·       +0.154  │
+ |  contracts/external/aave-v2/upgradeability/BaseUpgradeabilityProxy.sol:BaseUpgradeabilityProxy                                     ·      0.154  ·               │
  ·····································································································································|·············|················
- |  contracts/external/aave-v2/upgradeability/InitializableUpgradeabilityProxy.sol:InitializableUpgradeabilityProxy                   ·      0.999  ·       +0.999  │
+ |  contracts/external/aave-v2/upgradeability/InitializableUpgradeabilityProxy.sol:InitializableUpgradeabilityProxy                   ·      0.999  ·               │
  ·····································································································································|·············|················
- |  contracts/external/aave-v2/upgradeability/UpgradeabilityProxy.sol:UpgradeabilityProxy                                             ·      0.182  ·       +0.182  │
+ |  contracts/external/aave-v2/upgradeability/UpgradeabilityProxy.sol:UpgradeabilityProxy                                             ·      0.182  ·               │
  ·····································································································································|·············|················
- |  contracts/external/aave-v2/VariableDebtToken.sol:VariableDebtToken                                                                ·      5.473  ·       +5.473  │
+ |  contracts/external/aave-v2/VariableDebtToken.sol:VariableDebtToken                                                                ·      5.473  ·               │
  ·····································································································································|·············|················
- |  contracts/external/BytesLib.sol:BytesLib                                                                                          ·      0.086  ·       +0.086  │
+ |  contracts/external/BytesLib.sol:BytesLib                                                                                          ·      0.086  ·               │
  ·····································································································································|·············|················
- |  contracts/external/kyber-v1/DMMFactory.sol:DMMFactory                                                                             ·     18.629  ·      +18.629  │
+ |  contracts/external/kyber-v1/DMMFactory.sol:DMMFactory                                                                             ·     18.629  ·               │
  ·····································································································································|·············|················
- |  contracts/external/kyber-v1/DMMPool.sol:DMMPool                                                                                   ·     14.569  ·      +14.569  │
+ |  contracts/external/kyber-v1/DMMPool.sol:DMMPool                                                                                   ·     14.569  ·               │
  ·····································································································································|·············|················
- |  contracts/external/kyber-v1/DMMRouter02.sol:DMMRouter02                                                                           ·     18.422  ·      +18.422  │
+ |  contracts/external/kyber-v1/DMMRouter02.sol:DMMRouter02                                                                           ·     18.422  ·               │
  ·····································································································································|·············|················
- |  contracts/external/kyber-v1/lib/DMMLibrary.sol:DMMLibrary                                                                         ·      0.142  ·       +0.142  │
+ |  contracts/external/kyber-v1/lib/DMMLibrary.sol:DMMLibrary                                                                         ·      0.142  ·               │
  ·····································································································································|·············|················
- |  contracts/external/kyber-v1/lib/ERC20Permit.sol:ERC20Permit                                                                       ·      3.112  ·       +3.112  │
+ |  contracts/external/kyber-v1/lib/ERC20Permit.sol:ERC20Permit                                                                       ·      3.112  ·               │
  ·····································································································································|·············|················
- |  contracts/external/kyber-v1/lib/FeeFomula.sol:FeeFomula                                                                           ·      0.086  ·       +0.086  │
+ |  contracts/external/kyber-v1/lib/FeeFomula.sol:FeeFomula                                                                           ·      0.086  ·               │
  ·····································································································································|·············|················
- |  contracts/external/kyber-v1/lib/MathExt.sol:MathExt                                                                               ·      0.142  ·       +0.142  │
+ |  contracts/external/kyber-v1/lib/MathExt.sol:MathExt                                                                               ·      0.142  ·               │
  ·····································································································································|·············|················
- |  contracts/external/kyber-v1/VolumeTrendRecorder.sol:VolumeTrendRecorder                                                           ·      0.178  ·       +0.178  │
+ |  contracts/external/kyber-v1/VolumeTrendRecorder.sol:VolumeTrendRecorder                                                           ·      0.178  ·               │
  ·····································································································································|·············|················
- |  contracts/external/uniswap-v2/lib/Math.sol:Math                                                                                   ·      0.086  ·       +0.086  │
+ |  contracts/external/uniswap-v2/lib/Math.sol:Math                                                                                   ·      0.086  ·               │
  ·····································································································································|·············|················
- |  contracts/external/uniswap-v2/lib/TransferHelper.sol:TransferHelper                                                               ·      0.086  ·       +0.086  │
+ |  contracts/external/uniswap-v2/lib/TransferHelper.sol:TransferHelper                                                               ·      0.086  ·               │
  ·····································································································································|·············|················
- |  contracts/external/uniswap-v2/lib/UniswapV2Library.sol:UniswapV2Library                                                           ·      0.086  ·       +0.086  │
+ |  contracts/external/uniswap-v2/lib/UniswapV2Library.sol:UniswapV2Library                                                           ·      0.086  ·               │
  ·····································································································································|·············|················
- |  contracts/external/uniswap-v2/lib/UQ112x112.sol:UQ112x112                                                                         ·      0.086  ·       +0.086  │
+ |  contracts/external/uniswap-v2/lib/UQ112x112.sol:UQ112x112                                                                         ·      0.086  ·               │
  ·····································································································································|·············|················
- |  contracts/external/uniswap-v2/StakingRewards.sol:StakingRewards                                                                   ·      4.422  ·       +4.422  │
+ |  contracts/external/uniswap-v2/StakingRewards.sol:StakingRewards                                                                   ·      4.422  ·               │
  ·····································································································································|·············|················
- |  contracts/external/uniswap-v2/Uni.sol:Uni                                                                                         ·      8.831  ·       +8.831  │
+ |  contracts/external/uniswap-v2/Uni.sol:Uni                                                                                         ·      8.831  ·               │
  ·····································································································································|·············|················
- |  contracts/external/uniswap-v2/UniswapGovernorAlpha.sol:UniswapGovernorAlpha                                                       ·     11.060  ·      +11.060  │
+ |  contracts/external/uniswap-v2/UniswapGovernorAlpha.sol:UniswapGovernorAlpha                                                       ·     11.060  ·               │
  ·····································································································································|·············|················
- |  contracts/external/uniswap-v2/UniswapTimelock.sol:UniswapTimelock                                                                 ·      3.952  ·       +3.952  │
+ |  contracts/external/uniswap-v2/UniswapTimelock.sol:UniswapTimelock                                                                 ·      3.952  ·               │
  ·····································································································································|·············|················
- |  contracts/external/uniswap-v2/UniswapV2ERC20.sol:UniswapV2ERC20                                                                   ·      2.181  ·       +2.181  │
+ |  contracts/external/uniswap-v2/UniswapV2ERC20.sol:UniswapV2ERC20                                                                   ·      2.181  ·               │
  ·····································································································································|·············|················
- |  contracts/external/uniswap-v2/UniswapV2Factory.sol:UniswapV2Factory                                                               ·     10.428  ·      +10.428  │
+ |  contracts/external/uniswap-v2/UniswapV2Factory.sol:UniswapV2Factory                                                               ·     10.428  ·               │
  ·····································································································································|·············|················
- |  contracts/external/uniswap-v2/UniswapV2Pair.sol:UniswapV2Pair                                                                     ·      8.554  ·       +8.554  │
+ |  contracts/external/uniswap-v2/UniswapV2Pair.sol:UniswapV2Pair                                                                     ·      8.554  ·               │
  ·····································································································································|·············|················
- |  contracts/external/uniswap-v2/UniswapV2Router02.sol:UniswapV2Router02                                                             ·     16.473  ·      +16.473  │
+ |  contracts/external/uniswap-v2/UniswapV2Router02.sol:UniswapV2Router02                                                             ·     16.473  ·               │
  ·····································································································································|·············|················
- |  contracts/lib/AddressArrayUtil.sol:AddressArrayUtil                                                                               ·      0.086  ·       +0.086  │
+ |  contracts/lib/AddressArrayUtil.sol:AddressArrayUtil                                                                               ·      0.086  ·               │
  ·····································································································································|·············|················
- |  contracts/lib/ExactSafeErc20.sol:ExactSafeErc20                                                                                   ·      0.086  ·       +0.086  │
+ |  contracts/lib/ExactSafeErc20.sol:ExactSafeErc20                                                                                   ·      0.086  ·               │
  ·····································································································································|·············|················
- |  contracts/lib/PreciseUnitMath.sol:PreciseUnitMath                                                                                 ·      0.086  ·       +0.086  │
+ |  contracts/lib/PreciseUnitMath.sol:PreciseUnitMath                                                                                 ·      0.086  ·               │
  ·····································································································································|·············|················
- |  contracts/lib/Uint256ArrayUtil.sol:Uint256ArrayUtil                                                                               ·      0.086  ·       +0.086  │
+ |  contracts/lib/Uint256ArrayUtil.sol:Uint256ArrayUtil                                                                               ·      0.086  ·               │
  ·····································································································································|·············|················
- |  contracts/lib/UnitConversionUtil.sol:UnitConversionUtil                                                                           ·      0.086  ·       +0.086  │
+ |  contracts/lib/UnitConversionUtil.sol:UnitConversionUtil                                                                           ·      0.086  ·               │
  ·····································································································································|·············|················
- |  contracts/mocks/Erc20ErrorMock.sol:Erc20ErrorMock                                                                                 ·      2.554  ·       +2.554  │
+ |  contracts/mocks/Erc20ErrorMock.sol:Erc20ErrorMock                                                                                 ·      2.554  ·               │
  ·····································································································································|·············|················
- |  contracts/mocks/Erc20Mock.sol:Erc20Mock                                                                                           ·      2.556  ·       +2.556  │
+ |  contracts/mocks/Erc20Mock.sol:Erc20Mock                                                                                           ·      2.556  ·               │
  ·····································································································································|·············|················
- |  contracts/mocks/Erc20WithFeeMock.sol:Erc20WithFeeMock                                                                             ·      2.889  ·       +2.889  │
+ |  contracts/mocks/Erc20WithFeeMock.sol:Erc20WithFeeMock                                                                             ·      2.889  ·               │
  ·····································································································································|·············|················
- |  contracts/mocks/external/ChainlinkAggregatorMock.sol:ChainlinkAggregatorMock                                                      ·      0.606  ·       +0.606  │
+ |  contracts/mocks/external/ChainlinkAggregatorMock.sol:ChainlinkAggregatorMock                                                      ·      0.606  ·               │
  ·····································································································································|·············|················
- |  contracts/mocks/external/ChainlinkFeedRegistryMock.sol:ChainlinkFeedRegistryMock                                                  ·      1.078  ·       +1.078  │
+ |  contracts/mocks/external/ChainlinkFeedRegistryMock.sol:ChainlinkFeedRegistryMock                                                  ·      1.078  ·               │
  ·····································································································································|·············|················
- |  contracts/mocks/external/ChainlinkPriceFeedMock.sol:ChainlinkPriceFeedMock                                                        ·      0.731  ·       +0.731  │
+ |  contracts/mocks/external/ChainlinkPriceFeedMock.sol:ChainlinkPriceFeedMock                                                        ·      0.731  ·               │
  ·····································································································································|·············|················
- |  contracts/mocks/external/GaugeControllerMock.sol:GaugeControllerMock                                                              ·      0.670  ·       +0.670  │
+ |  contracts/mocks/external/GaugeControllerMock.sol:GaugeControllerMock                                                              ·      0.670  ·               │
  ·····································································································································|·············|················
- |  contracts/mocks/external/KyberNetworkProxyMock.sol:KyberNetworkProxyMock                                                          ·      2.581  ·       +2.581  │
+ |  contracts/mocks/external/KyberNetworkProxyMock.sol:KyberNetworkProxyMock                                                          ·      2.581  ·               │
  ·····································································································································|·············|················
- |  contracts/mocks/external/OneInchExchangeMock.sol:OneInchExchangeMock                                                              ·      1.474  ·       +1.474  │
+ |  contracts/mocks/external/OneInchExchangeMock.sol:OneInchExchangeMock                                                              ·      1.474  ·               │
  ·····································································································································|·············|················
- |  contracts/mocks/integrations/StakingAdapterMock.sol:StakingAdapterMock                                                            ·      1.326  ·       +1.326  │
+ |  contracts/mocks/integrations/StakingAdapterMock.sol:StakingAdapterMock                                                            ·      1.326  ·               │
  ·····································································································································|·············|················
- |  contracts/mocks/integrations/WrapV2AdapterMock.sol:WrapV2AdapterMock                                                              ·      4.247  ·       +4.247  │
+ |  contracts/mocks/integrations/WrapV2AdapterMock.sol:WrapV2AdapterMock                                                              ·      4.247  ·               │
  ·····································································································································|·············|················
- |  contracts/mocks/lib/AddressArrayMock.sol:AddressArrayMock                                                                         ·      3.392  ·       +3.392  │
+ |  contracts/mocks/lib/AddressArrayMock.sol:AddressArrayMock                                                                         ·      3.392  ·               │
  ·····································································································································|·············|················
- |  contracts/mocks/lib/ExactSafeErc20Mock.sol:ExactSafeErc20Mock                                                                     ·      2.173  ·       +2.173  │
+ |  contracts/mocks/lib/ExactSafeErc20Mock.sol:ExactSafeErc20Mock                                                                     ·      2.173  ·               │
  ·····································································································································|·············|················
- |  contracts/mocks/lib/PreciseUnitMathMock.sol:PreciseUnitMathMock                                                                   ·      1.990  ·       +1.990  │
+ |  contracts/mocks/lib/PreciseUnitMathMock.sol:PreciseUnitMathMock                                                                   ·      1.990  ·               │
  ·····································································································································|·············|················
- |  contracts/mocks/lib/Uint256ArrayMock.sol:Uint256ArrayMock                                                                         ·      0.874  ·       +0.874  │
+ |  contracts/mocks/lib/Uint256ArrayMock.sol:Uint256ArrayMock                                                                         ·      0.874  ·               │
  ·····································································································································|·············|················
- |  contracts/mocks/lib/UnitConversionUtilsMock.sol:UnitConversionUtilMock                                                            ·      0.927  ·       +0.927  │
+ |  contracts/mocks/lib/UnitConversionUtilsMock.sol:UnitConversionUtilMock                                                            ·      0.927  ·               │
  ·····································································································································|·············|················
- |  contracts/mocks/protocol/integration/lib/AaveV2Mock.sol:AaveV2Mock                                                                ·      3.579  ·       +3.579  │
+ |  contracts/mocks/protocol/integration/lib/AaveV2Mock.sol:AaveV2Mock                                                                ·      3.579  ·               │
  ·····································································································································|·············|················
- |  contracts/mocks/protocol/lib/InvokeMock.sol:InvokeMock                                                                            ·      0.957  ·       +0.957  │
+ |  contracts/mocks/protocol/lib/InvokeMock.sol:InvokeMock                                                                            ·      0.957  ·               │
  ·····································································································································|·············|················
- |  contracts/mocks/protocol/lib/ModuleBaseMock.sol:ModuleBaseMock                                                                    ·      5.105  ·       +5.105  │
+ |  contracts/mocks/protocol/lib/ModuleBaseMock.sol:ModuleBaseMock                                                                    ·      5.105  ·               │
  ·····································································································································|·············|················
- |  contracts/mocks/protocol/modules/DebtIssuanceMock.sol:DebtIssuanceMock                                                            ·      0.462  ·       +0.462  │
+ |  contracts/mocks/protocol/modules/DebtIssuanceMock.sol:DebtIssuanceMock                                                            ·      0.462  ·               │
  ·····································································································································|·············|················
- |  contracts/mocks/protocol/modules/DebtModuleMock.sol:DebtModuleMock                                                                ·      5.548  ·       +5.548  │
+ |  contracts/mocks/protocol/modules/DebtModuleMock.sol:DebtModuleMock                                                                ·      5.548  ·               │
  ·····································································································································|·············|················
- |  contracts/mocks/protocol/modules/ManagerIssuanceHookMock.sol:ManagerIssuanceHookMock                                              ·      0.455  ·       +0.455  │
+ |  contracts/mocks/protocol/modules/ManagerIssuanceHookMock.sol:ManagerIssuanceHookMock                                              ·      0.455  ·               │
  ·····································································································································|·············|················
- |  contracts/mocks/protocol/modules/ModuleIssuanceHookMock.sol:ModuleIssuanceHookMock                                                ·      3.189  ·       +3.189  │
+ |  contracts/mocks/protocol/modules/ModuleIssuanceHookMock.sol:ModuleIssuanceHookMock                                                ·      3.189  ·               │
  ·····································································································································|·············|················
- |  contracts/mocks/protocol/modules/NavIssuanceHookMock.sol:NavIssuanceHookMock                                                      ·      0.709  ·       +0.709  │
+ |  contracts/mocks/protocol/modules/NavIssuanceHookMock.sol:NavIssuanceHookMock                                                      ·      0.709  ·               │
  ·····································································································································|·············|················
- |  contracts/mocks/protocol/OracleAdapterMock.sol:OracleAdapterMock                                                                  ·      0.367  ·       +0.367  │
+ |  contracts/mocks/protocol/OracleAdapterMock.sol:OracleAdapterMock                                                                  ·      0.367  ·               │
  ·····································································································································|·············|················
- |  contracts/mocks/protocol/OracleMock.sol:OracleMock                                                                                ·      0.194  ·       +0.194  │
+ |  contracts/mocks/protocol/OracleMock.sol:OracleMock                                                                                ·      0.194  ·               │
  ·····································································································································|·············|················
- |  contracts/mocks/WETH9.sol:WETH9                                                                                                   ·      1.997  ·       +1.997  │
+ |  contracts/mocks/WETH9.sol:WETH9                                                                                                   ·      1.997  ·               │
  ·····································································································································|·············|················
- |  contracts/product/AmmSplitter.sol:AmmSplitter                                                                                     ·      6.236  ·       +6.236  │
+ |  contracts/product/AmmSplitter.sol:AmmSplitter                                                                                     ·      6.236  ·               │
  ·····································································································································|·············|················
- |  contracts/product/AssetLimitHook.sol:AssetLimitHook                                                                               ·      4.627  ·       +4.627  │
+ |  contracts/product/AssetLimitHook.sol:AssetLimitHook                                                                               ·      4.627  ·               │
  ·····································································································································|·············|················
- |  contracts/product/UniswapYieldHook.sol:UniswapYieldHook                                                                           ·      4.665  ·       +4.665  │
+ |  contracts/product/UniswapYieldHook.sol:UniswapYieldHook                                                                           ·      4.665  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol-viewers/Erc20Viewer.sol:Erc20Viewer                                                                            ·      3.293  ·       +3.293  │
+ |  contracts/protocol-viewers/Erc20Viewer.sol:Erc20Viewer                                                                            ·      3.293  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol-viewers/MatrixTokenViewer.sol:MatrixTokenViewer                                                                ·      5.751  ·       +5.751  │
+ |  contracts/protocol-viewers/MatrixTokenViewer.sol:MatrixTokenViewer                                                                ·      5.751  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol-viewers/ProtocolViewer.sol:ProtocolViewer                                                                      ·      9.187  ·       +9.187  │
+ |  contracts/protocol-viewers/ProtocolViewer.sol:ProtocolViewer                                                                      ·      9.187  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol-viewers/StreamingFeeModuleViewer.sol:StreamingFeeModuleViewer                                                  ·      1.276  ·       +1.276  │
+ |  contracts/protocol-viewers/StreamingFeeModuleViewer.sol:StreamingFeeModuleViewer                                                  ·      1.276  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/Controller.sol:Controller                                                                                      ·      9.262  ·       +9.262  │
+ |  contracts/protocol/Controller.sol:Controller                                                                                      ·      9.262  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/integration/amm/UniswapV2AmmAdapter.sol:UniswapV2AmmAdapter                                                    ·      4.261  ·       +4.261  │
+ |  contracts/protocol/integration/amm/UniswapV2AmmAdapter.sol:UniswapV2AmmAdapter                                                    ·      4.261  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/integration/exchange/KyberLegacyExchangeAdapter.sol:KyberLegacyExchangeAdapter                                 ·      1.882  ·       +1.882  │
+ |  contracts/protocol/integration/exchange/KyberLegacyExchangeAdapter.sol:KyberLegacyExchangeAdapter                                 ·      1.882  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/integration/exchange/KyberV1ExchangeAdapter.sol:KyberV1ExchangeAdapter                                         ·      2.388  ·       +2.388  │
+ |  contracts/protocol/integration/exchange/KyberV1ExchangeAdapter.sol:KyberV1ExchangeAdapter                                         ·      2.388  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/integration/exchange/KyberV1ExchangeAdapterV2.sol:KyberV1ExchangeAdapterV2                                     ·      3.851  ·       +3.851  │
+ |  contracts/protocol/integration/exchange/KyberV1ExchangeAdapterV2.sol:KyberV1ExchangeAdapterV2                                     ·      3.851  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/integration/exchange/KyberV1TransferFeeExchangeAdapter.sol:KyberV1TransferFeeExchangeAdapter                   ·      2.392  ·       +2.392  │
+ |  contracts/protocol/integration/exchange/KyberV1TransferFeeExchangeAdapter.sol:KyberV1TransferFeeExchangeAdapter                   ·      2.392  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/integration/exchange/OneInchExchangeAdapter.sol:OneInchExchangeAdapter                                         ·      1.094  ·       +1.094  │
+ |  contracts/protocol/integration/exchange/OneInchExchangeAdapter.sol:OneInchExchangeAdapter                                         ·      1.094  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/integration/exchange/UniswapV2ExchangeAdapter.sol:UniswapV2ExchangeAdapter                                     ·      1.630  ·       +1.630  │
+ |  contracts/protocol/integration/exchange/UniswapV2ExchangeAdapter.sol:UniswapV2ExchangeAdapter                                     ·      1.630  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/integration/exchange/UniswapV2ExchangeAdapterV2.sol:UniswapV2ExchangeAdapterV2                                 ·      2.872  ·       +2.872  │
+ |  contracts/protocol/integration/exchange/UniswapV2ExchangeAdapterV2.sol:UniswapV2ExchangeAdapterV2                                 ·      2.872  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/integration/exchange/UniswapV2TransferFeeExchangeAdapter.sol:UniswapV2TransferFeeExchangeAdapter               ·      1.560  ·       +1.560  │
+ |  contracts/protocol/integration/exchange/UniswapV2TransferFeeExchangeAdapter.sol:UniswapV2TransferFeeExchangeAdapter               ·      1.560  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/integration/exchange/UniswapV3ExchangeAdapter.sol:UniswapV3ExchangeAdapter                                     ·      2.339  ·       +2.339  │
+ |  contracts/protocol/integration/exchange/UniswapV3ExchangeAdapter.sol:UniswapV3ExchangeAdapter                                     ·      2.339  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/integration/governance/AaveGovernanceAdapter.sol:AaveGovernanceAdapter                                         ·      1.406  ·       +1.406  │
+ |  contracts/protocol/integration/governance/AaveGovernanceAdapter.sol:AaveGovernanceAdapter                                         ·      1.406  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/integration/governance/AaveGovernanceV2Adapter.sol:AaveGovernanceV2Adapter                                     ·      3.147  ·       +3.147  │
+ |  contracts/protocol/integration/governance/AaveGovernanceV2Adapter.sol:AaveGovernanceV2Adapter                                     ·      3.147  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/integration/index-exchange/UniswapV2IndexExchangeAdapter.sol:UniswapV2IndexExchangeAdapter                     ·      1.805  ·       +1.805  │
+ |  contracts/protocol/integration/index-exchange/UniswapV2IndexExchangeAdapter.sol:UniswapV2IndexExchangeAdapter                     ·      1.805  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/integration/index-exchange/UniswapV3IndexExchangeAdapter.sol:UniswapV3IndexExchangeAdapter                     ·      1.816  ·       +1.816  │
+ |  contracts/protocol/integration/index-exchange/UniswapV3IndexExchangeAdapter.sol:UniswapV3IndexExchangeAdapter                     ·      1.816  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/integration/lib/AaveV2.sol:AaveV2                                                                              ·      3.128  ·       +3.128  │
+ |  contracts/protocol/integration/lib/AaveV2.sol:AaveV2                                                                              ·      3.128  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/integration/lib/Compound.sol:Compound                                                                          ·      4.146  ·       +4.146  │
+ |  contracts/protocol/integration/lib/Compound.sol:Compound                                                                          ·      4.146  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/integration/lib/PerpV2.sol:PerpV2                                                                              ·      2.788  ·       +2.788  │
+ |  contracts/protocol/integration/lib/PerpV2.sol:PerpV2                                                                              ·      2.788  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/integration/oracles/ChainlinkOracle.sol:ChainlinkOracle                                                        ·      1.014  ·       +1.014  │
+ |  contracts/protocol/integration/oracles/ChainlinkOracle.sol:ChainlinkOracle                                                        ·      1.014  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/integration/oracles/ChainlinkOracleAdapter.sol:ChainlinkOracleAdapter                                          ·      1.252  ·       +1.252  │
+ |  contracts/protocol/integration/oracles/ChainlinkOracleAdapter.sol:ChainlinkOracleAdapter                                          ·      1.252  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/integration/oracles/ChainlinkSerialOracle.sol:ChainlinkSerialOracle                                            ·      1.298  ·       +1.298  │
+ |  contracts/protocol/integration/oracles/ChainlinkSerialOracle.sol:ChainlinkSerialOracle                                            ·      1.298  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/integration/oracles/ChainlinkSerialOracleAdapter.sol:ChainlinkSerialOracleAdapter                              ·      1.780  ·       +1.780  │
+ |  contracts/protocol/integration/oracles/ChainlinkSerialOracleAdapter.sol:ChainlinkSerialOracleAdapter                              ·      1.780  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/integration/oracles/ConstantPriceOracle.sol:ConstantPriceOracle                                                ·      0.150  ·       +0.150  │
+ |  contracts/protocol/integration/oracles/ConstantPriceOracle.sol:ConstantPriceOracle                                                ·      0.150  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/integration/oracles/IdenticalTokenOracleAdapter.sol:IdenticalTokenOracleAdapter                                ·      5.623  ·       +5.623  │
+ |  contracts/protocol/integration/oracles/IdenticalTokenOracleAdapter.sol:IdenticalTokenOracleAdapter                                ·      5.623  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/integration/oracles/KyberV1Oracle.sol:KyberV1Oracle                                                            ·      1.298  ·       +1.298  │
+ |  contracts/protocol/integration/oracles/KyberV1Oracle.sol:KyberV1Oracle                                                            ·      1.298  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/integration/oracles/SerialOracle.sol:SerialOracle                                                              ·      0.981  ·       +0.981  │
+ |  contracts/protocol/integration/oracles/SerialOracle.sol:SerialOracle                                                              ·      0.981  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/integration/oracles/UniswapV2PairPriceAdapter.sol:UniswapV2PairPriceAdapter                                    ·      8.092  ·       +8.092  │
+ |  contracts/protocol/integration/oracles/UniswapV2PairPriceAdapter.sol:UniswapV2PairPriceAdapter                                    ·      8.092  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/integration/staking/CurveStakingAdapter.sol:CurveStakingAdapter                                                ·      0.953  ·       +0.953  │
+ |  contracts/protocol/integration/staking/CurveStakingAdapter.sol:CurveStakingAdapter                                                ·      0.953  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/integration/wrap-v2/AaveV2WrapV2Adapter.sol:AaveV2WrapV2Adapter                                                ·      5.096  ·       +5.096  │
+ |  contracts/protocol/integration/wrap-v2/AaveV2WrapV2Adapter.sol:AaveV2WrapV2Adapter                                                ·      5.096  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/integration/wrap/AaveMigrationWrapAdapter.sol:AaveMigrationWrapAdapter                                         ·      1.048  ·       +1.048  │
+ |  contracts/protocol/integration/wrap/AaveMigrationWrapAdapter.sol:AaveMigrationWrapAdapter                                         ·      1.048  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/integration/wrap/AaveWrapAdapter.sol:AaveWrapAdapter                                                           ·      1.213  ·       +1.213  │
+ |  contracts/protocol/integration/wrap/AaveWrapAdapter.sol:AaveWrapAdapter                                                           ·      1.213  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/IntegrationRegistry.sol:IntegrationRegistry                                                                    ·      5.962  ·       +5.962  │
+ |  contracts/protocol/IntegrationRegistry.sol:IntegrationRegistry                                                                    ·      5.962  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/lib/IssuanceValidationUtil.sol:IssuanceValidationUtil                                                          ·      0.086  ·       +0.086  │
+ |  contracts/protocol/lib/IssuanceValidationUtil.sol:IssuanceValidationUtil                                                          ·      0.086  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/lib/PositionUtil.sol:PositionUtil                                                                              ·      0.086  ·       +0.086  │
+ |  contracts/protocol/lib/PositionUtil.sol:PositionUtil                                                                              ·      0.086  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/MatrixToken.sol:MatrixToken                                                                                    ·     15.506  ·      +15.506  │
+ |  contracts/protocol/MatrixToken.sol:MatrixToken                                                                                    ·     15.493  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/MatrixTokenFactory.sol:MatrixTokenFactory                                                                      ·     20.037  ·      +20.037  │
+ |  contracts/protocol/MatrixTokenFactory.sol:MatrixTokenFactory                                                                      ·     20.024  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/MatrixValuer.sol:MatrixValuer                                                                                  ·      2.499  ·       +2.499  │
+ |  contracts/protocol/MatrixValuer.sol:MatrixValuer                                                                                  ·      2.499  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/modules/AaveLeverageModule.sol:AaveLeverageModule                                                              ·     24.099  ·      +24.099  │
+ |  contracts/protocol/modules/AaveLeverageModule.sol:AaveLeverageModule                                                              ·     24.099  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/modules/AirdropModule.sol:AirdropModule                                                                        ·      9.889  ·       +9.889  │
+ |  contracts/protocol/modules/AirdropModule.sol:AirdropModule                                                                        ·      9.889  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/modules/AmmModule.sol:AmmModule                                                                                ·     10.705  ·      +10.705  │
+ |  contracts/protocol/modules/AmmModule.sol:AmmModule                                                                                ·     10.705  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/modules/BasicIssuanceModule.sol:BasicIssuanceModule                                                            ·      6.054  ·       +6.054  │
+ |  contracts/protocol/modules/BasicIssuanceModule.sol:BasicIssuanceModule                                                            ·      6.104  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/modules/ClaimModule.sol:ClaimModule                                                                            ·      8.775  ·       +8.775  │
+ |  contracts/protocol/modules/ClaimModule.sol:ClaimModule                                                                            ·      8.775  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/modules/CompoundLeverageModule.sol:CompoundLeverageModule                                                      ·     22.810  ·      +22.810  │
+ |  contracts/protocol/modules/CompoundLeverageModule.sol:CompoundLeverageModule                                                      ·     22.810  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/modules/CustomOracleNavIssuanceModule.sol:CustomOracleNavIssuanceModule                                        ·     17.629  ·      +17.629  │
+ |  contracts/protocol/modules/CustomOracleNavIssuanceModule.sol:CustomOracleNavIssuanceModule                                        ·     17.629  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/modules/DebtIssuanceModule.sol:DebtIssuanceModule                                                              ·     11.794  ·      +11.794  │
+ |  contracts/protocol/modules/DebtIssuanceModule.sol:DebtIssuanceModule                                                              ·     11.794  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/modules/DebtIssuanceModuleV2.sol:DebtIssuanceModuleV2                                                          ·     13.734  ·      +13.734  │
+ |  contracts/protocol/modules/DebtIssuanceModuleV2.sol:DebtIssuanceModuleV2                                                          ·     13.734  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/modules/GeneralIndexModule.sol:GeneralIndexModule                                                              ·     20.637  ·      +20.637  │
+ |  contracts/protocol/modules/GeneralIndexModule.sol:GeneralIndexModule                                                              ·     20.637  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/modules/GovernanceModule.sol:GovernanceModule                                                                  ·      5.062  ·       +5.062  │
+ |  contracts/protocol/modules/GovernanceModule.sol:GovernanceModule                                                                  ·      5.062  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/modules/IssuanceModule.sol:IssuanceModule                                                                      ·      6.517  ·       +6.517  │
+ |  contracts/protocol/modules/IssuanceModule.sol:IssuanceModule                                                                      ·      6.517  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/modules/NavIssuanceModule.sol:NavIssuanceModule                                                                ·     20.081  ·      +20.081  │
+ |  contracts/protocol/modules/NavIssuanceModule.sol:NavIssuanceModule                                                                ·     20.081  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/modules/SingleIndexModule.sol:SingleIndexModule                                                                ·     14.674  ·      +14.674  │
+ |  contracts/protocol/modules/SingleIndexModule.sol:SingleIndexModule                                                                ·     14.674  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/modules/SlippageIssuanceModule.sol:SlippageIssuanceModule                                                      ·     15.450  ·      +15.450  │
+ |  contracts/protocol/modules/SlippageIssuanceModule.sol:SlippageIssuanceModule                                                      ·     15.450  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/modules/StakingModule.sol:StakingModule                                                                        ·     10.966  ·      +10.966  │
+ |  contracts/protocol/modules/StakingModule.sol:StakingModule                                                                        ·     10.966  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/modules/StreamingFeeModule.sol:StreamingFeeModule                                                              ·      4.761  ·       +4.761  │
+ |  contracts/protocol/modules/StreamingFeeModule.sol:StreamingFeeModule                                                              ·      4.811  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/modules/TradeModule.sol:TradeModule                                                                            ·      6.928  ·       +6.928  │
+ |  contracts/protocol/modules/TradeModule.sol:TradeModule                                                                            ·      6.928  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/modules/WrapModuleV2.sol:WrapModuleV2                                                                          ·      7.535  ·       +7.535  │
+ |  contracts/protocol/modules/WrapModuleV2.sol:WrapModuleV2                                                                          ·      7.535  ·               │
  ·····································································································································|·············|················
- |  contracts/protocol/PriceOracle.sol:PriceOracle                                                                                    ·      6.614  ·       +6.614  │
+ |  contracts/protocol/PriceOracle.sol:PriceOracle                                                                                    ·      6.614  ·               │
  ·------------------------------------------------------------------------------------------------------------------------------------|-------------|---------------·
