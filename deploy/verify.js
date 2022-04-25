@@ -61,8 +61,8 @@ async function verifyController() {
   }
 
   const { filename, contractAddresses } = getDeployedAddresses(CHAIN_NAME, CHAIN_ID);
-  const { controller } = contractAddresses;
 
+  const controller = contractAddresses.controller?.address;
   if (!controller) {
     throw new Error(`Fail to verify Controller because controller is not exist in file ${filename} !`);
   }
@@ -73,8 +73,8 @@ async function verifyController() {
 
 async function verifyWithoutController(name, key) {
   const { filename, contractAddresses } = getDeployedAddresses(CHAIN_NAME, CHAIN_ID);
-  const contractAddress = contractAddresses[key];
 
+  const contractAddress = contractAddresses[key]?.address;
   if (!contractAddress) {
     throw new Error(`Fail to read contract ${name}'s address ${key} in file ${filename} !`);
   }
@@ -85,8 +85,9 @@ async function verifyWithoutController(name, key) {
 
 async function verifyWithController(name, key) {
   const { filename, contractAddresses } = getDeployedAddresses(CHAIN_NAME, CHAIN_ID);
-  const { controller, [key]: contractAddress } = contractAddresses;
 
+  const controller = contractAddresses.controller?.address;
+  const contractAddress = contractAddresses[key]?.address;
   if (!controller || !contractAddress) {
     throw new Error(`Fail to verify ${name} because controller or ${key} is not exist in file ${filename} !`);
   }
@@ -100,8 +101,9 @@ async function verifyWithControllerAndWeth(name, key) {
   const weth = getWeth(config, CHAIN_NAME);
 
   const { filename, contractAddresses } = getDeployedAddresses(CHAIN_NAME, CHAIN_ID);
-  const { controller, [key]: contractAddress } = contractAddresses;
 
+  const controller = contractAddresses.controller?.address;
+  const contractAddress = contractAddresses[key]?.address;
   if (!controller || !contractAddress) {
     throw new Error(`Fail to verify ${name} because controller or ${key} is not exist in file ${filename} !`);
   }
@@ -117,8 +119,8 @@ async function verifyAaveLeverageModule() {
   }
 
   const { filename, contractAddresses } = getDeployedAddresses(CHAIN_NAME, CHAIN_ID);
-  const { controller, aave_leverage_module: contractAddress } = contractAddresses;
-
+  const controller = contractAddresses.controller?.address;
+  const contractAddress = contractAddresses.aave_leverage_module?.address;
   if (!controller || !contractAddress) {
     throw new Error(`Fail to verify AaveLeverageModule because controller or aave_leverage_module is not exist in file ${filename} !`);
   }
@@ -134,8 +136,9 @@ async function verifyPriceOracle() {
   }
 
   const { filename, contractAddresses } = getDeployedAddresses(CHAIN_NAME, CHAIN_ID);
-  const { controller, price_oracle: priceOracle } = contractAddresses;
 
+  const controller = contractAddresses.controller?.address;
+  const priceOracle = contractAddresses.price_oracle?.address;
   if (!controller || !priceOracle) {
     throw new Error(`Fail to verify PriceOracle because controller or price_oracle is not exist in file ${filename} !`);
   }
@@ -145,7 +148,7 @@ async function verifyPriceOracle() {
 
 async function verifyChainlinkOracle(name, key, priceFeed) {
   const { contractAddresses } = getDeployedAddresses(CHAIN_NAME, CHAIN_ID);
-  const contractAddress = contractAddresses[key];
+  const contractAddress = contractAddresses[key]?.address;
 
   console.log(`[${getDataTime()}] Verify ChainlinkOracle ${name} ${key} at ${contractAddress}`);
   await verifyContract(contractAddress, [name, priceFeed]);
@@ -169,14 +172,11 @@ async function verifyChainlinkSerialOracle(name, key, path) {
     throw new Error(`${task}: length of [${path}] is not 3 !`);
   }
 
-  const oracle1 = `${path[0]}_${path[1]}_oracle`;
-  const oracle2 = `${path[1]}_${path[2]}_oracle`;
-
-  const priceFeed1 = getPriceFeed(oracle1);
-  const priceFeed2 = getPriceFeed(oracle2);
+  const priceFeed1 = getPriceFeed(`${path[0]}_${path[1]}_oracle`);
+  const priceFeed2 = getPriceFeed(`${path[1]}_${path[2]}_oracle`);
 
   const { contractAddresses } = getDeployedAddresses(CHAIN_NAME, CHAIN_ID);
-  const { [key]: contractAddress } = contractAddresses;
+  const contractAddress = contractAddresses[key]?.address;
 
   console.log(`[${getDataTime()}] Verify ChainlinkSerialOracle ${name} ${key} at ${contractAddress}`);
   await verifyContract(contractAddress, [name, priceFeed1, priceFeed2]);
@@ -201,7 +201,7 @@ async function verifyExchangeAdapter(name, key, routerKey) {
   }
 
   const { filename, contractAddresses } = getDeployedAddresses(CHAIN_NAME, CHAIN_ID);
-  const contractAddress = contractAddresses[key];
+  const contractAddress = contractAddresses[key]?.address;
 
   if (!contractAddress) {
     throw new Error(`Fail to verify ${name} because ${key} is not exist in file ${filename} !`);
@@ -218,8 +218,8 @@ async function verifyChainlinkOracleAdapter() {
   }
 
   const { filename, contractAddresses } = getDeployedAddresses(CHAIN_NAME, CHAIN_ID);
-  const { chainlink_oracle_adapter: contractAddress } = contractAddresses;
 
+  const contractAddress = contractAddresses.chainlink_oracle_adapter?.address;
   if (!contractAddress) {
     throw new Error(`Fail to verify ChainlinkOracleAdapter because chainlink_oracle_adapter is not exist in file ${filename} !`);
   }
@@ -242,8 +242,8 @@ async function verifyChainlinkSerialOracleAdapter() {
   }
 
   const { filename, contractAddresses } = getDeployedAddresses(CHAIN_NAME, CHAIN_ID);
-  const { chainlink_serial_oracle_adapter: contractAddress } = contractAddresses;
 
+  const contractAddress = contractAddresses.chainlink_serial_oracle_adapter?.address;
   if (!contractAddress) {
     throw new Error(`FAIL: ${task} because chainlink_serial_oracle_adapter is not exist in file ${filename} !`);
   }
@@ -254,12 +254,13 @@ async function verifyChainlinkSerialOracleAdapter() {
 
 async function verifyWithPriceOracle(name, key) {
   const { filename, contractAddresses } = getDeployedAddresses(CHAIN_NAME, CHAIN_ID);
-  const { [key]: contractAddress, price_oracle: priceOracle } = contractAddresses;
 
+  const priceOracle = contractAddresses.price_oracle?.address;
   if (!priceOracle) {
     throw new Error(`deploy ${name}: must set price_oracle in file ${filename} !`);
   }
 
+  const contractAddress = contractAddresses[key]?.address;
   if (!contractAddress) {
     throw new Error(`Fail to verify ${name} because ${key} is not exist in file ${filename} !`);
   }
@@ -275,8 +276,8 @@ async function verifyAaveV2WrapV2Adapter() {
   }
 
   const { filename, contractAddresses } = getDeployedAddresses(CHAIN_NAME, CHAIN_ID);
-  const { aave_v2_wrap_v2_adapter: contractAddress } = contractAddresses;
 
+  const contractAddress = contractAddresses.aave_v2_wrap_v2_adapter?.address;
   if (!contractAddress) {
     throw new Error(`Fail to verify AaveV2WrapV2Adapter because aave_v2_wrap_v2_adapter is not exist in file ${filename} !`);
   }
@@ -323,7 +324,9 @@ async function verifyMatrixToken() {
   const unit = WEI_PER_ETHER;
 
   const { filename, contractAddresses } = getDeployedAddresses(CHAIN_NAME, CHAIN_ID);
-  const { controller, [key]: contractAddress, basic_issuance_module: module } = contractAddresses;
+  const controller = contractAddresses.controller?.address;
+  const contractAddress = contractAddresses[key]?.address;
+  const module = contractAddresses.basic_issuance_module?.address;
 
   if (!controller || !contractAddress || !module) {
     throw new Error(`Fail to verify ${name} because controller or basic_issuance_module or ${key} is not exist in file ${filename} !`);

@@ -1,5 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
+/* global web3 */
+
 // ==================== External Imports ====================
 
 const fs = require('fs');
@@ -75,7 +77,7 @@ async function deployAllMocks() {
 
 async function quickDeployContract(name, key, args = []) {
   const { directory, filename, contractAddresses } = getDeployedAddresses(CHAIN_NAME, CHAIN_ID);
-  const oldAddress = contractAddresses[key];
+  const oldAddress = contractAddresses[key]?.address;
 
   if (oldAddress) {
     console.log(`[${getDataTime()}] SKIP: ${name} is already deployed at ${oldAddress}\n`);
@@ -85,14 +87,18 @@ async function quickDeployContract(name, key, args = []) {
   // Deploy contract
   console.log(`[${getDataTime()}] DO: Deploy ${name} to ${CHAIN_NAME}`);
   const instance = await deployContract(deployer, name, args);
-  console.log(`[${getDataTime()}] OK: ${name} is deployed at ${instance.address}`);
+  const address = instance.address;
+  const hash = instance.deployTransaction.hash;
+  const trx = await web3.eth.getTransaction(instance.deployTransaction.hash);
+  const block = trx.blockNumber;
+  console.log(`[${getDataTime()}] OK: ${name} is deployed at ${address}, block = ${block}`);
 
   // update addresses
-  contractAddresses[key] = instance.address;
+  contractAddresses[key] = { address, block, hash };
   writeDeployedAddresses(directory, filename, contractAddresses);
   console.log(`[${getDataTime()}] OK: Write ${key} to file ${filename}\n`);
 
-  return instance.address;
+  return address;
 }
 
 function deployController() {
@@ -110,8 +116,8 @@ function deployController() {
 
 function getController() {
   const { filename, contractAddresses } = getDeployedAddresses(CHAIN_NAME, CHAIN_ID);
-  const { controller } = contractAddresses;
 
+  const controller = contractAddresses.controller?.address;
   if (!controller) {
     throw new Error(`must set controller in file ${filename} !`);
   }
@@ -142,16 +148,18 @@ async function deployAaveLeverageModule() {
   }
 
   const { directory, filename, contractAddresses } = getDeployedAddresses(CHAIN_NAME, CHAIN_ID);
-  const { controller, aave_v2: aaveV2, aave_leverage_module: oldAddress } = contractAddresses;
 
+  const controller = contractAddresses.controller?.address;
   if (!controller) {
     throw new Error(`deployAaveLeverageModule: must set controller in file ${filename} !`);
   }
 
+  const aaveV2 = contractAddresses.aaveV2?.address;
   if (!aaveV2) {
     throw new Error(`deployAaveLeverageModule: must set aave_v2 in file ${filename} !`);
   }
 
+  const oldAddress = contractAddresses.aave_leverage_module?.address;
   if (oldAddress) {
     console.log(`[${getDataTime()}] SKIP: AaveLeverageModule is already deployed at ${oldAddress}\n`);
     return oldAddress;
@@ -159,15 +167,19 @@ async function deployAaveLeverageModule() {
 
   // Deploy contract AaveLeverageModule
   console.log(`[${getDataTime()}] DO: Deploy AaveLeverageModule to ${CHAIN_NAME}`);
-  const aaveLeverageModule = await deployContractAndLinkLibraries(deployer, 'AaveLeverageModule', [controller, lpap], { AaveV2: aaveV2 });
-  console.log(`[${getDataTime()}] OK: AaveLeverageModule is deployed at ${aaveLeverageModule.address}`);
+  const instance = await deployContractAndLinkLibraries(deployer, 'AaveLeverageModule', [controller, lpap], { AaveV2: aaveV2 });
+  const address = instance.address;
+  const hash = instance.deployTransaction.hash;
+  const trx = await web3.eth.getTransaction(instance.deployTransaction.hash);
+  const block = trx.blockNumber;
+  console.log(`[${getDataTime()}] OK: AaveLeverageModule is deployed at ${address}, block = ${block}`);
 
   // update the AaveLeverageModule addresses
-  contractAddresses.aave_leverage_module = aaveLeverageModule.address;
+  contractAddresses.aave_leverage_module = { address, block, hash };
   writeDeployedAddresses(directory, filename, contractAddresses);
   console.log(`[${getDataTime()}] OK: Write aave_leverage_module to file ${filename}\n`);
 
-  return aaveLeverageModule.address;
+  return address;
 }
 
 async function deployPriceOracle() {
@@ -265,8 +277,8 @@ async function deployExchangeAdapter(name, key, routerKey) {
 
 async function deployWithPriceOracle(name, key) {
   const { filename, contractAddresses } = getDeployedAddresses(CHAIN_NAME, CHAIN_ID);
-  const { price_oracle: priceOracle } = contractAddresses;
 
+  const priceOracle = contractAddresses.price_oracle?.address;
   if (!priceOracle) {
     throw new Error(`deploy ${name}: must set price_oracle in file ${filename} !`);
   }
@@ -289,9 +301,9 @@ async function addPairToIdenticalTokenOracleAdapter(identicalTokenKey, underlyin
   }
 
   const { filename, contractAddresses } = getDeployedAddresses(CHAIN_NAME, CHAIN_ID);
-  const adapterAddress = contractAddresses[adapterKey];
+  const adapterAddress = contractAddresses[adapterKey]?.address;
   if (!adapterAddress) {
-    throw new Error(`${task}: must set ${adapterKey} in file ${filename} !`);
+    throw new Error(`${task}: must set ${adapterKey}.address in file ${filename} !`);
   }
 
   const adapterImplementation = await hre.ethers.getContractFactory('IdenticalTokenOracleAdapter', deployer);
@@ -326,9 +338,9 @@ async function addQuoteAssetToUniswapV2PairPriceAdapter(assetKey) {
   }
 
   const { filename, contractAddresses } = getDeployedAddresses(CHAIN_NAME, CHAIN_ID);
-  const adapterAddress = contractAddresses[adapterKey];
+  const adapterAddress = contractAddresses[adapterKey]?.address;
   if (!adapterAddress) {
-    throw new Error(`${task}: must set ${adapterKey} in file ${filename} !`);
+    throw new Error(`${task}: must set ${adapterKey}.address in file ${filename} !`);
   }
 
   const adapterImplementation = await hre.ethers.getContractFactory('UniswapV2PairPriceAdapter', deployer);
@@ -404,15 +416,14 @@ async function deployAdapters() {
 
 // eslint-disable-next-line no-unused-vars
 async function removeIntegration(moduleKey, adapterKey) {
-  const adapterName = adapterKey.toUpperCase();
-
   const { filename, contractAddresses } = getDeployedAddresses(CHAIN_NAME, CHAIN_ID);
-  const { integration_registry: irAddress, [moduleKey]: moduleAddress } = contractAddresses;
 
+  const irAddress = contractAddresses.integration_registry?.address;
   if (!irAddress) {
     throw new Error(`removeIntegration: must set integration_registry in file ${filename}!`);
   }
 
+  const moduleAddress = contractAddresses[moduleKey]?.address;
   if (!moduleAddress) {
     throw new Error(`removeIntegration: must set ${moduleKey} in file ${filename}!`);
   }
@@ -423,6 +434,7 @@ async function removeIntegration(moduleKey, adapterKey) {
   // const moduleImplementation = await hre.ethers.getContractAt('ModuleBase', moduleAddress, deployer);
   // const moduleName = await moduleImplementation.getName();
 
+  const adapterName = adapterKey.toUpperCase();
   const task = `IntegrationRegistry remove integration ${adapterName} from ${moduleKey}`;
   if ((await integrationRegistry.getIntegrationAdapter(moduleAddress, adapterName)) == ZERO_ADDRESS) {
     console.log(`[${getDataTime()}] SKIP: ${task}\n`);
@@ -444,19 +456,19 @@ async function removeIntegration(moduleKey, adapterKey) {
 }
 
 async function addIntegration(moduleKey, adapterKey) {
-  const adapterName = adapterKey.toUpperCase();
-
   const { filename, contractAddresses } = getDeployedAddresses(CHAIN_NAME, CHAIN_ID);
-  const { integration_registry: irAddress, [moduleKey]: moduleAddress, [adapterKey]: adapterAddress } = contractAddresses;
 
+  const irAddress = contractAddresses.integration_registry?.address;
   if (!irAddress) {
     throw new Error(`addIntegration: must set integration_registry in file ${filename}!`);
   }
 
+  const moduleAddress = contractAddresses[moduleKey]?.address;
   if (!moduleAddress) {
     throw new Error(`addIntegration: must set ${moduleKey} in file ${filename}!`);
   }
 
+  const adapterAddress = contractAddresses[adapterKey]?.address;
   if (!adapterAddress) {
     throw new Error(`addIntegration: must set ${adapterKey} in file ${filename}!`);
   }
@@ -467,6 +479,7 @@ async function addIntegration(moduleKey, adapterKey) {
   // const moduleImplementation = await hre.ethers.getContractAt('ModuleBase', moduleAddress, deployer);
   // const moduleName = await moduleImplementation.getName();
 
+  const adapterName = adapterKey.toUpperCase();
   const task = `IntegrationRegistry add integration ${adapterKey} to ${moduleKey}`;
   const oldAdapterAddress = await integrationRegistry.getIntegrationAdapter(moduleAddress, adapterName);
 
@@ -535,7 +548,7 @@ async function addOracleToPriceOracle(priceOracle, oracle_key) {
   }
 
   const { filename, contractAddresses } = getDeployedAddresses(CHAIN_NAME, CHAIN_ID);
-  const oracleAddress = contractAddresses[oracle_key];
+  const oracleAddress = contractAddresses[oracle_key]?.address;
   if (!oracleAddress) {
     throw new Error(`${task}: must set ${oracle_key} in file ${filename} !`);
   }
@@ -569,7 +582,7 @@ async function addAdapterToPriceOracle(priceOracle, adapterKey) {
   const task = `PriceOracle add adapter ${adapterKey}`;
 
   const { filename, contractAddresses } = getDeployedAddresses(CHAIN_NAME, CHAIN_ID);
-  const adapterAddress = contractAddresses[adapterKey];
+  const adapterAddress = contractAddresses[adapterKey]?.address;
   if (!adapterAddress) {
     throw new Error(`${task}: must set ${adapterKey} in file ${filename} !`);
   }
@@ -597,8 +610,8 @@ async function addAdapterToPriceOracle(priceOracle, adapterKey) {
 
 async function setupPriceOracle() {
   const { filename, contractAddresses } = getDeployedAddresses(CHAIN_NAME, CHAIN_ID);
-  const { price_oracle: priceOracleAddress } = contractAddresses;
 
+  const priceOracleAddress = contractAddresses.price_oracle?.address;
   if (!priceOracleAddress) {
     throw new Error(`setupPriceOracle: must set price_oracle in file ${filename} !`);
   }
@@ -637,13 +650,11 @@ async function setupPriceOracle() {
 
 async function initController() {
   const { filename, contractAddresses } = getDeployedAddresses(CHAIN_NAME, CHAIN_ID);
-  const {
-    controller: controllerAddress,
-    price_oracle: priceOracle,
-    matrix_valuer: matrixValuer,
-    matrix_token_factory: matrixTokenFactory,
-    integration_registry: integrationRegistry,
-  } = contractAddresses;
+  const controllerAddress = contractAddresses.controller?.address;
+  const priceOracle = contractAddresses.price_oracle?.address;
+  const matrixValuer = contractAddresses.matrix_valuer?.address;
+  const matrixTokenFactory = contractAddresses.matrix_token_factory?.address;
+  const integrationRegistry = contractAddresses.integration_registry?.address;
 
   const names = joinByFlags(
     [controllerAddress, priceOracle, matrixValuer, matrixTokenFactory, integrationRegistry],
@@ -679,8 +690,8 @@ async function initController() {
 
 async function addModule(controller, moduleName, moduleKey) {
   const { filename, contractAddresses } = getDeployedAddresses(CHAIN_NAME, CHAIN_ID);
-  const moduleAddress = contractAddresses[moduleKey];
 
+  const moduleAddress = contractAddresses[moduleKey]?.address;
   if (!moduleAddress) {
     throw new Error(`addModule: must set ${moduleKey} in file ${filename} !`);
   }
@@ -757,7 +768,8 @@ async function deployMatrixToken() {
   const manager = config['fee_recipient'];
   const weth = getWeth(config, CHAIN_NAME);
   const { contractAddresses } = getDeployedAddresses(CHAIN_NAME, CHAIN_ID);
-  const { controller, basic_issuance_module } = contractAddresses;
+  const controller = contractAddresses.controller?.address;
+  const basic_issuance_module = contractAddresses.basic_issuance_module?.address;
 
   const name = 'MatrixToken';
   const key = 'test_matrix_token';
