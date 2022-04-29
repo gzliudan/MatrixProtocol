@@ -2,248 +2,248 @@
     "chain_name": "kovan",
     "chain_id": 42,
     "protocol_viewer": {
-        "address": "0xe95EB312F95CefC6CcD1C90230b58B39C0944C2e",
-        "block": 31235044,
-        "hash": "0x162a4f5520399798f05f81f6a2405587d59ceada5c58b879156fed91f4b64215"
+        "address": "0x76B988C4280c9B7Dd985AC1D659EB3792f59Dcd1",
+        "block": 31312443,
+        "hash": "0x59f5b0f3d915cf427aafbd4d2c8578d4bf1f8b19c6c854a95d4f68d40725feb8"
     },
     "aave_v2": {
-        "address": "0x93A3334bF4EED51B2135F7428196118dF591c178",
-        "block": 31235047,
-        "hash": "0x033f1720dbbf04778151b030ff368f24cf2358c777aa9028add17df2ebfbf97e"
+        "address": "0x78a8B3143cE704412d9d7dcD10F67F748952009e",
+        "block": 31312447,
+        "hash": "0xbebd4bb2e1b4197228c4e79722a2bbd2a56bc9364384b56d0c8404c76693cb78"
     },
     "controller": {
-        "address": "0x01a58A9508102FdF8cb1289eF6501f6f8703b96f",
-        "block": 31235050,
-        "hash": "0x1b2b92ab4d83a1b8682f552f13aae17da37137426b50edcc52bd35f6d19cc32a"
+        "address": "0x9699da1E91b0673fA4BD10750DADC822E17A1C73",
+        "block": 31312450,
+        "hash": "0x0c884fd54da5ce11572d3112466480e478dfda872f7c03d4b9e1f684ff7cdd3b"
     },
     "matrix_valuer": {
-        "address": "0x47a322d3205822CDb4d9A01C7C0c74D90Bc29a34",
-        "block": 31235055,
-        "hash": "0x29c883703c30b75aad08a1ec18ece1c3db2edbb63e5291f78562e77fdead2709"
+        "address": "0xD68cc661B7F34280b8452BaC212E4F65aEff8C5e",
+        "block": 31312455,
+        "hash": "0x76ae69a4fd969c8baa459b35ec4b1d669287df9362b47a28d20cbb1356152cf3"
     },
     "matrix_token_factory": {
-        "address": "0xE63D657ACc5BE9D4d35C163555a87846F5323BD0",
-        "block": 31235059,
-        "hash": "0x82d09ea781715f0dfa613bd9f7236123fc8a5d2a7c8934126fd3cac97a138249"
+        "address": "0x86B06C90856f6C4F1cDd882Ba681b2DdFdD03891",
+        "block": 31312458,
+        "hash": "0x5a4d56fdf4e92968826d45658367d3dd750c299511fb5598cfa0a03414db6692"
     },
     "integration_registry": {
-        "address": "0x2762e00EcFe0Dace727C2F6416c7E9739bff5Bfb",
-        "block": 31235062,
-        "hash": "0x8ed6ea864beb6c5949eaa8dd2511032d5f018483f59cabe87803d66a1bd2d68e"
+        "address": "0x2A374a28658Ff8271eE39B755AC61BB5bb7C34fA",
+        "block": 31312462,
+        "hash": "0x3eacbe449658b6d2f0b6d924641c316755e1690c6e8f2f174b4ed50951aef43d"
     },
     "basic_issuance_module": {
-        "address": "0xA02dee1beeD8F4d3c2be7e6433126733e2e4c667",
-        "block": 31235066,
-        "hash": "0x6d578750d330682c912f4a044f5c80909c78bb0d857c1d2d51aa28db593a80e6"
+        "address": "0x6927D9e665CB50717Cb333db6172D829C7442882",
+        "block": 31312465,
+        "hash": "0x6cd98af99e626ca363457e7f21787c91160904e7be8daaaeac10e19a61a80099"
     },
     "streaming_fee_module": {
-        "address": "0x230c10456faAce6305ae540396cFEc72BDf1ea38",
-        "block": 31235071,
-        "hash": "0xae66e45c05611dcda15e07d339272bf6aa5198d87021c979ee2b03f60d1e0cb9"
+        "address": "0x16aF8E17d8664FfD57681C7f7F4D2e70C3ea7921",
+        "block": 31312468,
+        "hash": "0xc9355b05d20aa45f9fca36e4fb1430fa92d0c5ef68bd33206b3dfd1306db293f"
     },
     "trade_module": {
-        "address": "0x77a00D52B70cf2c4D28efB57bE2D602FcaC017ef",
-        "block": 31235075,
-        "hash": "0xb9b113095ad4c8f8b1db0a2cb8d320b5aafc7d6911a19368304946eb9b509ac7"
+        "address": "0x575eBf1e7E62956BcA4B961026346e4e0FdB835A",
+        "block": 31312472,
+        "hash": "0x610162e2c188cfcf4f1302ac449d60ceac622c92389b2ef5946d90ce0401b9ef"
     },
     "airdrop_module": {
-        "address": "0x3f0760Ead6eeb3FeACf513426E657Ac80adbcb2B",
-        "block": 31235079,
-        "hash": "0xe5fab6085a5d6409dc52e87a3d01f8f06808430041643d3264ff1473e08a7940"
+        "address": "0xaAd34E1100f75B21BD607f8480e8E86cD5F93DE0",
+        "block": 31312475,
+        "hash": "0x0b4ea79f4069ced32664ed6b63b1895fd37b9e11cb2a9026e244c87df0761fd1"
     },
     "nav_issuance_module": {
-        "address": "0xed2c0e1F71F36EF31936Ca4A989904a4Ca237Fc8",
-        "block": 31235083,
-        "hash": "0xb6a2fc30d92a60faad8027b1f3bed190dfd94e5c1a14bb63cd966a9100bb49ad"
+        "address": "0x89C0623e2Cb485aC1F4669dd2b571a7c45E5fD95",
+        "block": 31312478,
+        "hash": "0xd192853cd183896d65b398fbf705de789755600e42849e771187d0ae5671d324"
     },
     "wrap_module_v2": {
-        "address": "0xe3204728E8259Cd4DF7D051a487c90215bC329C2",
-        "block": 31235087,
-        "hash": "0xc4f4594a706a33c13307954d210b2fa2ffc0e85baa000ef45405c7345855d928"
+        "address": "0x7240b9de926dB23438a3e03eA7d9f539aEf9A28C",
+        "block": 31312480,
+        "hash": "0x9a62ad82bf12242e261de63dec2c4ec8b7c7fb74d6997820ff0f9826d14618ab"
     },
     "price_oracle": {
-        "address": "0xaBA5e84614AA956777770544458311001114Eaf5",
-        "block": 31235091,
-        "hash": "0xb2ac5e8973322bbe9b666b2a86430fe7d2029c0798b14410f2d3b6dbdd0acd8f"
+        "address": "0x2aB7A90a72544a4D3dd7F65A5046A2bcBC0C7857",
+        "block": 31312484,
+        "hash": "0x811751d9870069fb231bebfd766922b9da85f4ab7617258acaebd80f8474311e"
     },
     "eth_usd_oracle": {
-        "address": "0xFD687A18020903D7403492E6A7056c784D25EeAf",
-        "block": 31235095,
-        "hash": "0x3e7cd41d040d6ba41ac60fec0dcc20187e4f6fc5e70e5416572e49a6ce051e6f"
+        "address": "0xEd9Ee44eAf3FD25f02E41F38D2D6B4Dc8C96953d",
+        "block": 31312488,
+        "hash": "0x48f9db2d244a3722720fcba14234174f5be8657a7154bb91e45f36ea831b9566"
     },
     "ampl-test_eth_oracle": {
-        "address": "0x24D4CED002B107f4b6CFd1f278456F6962924D38",
-        "block": 31235099,
-        "hash": "0x6d86076050c50685f5fc8a46f95d01792a294051e5b944e5650492e09a75c8b0"
+        "address": "0xD3C6C361284AAc5DE2cca4c21419282B40282Ff0",
+        "block": 31312492,
+        "hash": "0xf2f2e28dc5a9498d9ab204b44ab942217a1977c130af14f2aa8382e1720a421a"
     },
     "bat-test_eth_oracle": {
-        "address": "0xe4DfA44C976feE8D0526C22b5cA4a5590Ad66939",
-        "block": 31235103,
-        "hash": "0x6e4fc44dccbf0523ff10673acc79931595272471c38781bee99314d8d239ab1f"
+        "address": "0x4E47A7c4da964B21bF72bc46Bb15eB80AE49FE3B",
+        "block": 31312494,
+        "hash": "0x8b27d5eea9b03c683f0cc512e98c17940cfc6cee7101a1a295a35e67b988f2c6"
     },
     "bat-test_usd_oracle": {
-        "address": "0xEa6B496B4cd46fa5Dc13594892F3C45f52D89D0C",
-        "block": 31235107,
-        "hash": "0xcbc411d2f3d0a19ae7531df5ffa66f0560c449fedae7608290be2e1c2903636a"
+        "address": "0x37eDe17858CE49Dc5e4b8E213a886679c61e546a",
+        "block": 31312497,
+        "hash": "0xd73985d211395ea4c41a70e08ba8a551ef4b7d0b5c3cf6144c549adea784c764"
     },
     "busd-test_eth_oracle": {
-        "address": "0x0C144798B4B6B75e2F9c869B6C4558EEfe257fFE",
-        "block": 31235111,
-        "hash": "0x3e4febda9c2e6c5392bf25fb32bd91fd4ad0e3f93fe1ea123456f056385ce5db"
+        "address": "0x45AD03762EB5FB2F420120823b720D249893AB0C",
+        "block": 31312500,
+        "hash": "0xa2f34e3cb943e5c1cd3e1f8d9549033f2f1c0662e5a87c296a03aff7ec298f97"
     },
     "dai-test_eth_oracle": {
-        "address": "0x6777B680f8a69D26a7A8cfdD932B5b17bcb36600",
-        "block": 31235114,
-        "hash": "0x8d850173922f3ba04a3de8b21e29c76d59d455ffc37a4c2d84b8f126aa3f3388"
+        "address": "0xf6305e8e83Cc22517ed51ee68Fb823234053ce5f",
+        "block": 31312503,
+        "hash": "0xd28a8e3fc1d920e292003cd68be2f1fa2d84b279eaaadc5b56deba530b5e6ed9"
     },
     "dai-test_usd_oracle": {
-        "address": "0x6924033421a66811ccF4F148a83BBFB24E6d5b15",
-        "block": 31235118,
-        "hash": "0xb3e687434e75176aaf0656ce50a11fa7feb18297a9eb615eae5f54d32eb400c7"
+        "address": "0x1B4AC20A48302E883280598bF80e4BB0e70A3D89",
+        "block": 31312507,
+        "hash": "0x8128d8d12175574f76c7ba07fcae1e8904b5bb5556984e1043892df6ef810017"
     },
     "enj-test_eth_oracle": {
-        "address": "0xBb70c661EC255624eba16b3fE0D43d38C5462A1C",
-        "block": 31235121,
-        "hash": "0xb67288ad1948786cbb10c067f151f82aed959edad9bbecab1b78af3dd84295c9"
+        "address": "0x1A90BECDAa30f1C10C29A3E1DdC78fc6d1FcBd1D",
+        "block": 31312510,
+        "hash": "0xc726db7ff95f9c092d792c66c26ac3d25dec8c9327b8a7b964519c149c141f00"
     },
     "link-test_eth_oracle": {
-        "address": "0x3A53670E3a8B04e4a6Bf3F98FA6Ea9FCd6EDc7d6",
-        "block": 31235125,
-        "hash": "0x897e41245af33c04371df9198038bdad38a81aa6ce32eaa61a803a374dc36b1a"
+        "address": "0xF21611aCf001BE19f1E4Fe25Dbeb0cd42e816BfF",
+        "block": 31312512,
+        "hash": "0xabfa8d69377f417fc30d6976441c103f025ea5397a66b1c533c067cdd78ee44c"
     },
     "link-test_usd_oracle": {
-        "address": "0xBCAe0Bbd4656a40b32d965ec1848098500184cb1",
-        "block": 31235129,
-        "hash": "0xbe5b3adcd35b4c4ecfbda82ab1e0ae45621c296d776d41c1f651c3427ffa6a55"
+        "address": "0x3429c04153f42549a4C952218AbE2F45f9e1AB07",
+        "block": 31312514,
+        "hash": "0x9326659b1a62437ad374f6dfece7e65a2084c279956bbf997af52727d6edd3f2"
     },
     "mana-test_eth_oracle": {
-        "address": "0xbeC055A9dCB755e5913d140FbA69b037b775b696",
-        "block": 31235132,
-        "hash": "0x0977cfe3dcc13544ab0d215245013c0d9c583f72a976e8e5dcb050ee24c69a10"
+        "address": "0xC6b6ffcbaeD9042e475064c0207f9243681aB2BE",
+        "block": 31312518,
+        "hash": "0x913c81590c141b4b4d9fe2dbcb9788adc2851955d3a10ff51cc500283f9087bb"
     },
     "mkr-test_eth_oracle": {
-        "address": "0xbFEef7675a1f794EFdCCc3b95A76009e1Efb014c",
-        "block": 31235135,
-        "hash": "0xe693ca1f9c44fb1976024db8ff74df8d2ee930309987d9e6916117f3a02febef"
+        "address": "0xC83AdE4cBC17AF4676099c7Df5c249Ad3C8cC547",
+        "block": 31312522,
+        "hash": "0xd7efddfbbaa838aec2a63721426006ef5988e014202d43f624d00c68d0d7e286"
     },
     "snx-test_eth_oracle": {
-        "address": "0x26561E3ed93aC3c1f207F4fc8F2C3F92d69450e8",
-        "block": 31235138,
-        "hash": "0x1efc2740de76b00d215bfcf0ced7cee496b60c0981bd7a7baa3b00fcaf2ae707"
+        "address": "0xb73512C453499B4D0d826D393F3bD5525EA001f7",
+        "block": 31312526,
+        "hash": "0x2b4590ed09baaa2c3e864ec67a9086b5b901e0cc76eeb39fb945e482618d86bb"
     },
     "snx-test_usd_oracle": {
-        "address": "0x56fb1Cd686b60E97a9898286D75572A6F8D965b1",
-        "block": 31235143,
-        "hash": "0xbf69bfc47b335c2a77c8b5f0ef61408763bdc747abfd31ac495e5a0cecc85916"
+        "address": "0x539cBa07A2b8E99D0FdFE00D190c635dC36b9aa5",
+        "block": 31312528,
+        "hash": "0xec24a38ad34e50e1426f6dfc6c1bd95683582f7346bd17bce808e9c433317798"
     },
     "tusd-test_eth_oracle": {
-        "address": "0x4347074A5C251611Aa138840BbA36e3B8AA22a18",
-        "block": 31235147,
-        "hash": "0x3870c23028c17f716e85c5b04522773ab9fb143fb10ac6d7e4901121d14ac42b"
+        "address": "0x3f949747895817e21e256C9d7462613AFDe30d03",
+        "block": 31312532,
+        "hash": "0x0e663ac7d1d47131155f2f65b1e110190552eef55c90a2a07f9c26f23247dd4c"
     },
     "uni-test_usd_oracle": {
-        "address": "0x18F094FA7C3f8601D3f9cf626DB15932AD7B917a",
-        "block": 31235151,
-        "hash": "0xfe713de2b1bcac731a182c83de80d9ae4c7b8e308fb7852a579093c12c294ba8"
+        "address": "0x8Dccc7197ABb59BC320a8E77c667a74363e58D50",
+        "block": 31312536,
+        "hash": "0x2279722b2bcddabf1b55ce20f7da519cfd8991a724365a30c9277c40608e5d6f"
     },
     "usdc-test_eth_oracle": {
-        "address": "0x86eeC9F818B939e7e7c0A2c971Ef60B46Fb04ca7",
-        "block": 31235155,
-        "hash": "0xf180db1e904d791fd937dcbdbf54a322fa11fc14178e110dd46562fb88b0a6bb"
+        "address": "0x4d37492B178cB6Df66214123b13Fd6f714E33587",
+        "block": 31312540,
+        "hash": "0xf827c4d741370e9d466bcdb5c0a4c2cc5c845b1fc3c7eb896bf92c7ba34f1318"
     },
     "usdc-test_usd_oracle": {
-        "address": "0xeec4fc4299Bcf1582E327eF4726a41c76ce20C2E",
-        "block": 31235159,
-        "hash": "0xd90792b2f867fbd3b67bf814adc08e88ef875bd52547f41fd1abdaee029c25cc"
+        "address": "0x0a41e9E12C3636Ab8b6AfF0B47C217dCE689FFFB",
+        "block": 31312543,
+        "hash": "0xfdb8d284f534ea208287f5877239a0d47bda649648093f0dc4ccfcee76e5b837"
     },
     "usdt-test_eth_oracle": {
-        "address": "0xCE869C58b49460128fcA9Bb32eFeDFbb3D4aD7E2",
-        "block": 31235162,
-        "hash": "0x62f4cba56b79428cf7797e6f89d9ac7b3dd9509442f304cdb00203d304e7afd2"
+        "address": "0xDE90F837a8bf1e0C53Af97D260927B2F9099A14D",
+        "block": 31312546,
+        "hash": "0x1fad83701ae7940935e120ad93efac428d5f9be3b9f12282e30392b1630beb6f"
     },
     "usdt-test_usd_oracle": {
-        "address": "0x1135A6919688Fd441e3E29ccdCfE7171690ef082",
-        "block": 31235165,
-        "hash": "0x7d9c16e8b07b13e1679b68c70cf309b24f97c14c813458ac12f96326341c813a"
+        "address": "0x839f12025b45efFA4295B821B47F4B7EfAC5Eaa6",
+        "block": 31312550,
+        "hash": "0x1b10871cbcf0d9057da85d60b4eecbac051fd5278f1ee6dc10b48714bbe2200b"
     },
     "wbtc-test_eth_oracle": {
-        "address": "0x07839cEAA149dA21A15A3Edfc30C4600075aab0A",
-        "block": 31235169,
-        "hash": "0x90925aebd09388ade157b2567bf3c373b45dc466f67d7c908d66ec4d48478ec1"
+        "address": "0x48cCe12fB1F0a0354b1e42f0Dc3Bfb8c49a423C0",
+        "block": 31312553,
+        "hash": "0xb28c1a8418cfa131681ab54e3bc306c7cf494bfafbec4417bcdff417bbdfab55"
     },
     "wbtc-test_usd_oracle": {
-        "address": "0x3E873159a6F03EF4328470c7d199A3686C79a440",
-        "block": 31235172,
-        "hash": "0xa11e636183511ed35a84edb1a775339573aa319f3cec8e3959de3fa84f461690"
+        "address": "0x0C9621bCc9dCE6B8b3b0B858F2317B4D101300C6",
+        "block": 31312557,
+        "hash": "0xd36891fabb1fbfc37f4309174e37f29769d972529f699eefa730b93e65ec14a3"
     },
     "zrx-test_eth_oracle": {
-        "address": "0xaF00641a576F70Fd49c4549BB3352228E6D7f3A2",
-        "block": 31235175,
-        "hash": "0xe2e2103fbf406923d8b7ee4266d86315e3208b57a54bfac93ea8f4d759ad0d7a"
+        "address": "0x7fd9572352a8e58F28f714fC39b473A85aC4279b",
+        "block": 31312561,
+        "hash": "0x71fd79a1955f1706c5bebdecfee744cf4a0e3ac9f6c20e3b1a948d541b1c9035"
     },
     "zrx-test_usd_oracle": {
-        "address": "0x11106046E1D45291c28ca91473a881a7b2134CFb",
-        "block": 31235178,
-        "hash": "0xe94e29c48fedf80ed60101b49f2ebe4aa37f19c9644b1eb7d393e7806cf7f9b3"
+        "address": "0xf6618484454e22bE0681E753A81fb3c9C3126C37",
+        "block": 31312564,
+        "hash": "0xa03fdf1de80eeebd6b025fdca4f16f4ccec2c09a01b96de1d8ad71da2ce2e6f6"
     },
     "enj-test_usd_oracle": {
-        "address": "0xBc8bAb6B73E41E6FC48ff1cBb252376815FD57dB",
-        "block": 31235181,
-        "hash": "0xd9310d4b6f02d8ac789b7b38f2e6094c601ec6736439b95b5d55cef9d1aeca14"
+        "address": "0x99df1493CB4f30d5D5fb4C045Af5D5498D8affDd",
+        "block": 31312567,
+        "hash": "0x002f7d4d3175385fb8f96e40c6f71ab56d188cc5dec627eef1cfcefdff2555bd"
     },
     "mana-test_usd_oracle": {
-        "address": "0xe0a22a5A02AAa8462f0E96ec3d1c236BDE836BAF",
-        "block": 31235185,
-        "hash": "0xccdb725b71ab1d55a91f15667e6bb9054f7c8c68276fa2fdf899e5566e1f3474"
+        "address": "0x9c4E1770e085c6076b2E232C0d91a71328BB6a69",
+        "block": 31312570,
+        "hash": "0x164929461a1c29d7d201eae4e48aa7d11c52a8485e5cec12d7c4ce7dbdd66707"
     },
     "mkr-test_usd_oracle": {
-        "address": "0xd52208fc61e9Bba7421dcb8cae926E4FfD2DFe56",
-        "block": 31235188,
-        "hash": "0xc33e432658cdad7d6fa8956c64677c40155f5ffd9e242542052a39f21f90b9f8"
+        "address": "0x8B520a68170B521Ca5B4de94Cd8abd07F007032C",
+        "block": 31312575,
+        "hash": "0x4db5cda6807c800d8cd7400593211461baf477ce7a7199cad0aae70ff35c435e"
     },
     "chainlink_oracle_adapter": {
-        "address": "0x29F3724BD6E63C34A69b0D1ec3abf8A948C753C2",
-        "block": 31235192,
-        "hash": "0x9fce7f1caac4ac5624a9463f4565835fba0b15c220b2d97e60697755d2f095bf"
+        "address": "0xAf7Ed29C2977F9D0124E7f8caF8eA0E2F54ec824",
+        "block": 31312579,
+        "hash": "0x76c60f6b8ec61ea9fd2739147c0d4cf32104e8c657248b7fe591d30c1d5ac093"
     },
     "chainlink_serial_oracle_adapter": {
-        "address": "0x2825A39132B87Ed03BF39627785B754F33719d27",
-        "block": 31235196,
-        "hash": "0x334d7f62816cd42819785d897068eebd9811a1f9f9a1db8e8560abb07d83c9e2"
+        "address": "0x6fCA6141306761e3508E52dff5D56ae8A271b080",
+        "block": 31312583,
+        "hash": "0xf4b2bf13e20d07cabdefffd6ce382ac1e67d597a9f0d36de1738dba611f30330"
     },
     "identical_token_oracle_adapter": {
-        "address": "0x03481289027d26087c7525F0DFF89322196471ee",
-        "block": 31235201,
-        "hash": "0x07fcceeffde1c8bd9c406913e6919d33b655afebb1462a6021c0c025e7232b21"
+        "address": "0x83125E3DD7f5ea4D72c74737803b97A36B5A5001",
+        "block": 31312586,
+        "hash": "0xc9b685c7411b38d9fb742b7b01b068d513b7ceae2b6c239ad637dc5870847312"
     },
     "uniswap_v2_pair_price_adapter": {
-        "address": "0xc89434F448b52277F70223D622488D9A90048A0F",
-        "block": 31235205,
-        "hash": "0x2e9444f2b891cf9dcaa3dfd3fe4ca5f417e652305c17a8ccd6d506213b2cd09b"
+        "address": "0x4a1a9bA7DA43Da3071836C270eCCC4088d054fB6",
+        "block": 31312589,
+        "hash": "0xf266935096f6aa89443ea420dcbade863a253c01d95fc36d5b1bf69655ca7b52"
     },
     "sushi_v2_exchange_adapter": {
-        "address": "0x247a8abE7898Ba7D878d3467e0149b325af6a69c",
-        "block": 31235218,
-        "hash": "0x2995887b0dfdc33b57e0c6aef9a33310fa2d3242e5306e667ddbf168bf9e9f4d"
+        "address": "0x15613D053DF7554dA7e74e2532b148344CbC6202",
+        "block": 31312601,
+        "hash": "0xf34da4a5daabbf7765fe6fde4d707e7287a1b57454fdafff371462ad89a8176e"
     },
     "uniswap_v2_exchange_adapter": {
-        "address": "0x866A67C6f3F6B863fac912e9Ef8dE879Dd3Ed98C",
-        "block": 31235221,
-        "hash": "0xc292a9cbcf189cb8d5763550f149b412d406132ae7e30b31283ed67886da1590"
+        "address": "0x1eFb7e9F890b3E12E26afAbC2861f4dC762092c9",
+        "block": 31312605,
+        "hash": "0x96c31d30d06c2f2e982f26673a6e959a298aca672834ad3f91f0531de246e1ca"
     },
     "uniswap_v3_exchange_adapter": {
-        "address": "0xfCF908B203Ac04f5423E95F03b149d15ebea57c0",
-        "block": 31235224,
-        "hash": "0xe39d6dcb118684e6c83570e5d5a9f4fe2c133a8bdfc923ed30dc119ec7824b25"
+        "address": "0x2b2FD2e1d225eAD59d55300949aC445DC727c2a0",
+        "block": 31312609,
+        "hash": "0xb44e3b3750edda4351649d863b4aa3ad32d589e5bc726c0a7bc11c9b6100a830"
     },
     "aave_v2_wrap_v2_adapter": {
-        "address": "0xC0f93f370e2A1bD255Db7f6EC89aF5170E48a981",
-        "block": 31235228,
-        "hash": "0x5d1f766ced8063bd889631e1aa578dad86b2147d8fdc010b56c8f7f810653007"
+        "address": "0x4E8c58Ccd26Eb115e61d15c0167F7E6656975f8a",
+        "block": 31312613,
+        "hash": "0xe81d0458f86e75ebc7e30477edef34787cbf356c218d97fc752595c8986c6de3"
     },
     "test_matrix_token": {
-        "address": "0xa184C6bea1E6D65Dc9B384F1C15649883CE008C4",
-        "block": 31235232,
-        "hash": "0x922d622253dbd846d5e875412a7d1ad057a61edf7b84fb1479274a75ca974c76"
+        "address": "0xd9697E67b0a80fE2AC9aCFB92CEE4239DAF67155",
+        "block": 31312617,
+        "hash": "0xa0a2e9d657d9a142da1ccf7ba19e3e35b2513b89d6a2640bd8c43fb0e8d562d6"
     }
 }

@@ -119,7 +119,7 @@ module.exports = {
       chainId: 56,
     },
     mumbai: {
-      url: MUMBAI_RPC_LIST[0],
+      url: MUMBAI_RPC_LIST[1],
       chainId: 80001,
     },
     polygon: {
