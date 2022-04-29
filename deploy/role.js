@@ -56,9 +56,9 @@ async function grantAdminRole(account, hre) {
   for (const contract of adminContracts) {
     const { name, key } = contract;
 
-    const { [key]: contractAddress } = contractAddresses;
+    const contractAddress = contractAddresses[key]?.address;
     if (!contractAddress) {
-      throw new Error(`must set ${key} in ${filename} !`);
+      throw new Error(`must set ${key}.address in ${filename} !`);
     }
 
     const implementation = await hre.ethers.getContractFactory(name, deployer);
@@ -75,9 +75,9 @@ async function grantDefaultAdminRole(account, hre) {
   for (const contract of adminContracts) {
     const { name, key } = contract;
 
-    const { [key]: contractAddress } = contractAddresses;
+    const contractAddress = contractAddresses[key]?.address;
     if (!contractAddress) {
-      throw new Error(`must set ${key} in ${filename} !`);
+      throw new Error(`must set ${key}.address in ${filename} !`);
     }
 
     const implementation = await hre.ethers.getContractFactory(name, deployer);
@@ -119,9 +119,9 @@ async function revokeAdminRole(account, hre) {
   for (const contract of adminContracts) {
     const { name, key } = contract;
 
-    const { [key]: contractAddress } = contractAddresses;
+    const contractAddress = contractAddresses[key]?.address;
     if (!contractAddress) {
-      throw new Error(`must set ${key} in ${filename} !`);
+      throw new Error(`must set ${key}.address in ${filename} !`);
     }
 
     const implementation = await hre.ethers.getContractFactory(name, deployer);
@@ -138,9 +138,9 @@ async function revokeDefaultAdminRole(account, hre) {
   for (const contract of adminContracts) {
     const { name, key } = contract;
 
-    const { [key]: contractAddress } = contractAddresses;
+    const contractAddress = contractAddresses[key]?.address;
     if (!contractAddress) {
-      throw new Error(`must set ${key} in ${filename} !`);
+      throw new Error(`must set ${key}.address in ${filename} !`);
     }
 
     const implementation = await hre.ethers.getContractFactory(name, deployer);
