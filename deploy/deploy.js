@@ -44,6 +44,29 @@ const CONFIG_DIR = `./deploy/configs`;
 const CONFIG_FILE = `./deploy/configs/${CHAIN_NAME}.json`;
 const config = JSON.parse(fs.readFileSync(CONFIG_FILE));
 
+async function deployWeth() {
+  const name = 'WETH9';
+  const key = 'weth';
+
+  const oldAddress = config['tokens'][key];
+  if (oldAddress) {
+    console.log(`[${getDataTime()}] SKIP: "${name}" is already deployed at ${oldAddress}\n`);
+    return oldAddress;
+  }
+
+  // Deploy contract
+  console.log(`[${getDataTime()}] DO: Deploy ${name} to ${CHAIN_NAME}`);
+  const instance = await deployContract(deployer, name, []);
+  console.log(`[${getDataTime()}] OK: "${name}" is deployed at ${instance.address}`);
+
+  // update addresses
+  config['tokens'][key] = instance.address;
+  writeDeployedAddresses(CONFIG_DIR, CONFIG_FILE, config);
+  console.log(`[${getDataTime()}] OK: Write ${key} to file ${CONFIG_FILE}\n`);
+
+  return instance.address;
+}
+
 async function deployTestErc20(name, symbol, decimals) {
   const key = symbol.toLowerCase();
   const oldAddress = config['tokens'][key];
@@ -66,8 +89,12 @@ async function deployTestErc20(name, symbol, decimals) {
 }
 
 async function deployAllMocks() {
-  if (CHAIN_NAME != 'mumbai' && CHAIN_NAME != 'kovan') {
+  if (CHAIN_NAME != 'xdcdev' && CHAIN_NAME != 'mumbai' && CHAIN_NAME != 'kovan') {
     return;
+  }
+
+  if (CHAIN_NAME == 'xdcdev') {
+    await deployWeth();
   }
 
   for (const token of testTokens[CHAIN_NAME]) {
@@ -391,6 +418,10 @@ async function deployAdapters() {
   await deployWithPriceOracle('UniswapV2PairPriceAdapter', 'uniswap_v2_pair_price_adapter');
   await addQuoteAssetToUniswapV2PairPriceAdapter('usd');
   await addQuoteAssetToUniswapV2PairPriceAdapter('eth');
+
+  if (CHAIN_NAME == 'xdcdev') {
+    return;
+  }
 
   if (CHAIN_NAME != 'kovan') {
     await deployExchangeAdapter('KyberV1ExchangeAdapter', 'kyber_v1_exchange_adapter', 'kyber_v1_router');
@@ -738,6 +769,10 @@ async function setupController() {
 }
 
 async function setupTradeModule() {
+  if (CHAIN_NAME == 'xdcdev') {
+    return;
+  }
+
   if (CHAIN_NAME != 'kovan') {
     await addIntegration('trade_module', 'kyber_v1_exchange_adapter');
     // await addIntegration('trade_module', 'kyber_v1_exchange_adapter_v2');
@@ -759,6 +794,10 @@ async function setupTradeModule() {
 }
 
 async function setupWrapModuleV2() {
+  if (CHAIN_NAME == 'xdcdev') {
+    return;
+  }
+
   // await removeIntegration('wrap_module_v2', 'aave_v2_wrap_v2_adapter');
   await addIntegration('wrap_module_v2', 'aave_v2_wrap_v2_adapter');
 }
