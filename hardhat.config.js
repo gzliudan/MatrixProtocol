@@ -100,15 +100,27 @@ module.exports = {
   defaultNetwork: 'hardhat',
   networks: {
     hardhat: {
-      blockGasLimit: 2e7,
-      allowUnlimitedContractSize: true,
       accounts: {
         count: 100,
         accountsBalance: ether(1000000),
       },
+      allowUnlimitedContractSize: true,
+      blockGasLimit: 2e7,
     },
     local: {
       url: 'http://localhost:8545',
+    },
+    xinfin: {
+      url: 'https://erpc.xinfin.network',
+      chainId: 50,
+    },
+    apothem: {
+      url: 'https://erpc.apothem.network',
+      chainId: 51,
+    },
+    xdcdev: {
+      url: 'https://devnetstats.apothem.network/devnet',
+      chainId: 551,
     },
     bsc_testnet: {
       url: `https://data-seed-prebsc-1-s1.binance.org:8545`,
