@@ -1,0 +1,84 @@
+{
+    "chain_name": "xdcdev",
+    "chain_id": 551,
+    "protocol_viewer": {
+        "address": "0x41c0ad06c98951e9Bf7172cd1D285C6E34537170",
+        "block": 17071180,
+        "hash": "0x8626f0fa20f8793f93698661836b7f6e5b05549b14c88c219f1fc4e7b84f1996"
+    },
+    "aave_v2": {
+        "address": "0x07E2B29116C31c649b641921f99bb04a34144adB",
+        "block": 17071186,
+        "hash": "0x8ff576e6b3b74e16b2b2063dac66320ed92254254680ac436ac0ed7375430502"
+    },
+    "controller": {
+        "address": "0xd0D35489Be9B260D2DEb94Ca8Af4796Deb437556",
+        "block": 17071193,
+        "hash": "0xa0bf390a10c6f2e519bc3090e69ed4c8789ea87cc0dde89a0f9d6f6e5b83a7a3"
+    },
+    "matrix_valuer": {
+        "address": "0x3503Ea16D1c780AEB042043f05eDc7fCbeC1B257",
+        "block": 17071199,
+        "hash": "0x9c27f60baac093afde49b828b4690bd1218487dc26168685d27a7e7d93ae1433"
+    },
+    "matrix_token_factory": {
+        "address": "0xba9CFD74d5Fde7B1B978A4EC9b003A8FACE0aF2E",
+        "block": 17071206,
+        "hash": "0xd19dadbd70434f61a3a7d1c6484cd6ee5dbc1c17796d3e7047f4d31fb1cbe292"
+    },
+    "integration_registry": {
+        "address": "0x247baCa02d6eeAA60962F8414619D3170C5E5cc1",
+        "block": 17071215,
+        "hash": "0x3777b181cbc150a730568c454b3855e0badf9f0ce1a27aefe810824387796381"
+    },
+    "basic_issuance_module": {
+        "address": "0x31630bFd8f994e02509af244cB941c78C1E8a098",
+        "block": 17071224,
+        "hash": "0x5f04cf675accbf9e3e1715303da345d29ccb9baabe5c0e5f32786df17697e2a1"
+    },
+    "streaming_fee_module": {
+        "address": "0x7aA5918Ce1C89700328C56f7a65Fe0A34C949a96",
+        "block": 17071232,
+        "hash": "0x61a6f90dccf560ab0c89bdad4425075c1b274a340ce83c16e15a37595743f3c4"
+    },
+    "trade_module": {
+        "address": "0x770001C226EE731721a6183203fD3259BBE206AA",
+        "block": 17071238,
+        "hash": "0xce5f00ad7249023871dcdb544c0613b7cab197ac3050194d6e9c31c63ce9ba0f"
+    },
+    "airdrop_module": {
+        "address": "0x82243d38E279f35Db3979FB4a8501480f5Abb615",
+        "block": 17071246,
+        "hash": "0xeaa85853711cfdf494d78bcac3ffe6e13c3f2b28fe34f0c279b50b398d734380"
+    },
+    "nav_issuance_module": {
+        "address": "0xf2AFf5bE5e083E3aB780b6894B94dDdABabB880A",
+        "block": 17071859,
+        "hash": "0x772aa2ecbbf47d94664363d3a224c0bc858d177922f0d662a53425f07a991276"
+    },
+    "wrap_module_v2": {
+        "address": "0x7b970c1E83aEBB4e1649B3d771CefDC48b8BA852",
+        "block": 17071867,
+        "hash": "0xb279486001cf3b3b71df5befc913c8cd325d117b8753fe83d0f9d402cb748d73"
+    },
+    "price_oracle": {
+        "address": "0x293eA473E06d806d7557208A3a147cf207a0061c",
+        "block": 17071955,
+        "hash": "0x741339df20da7937aaab535ad20e91b19ca6f9bfbc6bfb16a97a45eaa1a11ca7"
+    },
+    "identical_token_oracle_adapter": {
+        "address": "0xab8371f75669ff1cb408329e8D969111442fEa55",
+        "block": 17072057,
+        "hash": "0xe42059c8b484dad4eb547e4f3b05b1851c68ab6ad6a26aea605ac952cfe8493e"
+    },
+    "uniswap_v2_pair_price_adapter": {
+        "address": "0xf6Efd267f4659729CBe72588f3aa8a751AC55Ec1",
+        "block": 17072065,
+        "hash": "0x3bbe06112b364d01ad9a9dd35fd745651efb30357ef5d2a5a92b7f846789b9b3"
+    },
+    "test_matrix_token": {
+        "address": "0xfBd6b129C9B4fafB2C6a13Fb0050a310C1126e22",
+        "block": 17072190,
+        "hash": "0x6b0005b366a617a3d80ff35832f066a147c7678649406e7f6d24dd0d38981f8f"
+    }
+}
