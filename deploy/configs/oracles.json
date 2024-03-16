@@ -1,4 +1,9 @@
 {
+    "xdcdev": {
+        "chainlink_oracle": [],
+        "chainlink_serial_oracle": [],
+        "identical_token_pair": []
+    },
     "mumbai": {
         "chainlink_oracle": [
             { "name": "ETH/USD", "key": "eth_usd_oracle", "address": "0x0715A7794a1dc8e42615F059dD6e406A6594651A" },

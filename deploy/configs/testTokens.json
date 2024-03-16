@@ -1,4 +1,12 @@
 {
+    "xdcdev": [
+        { "name": "Dai Test", "symbol": "DAI-TEST", "decimals": 18 },
+        { "name": "Link Test", "symbol": "LINK-TEST", "decimals": 18 },
+        { "name": "Sand Test", "symbol": "SAND-TEST", "decimals": 18 },
+        { "name": "Usdc Test", "symbol": "USDC-TEST", "decimals": 6 },
+        { "name": "Usdt Test", "symbol": "USDT-TEST", "decimals": 6 },
+        { "name": "Wbtc Test", "symbol": "WBTC-TEST", "decimals": 8 }
+    ],
     "kovan": [
         { "name": "Ampl Test", "symbol": "AMPL-TEST", "decimals": 9 },
         { "name": "Bat Test", "symbol": "BAT-TEST", "decimals": 18 },

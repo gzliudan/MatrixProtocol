@@ -1,0 +1,17 @@
+{
+    "chain_name": "xdcdev",
+    "chain_id": 551,
+    "admin": "0xD4CE02705041F04135f1949Bc835c1Fe0885513c",
+    "fee_recipient": "0x85f33E1242d87a875301312BD4EbaEe8876517BA",
+    "tokens": {
+        "usd": "0x0000000000000000000000000000000000000348",
+        "eth": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+        "weth": "0x0Ef9a68D4C380Ebe8aa0279B7796970C45C0F862",
+        "dai-test": "0xB4251b5632062d2716eD3D1B8F775AD4d95E23b9",
+        "link-test": "0x67e0b9606b1E7558B2bB3a55d2b4912907059830",
+        "sand-test": "0x21c8a22b8707A35Eb560342831d6cb38513DDc2d",
+        "usdc-test": "0x982ADA56Bf4d0EC80bEa5E3F6C6064410F88BA5A",
+        "usdt-test": "0xfb50F202dB3ED62B988bA48Bc0FfB54794ee0382",
+        "wbtc-test": "0xaD2552941efbAc1532B5C8950EcCdb3EA9DFE68b"
+    }
+}
