@@ -5,7 +5,7 @@ This project is forked from [set-protocol-v2](https://github.com/SetProtocol/set
 ## Install
 
 ```shell
-git clone https://gitee.com/matrix-tech/MatrixProtocol
+git clone https://github.com/gzliudan/MatrixProtocol
 cd MatrixProtocol
 yarn
 ```
