@@ -14,8 +14,8 @@ const { getSigners, getRandomAddress, getEthBalance } = require('../../helpers/a
 const { snapshotBlockchain, revertBlockchain } = require('../../helpers/evmUtil.js');
 const { ZERO, ZERO_ADDRESS, ZERO_BYTES } = require('../../helpers/constants');
 
-describe('contract WrapModuleV2', async () => {
-  const [owner, protocolFeeRecipient, randomAccount] = await getSigners();
+describe('contract WrapModuleV2', () => {
+  const [owner, protocolFeeRecipient, randomAccount] = getSigners();
   const systemFixture = new SystemFixture(owner, protocolFeeRecipient);
   const wrapV2AdapterName = 'WRAP_V2_ADAPTER';
 
@@ -39,7 +39,7 @@ describe('contract WrapModuleV2', async () => {
     await revertBlockchain(snapshotId);
   });
 
-  describe('constructor', async () => {
+  describe('constructor', () => {
     it('should set the correct controller', async () => {
       expect(await wrapV2Module.getController()).eq(systemFixture.controller.address);
     });
@@ -49,7 +49,7 @@ describe('contract WrapModuleV2', async () => {
     });
   });
 
-  describe('initialize', async () => {
+  describe('initialize', () => {
     let caller;
     let matrixToken;
     let matrixTokenAddress;
@@ -96,7 +96,7 @@ describe('contract WrapModuleV2', async () => {
     });
   });
 
-  describe('removeModule', async () => {
+  describe('removeModule', () => {
     let caller;
     let module;
     let matrixToken;
@@ -154,7 +154,7 @@ describe('contract WrapModuleV2', async () => {
       await systemFixture.basicIssuanceModule.issue(matrixToken.address, matrixTokensIssued, owner.address);
     });
 
-    describe('wrap', async () => {
+    describe('wrap', () => {
       let caller;
       let wrapData;
       let wrappedToken;
@@ -246,7 +246,7 @@ describe('contract WrapModuleV2', async () => {
       });
     });
 
-    describe('wrapWithEther', async () => {
+    describe('wrapWithEther', () => {
       let caller;
       let wrapData;
       let wrappedToken;
@@ -360,7 +360,7 @@ describe('contract WrapModuleV2', async () => {
       });
     });
 
-    describe('unwrap', async () => {
+    describe('unwrap', () => {
       let caller;
       let unwrapData;
       let wrappedToken;
@@ -456,7 +456,7 @@ describe('contract WrapModuleV2', async () => {
       });
     });
 
-    describe('unwrapWithEther', async () => {
+    describe('unwrapWithEther', () => {
       let caller;
       let unwrapData;
       let wrappedToken;

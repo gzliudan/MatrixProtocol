@@ -15,8 +15,8 @@ const { UniswapFixture } = require('../../../fixtures/uniswapFixture');
 const { snapshotBlockchain, revertBlockchain, getLastBlockTimestamp } = require('../../../helpers/evmUtil.js');
 const { ZERO, EMPTY_BYTES } = require('../../../helpers/constants');
 
-describe('contract UniswapV2ExchangeAdapter', async () => {
-  const [owner, protocolFeeRecipient, matrixTokenMock] = await getSigners();
+describe('contract UniswapV2ExchangeAdapter', () => {
+  const [owner, protocolFeeRecipient, matrixTokenMock] = getSigners();
   const systemFixture = new SystemFixture(owner, protocolFeeRecipient);
   const uniswapFixture = new UniswapFixture(owner);
 
@@ -35,14 +35,14 @@ describe('contract UniswapV2ExchangeAdapter', async () => {
     await revertBlockchain(snapshotId);
   });
 
-  describe('getSpender', async () => {
+  describe('getSpender', () => {
     it('should have the correct router address', async () => {
       const actualRouterAddress = await uniswapV2ExchangeAdapter.getSpender();
       expect(actualRouterAddress).eq(uniswapFixture.router.address);
     });
   });
 
-  describe('getTradeCalldata', async () => {
+  describe('getTradeCalldata', () => {
     const srcQuantity = btcToWei(1); // Trade 1 WBTC
     const minDestQuantity = ethToWei(30000); // Receive at least 30k DAI
 

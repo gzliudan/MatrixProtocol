@@ -12,7 +12,7 @@ const { getSigners } = require('../helpers/accountUtil');
 const { snapshotBlockchain, revertBlockchain } = require('../helpers/evmUtil.js');
 const { ZERO_ADDRESS, ZERO, ONE } = require('../helpers/constants');
 
-describe('contract Controller', async () => {
+describe('contract Controller', () => {
   const [owner, protocolFeeRecipient, basicIssuanceModule, matrixTokenFactory, priceOracle, matrixToken, userMock, randomAccount] = getSigners();
   const protocolFeeRecipientAddress = protocolFeeRecipient.address;
 
@@ -42,7 +42,7 @@ describe('contract Controller', async () => {
     revertBlockchain(snapshotId);
   });
 
-  describe('constructor', async () => {
+  describe('constructor', () => {
     let snapshotId;
     before(async () => {
       snapshotId = await snapshotBlockchain();
@@ -63,7 +63,7 @@ describe('contract Controller', async () => {
     });
   });
 
-  describe('initialize', async () => {
+  describe('initialize', () => {
     let resourceId;
     let factories;
     let modules;
@@ -177,7 +177,7 @@ describe('contract Controller', async () => {
     });
   });
 
-  describe('addMatrix', async () => {
+  describe('addMatrix', () => {
     const matrixTokenAddr = matrixToken.address;
 
     async function addMatrix() {
@@ -237,7 +237,7 @@ describe('contract Controller', async () => {
     });
   });
 
-  describe('removeMatrix', async () => {
+  describe('removeMatrix', () => {
     const matrixTokenAddr = matrixToken.address;
 
     async function removeMatrix() {
@@ -295,7 +295,7 @@ describe('contract Controller', async () => {
     });
   });
 
-  describe('addFactory', async () => {
+  describe('addFactory', () => {
     let factory;
 
     async function addFactory() {
@@ -352,7 +352,7 @@ describe('contract Controller', async () => {
     });
   });
 
-  describe('removeFactory', async () => {
+  describe('removeFactory', () => {
     let factory;
 
     async function removeFactory() {
@@ -410,7 +410,7 @@ describe('contract Controller', async () => {
     });
   });
 
-  describe('addModule', async () => {
+  describe('addModule', () => {
     let module;
 
     async function addModule() {
@@ -467,7 +467,7 @@ describe('contract Controller', async () => {
     });
   });
 
-  describe('removeModule', async () => {
+  describe('removeModule', () => {
     let module;
 
     async function removeModule() {
@@ -525,7 +525,7 @@ describe('contract Controller', async () => {
     });
   });
 
-  describe('addResource', async () => {
+  describe('addResource', () => {
     let resource;
     let resourceId;
     let priceOracleAddress;
@@ -596,7 +596,7 @@ describe('contract Controller', async () => {
     });
   });
 
-  describe('removeResource', async () => {
+  describe('removeResource', () => {
     let resource;
     let resourceId;
 
@@ -661,7 +661,7 @@ describe('contract Controller', async () => {
     });
   });
 
-  describe('addFee', async () => {
+  describe('addFee', () => {
     let module;
     let feeType;
     let feePercentage;
@@ -718,7 +718,7 @@ describe('contract Controller', async () => {
     });
   });
 
-  describe('editFee', async () => {
+  describe('editFee', () => {
     let module;
     let feeType;
     let feePercentage;
@@ -776,7 +776,7 @@ describe('contract Controller', async () => {
     });
   });
 
-  describe('editFeeRecipient', async () => {
+  describe('editFeeRecipient', () => {
     let protocolFeeRecipient;
 
     async function editFeeRecipient() {

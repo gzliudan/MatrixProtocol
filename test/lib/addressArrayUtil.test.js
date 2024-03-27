@@ -11,7 +11,7 @@ const { testCases, others } = require('../cases/addressArrayUtil.json');
 const { compareArray, quickPopArrayItem } = require('../helpers/arrayUtil');
 const { snapshotBlockchain, revertBlockchain } = require('../helpers/evmUtil.js');
 
-describe('library AddressArrayUtil', async () => {
+describe('library AddressArrayUtil', () => {
   let arrayMock;
 
   let snapshotId;

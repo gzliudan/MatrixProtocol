@@ -20,8 +20,8 @@ const { getSigners, getRandomAddress } = require('../../helpers/accountUtil');
 const { snapshotBlockchain, revertBlockchain } = require('../../helpers/evmUtil.js');
 const { ZERO, MAX_UINT_256, ZERO_ADDRESS, EMPTY_BYTES } = require('../../helpers/constants');
 
-describe('contract TradeModule', async () => {
-  const [owner, protocolFeeRecipient, manager, mockModule, randomAccount] = await getSigners();
+describe('contract TradeModule', () => {
+  const [owner, protocolFeeRecipient, manager, mockModule, randomAccount] = getSigners();
   const systemFixture = new SystemFixture(owner, protocolFeeRecipient);
   const uniswapFixture = new UniswapFixture(owner);
   const kyberV1Fixture = new KyberV1Fixture(owner);
@@ -111,7 +111,7 @@ describe('contract TradeModule', async () => {
     await revertBlockchain(snapshotId);
   });
 
-  describe('constructor', async () => {
+  describe('constructor', () => {
     it('should have the correct controller', async () => {
       const controller = await tradeModule.getController();
       expect(controller).eq(systemFixture.controller.address);
@@ -146,7 +146,7 @@ describe('contract TradeModule', async () => {
       await revertBlockchain(snapshotId);
     });
 
-    describe('initialize', async () => {
+    describe('initialize', () => {
       let matrixTokenAddress;
 
       beforeEach(async () => {
@@ -181,7 +181,7 @@ describe('contract TradeModule', async () => {
       });
     });
 
-    describe('trade', async () => {
+    describe('trade', () => {
       let dataBytes;
       let adapterName;
       let srcQuantity;
@@ -313,7 +313,7 @@ describe('contract TradeModule', async () => {
             expect(newSecondPosition.component).eq(destToken.address);
           });
 
-          describe('when there is a protocol fee charged', async () => {
+          describe('when there is a protocol fee charged', () => {
             let feePercentage;
 
             beforeEach(async () => {
@@ -380,7 +380,7 @@ describe('contract TradeModule', async () => {
                 );
             });
 
-            describe('when receive token is more than total position units tracked on MatrixToken', async () => {
+            describe('when receive token is more than total position units tracked on MatrixToken', () => {
               let extraTokenQuantity;
 
               beforeEach(async () => {
@@ -420,7 +420,7 @@ describe('contract TradeModule', async () => {
               });
             });
 
-            describe('when send token is more than total position units tracked on MatrixToken', async () => {
+            describe('when send token is more than total position units tracked on MatrixToken', () => {
               let extraTokenQuantity;
 
               beforeEach(async () => {
@@ -613,7 +613,7 @@ describe('contract TradeModule', async () => {
           expect(newFirstPosition.unit).eq(expectedReceiveQuantity);
         });
 
-        describe('when path is through multiple trading pairs', async () => {
+        describe('when path is through multiple trading pairs', () => {
           beforeEach(async () => {
             destTokenAddress = systemFixture.dai.address;
             const tradePath = [srcTokenAddress, systemFixture.weth.address, destTokenAddress];
@@ -755,7 +755,7 @@ describe('contract TradeModule', async () => {
           expect(newSecondPosition.unit).lte(expectedReceiveQuantity);
         });
 
-        describe('when path is through multiple trading pairs', async () => {
+        describe('when path is through multiple trading pairs', () => {
           let kyberWbtcDaiPool;
 
           beforeEach(async () => {
@@ -868,7 +868,7 @@ describe('contract TradeModule', async () => {
           return tradeModule.connect(caller).trade(matrixTokenAddress, adapterName, srcTokenAddress, srcQuantity, destTokenAddress, minDestQuantity, dataBytes);
         }
 
-        describe('when path is through one pair and swaps exact tokens for tokens', async () => {
+        describe('when path is through one pair and swaps exact tokens for tokens', () => {
           beforeEach(async () => {
             const shouldSwapExactTokenForToken = true;
             const tradePath = [srcToken.address, destToken.address];
@@ -920,7 +920,7 @@ describe('contract TradeModule', async () => {
           });
         });
 
-        describe('when path is through one pair and swaps for exact tokens', async () => {
+        describe('when path is through one pair and swaps for exact tokens', () => {
           beforeEach(async () => {
             const shouldSwapExactTokenForToken = false;
             const tradePath = [srcToken.address, destToken.address];
@@ -947,7 +947,7 @@ describe('contract TradeModule', async () => {
           });
         });
 
-        describe('when path is through multiple trading pairs and swaps exact tokens for tokens', async () => {
+        describe('when path is through multiple trading pairs and swaps exact tokens for tokens', () => {
           beforeEach(async () => {
             const shouldSwapExactTokenForToken = true;
             const tradePath = [srcToken.address, systemFixture.weth.address, systemFixture.dai.address];
@@ -978,7 +978,7 @@ describe('contract TradeModule', async () => {
           });
         });
 
-        describe('when path is through multiple trading pairs and swaps for exact tokens', async () => {
+        describe('when path is through multiple trading pairs and swaps for exact tokens', () => {
           beforeEach(async () => {
             const shouldSwapExactTokenForToken = false;
             const tradePath = [srcToken.address, systemFixture.weth.address, systemFixture.dai.address];
@@ -1311,7 +1311,7 @@ describe('contract TradeModule', async () => {
           expect(newFirstPosition.unit).eq(expectedReceiveQuantity);
         });
 
-        describe('when path is through multiple trading pairs', async () => {
+        describe('when path is through multiple trading pairs', () => {
           beforeEach(async () => {
             await systemFixture.weth.connect(owner).approve(uniswapFixture.router.address, ethToWei(1000));
             await systemFixture.dai.connect(owner).approve(uniswapFixture.router.address, ethToWei(1000000));
@@ -1449,7 +1449,7 @@ describe('contract TradeModule', async () => {
           expect(newSecondPosition.unit).eq(expectedReceiveQuantity);
         });
 
-        describe('when path is through multiple trading pairs', async () => {
+        describe('when path is through multiple trading pairs', () => {
           beforeEach(async () => {
             await systemFixture.wbtc.connect(owner).approve(uniswapFixture.router.address, btcToWei(1000));
             await systemFixture.dai.connect(owner).approve(uniswapFixture.router.address, ethToWei(1000000));
@@ -1538,7 +1538,7 @@ describe('contract TradeModule', async () => {
           return tradeModule.connect(caller).trade(matrixTokenAddress, adapterName, srcTokenAddress, srcQuantity, destTokenAddress, minDestQuantity, dataBytes);
         }
 
-        describe('when path is through one pair and swaps exact tokens for tokens', async () => {
+        describe('when path is through one pair and swaps exact tokens for tokens', () => {
           beforeEach(async () => {
             const shouldSwapExactTokenForToken = true;
             const tradePath = [srcToken.address, destToken.address];
@@ -1588,7 +1588,7 @@ describe('contract TradeModule', async () => {
           });
         });
 
-        describe('when path is through one pair and swaps for exact tokens', async () => {
+        describe('when path is through one pair and swaps for exact tokens', () => {
           beforeEach(async () => {
             const shouldSwapExactTokenForToken = false;
             const tradePath = [srcToken.address, destToken.address];
@@ -1615,7 +1615,7 @@ describe('contract TradeModule', async () => {
           });
         });
 
-        describe('when path is through multiple trading pairs and swaps exact tokens for tokens', async () => {
+        describe('when path is through multiple trading pairs and swaps exact tokens for tokens', () => {
           beforeEach(async () => {
             const shouldSwapExactTokenForToken = true;
             const tradePath = [srcToken.address, systemFixture.weth.address, systemFixture.dai.address];
@@ -1645,7 +1645,7 @@ describe('contract TradeModule', async () => {
           });
         });
 
-        describe('when path is through multiple trading pairs and swaps for exact tokens', async () => {
+        describe('when path is through multiple trading pairs and swaps for exact tokens', () => {
           beforeEach(async () => {
             const shouldSwapExactTokenForToken = false;
             const tradePath = [srcToken.address, systemFixture.weth.address, systemFixture.dai.address];
@@ -1704,7 +1704,7 @@ describe('contract TradeModule', async () => {
       });
     });
 
-    describe('removeModule', async () => {
+    describe('removeModule', () => {
       let tradeModuleAddress;
 
       beforeEach(async () => {

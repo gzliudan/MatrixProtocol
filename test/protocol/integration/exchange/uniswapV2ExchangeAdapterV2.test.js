@@ -15,8 +15,8 @@ const { UniswapFixture } = require('../../../fixtures/uniswapFixture');
 const { snapshotBlockchain, revertBlockchain, getLastBlockTimestamp } = require('../../../helpers/evmUtil.js');
 const { ZERO, EMPTY_BYTES } = require('../../../helpers/constants');
 
-describe('contract UniswapV2ExchangeAdapterV2', async () => {
-  const [owner, protocolFeeRecipient, matrixTokenMock] = await getSigners();
+describe('contract UniswapV2ExchangeAdapterV2', () => {
+  const [owner, protocolFeeRecipient, matrixTokenMock] = getSigners();
   const systemFixture = new SystemFixture(owner, protocolFeeRecipient);
   const uniswapFixture = new UniswapFixture(owner);
 
@@ -35,14 +35,14 @@ describe('contract UniswapV2ExchangeAdapterV2', async () => {
     await revertBlockchain(snapshotId);
   });
 
-  describe('getSpender', async () => {
+  describe('getSpender', () => {
     it('should return the correct spender address', async () => {
       const spender = await uniswapV2ExchangeAdapterV2.getSpender();
       expect(spender).eq(uniswapFixture.router.address);
     });
   });
 
-  describe('getExchangeData', async () => {
+  describe('getExchangeData', () => {
     it('should return the correct data', async () => {
       const shouldSwapExactTokensForTokens = true;
       const tradePath = [systemFixture.weth.address, systemFixture.wbtc.address, systemFixture.dai.address];
@@ -53,7 +53,7 @@ describe('contract UniswapV2ExchangeAdapterV2', async () => {
     });
   });
 
-  describe('generateDataParam', async () => {
+  describe('generateDataParam', () => {
     let srcToken;
     let destToken;
     let isFixIn;
@@ -67,7 +67,7 @@ describe('contract UniswapV2ExchangeAdapterV2', async () => {
       return await uniswapV2ExchangeAdapterV2.generateDataParam(srcToken, destToken, isFixIn);
     }
 
-    describe('when boolean fixed input amount is true', async () => {
+    describe('when boolean fixed input amount is true', () => {
       it('should return the correct trade calldata', async () => {
         isFixIn = true;
         const dataParam = await generateDataParam();
@@ -79,7 +79,7 @@ describe('contract UniswapV2ExchangeAdapterV2', async () => {
       });
     });
 
-    describe('when boolean fixed input amount is false', async () => {
+    describe('when boolean fixed input amount is false', () => {
       it('should return the correct trade calldata', async () => {
         isFixIn = false;
         const dataParam = await generateDataParam();
@@ -92,7 +92,7 @@ describe('contract UniswapV2ExchangeAdapterV2', async () => {
     });
   });
 
-  describe('getTradeCalldata', async () => {
+  describe('getTradeCalldata', () => {
     const srcQuantity = btcToWei(1); // Trade 1 WBTC;
     const minDestQuantity = ethToWei(30000); // Receive at least 30k DAI;
 
@@ -112,7 +112,7 @@ describe('contract UniswapV2ExchangeAdapterV2', async () => {
       return await uniswapV2ExchangeAdapterV2.getTradeCalldata(srcToken, destToken, matrixTokenAddress, srcQuantity, minDestQuantity, dataBytes);
     }
 
-    describe('when swap exact tokens for tokens', async () => {
+    describe('when swap exact tokens for tokens', () => {
       it('should return the correct trade calldata', async () => {
         const shouldSwapExactTokensForTokens = true;
         const path = [srcToken, systemFixture.weth.address, destToken];
@@ -133,7 +133,7 @@ describe('contract UniswapV2ExchangeAdapterV2', async () => {
       });
     });
 
-    describe('when swap tokens for exact tokens', async () => {
+    describe('when swap tokens for exact tokens', () => {
       it('should return the correct trade calldata', async () => {
         const shouldSwapExactTokensForTokens = false;
         const path = [srcToken, systemFixture.weth.address, destToken];

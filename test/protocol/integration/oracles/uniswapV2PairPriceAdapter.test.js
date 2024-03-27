@@ -15,8 +15,8 @@ const { preciseMul, preciseDiv } = require('../../../helpers/mathUtil');
 const { ZERO_ADDRESS, ZERO, MAX_UINT_256 } = require('../../../helpers/constants');
 const { snapshotBlockchain, revertBlockchain } = require('../../../helpers/evmUtil.js');
 
-describe('contract UniswapV2PairPriceAdapter', async () => {
-  const [owner, protocolFeeRecipient, attacker] = await getSigners();
+describe('contract UniswapV2PairPriceAdapter', () => {
+  const [owner, protocolFeeRecipient, attacker] = getSigners();
   const systemFixture = new SystemFixture(owner, protocolFeeRecipient);
   const uniswapFixture = new UniswapFixture(owner);
 
@@ -75,7 +75,7 @@ describe('contract UniswapV2PairPriceAdapter', async () => {
     await revertBlockchain(snapshotId);
   });
 
-  describe('constructor', async () => {
+  describe('constructor', () => {
     let uniswapPools;
 
     // let snapshotId;
@@ -139,7 +139,7 @@ describe('contract UniswapV2PairPriceAdapter', async () => {
     });
   });
 
-  describe('getPrice', async () => {
+  describe('getPrice', () => {
     let asset1;
     let asset2;
 
@@ -301,7 +301,7 @@ describe('contract UniswapV2PairPriceAdapter', async () => {
     });
   });
 
-  describe('addPool', async () => {
+  describe('addPool', () => {
     let poolAddress;
     let token1Address;
     let token2Address;
@@ -364,7 +364,7 @@ describe('contract UniswapV2PairPriceAdapter', async () => {
     });
   });
 
-  describe('removePair', async () => {
+  describe('removePair', () => {
     let poolAddress;
 
     let snapshotId;

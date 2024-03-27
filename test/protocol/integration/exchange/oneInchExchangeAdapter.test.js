@@ -14,8 +14,8 @@ const { ethToWei, btcToWei } = require('../../../helpers/unitUtil');
 const { snapshotBlockchain, revertBlockchain } = require('../../../helpers/evmUtil.js');
 const { ZERO, ONE, EMPTY_BYTES, ZERO_ADDRESS } = require('../../../helpers/constants');
 
-describe('contract OneInchExchangeAdapter', async () => {
-  const [owner, matrixTokenMock, wbtcMock, wethMock, oneInchSpenderMock, randomAccount] = await getSigners();
+describe('contract OneInchExchangeAdapter', () => {
+  const [owner, matrixTokenMock, wbtcMock, wethMock, oneInchSpenderMock, randomAccount] = getSigners();
 
   let oneInchExchangeMock;
   let oneInchExchangeAdapter;
@@ -42,7 +42,7 @@ describe('contract OneInchExchangeAdapter', async () => {
     await revertBlockchain(snapshotId);
   });
 
-  describe('constructor', async () => {
+  describe('constructor', () => {
     it('should have the correct approve address', async () => {
       const actualAddress = await oneInchExchangeAdapter.getSpender();
       expect(actualAddress).eq(oneInchSpenderMock.address);
@@ -59,7 +59,7 @@ describe('contract OneInchExchangeAdapter', async () => {
     });
   });
 
-  describe('getTradeCalldata', async () => {
+  describe('getTradeCalldata', () => {
     const srcQuantity = ONE;
     const minDestQuantity = ONE;
 

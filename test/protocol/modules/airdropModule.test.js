@@ -15,8 +15,8 @@ const { getSigners, getRandomAddress } = require('../../helpers/accountUtil');
 const { ZERO, ZERO_ADDRESS, PRECISE_UNIT } = require('../../helpers/constants');
 const { snapshotBlockchain, revertBlockchain } = require('../../helpers/evmUtil.js');
 
-describe('contract AirdropModule', async () => {
-  const [owner, protocolFeeRecipient, feeRecipient, tokenHolder] = await getSigners();
+describe('contract AirdropModule', () => {
+  const [owner, protocolFeeRecipient, feeRecipient, tokenHolder] = getSigners();
   const systemFixture = new SystemFixture(owner, protocolFeeRecipient);
   const protocolFeeRecipientAddress = protocolFeeRecipient.address;
 
@@ -39,7 +39,7 @@ describe('contract AirdropModule', async () => {
     await revertBlockchain(snapshotId);
   });
 
-  describe('initialize', async () => {
+  describe('initialize', () => {
     let airdrops;
     let airdropFee;
     let anyoneAbsorb;
@@ -98,7 +98,7 @@ describe('contract AirdropModule', async () => {
       expect(usdcIsAirdrop).is.true;
     });
 
-    describe('when the airdrops array is empty', async () => {
+    describe('when the airdrops array is empty', () => {
       before(async () => {
         airdrops = [];
       });
@@ -114,7 +114,7 @@ describe('contract AirdropModule', async () => {
       });
     });
 
-    describe('when there are duplicate components in the airdrops array', async () => {
+    describe('when there are duplicate components in the airdrops array', () => {
       before(async () => {
         airdrops = [systemFixture.weth.address, systemFixture.weth.address];
       });
@@ -128,7 +128,7 @@ describe('contract AirdropModule', async () => {
       });
     });
 
-    describe('when the airdrop fee is greater than 100%', async () => {
+    describe('when the airdrop fee is greater than 100%', () => {
       before(async () => {
         airdropFee = ethToWei(1.01);
       });
@@ -142,7 +142,7 @@ describe('contract AirdropModule', async () => {
       });
     });
 
-    describe('when the fee recipient is the ZERO_ADDRESS', async () => {
+    describe('when the fee recipient is the ZERO_ADDRESS', () => {
       before(async () => {
         airdropFeeRecipient = ZERO_ADDRESS;
       });
@@ -179,7 +179,7 @@ describe('contract AirdropModule', async () => {
     });
   });
 
-  describe('absorb', async () => {
+  describe('absorb', () => {
     let token;
     let airdrops;
     let airdropFee;
@@ -292,7 +292,7 @@ describe('contract AirdropModule', async () => {
         .withArgs(matrixToken.address, systemFixture.usdc.address, airdroppedTokens, expectedManagerTake, expectedProtocolTake);
     });
 
-    describe('when protocolFee is 0 but airdropFee > 0', async () => {
+    describe('when protocolFee is 0 but airdropFee > 0', () => {
       before(async () => {
         protocolFee = ZERO;
       });
@@ -337,7 +337,7 @@ describe('contract AirdropModule', async () => {
       });
     });
 
-    describe('when airdropFee is 0', async () => {
+    describe('when airdropFee is 0', () => {
       before(async () => {
         airdropFee = ZERO;
       });
@@ -375,7 +375,7 @@ describe('contract AirdropModule', async () => {
       });
     });
 
-    describe('when anyoneAbsorb is false and the caller is the MatrixToken manager', async () => {
+    describe('when anyoneAbsorb is false and the caller is the MatrixToken manager', () => {
       before(async () => {
         anyoneAbsorb = false;
       });
@@ -400,7 +400,7 @@ describe('contract AirdropModule', async () => {
       });
     });
 
-    describe('when anyoneAbsorb is false and the caller is not the MatrixToken manager', async () => {
+    describe('when anyoneAbsorb is false and the caller is not the MatrixToken manager', () => {
       before(async () => {
         anyoneAbsorb = false;
       });
@@ -419,7 +419,7 @@ describe('contract AirdropModule', async () => {
       await expect(absorb()).revertedWith('AD3');
     });
 
-    describe('when module is not initialized', async () => {
+    describe('when module is not initialized', () => {
       before(async () => {
         notInitialized = false;
       });
@@ -442,7 +442,7 @@ describe('contract AirdropModule', async () => {
     });
   });
 
-  describe('batchAbsorb', async () => {
+  describe('batchAbsorb', () => {
     let tokens;
     let airdrops;
     let airdropFee;
@@ -616,7 +616,7 @@ describe('contract AirdropModule', async () => {
         .withArgs(matrixToken.address, systemFixture.weth.address, airdroppedTokens, expectedManagerTake, expectedProtocolTake);
     });
 
-    describe('when protocolFee is 0 but airdropFee > 0', async () => {
+    describe('when protocolFee is 0 but airdropFee > 0', () => {
       before(async () => {
         protocolFee = ZERO;
       });
@@ -699,7 +699,7 @@ describe('contract AirdropModule', async () => {
       });
     });
 
-    describe('when airdropFee is 0', async () => {
+    describe('when airdropFee is 0', () => {
       before(async () => {
         airdropFee = ZERO;
       });
@@ -766,7 +766,7 @@ describe('contract AirdropModule', async () => {
       });
     });
 
-    describe('when anyoneAbsorb is false and the caller is the MatrixToken manager', async () => {
+    describe('when anyoneAbsorb is false and the caller is the MatrixToken manager', () => {
       before(async () => {
         anyoneAbsorb = false;
       });
@@ -814,7 +814,7 @@ describe('contract AirdropModule', async () => {
       await expect(batchAbsorb()).revertedWith('AD3');
     });
 
-    describe('when anyoneAbsorb is false and the caller is not the MatrixToken manager', async () => {
+    describe('when anyoneAbsorb is false and the caller is not the MatrixToken manager', () => {
       before(async () => {
         anyoneAbsorb = false;
       });
@@ -828,7 +828,7 @@ describe('contract AirdropModule', async () => {
       });
     });
 
-    describe('when module is not initialized', async () => {
+    describe('when module is not initialized', () => {
       before(async () => {
         notInitialized = false;
       });
@@ -851,7 +851,7 @@ describe('contract AirdropModule', async () => {
     });
   });
 
-  describe('removeModule', async () => {
+  describe('removeModule', () => {
     let module;
 
     let snapshotId;
@@ -896,7 +896,7 @@ describe('contract AirdropModule', async () => {
     });
   });
 
-  describe('addAirdrop and removeAirdrop', async () => {
+  describe('addAirdrop and removeAirdrop', () => {
     let notInitialized;
     let airdropTokenAddress;
 
@@ -926,7 +926,7 @@ describe('contract AirdropModule', async () => {
       await revertBlockchain(snapshotId);
     });
 
-    describe('addAirdrop', async () => {
+    describe('addAirdrop', () => {
       beforeEach(async () => {
         caller = owner;
         airdropTokenAddress = systemFixture.wbtc.address;
@@ -964,7 +964,7 @@ describe('contract AirdropModule', async () => {
         await expect(addAirdrop()).revertedWith('M1b');
       });
 
-      describe('when module is not initialized', async () => {
+      describe('when module is not initialized', () => {
         before(async () => {
           notInitialized = false;
         });
@@ -979,7 +979,7 @@ describe('contract AirdropModule', async () => {
       });
     });
 
-    describe('removeAirdrop', async () => {
+    describe('removeAirdrop', () => {
       beforeEach(async () => {
         caller = owner;
         airdropTokenAddress = systemFixture.usdc.address;
@@ -1017,7 +1017,7 @@ describe('contract AirdropModule', async () => {
         await expect(removeAirdrop()).revertedWith('M1b');
       });
 
-      describe('when module is not initialized', async () => {
+      describe('when module is not initialized', () => {
         before(async () => {
           notInitialized = false;
         });
@@ -1033,7 +1033,7 @@ describe('contract AirdropModule', async () => {
     });
   });
 
-  describe('updateAirdropFee', async () => {
+  describe('updateAirdropFee', () => {
     let newFee;
     let airdrops;
     let airdropFee;
@@ -1119,7 +1119,7 @@ describe('contract AirdropModule', async () => {
       await expect(updateAirdropFee()).revertedWith('AD1');
     });
 
-    describe('when module is not initialized', async () => {
+    describe('when module is not initialized', () => {
       before(async () => {
         notInitialized = false;
       });
@@ -1140,7 +1140,7 @@ describe('contract AirdropModule', async () => {
     });
   });
 
-  describe('updateAnyoneAbsorb', async () => {
+  describe('updateAnyoneAbsorb', () => {
     let notInitialized;
     let isAnyoneAbsorb;
 
@@ -1187,7 +1187,7 @@ describe('contract AirdropModule', async () => {
       await expect(updateAnyoneAbsorb()).emit(airdropModule, 'UpdateAnyoneAbsorb').withArgs(matrixTokenAddress, isAnyoneAbsorb);
     });
 
-    describe('when module is not initialized', async () => {
+    describe('when module is not initialized', () => {
       before(async () => {
         notInitialized = false;
       });
@@ -1208,7 +1208,7 @@ describe('contract AirdropModule', async () => {
     });
   });
 
-  describe('updateFeeRecipient', async () => {
+  describe('updateFeeRecipient', () => {
     let notInitialized;
     let newFeeRecipient;
 
@@ -1260,7 +1260,7 @@ describe('contract AirdropModule', async () => {
       await expect(updateFeeRecipient()).revertedWith('AD0');
     });
 
-    describe('when module is not initialized', async () => {
+    describe('when module is not initialized', () => {
       before(async () => {
         notInitialized = false;
       });
@@ -1281,7 +1281,7 @@ describe('contract AirdropModule', async () => {
     });
   });
 
-  describe('getAirdrops', async () => {
+  describe('getAirdrops', () => {
     let airdrops;
 
     let snapshotId;
@@ -1312,7 +1312,7 @@ describe('contract AirdropModule', async () => {
     });
   });
 
-  describe('isAirdrop', async () => {
+  describe('isAirdrop', () => {
     let token;
 
     let snapshotId;

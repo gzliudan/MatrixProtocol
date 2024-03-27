@@ -14,8 +14,8 @@ const { SystemFixture } = require('../../../fixtures/systemFixture');
 const { getSigners, getRandomAddress } = require('../../../helpers/accountUtil');
 const { snapshotBlockchain, revertBlockchain } = require('../../../helpers/evmUtil.js');
 
-describe('contract CurveStakingAdapter', async () => {
-  const [owner, protocolFeeRecipient] = await getSigners();
+describe('contract CurveStakingAdapter', () => {
+  const [owner, protocolFeeRecipient] = getSigners();
   const systemFixture = new SystemFixture(owner, protocolFeeRecipient);
 
   let curveStakingAdapter;
@@ -34,13 +34,13 @@ describe('contract CurveStakingAdapter', async () => {
     await revertBlockchain(snapshotId);
   });
 
-  describe('constructor', async () => {
+  describe('constructor', () => {
     it('set the correct variables', async () => {
       expect(await curveStakingAdapter.getGaugeController()).eq(gaugeControllerMock.address);
     });
   });
 
-  describe('getSpenderAddress', async () => {
+  describe('getSpenderAddress', () => {
     it('should return the correct address', async () => {
       const stakingContract = await getRandomAddress();
       const spender = await curveStakingAdapter.getSpenderAddress(stakingContract);
@@ -48,7 +48,7 @@ describe('contract CurveStakingAdapter', async () => {
     });
   });
 
-  describe('getStakeCallData', async () => {
+  describe('getStakeCallData', () => {
     const amount = ethToWei(1);
     const stakeSignature = '0xb6b55f25'; // deposit(uint256)
     const generateCallData = (amount) => stakeSignature + bigNumberToData(amount);
@@ -85,7 +85,7 @@ describe('contract CurveStakingAdapter', async () => {
     });
   });
 
-  describe('getUnstakeCallData', async () => {
+  describe('getUnstakeCallData', () => {
     const amount = ethToWei(1);
     const unstakeSignature = '0x2e1a7d4d'; // withdraw(uint256)
     const generateCallData = (amount) => unstakeSignature + bigNumberToData(amount);

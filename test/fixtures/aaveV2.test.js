@@ -13,8 +13,8 @@ const { AaveV2Fixture } = require('./aaveV2Fixture');
 const { getSigners } = require('../helpers/accountUtil');
 const { snapshotBlockchain, revertBlockchain } = require('../helpers/evmUtil.js');
 
-describe('AaveV2Fixture', async () => {
-  const [owner, protocolFeeRecipient] = await getSigners();
+describe('AaveV2Fixture', () => {
+  const [owner, protocolFeeRecipient] = getSigners();
   const systemFixture = new SystemFixture(owner, protocolFeeRecipient);
   const aaveV2Fixture = new AaveV2Fixture(owner);
 
@@ -28,7 +28,7 @@ describe('AaveV2Fixture', async () => {
     await revertBlockchain(snapshotId);
   });
 
-  describe('init', async () => {
+  describe('init', () => {
     let snapshotId;
     beforeEach(async () => {
       snapshotId = await snapshotBlockchain();

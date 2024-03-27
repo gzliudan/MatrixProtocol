@@ -13,8 +13,8 @@ const { getSigners } = require('../helpers/accountUtil');
 const { ZERO, MAX_UINT_256 } = require('../helpers/constants');
 const { snapshotBlockchain, revertBlockchain } = require('../helpers/evmUtil.js');
 
-describe('class UniswapFixture', async () => {
-  const [owner, protocolFeeRecipient] = await getSigners();
+describe('class UniswapFixture', () => {
+  const [owner, protocolFeeRecipient] = getSigners();
   const systemFixture = new SystemFixture(owner, protocolFeeRecipient);
   const uniswapFixture = new UniswapFixture(owner);
 
@@ -29,7 +29,7 @@ describe('class UniswapFixture', async () => {
     await revertBlockchain(snapshotId);
   });
 
-  describe('init', async () => {
+  describe('init', () => {
     let snapshotId;
     beforeEach(async () => {
       snapshotId = await snapshotBlockchain();
@@ -76,7 +76,7 @@ describe('class UniswapFixture', async () => {
     });
   });
 
-  describe('addLiquidity', async () => {
+  describe('addLiquidity', () => {
     let snapshotId;
     beforeEach(async () => {
       snapshotId = await snapshotBlockchain();
@@ -118,7 +118,7 @@ describe('class UniswapFixture', async () => {
     });
   });
 
-  describe('stake', async () => {
+  describe('stake', () => {
     let stakeAmount;
 
     beforeEach(async () => {

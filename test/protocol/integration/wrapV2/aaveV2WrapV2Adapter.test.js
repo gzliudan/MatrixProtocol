@@ -14,8 +14,8 @@ const { AaveV2Fixture } = require('../../../fixtures/aaveV2Fixture');
 const { getSigners, getRandomAddress } = require('../../../helpers/accountUtil');
 const { snapshotBlockchain, revertBlockchain } = require('../../../helpers/evmUtil.js');
 
-describe('contract AaveV2WrapV2Adapter', async () => {
-  const [owner, protocolFeeRecipient, INVALID_TOKEN] = await getSigners();
+describe('contract AaveV2WrapV2Adapter', () => {
+  const [owner, protocolFeeRecipient, INVALID_TOKEN] = getSigners();
   const systemFixture = new SystemFixture(owner, protocolFeeRecipient);
   const aaveV2Fixture = new AaveV2Fixture(owner);
 
@@ -40,19 +40,19 @@ describe('contract AaveV2WrapV2Adapter', async () => {
     await revertBlockchain(snapshotId);
   });
 
-  describe('constructor', async () => {
+  describe('constructor', () => {
     it('should have the correct lending pool addresses provider', async () => {
       expect(await aaveV2WrapV2Adapter.ADDRESSES_PROVIDER()).eq(aaveV2Fixture.lendingPoolAddressesProvider.address);
     });
   });
 
-  describe('getSpenderAddress', async () => {
+  describe('getSpenderAddress', () => {
     it('should return the correct spender address', async () => {
       expect(await aaveV2WrapV2Adapter.getSpenderAddress(underlyingToken.address, wrappedToken.address)).eq(aaveV2Fixture.lendingPool.address);
     });
   });
 
-  describe('getWrapCallData', async () => {
+  describe('getWrapCallData', () => {
     const subjectUnderlyingUnits = ethToWei(2);
     const subjectWrapData = ZERO_BYTES;
 
@@ -90,7 +90,7 @@ describe('contract AaveV2WrapV2Adapter', async () => {
     });
   });
 
-  describe('getUnwrapCallData', async () => {
+  describe('getUnwrapCallData', () => {
     let unwrapData = ZERO_BYTES;
     let wrappedTokenUnits = ethToWei(2);
 

@@ -11,12 +11,12 @@ const { deployContract } = require('../../../helpers/deploy');
 const { getSigners, getRandomAddress } = require('../../../helpers/accountUtil');
 const { snapshotBlockchain, revertBlockchain } = require('../../../helpers/evmUtil.js');
 
-describe('contract ChainlinkOracleAdapter', async () => {
-  const [owner] = await getSigners();
+describe('contract ChainlinkOracleAdapter', () => {
+  const [owner] = getSigners();
   const price = BigNumber.from(1000);
   const expectedPrice = price.mul(BigNumber.from(10).pow(18));
-  const BTC = await getRandomAddress();
-  const USD = await getRandomAddress();
+  let BTC;
+  let USD;
 
   let baseAsset;
   let quotaAsset;
@@ -26,6 +26,8 @@ describe('contract ChainlinkOracleAdapter', async () => {
 
   let snapshotId;
   before(async () => {
+    BTC = await getRandomAddress();
+    USD = await getRandomAddress();
     snapshotId = await snapshotBlockchain();
 
     chainlinkFeedRegistryMock = await deployContract('ChainlinkFeedRegistryMock', [], owner);
@@ -36,13 +38,13 @@ describe('contract ChainlinkOracleAdapter', async () => {
     await revertBlockchain(snapshotId);
   });
 
-  describe('getFeedRegistry', async () => {
+  describe('getFeedRegistry', () => {
     it('should return the correct registry address', async () => {
       expect(await chainlinkSerialOracleAdapter.getFeedRegistry()).eq(chainlinkFeedRegistryMock.address);
     });
   });
 
-  describe('getPrice', async () => {
+  describe('getPrice', () => {
     let snapshotId;
     beforeEach(async () => {
       snapshotId = await snapshotBlockchain();

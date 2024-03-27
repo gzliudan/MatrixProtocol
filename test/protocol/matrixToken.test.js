@@ -16,7 +16,7 @@ const { getSigners, getEthBalance, getRandomAddress } = require('../helpers/acco
 const { preciseMul, preciseDivFloorInt, preciseMulFloorInt } = require('../helpers/mathUtil');
 const { ZERO, ONE, ZERO_ADDRESS, PRECISE_UNIT, EMPTY_BYTES, MODULE_STATE, POSITION_STATE } = require('../helpers/constants');
 
-describe('contract MatrixToken', async () => {
+describe('contract MatrixToken', () => {
   const [owner, feeRecipient, manager, mockBasicIssuanceModule, mockLockedModule, unaddedModule, pendingModule, testAccount, randomAccount] = getSigners();
   const firstComponentUnits = ethToWei(1);
   const secondComponentUnits = ethToWei(2);
@@ -32,8 +32,8 @@ describe('contract MatrixToken', async () => {
   let modules;
   let units;
 
-  async function shouldRevertIfModuleDisabled(aTestFun) {
-    describe('when the calling module is disabled', async () => {
+  function shouldRevertIfModuleDisabled(aTestFun) {
+    describe('when the calling module is disabled', () => {
       let snapshotId;
       beforeEach(async () => {
         snapshotId = await snapshotBlockchain();
@@ -50,15 +50,15 @@ describe('contract MatrixToken', async () => {
     });
   }
 
-  async function shouldRevertIfCallerIsNotModule(aTestFun) {
+  function shouldRevertIfCallerIsNotModule(aTestFun) {
     it('should revert when the caller is not a module', async () => {
       caller = randomAccount;
       await expect(aTestFun()).revertedWith('T11a');
     });
   }
 
-  async function shouldRevertIfMatrixTokenIsLocked(aTestFun) {
-    describe('when the MatrixToken is locked', async () => {
+  function shouldRevertIfMatrixTokenIsLocked(aTestFun) {
+    describe('when the MatrixToken is locked', () => {
       let snapshotId;
       beforeEach(async () => {
         snapshotId = await snapshotBlockchain();
@@ -84,7 +84,7 @@ describe('contract MatrixToken', async () => {
     await revertBlockchain(snapshotId);
   });
 
-  describe('constructor', async () => {
+  describe('constructor', () => {
     before(async () => {
       firstComponent = await deployContract('Erc20Mock', ['First', 'MOCK', 18], owner);
       secondComponent = await deployContract('Erc20Mock', ['Second', 'MOCK', 18], owner);
@@ -162,14 +162,14 @@ describe('contract MatrixToken', async () => {
     });
   });
 
-  describe('when there is a deployed MatrixToken', async () => {
+  describe('when there is a deployed MatrixToken', () => {
     before(async () => {
       await controller.initialize([], modules, [], []);
       await matrixToken.connect(mockBasicIssuanceModule).initializeModule();
       await matrixToken.connect(mockLockedModule).initializeModule();
     });
 
-    describe('invoke', async () => {
+    describe('invoke', () => {
       let testSpender;
       let burnQuantity;
       let callData;
@@ -275,7 +275,7 @@ describe('contract MatrixToken', async () => {
       });
     });
 
-    describe('addComponent', async () => {
+    describe('addComponent', () => {
       let component;
 
       let snapshotId;
@@ -318,7 +318,7 @@ describe('contract MatrixToken', async () => {
       shouldRevertIfMatrixTokenIsLocked(addComponent);
     });
 
-    describe('removeComponent', async () => {
+    describe('removeComponent', () => {
       let component;
 
       let snapshotId;
@@ -358,7 +358,7 @@ describe('contract MatrixToken', async () => {
       shouldRevertIfMatrixTokenIsLocked(removeComponent);
     });
 
-    describe('editDefaultPositionUnit', async () => {
+    describe('editDefaultPositionUnit', () => {
       const multiplier = ethToWei(2);
 
       let component;
@@ -420,7 +420,7 @@ describe('contract MatrixToken', async () => {
       shouldRevertIfMatrixTokenIsLocked(editDefaultPositionUnit);
     });
 
-    describe('addExternalPositionModule', async () => {
+    describe('addExternalPositionModule', () => {
       let component;
       let externalModule;
 
@@ -467,7 +467,7 @@ describe('contract MatrixToken', async () => {
       shouldRevertIfMatrixTokenIsLocked(addExternalPositionModule);
     });
 
-    describe('removeExternalPositionModule', async () => {
+    describe('removeExternalPositionModule', () => {
       let component;
       let externalModule;
 
@@ -525,7 +525,7 @@ describe('contract MatrixToken', async () => {
       shouldRevertIfMatrixTokenIsLocked(removeExternalPositionModule);
     });
 
-    describe('editExternalPositionUnit', async () => {
+    describe('editExternalPositionUnit', () => {
       const multiplier = ethToWei(2);
 
       let component;
@@ -593,7 +593,7 @@ describe('contract MatrixToken', async () => {
       shouldRevertIfMatrixTokenIsLocked(editExternalPositionUnit);
     });
 
-    describe('editExternalPositionData', async () => {
+    describe('editExternalPositionData', () => {
       let component;
       let module;
       let data;
@@ -633,7 +633,7 @@ describe('contract MatrixToken', async () => {
       shouldRevertIfMatrixTokenIsLocked(editExternalPositionData);
     });
 
-    describe('editPositionMultiplier', async () => {
+    describe('editPositionMultiplier', () => {
       let subjectPositionMultiplier;
 
       let snapshotId;
@@ -697,7 +697,7 @@ describe('contract MatrixToken', async () => {
       shouldRevertIfModuleDisabled(editPositionMultiplier);
     });
 
-    describe('lock', async () => {
+    describe('lock', () => {
       let snapshotId;
       before(async () => {
         snapshotId = await snapshotBlockchain();
@@ -738,7 +738,7 @@ describe('contract MatrixToken', async () => {
       shouldRevertIfModuleDisabled(lock);
     });
 
-    describe('unlock', async () => {
+    describe('unlock', () => {
       let snapshotId;
       before(async () => {
         snapshotId = await snapshotBlockchain();
@@ -790,7 +790,7 @@ describe('contract MatrixToken', async () => {
       shouldRevertIfModuleDisabled(unlock);
     });
 
-    describe('mint', async () => {
+    describe('mint', () => {
       const quantity = ethToWei(3);
       const mintee = manager.address;
 
@@ -839,7 +839,7 @@ describe('contract MatrixToken', async () => {
       shouldRevertIfModuleDisabled(mint);
     });
 
-    describe('burn', async () => {
+    describe('burn', () => {
       const mintQuantity = ethToWei(4);
       const burnQuantity = ethToWei(3);
 
@@ -897,7 +897,7 @@ describe('contract MatrixToken', async () => {
       shouldRevertIfModuleDisabled(burn);
     });
 
-    describe('addModule', async () => {
+    describe('addModule', () => {
       let module;
 
       let snapshotId;
@@ -943,7 +943,7 @@ describe('contract MatrixToken', async () => {
       });
     });
 
-    describe('removeModule', async () => {
+    describe('removeModule', () => {
       let module;
       let moduleMock;
 
@@ -1021,7 +1021,7 @@ describe('contract MatrixToken', async () => {
       });
     });
 
-    describe('removePendingModule', async () => {
+    describe('removePendingModule', () => {
       let module;
       let moduleMock;
 
@@ -1071,7 +1071,7 @@ describe('contract MatrixToken', async () => {
       });
     });
 
-    describe('setManager', async () => {
+    describe('setManager', () => {
       const testManager = testAccount.address;
       caller = manager;
 
@@ -1109,7 +1109,7 @@ describe('contract MatrixToken', async () => {
       });
     });
 
-    describe('initializeModule', async () => {
+    describe('initializeModule', () => {
       const module = testAccount.address;
 
       let snapshotId;
@@ -1161,7 +1161,7 @@ describe('contract MatrixToken', async () => {
       });
     });
 
-    describe('getDefaultPositionRealUnit', async () => {
+    describe('getDefaultPositionRealUnit', () => {
       const multiplier = ethToWei(2);
 
       let snapshotId;
@@ -1181,7 +1181,7 @@ describe('contract MatrixToken', async () => {
       });
     });
 
-    describe('getExternalPositionRealUnit', async () => {
+    describe('getExternalPositionRealUnit', () => {
       const multiplier = ethToWei(2);
       const externalUnitToAdd = ethToWei(9);
 
@@ -1204,7 +1204,7 @@ describe('contract MatrixToken', async () => {
       });
     });
 
-    describe('getComponents', async () => {
+    describe('getComponents', () => {
       let snapshotId;
       before(async () => {
         snapshotId = await snapshotBlockchain();
@@ -1220,7 +1220,7 @@ describe('contract MatrixToken', async () => {
       });
     });
 
-    describe('getExternalPositionModules', async () => {
+    describe('getExternalPositionModules', () => {
       let snapshotId;
       before(async () => {
         snapshotId = await snapshotBlockchain();
@@ -1240,7 +1240,7 @@ describe('contract MatrixToken', async () => {
       });
     });
 
-    describe('getExternalPositionData', async () => {
+    describe('getExternalPositionData', () => {
       let snapshotId;
       before(async () => {
         snapshotId = await snapshotBlockchain();
@@ -1260,7 +1260,7 @@ describe('contract MatrixToken', async () => {
       });
     });
 
-    describe('getPositions', async () => {
+    describe('getPositions', () => {
       const externalData = '0x11';
       const multiplier = ethToWei(0.5);
       const externalRealUnit = ethToWei(-1);
@@ -1325,14 +1325,14 @@ describe('contract MatrixToken', async () => {
       });
     });
 
-    describe('getModules', async () => {
+    describe('getModules', () => {
       it('should return the correct modules', async () => {
         const result = await matrixToken.getModules();
         expect(compareArray(result, modules)).is.true;
       });
     });
 
-    describe('getTotalComponentRealUnits', async () => {
+    describe('getTotalComponentRealUnits', () => {
       const externalRealUnit1 = ethToWei(6);
       const externalRealUnit2 = ethToWei(-1);
 
@@ -1360,7 +1360,7 @@ describe('contract MatrixToken', async () => {
       });
     });
 
-    describe('isInitializedModule', async () => {
+    describe('isInitializedModule', () => {
       it('should return ture if module is initialized', async () => {
         const result = await matrixToken.isInitializedModule(modules[0]);
         expect(result).is.true;

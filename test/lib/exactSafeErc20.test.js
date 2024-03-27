@@ -13,7 +13,7 @@ const { deployContract } = require('../helpers/deploy');
 const { testCases } = require('../cases/exactSafeErc20.json');
 const { snapshotBlockchain, revertBlockchain } = require('../helpers/evmUtil.js');
 
-describe('library ExactSafeErc20', async () => {
+describe('library ExactSafeErc20', () => {
   let appMock;
   let erc20Mock;
   const [owner, userA, userB] = provider.getWallets();

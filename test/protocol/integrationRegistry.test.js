@@ -12,7 +12,7 @@ const { ZERO_ADDRESS } = require('../helpers/constants');
 const { getSigners } = require('../helpers/accountUtil');
 const { snapshotBlockchain, revertBlockchain } = require('../helpers/evmUtil.js');
 
-describe('contract IntegrationRegistry', async () => {
+describe('contract IntegrationRegistry', () => {
   const [firstAdapterName, secondAdapterName, thirdAdapterName] = ['COMPOUND', 'KYBER', 'ONEINCH'];
   const [owner, firstAdapter, secondAdapter, firstModule, secondModule, thirdModule, randomAccount] = getSigners();
 
@@ -31,7 +31,7 @@ describe('contract IntegrationRegistry', async () => {
     revertBlockchain(snapshotId);
   });
 
-  describe('addIntegration', async () => {
+  describe('addIntegration', () => {
     let module;
     let adapterName;
     let adapter;
@@ -90,7 +90,7 @@ describe('contract IntegrationRegistry', async () => {
     });
   });
 
-  describe('batchAddIntegration', async () => {
+  describe('batchAddIntegration', () => {
     let modules;
     let adapterNames;
     let adapters;
@@ -186,7 +186,7 @@ describe('contract IntegrationRegistry', async () => {
     });
   });
 
-  describe('removeIntegration', async () => {
+  describe('removeIntegration', () => {
     let module;
     let adapterName;
 
@@ -236,7 +236,7 @@ describe('contract IntegrationRegistry', async () => {
     });
   });
 
-  describe('editIntegration', async () => {
+  describe('editIntegration', () => {
     let subjectModule;
     let subjectAdapterName;
     let subjectAdapter;
@@ -298,7 +298,7 @@ describe('contract IntegrationRegistry', async () => {
     });
   });
 
-  describe('batchEditIntegration', async () => {
+  describe('batchEditIntegration', () => {
     let modules;
     let adapterNames;
     let adapters;
@@ -388,7 +388,7 @@ describe('contract IntegrationRegistry', async () => {
     });
   });
 
-  describe('isValidIntegration', async () => {
+  describe('isValidIntegration', () => {
     let snapshotId;
     before(async () => {
       snapshotId = await snapshotBlockchain();
@@ -410,7 +410,7 @@ describe('contract IntegrationRegistry', async () => {
     });
   });
 
-  describe('getIntegrationAdapter', async () => {
+  describe('getIntegrationAdapter', () => {
     let snapshotId;
     before(async () => {
       snapshotId = await snapshotBlockchain();
@@ -442,7 +442,7 @@ describe('contract IntegrationRegistry', async () => {
     });
   });
 
-  describe('getIntegrationAdapterWithHash', async () => {
+  describe('getIntegrationAdapterWithHash', () => {
     let snapshotId;
     before(async () => {
       snapshotId = await snapshotBlockchain();

@@ -43,8 +43,8 @@ async function reconcileBalances(matrixToken, testFun, signer) {
   }
 }
 
-describe('contract NavIssuanceModule', async () => {
-  const [owner, protocolFeeRecipient, feeRecipient, recipient, randomAccount] = await getSigners();
+describe('contract NavIssuanceModule', () => {
+  const [owner, protocolFeeRecipient, feeRecipient, recipient, randomAccount] = getSigners();
   const systemFixture = new SystemFixture(owner, protocolFeeRecipient);
   const protocolFeeRecipientAddress = protocolFeeRecipient.address;
 
@@ -62,7 +62,7 @@ describe('contract NavIssuanceModule', async () => {
     await revertBlockchain(snapshotId);
   });
 
-  describe('constructor', async () => {
+  describe('constructor', () => {
     it('should set the correct controller', async () => {
       const controller = await systemFixture.navIssuanceModule.getController();
       expect(controller).eq(systemFixture.controller.address);
@@ -74,7 +74,7 @@ describe('contract NavIssuanceModule', async () => {
     });
   });
 
-  describe('initialize', async () => {
+  describe('initialize', () => {
     const managerFees = [ethToWei(0.001), ethToWei(0.002)]; // Set manager issue fee to 0.1% and redeem to 0.2%
     const maxManagerFee = ethToWei(0.02); // Set max managerFee to 2%
     const premiumPercentage = ethToWei(0.01); // Set premium to 1%
@@ -232,7 +232,7 @@ describe('contract NavIssuanceModule', async () => {
     });
   });
 
-  describe('removeModule', async () => {
+  describe('removeModule', () => {
     let snapshotId;
     before(async () => {
       snapshotId = await snapshotBlockchain();
@@ -305,7 +305,7 @@ describe('contract NavIssuanceModule', async () => {
     });
   });
 
-  describe('getReserveAssets', async () => {
+  describe('getReserveAssets', () => {
     let reserveAssets;
 
     let snapshotId;
@@ -349,7 +349,7 @@ describe('contract NavIssuanceModule', async () => {
     });
   });
 
-  describe('getIssuePremium', async () => {
+  describe('getIssuePremium', () => {
     let premiumPercentage;
 
     let snapshotId;
@@ -394,7 +394,7 @@ describe('contract NavIssuanceModule', async () => {
     });
   });
 
-  describe('getRedeemPremium', async () => {
+  describe('getRedeemPremium', () => {
     let premiumPercentage;
 
     let snapshotId;
@@ -439,7 +439,7 @@ describe('contract NavIssuanceModule', async () => {
     });
   });
 
-  describe('getManagerFee', async () => {
+  describe('getManagerFee', () => {
     let managerFees;
 
     let snapshotId;
@@ -482,7 +482,7 @@ describe('contract NavIssuanceModule', async () => {
     });
   });
 
-  describe('getExpectedMatrixTokenIssueQuantity', async () => {
+  describe('getExpectedMatrixTokenIssueQuantity', () => {
     let managerFees;
     let protocolDirectFee;
     let premiumPercentage;
@@ -547,7 +547,7 @@ describe('contract NavIssuanceModule', async () => {
     });
   });
 
-  describe('getExpectedReserveRedeemQuantity', async () => {
+  describe('getExpectedReserveRedeemQuantity', () => {
     let managerFees;
     let protocolDirectFee;
     let premiumPercentage;
@@ -620,7 +620,7 @@ describe('contract NavIssuanceModule', async () => {
     });
   });
 
-  describe('isIssueValid', async () => {
+  describe('isIssueValid', () => {
     let reserveAsset;
     let reserveQuantity;
 
@@ -702,7 +702,7 @@ describe('contract NavIssuanceModule', async () => {
     });
   });
 
-  describe('isRedeemValid', async () => {
+  describe('isRedeemValid', () => {
     let reserveAsset;
     let matrixTokenQuantity;
 
@@ -800,7 +800,7 @@ describe('contract NavIssuanceModule', async () => {
     });
   });
 
-  describe('issue', async () => {
+  describe('issue', () => {
     const units = [ethToWei(1), usdToWei(270), btcToWei(1).div(10), ethToWei(600)]; // Valued at 2000 USDC
 
     let reserveAsset;
@@ -987,7 +987,7 @@ describe('contract NavIssuanceModule', async () => {
           await expect(issue()).revertedWith('M3');
         });
 
-        describe('case 1.1: when the issue quantity is extremely small', async () => {
+        describe('case 1.1: when the issue quantity is extremely small', () => {
           beforeEach(async () => {
             reserveQuantity = ONE;
           });
@@ -1053,7 +1053,7 @@ describe('contract NavIssuanceModule', async () => {
           });
         });
 
-        describe('case 1.2: when a MatrixToken position is not in default state', async () => {
+        describe('case 1.2: when a MatrixToken position is not in default state', () => {
           beforeEach(async () => {
             // Add self as module and update the position state
             await systemFixture.controller.addModule(owner.address);
@@ -1241,7 +1241,7 @@ describe('contract NavIssuanceModule', async () => {
     });
   });
 
-  describe('issueWithEther', async () => {
+  describe('issueWithEther', () => {
     const units = [ethToWei(1), usdToWei(270), btcToWei(1).div(10), ethToWei(600)]; // Valued at 2000 USDC
 
     let minMatrixTokenReceived;
@@ -1421,7 +1421,7 @@ describe('contract NavIssuanceModule', async () => {
           await expect(issueWithEther()).revertedWith('M3');
         });
 
-        describe('case 1.1: when a MatrixToken position is not in default state', async () => {
+        describe('case 1.1: when a MatrixToken position is not in default state', () => {
           beforeEach(async () => {
             // Add self as module and update the position state
             await systemFixture.controller.addModule(owner.address);
@@ -1590,7 +1590,7 @@ describe('contract NavIssuanceModule', async () => {
     });
   });
 
-  describe('redeem', async () => {
+  describe('redeem', () => {
     const units = [ethToWei(1), usdToWei(570), btcToWei(1).div(10), ethToWei(300)]; // Valued at 2000 USDC
 
     let reserveAsset;
@@ -1801,7 +1801,7 @@ describe('contract NavIssuanceModule', async () => {
           await expect(redeem()).revertedWith('M3');
         });
 
-        describe('case 1.1: when the redeem quantity is extremely small', async () => {
+        describe('case 1.1: when the redeem quantity is extremely small', () => {
           beforeEach(async () => {
             matrixTokenQuantity = ONE;
           });
@@ -1871,7 +1871,7 @@ describe('contract NavIssuanceModule', async () => {
           });
         });
 
-        describe('case 1.2: when a MatrixToken position is not in default state', async () => {
+        describe('case 1.2: when a MatrixToken position is not in default state', () => {
           beforeEach(async () => {
             // Add self as module and update the position state
             await systemFixture.controller.addModule(owner.address);
@@ -2075,7 +2075,7 @@ describe('contract NavIssuanceModule', async () => {
     });
   });
 
-  describe('redeemIntoEther', async () => {
+  describe('redeemIntoEther', () => {
     const units = [ethToWei(1), usdToWei(270), btcToWei(1).div(10), ethToWei(600)]; // Valued at 2000 USDC
 
     let matrixToken;
@@ -2477,7 +2477,7 @@ describe('contract NavIssuanceModule', async () => {
       revertBlockchain(snapshotId);
     });
 
-    describe('addReserveAsset', async () => {
+    describe('addReserveAsset', () => {
       let reserveAsset;
 
       beforeEach(async () => {
@@ -2512,7 +2512,7 @@ describe('contract NavIssuanceModule', async () => {
       shouldRevertIfModuleDisabled(addReserveAsset);
     });
 
-    describe('removeReserveAsset', async () => {
+    describe('removeReserveAsset', () => {
       let reserveAsset;
 
       beforeEach(async () => {
@@ -2548,7 +2548,7 @@ describe('contract NavIssuanceModule', async () => {
       shouldRevertIfModuleDisabled(removeReserveAsset);
     });
 
-    describe('editPremium', async () => {
+    describe('editPremium', () => {
       let premium;
 
       beforeEach(async () => {
@@ -2581,7 +2581,7 @@ describe('contract NavIssuanceModule', async () => {
       shouldRevertIfModuleDisabled(editPremium);
     });
 
-    describe('editManagerFee', async () => {
+    describe('editManagerFee', () => {
       let managerFee;
       let feeIndex;
 
@@ -2624,7 +2624,7 @@ describe('contract NavIssuanceModule', async () => {
       shouldRevertIfModuleDisabled(editManagerFee);
     });
 
-    describe('editFeeRecipient', async () => {
+    describe('editFeeRecipient', () => {
       let feeRecipientAddress;
 
       beforeEach(async () => {

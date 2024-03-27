@@ -19,8 +19,8 @@ const { snapshotBlockchain, revertBlockchain } = require('../../helpers/evmUtil.
 const { deployContract, deployContractAndLinkLibraries } = require('../../helpers/deploy');
 const { ZERO, ZERO_ADDRESS, EMPTY_BYTES, MAX_UINT_256 } = require('../../helpers/constants');
 
-describe('contract AaveLeverageModule', async () => {
-  const [owner, protocolFeeRecipient, mockModule, randomAccount] = await getSigners();
+describe('contract AaveLeverageModule', () => {
+  const [owner, protocolFeeRecipient, mockModule, randomAccount] = getSigners();
   const systemFixture = new SystemFixture(owner, protocolFeeRecipient);
   const protocolFeeRecipientAddress = protocolFeeRecipient.address;
   const aaveV2Fixture = new AaveV2Fixture(owner);
@@ -185,7 +185,7 @@ describe('contract AaveLeverageModule', async () => {
     await revertBlockchain(snapshotId);
   });
 
-  describe('constructor', async () => {
+  describe('constructor', () => {
     it('should set the correct controller', async () => {
       const controller = await aaveLeverageModule.getController();
       expect(controller).eq(systemFixture.controller.address);
@@ -210,7 +210,7 @@ describe('contract AaveLeverageModule', async () => {
     });
   });
 
-  describe('initialize', async () => {
+  describe('initialize', () => {
     let caller;
     let isAllowed;
     let matrixToken;
@@ -289,7 +289,7 @@ describe('contract AaveLeverageModule', async () => {
         expect(isRegistered).is.true;
       });
 
-      describe('when debt issuance module is not added to integration registry', async () => {
+      describe('when debt issuance module is not added to integration registry', () => {
         beforeEach(async () => {
           await systemFixture.integrationRegistry.removeIntegration(aaveLeverageModule.address, 'DEFAULT_ISSUANCE_MODULE');
         });
@@ -304,7 +304,7 @@ describe('contract AaveLeverageModule', async () => {
         });
       });
 
-      describe('when debt issuance module is not initialized on MatrixToken', async () => {
+      describe('when debt issuance module is not initialized on MatrixToken', () => {
         beforeEach(async () => {
           await matrixToken.removeModule(debtIssuanceMock.address);
         });
@@ -340,7 +340,7 @@ describe('contract AaveLeverageModule', async () => {
       });
     });
 
-    describe('when isAllowed is false', async () => {
+    describe('when isAllowed is false', () => {
       beforeEach(async () => {
         isAllowed = false;
         await initContracts();
@@ -360,7 +360,7 @@ describe('contract AaveLeverageModule', async () => {
     });
   });
 
-  describe('lever', async () => {
+  describe('lever', () => {
     const destTokenQuantity = ethToWei(1);
     const minCollateralQuantity = ethToWei(1);
 
@@ -447,7 +447,7 @@ describe('contract AaveLeverageModule', async () => {
           .lever(matrixTokenAddress, borrowAsset, collateralAsset, borrowQuantity, minCollateralQuantity, tradeAdapterName, tradeData);
       }
 
-      describe('when module is initialized', async () => {
+      describe('when module is initialized', () => {
         beforeEach(async () => {
           notInitialized = true;
           await initContracts();
@@ -540,7 +540,7 @@ describe('contract AaveLeverageModule', async () => {
           await expect(lever()).revertedWith('M1b');
         });
 
-        describe('when the leverage position has been liquidated', async () => {
+        describe('when the leverage position has been liquidated', () => {
           const ethSeized = ethToWei(1);
 
           beforeEach(async () => {
@@ -613,7 +613,7 @@ describe('contract AaveLeverageModule', async () => {
           });
         });
 
-        describe('when there is a protocol fee charged', async () => {
+        describe('when there is a protocol fee charged', () => {
           const feePercentage = ethToWei(0.05);
 
           beforeEach(async () => {
@@ -723,7 +723,7 @@ describe('contract AaveLeverageModule', async () => {
         });
       });
 
-      describe('when module is not initialized', async () => {
+      describe('when module is not initialized', () => {
         beforeEach(async () => {
           notInitialized = false;
           await initContracts();
@@ -850,7 +850,7 @@ describe('contract AaveLeverageModule', async () => {
     });
   });
 
-  describe('delever', async () => {
+  describe('delever', () => {
     let redeemQuantity;
 
     let caller;
@@ -975,7 +975,7 @@ describe('contract AaveLeverageModule', async () => {
         .delever(matrixTokenAddress, collateralAsset, repayAsset, redeemQuantity, minRepayQuantity, tradeAdapterName, tradeData);
     }
 
-    describe('when module is initialized', async () => {
+    describe('when module is initialized', () => {
       beforeEach(async () => {
         notInitialized = true;
         await initContracts();
@@ -1068,7 +1068,7 @@ describe('contract AaveLeverageModule', async () => {
         await expect(delever()).revertedWith('M1b');
       });
 
-      describe('when there is a protocol fee charged', async () => {
+      describe('when there is a protocol fee charged', () => {
         let feePercentage;
 
         beforeEach(async () => {
@@ -1148,7 +1148,7 @@ describe('contract AaveLeverageModule', async () => {
         });
       });
 
-      describe('when used to delever to zero', async () => {
+      describe('when used to delever to zero', () => {
         beforeEach(async () => {
           minRepayQuantity = ethToWei(1001);
           await oneInchExchangeMockFromWeth.updateReceiveAmount(minRepayQuantity);
@@ -1218,7 +1218,7 @@ describe('contract AaveLeverageModule', async () => {
       });
     });
 
-    describe('when module is not initialized', async () => {
+    describe('when module is not initialized', () => {
       beforeEach(async () => {
         notInitialized = false;
         await initContracts();
@@ -1231,7 +1231,7 @@ describe('contract AaveLeverageModule', async () => {
     });
   });
 
-  describe('deleverToZeroBorrowBalance', async () => {
+  describe('deleverToZeroBorrowBalance', () => {
     const uniswapFixture = new UniswapFixture(owner);
 
     let caller;
@@ -1356,7 +1356,7 @@ describe('contract AaveLeverageModule', async () => {
         .deleverToZeroBorrowBalance(matrixTokenAddress, collateralAsset, repayAsset, redeemQuantity, tradeAdapterName, tradeData);
     }
 
-    describe('when module is initialized', async () => {
+    describe('when module is initialized', () => {
       beforeEach(async () => {
         notInitialized = true;
         await initContracts();
@@ -1471,7 +1471,7 @@ describe('contract AaveLeverageModule', async () => {
       });
     });
 
-    describe('when module is not initialized', async () => {
+    describe('when module is not initialized', () => {
       beforeEach(async () => {
         notInitialized = false;
         await initContracts();
@@ -1484,7 +1484,7 @@ describe('contract AaveLeverageModule', async () => {
     });
   });
 
-  describe('sync', async () => {
+  describe('sync', () => {
     let caller;
     let matrixToken;
     let notInitialized;
@@ -1602,7 +1602,7 @@ describe('contract AaveLeverageModule', async () => {
         }
       };
 
-      describe('when module is initialized', async () => {
+      describe('when module is initialized', () => {
         beforeEach(async () => {
           notInitialized = true;
           await initContracts();
@@ -1661,7 +1661,7 @@ describe('contract AaveLeverageModule', async () => {
           expect(newFourthPosition.unit).eq(expectedFourthPositionUnit);
         });
 
-        describe('when leverage position has been liquidated', async () => {
+        describe('when leverage position has been liquidated', () => {
           let liquidationRepayQuantity;
 
           beforeEach(async () => {
@@ -1763,7 +1763,7 @@ describe('contract AaveLeverageModule', async () => {
         });
       });
 
-      describe('when module is not initialized', async () => {
+      describe('when module is not initialized', () => {
         it('should revert when module is not initialized', async () => {
           notInitialized = false;
           await expect(sync()).revertedWith('M3');
@@ -1771,7 +1771,7 @@ describe('contract AaveLeverageModule', async () => {
       });
     });
 
-    describe('when MatrixToken total supply is 0', async () => {
+    describe('when MatrixToken total supply is 0', () => {
       async function initContracts() {
         matrixToken = await systemFixture.createMatrixToken(
           [aWETH.address, aDAI.address],
@@ -1818,7 +1818,7 @@ describe('contract AaveLeverageModule', async () => {
     });
   });
 
-  describe('addCollateralAssets', async () => {
+  describe('addCollateralAssets', () => {
     let caller;
     let matrixToken;
     let notInitialized;
@@ -1893,7 +1893,7 @@ describe('contract AaveLeverageModule', async () => {
         });
       });
 
-      describe('when re-adding a removed collateral asset', async () => {
+      describe('when re-adding a removed collateral asset', () => {
         beforeEach(async () => {
           // Mint aTokens
           await systemFixture.weth.approve(aaveV2Fixture.lendingPool.address, ethToWei(1000));
@@ -1928,7 +1928,7 @@ describe('contract AaveLeverageModule', async () => {
         await expect(addCollateralAssets()).revertedWith('L12a');
       });
 
-      describe('when a new Aave reserve is added as collateral', async () => {
+      describe('when a new Aave reserve is added as collateral', () => {
         beforeEach(async () => {
           // Create a new reserve
           await aaveV2Fixture.createAndEnableReserve(
@@ -1966,7 +1966,7 @@ describe('contract AaveLeverageModule', async () => {
         await expect(addCollateralAssets()).revertedWith('L12c');
       });
 
-      describe('when collateral asset reserve is frozen on Aave', async () => {
+      describe('when collateral asset reserve is frozen on Aave', () => {
         beforeEach(async () => {
           await aaveV2Fixture.lendingPoolConfigurator.connect(owner).freezeReserve(systemFixture.dai.address);
         });
@@ -2005,7 +2005,7 @@ describe('contract AaveLeverageModule', async () => {
       });
     });
 
-    describe('when module is not initialized', async () => {
+    describe('when module is not initialized', () => {
       beforeEach(async () => {
         notInitialized = false;
         await initContracts();
@@ -2018,7 +2018,7 @@ describe('contract AaveLeverageModule', async () => {
     });
   });
 
-  describe('addBorrowAssets', async () => {
+  describe('addBorrowAssets', () => {
     let caller;
     let matrixToken;
     let borrowAssets;
@@ -2114,7 +2114,7 @@ describe('contract AaveLeverageModule', async () => {
         await expect(addBorrowAssets()).revertedWith('M1a');
       });
 
-      describe('when borrow asset reserve is frozen on Aave', async () => {
+      describe('when borrow asset reserve is frozen on Aave', () => {
         beforeEach(async () => {
           await aaveV2Fixture.lendingPoolConfigurator.connect(owner).freezeReserve(systemFixture.dai.address);
         });
@@ -2128,7 +2128,7 @@ describe('contract AaveLeverageModule', async () => {
         });
       });
 
-      describe('when a new Aave reserve is added as borrow', async () => {
+      describe('when a new Aave reserve is added as borrow', () => {
         beforeEach(async () => {
           // Create a new reserve
           await aaveV2Fixture.createAndEnableReserve(
@@ -2162,7 +2162,7 @@ describe('contract AaveLeverageModule', async () => {
       });
     });
 
-    describe('when module is not initialized', async () => {
+    describe('when module is not initialized', () => {
       beforeEach(async () => {
         notInitialized = false;
         await initContracts();
@@ -2175,7 +2175,7 @@ describe('contract AaveLeverageModule', async () => {
     });
   });
 
-  describe('registerToModule', async () => {
+  describe('registerToModule', () => {
     let matrixToken;
     let notInitialized;
     let matrixTokenAddress;
@@ -2254,7 +2254,7 @@ describe('contract AaveLeverageModule', async () => {
       });
     });
 
-    describe('when module is not initialized', async () => {
+    describe('when module is not initialized', () => {
       beforeEach(async () => {
         notInitialized = false;
         await initContracts();
@@ -2267,7 +2267,7 @@ describe('contract AaveLeverageModule', async () => {
     });
   });
 
-  describe('moduleIssueHook', async () => {
+  describe('moduleIssueHook', () => {
     let caller;
     let matrixToken;
     let notInitialized;
@@ -2453,7 +2453,7 @@ describe('contract AaveLeverageModule', async () => {
     });
   });
 
-  describe('moduleRedeemHook', async () => {
+  describe('moduleRedeemHook', () => {
     let caller;
     let matrixToken;
     let notInitialized;
@@ -2639,7 +2639,7 @@ describe('contract AaveLeverageModule', async () => {
     });
   });
 
-  describe('componentIssueHook', async () => {
+  describe('componentIssueHook', () => {
     const issueQuantity = ethToWei(1);
 
     let caller;
@@ -2775,7 +2775,7 @@ describe('contract AaveLeverageModule', async () => {
     });
   });
 
-  describe('componentRedeemHook', async () => {
+  describe('componentRedeemHook', () => {
     const issueQuantity = ethToWei(1);
 
     let caller;
@@ -2917,7 +2917,7 @@ describe('contract AaveLeverageModule', async () => {
     });
   });
 
-  describe('removeModule', async () => {
+  describe('removeModule', () => {
     let module;
     let matrixToken;
 
@@ -3022,7 +3022,7 @@ describe('contract AaveLeverageModule', async () => {
     });
   });
 
-  describe('removeCollateralAssets', async () => {
+  describe('removeCollateralAssets', () => {
     let caller;
     let matrixToken;
     let notInitialized;
@@ -3097,7 +3097,7 @@ describe('contract AaveLeverageModule', async () => {
         await expect(removeCollateralAssets()).revertedWith('M1a');
       });
 
-      describe('when removing a collateral asset which has been enabled to be used as collateral on aave', async () => {
+      describe('when removing a collateral asset which has been enabled to be used as collateral on aave', () => {
         beforeEach(async () => {
           // Mint aTokens
           await systemFixture.weth.approve(aaveV2Fixture.lendingPool.address, ethToWei(1000));
@@ -3125,7 +3125,7 @@ describe('contract AaveLeverageModule', async () => {
       });
     });
 
-    describe('when module is not initialized', async () => {
+    describe('when module is not initialized', () => {
       beforeEach(async () => {
         notInitialized = false;
         await initContracts();
@@ -3138,7 +3138,7 @@ describe('contract AaveLeverageModule', async () => {
     });
   });
 
-  describe('removeBorrowAssets', async () => {
+  describe('removeBorrowAssets', () => {
     let caller;
     let matrixToken;
     let borrowAssets;
@@ -3219,7 +3219,7 @@ describe('contract AaveLeverageModule', async () => {
         await expect(removeBorrowAssets()).revertedWith('L6a');
       });
 
-      describe('when borrow balance exists', async () => {
+      describe('when borrow balance exists', () => {
         beforeEach(async () => {
           // Add MatrixToken as token sender / recipient
           await oneInchExchangeMockToWeth.connect(owner).addMatrixTokenAddress(matrixToken.address);
@@ -3263,7 +3263,7 @@ describe('contract AaveLeverageModule', async () => {
       });
     });
 
-    describe('when module is not initialized', async () => {
+    describe('when module is not initialized', () => {
       beforeEach(async () => {
         notInitialized = false;
         await initContracts();
@@ -3276,7 +3276,7 @@ describe('contract AaveLeverageModule', async () => {
     });
   });
 
-  describe('updateAllowedMatrixToken', async () => {
+  describe('updateAllowedMatrixToken', () => {
     let caller;
     let status;
     let matrixToken;
@@ -3315,7 +3315,7 @@ describe('contract AaveLeverageModule', async () => {
       await expect(updateAllowedMatrixToken()).emit(aaveLeverageModule, 'UpdateMatrixTokenStatus').withArgs(matrixTokenAddress, status);
     });
 
-    describe('when disabling a MatrixToken', async () => {
+    describe('when disabling a MatrixToken', () => {
       beforeEach(async () => {
         await updateAllowedMatrixToken();
         status = false;
@@ -3348,7 +3348,7 @@ describe('contract AaveLeverageModule', async () => {
     });
   });
 
-  describe('updateAnyMatrixAllowed', async () => {
+  describe('updateAnyMatrixAllowed', () => {
     let caller;
     let isAnyMatrixAllowed;
 
@@ -3383,7 +3383,7 @@ describe('contract AaveLeverageModule', async () => {
     });
   });
 
-  describe('addUnderlyingToReserveTokensMappings', async () => {
+  describe('addUnderlyingToReserveTokensMappings', () => {
     let caller;
     let underlying;
     let usdcReserveTokens; // ReserveTokens

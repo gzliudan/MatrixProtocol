@@ -14,8 +14,8 @@ const { ethToWei, btcToWei, usdToWei } = require('../../helpers/unitUtil');
 const { preciseMul, preciseMulCeilUint } = require('../../helpers/mathUtil');
 const { snapshotBlockchain, revertBlockchain } = require('../../helpers/evmUtil.js');
 
-describe('contract SlippageIssuanceModule', async () => {
-  const [owner, manager, protocolFeeRecipient, feeRecipient, recipient] = await getSigners();
+describe('contract SlippageIssuanceModule', () => {
+  const [owner, manager, protocolFeeRecipient, feeRecipient, recipient] = getSigners();
   const systemFixture = new SystemFixture(owner, protocolFeeRecipient);
   const protocolFeeRecipientAddress = protocolFeeRecipient.address;
 
@@ -79,7 +79,7 @@ describe('contract SlippageIssuanceModule', async () => {
       await revertBlockchain(snapshotId);
     });
 
-    describe('getRequiredComponentIssuanceUnitsOffChain', async () => {
+    describe('getRequiredComponentIssuanceUnitsOffChain', () => {
       const debtUnits = ethToWei(100);
 
       let issueQuantity;
@@ -149,7 +149,7 @@ describe('contract SlippageIssuanceModule', async () => {
         expect(JSON.stringify(expectedDebtFlows)).eq(JSON.stringify(totalDebtUnits));
       });
 
-      describe('when positional adjustments are needed to account for positions changed during issuance', async () => {
+      describe('when positional adjustments are needed to account for positions changed during issuance', () => {
         let ethIssuanceAdjustment;
         let daiDebtAdjustment;
 
@@ -158,7 +158,7 @@ describe('contract SlippageIssuanceModule', async () => {
           await debtModuleMock.addDebtIssuanceAdjustment(systemFixture.dai.address, daiDebtAdjustment);
         });
 
-        describe('when positional adjustments are positive numbers', async () => {
+        describe('when positional adjustments are positive numbers', () => {
           before(async () => {
             ethIssuanceAdjustment = ethToWei(0.01);
             daiDebtAdjustment = ethToWei(1.5);
@@ -186,7 +186,7 @@ describe('contract SlippageIssuanceModule', async () => {
           });
         });
 
-        describe('when positional adjustments are negative numbers', async () => {
+        describe('when positional adjustments are negative numbers', () => {
           before(async () => {
             ethIssuanceAdjustment = ethToWei(0.01).mul(-1);
             daiDebtAdjustment = ethToWei(1.5).mul(-1);
@@ -214,7 +214,7 @@ describe('contract SlippageIssuanceModule', async () => {
           });
         });
 
-        describe('when equity positional adjustments lead to negative results', async () => {
+        describe('when equity positional adjustments lead to negative results', () => {
           before(async () => {
             ethIssuanceAdjustment = ethToWei(1.1).mul(-1);
           });
@@ -229,7 +229,7 @@ describe('contract SlippageIssuanceModule', async () => {
           });
         });
 
-        describe('when debt positional adjustments lead to negative results', async () => {
+        describe('when debt positional adjustments lead to negative results', () => {
           before(async () => {
             daiDebtAdjustment = ethToWei(101);
           });
@@ -246,7 +246,7 @@ describe('contract SlippageIssuanceModule', async () => {
       });
     });
 
-    describe('getRequiredComponentRedemptionUnitsOffChain', async () => {
+    describe('getRequiredComponentRedemptionUnitsOffChain', () => {
       const debtUnits = ethToWei(100);
 
       let redeemQuantity;
@@ -277,7 +277,7 @@ describe('contract SlippageIssuanceModule', async () => {
         expect(JSON.stringify(expectedDebtFlows)).eq(JSON.stringify(totalDebtUnits));
       });
 
-      describe('when an additive external equity position is in place', async () => {
+      describe('when an additive external equity position is in place', () => {
         const externalUnits = ethToWei(1);
 
         beforeEach(async () => {
@@ -301,7 +301,7 @@ describe('contract SlippageIssuanceModule', async () => {
         });
       });
 
-      describe('when a non-additive external equity position is in place', async () => {
+      describe('when a non-additive external equity position is in place', () => {
         const externalUnits = btcToWei(0.5);
 
         beforeEach(async () => {
@@ -326,7 +326,7 @@ describe('contract SlippageIssuanceModule', async () => {
         });
       });
 
-      describe('when positional adjustments are needed to account for positions changed during redemption', async () => {
+      describe('when positional adjustments are needed to account for positions changed during redemption', () => {
         let daiDebtAdjustment;
         let ethIssuanceAdjustment;
 
@@ -335,7 +335,7 @@ describe('contract SlippageIssuanceModule', async () => {
           await debtModuleMock.addEquityIssuanceAdjustment(systemFixture.weth.address, ethIssuanceAdjustment);
         });
 
-        describe('when positional adjustments are positive numbers', async () => {
+        describe('when positional adjustments are positive numbers', () => {
           before(async () => {
             daiDebtAdjustment = ethToWei(1.5);
             ethIssuanceAdjustment = ethToWei(0.01);
@@ -358,7 +358,7 @@ describe('contract SlippageIssuanceModule', async () => {
           });
         });
 
-        describe('when positional adjustments are negative numbers', async () => {
+        describe('when positional adjustments are negative numbers', () => {
           before(async () => {
             ethIssuanceAdjustment = ethToWei(0.01).mul(-1);
             daiDebtAdjustment = ethToWei(1.5).mul(-1);
@@ -381,7 +381,7 @@ describe('contract SlippageIssuanceModule', async () => {
           });
         });
 
-        describe('when equity positional adjustments lead to negative results', async () => {
+        describe('when equity positional adjustments lead to negative results', () => {
           before(async () => {
             ethIssuanceAdjustment = ethToWei(1.1).mul(-1);
           });
@@ -396,7 +396,7 @@ describe('contract SlippageIssuanceModule', async () => {
           });
         });
 
-        describe('when debt positional adjustments lead to negative results', async () => {
+        describe('when debt positional adjustments lead to negative results', () => {
           before(async () => {
             daiDebtAdjustment = ethToWei(101);
           });
@@ -413,7 +413,7 @@ describe('contract SlippageIssuanceModule', async () => {
       });
     });
 
-    describe('issueWithSlippage', async () => {
+    describe('issueWithSlippage', () => {
       const debtUnits = ethToWei(100);
 
       let to;
@@ -492,7 +492,7 @@ describe('contract SlippageIssuanceModule', async () => {
           .withArgs(matrixToken.address, caller.address, to, preIssueHook, issueQuantity, feeQuantity, ZERO);
       });
 
-      describe('when an external equity position is in place', async () => {
+      describe('when an external equity position is in place', () => {
         const externalUnits = ethToWei(1);
 
         before(async () => {
@@ -535,7 +535,7 @@ describe('contract SlippageIssuanceModule', async () => {
         });
       });
 
-      describe('when the manager issuance fee is 0', async () => {
+      describe('when the manager issuance fee is 0', () => {
         before(async () => {
           issueFee = ZERO;
         });
@@ -601,7 +601,7 @@ describe('contract SlippageIssuanceModule', async () => {
         expect(newBalanceOfProtocol.sub(oldBalanceOfProtocol)).eq(protocolSplit);
       });
 
-      describe('when manager issuance hook is defined', async () => {
+      describe('when manager issuance hook is defined', () => {
         before(async () => {
           preIssueHook = managerIssuanceHookMock.address;
         });
@@ -617,7 +617,7 @@ describe('contract SlippageIssuanceModule', async () => {
         });
       });
 
-      describe('when a max token amount in is submitted', async () => {
+      describe('when a max token amount in is submitted', () => {
         beforeEach(async () => {
           const mintQuantity = preciseMul(issueQuantity, ethToWei(1).add(issueFee));
           const expectedWethFlows = preciseMul(mintQuantity, ethToWei(1));
@@ -708,7 +708,7 @@ describe('contract SlippageIssuanceModule', async () => {
       });
     });
 
-    describe('redeemWithSlippage', async () => {
+    describe('redeemWithSlippage', () => {
       const debtUnits = ethToWei(100);
 
       let to;
@@ -793,7 +793,7 @@ describe('contract SlippageIssuanceModule', async () => {
           .withArgs(matrixToken.address, caller.address, to, testRedeemQuantity, feeQuantity, ZERO);
       });
 
-      describe('when an external equity position is in place', async () => {
+      describe('when an external equity position is in place', () => {
         const externalUnits = ethToWei(1);
 
         before(async () => {
@@ -836,7 +836,7 @@ describe('contract SlippageIssuanceModule', async () => {
         });
       });
 
-      describe('when the manager redemption fee is 0', async () => {
+      describe('when the manager redemption fee is 0', () => {
         before(async () => {
           redeemFee = ZERO;
         });
@@ -902,7 +902,7 @@ describe('contract SlippageIssuanceModule', async () => {
         expect(newBalanceOfProtocol.sub(oldBalanceOfProtocol)).eq(protocolSplit);
       });
 
-      describe('when a min token amount out is submitted', async () => {
+      describe('when a min token amount out is submitted', () => {
         beforeEach(async () => {
           const mintQuantity = preciseMul(testRedeemQuantity, ethToWei(1).sub(issueFee));
           const expectedWethFlows = preciseMul(mintQuantity, ethToWei(1));

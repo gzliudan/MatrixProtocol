@@ -14,8 +14,8 @@ const { preciseMul, preciseMulCeilUint } = require('../../helpers/mathUtil');
 const { getSigners, getRandomAddress } = require('../../helpers/accountUtil');
 const { snapshotBlockchain, revertBlockchain } = require('../../helpers/evmUtil.js');
 
-describe('contract DebtIssuanceModule', async () => {
-  const [owner, manager, protocolFeeRecipient, feeRecipient, recipient, dummyModule, randomAccount] = await getSigners();
+describe('contract DebtIssuanceModule', () => {
+  const [owner, manager, protocolFeeRecipient, feeRecipient, recipient, dummyModule, randomAccount] = getSigners();
   const systemFixture = new SystemFixture(owner, protocolFeeRecipient);
   const protocolFeeRecipientAddress = protocolFeeRecipient.address;
 
@@ -51,7 +51,7 @@ describe('contract DebtIssuanceModule', async () => {
     await revertBlockchain(snapshotId);
   });
 
-  describe('initialize', async () => {
+  describe('initialize', () => {
     let maxManagerFee;
     let managerIssueFee;
     let managerRedeemFee;
@@ -148,7 +148,7 @@ describe('contract DebtIssuanceModule', async () => {
       await revertBlockchain(snapshotId);
     });
 
-    describe('removeModule', async () => {
+    describe('removeModule', () => {
       let testModule;
 
       beforeEach(async () => {
@@ -177,7 +177,7 @@ describe('contract DebtIssuanceModule', async () => {
       });
     });
 
-    describe('registerToIssuanceModule', async () => {
+    describe('registerToIssuanceModule', () => {
       beforeEach(async () => {
         caller = dummyModule;
         matrixTokenAddress = matrixToken.address;
@@ -202,7 +202,7 @@ describe('contract DebtIssuanceModule', async () => {
         expect(isModuleHook).is.true;
       });
 
-      describe('when DebtIssuanceModule is not initialized', async () => {
+      describe('when DebtIssuanceModule is not initialized', () => {
         before(async () => {
           isInitialized = true;
         });
@@ -222,7 +222,7 @@ describe('contract DebtIssuanceModule', async () => {
       });
     });
 
-    describe('unregisterFromIssuanceModule', async () => {
+    describe('unregisterFromIssuanceModule', () => {
       let isRegistered = false;
 
       beforeEach(async () => {
@@ -254,7 +254,7 @@ describe('contract DebtIssuanceModule', async () => {
         expect(isModuleHook).is.false;
       });
 
-      describe('when calling module is not registered', async () => {
+      describe('when calling module is not registered', () => {
         before(async () => {
           isRegistered = true;
         });
@@ -274,7 +274,7 @@ describe('contract DebtIssuanceModule', async () => {
         await debtModuleMock.connect(manager).initialize(matrixToken.address);
       });
 
-      describe('getRequiredComponentIssuanceUnits', async () => {
+      describe('getRequiredComponentIssuanceUnits', () => {
         const debtUnits = ethToWei(100);
 
         let issueQuantity;
@@ -343,7 +343,7 @@ describe('contract DebtIssuanceModule', async () => {
         });
       });
 
-      describe('getRequiredComponentRedemptionUnits', async () => {
+      describe('getRequiredComponentRedemptionUnits', () => {
         let redeemQuantity;
 
         const debtUnits = ethToWei(100);
@@ -414,7 +414,7 @@ describe('contract DebtIssuanceModule', async () => {
         });
       });
 
-      describe('issue', async () => {
+      describe('issue', () => {
         const debtUnits = ethToWei(100);
 
         let to;
@@ -505,7 +505,7 @@ describe('contract DebtIssuanceModule', async () => {
           await expect(issue()).revertedWith('M3');
         });
 
-        describe('when an external equity position is in place', async () => {
+        describe('when an external equity position is in place', () => {
           const externalUnits = ethToWei(1);
 
           before(async () => {
@@ -550,7 +550,7 @@ describe('contract DebtIssuanceModule', async () => {
           });
         });
 
-        describe('when the manager issuance fee is 0', async () => {
+        describe('when the manager issuance fee is 0', () => {
           before(async () => {
             issueFee = ZERO;
           });
@@ -596,7 +596,7 @@ describe('contract DebtIssuanceModule', async () => {
           });
         });
 
-        describe('when protocol fees are enabled', async () => {
+        describe('when protocol fees are enabled', () => {
           const protocolFee = ethToWei(0.2);
 
           beforeEach(async () => {
@@ -623,7 +623,7 @@ describe('contract DebtIssuanceModule', async () => {
           });
         });
 
-        describe('when manager issuance hook is defined', async () => {
+        describe('when manager issuance hook is defined', () => {
           before(async () => {
             preIssueHook = managerIssuanceHookMock.address;
           });
@@ -640,7 +640,7 @@ describe('contract DebtIssuanceModule', async () => {
         });
       });
 
-      describe('redeem', async () => {
+      describe('redeem', () => {
         const debtUnits = ethToWei(100);
 
         let to;
@@ -735,7 +735,7 @@ describe('contract DebtIssuanceModule', async () => {
           await expect(redeem()).revertedWith('M3');
         });
 
-        describe('when an external equity position is in place', async () => {
+        describe('when an external equity position is in place', () => {
           const externalUnits = ethToWei(1);
 
           before(async () => {
@@ -780,7 +780,7 @@ describe('contract DebtIssuanceModule', async () => {
           });
         });
 
-        describe('when the manager redemption fee is 0', async () => {
+        describe('when the manager redemption fee is 0', () => {
           before(async () => {
             redeemFee = ZERO;
           });
@@ -826,7 +826,7 @@ describe('contract DebtIssuanceModule', async () => {
           });
         });
 
-        describe('when protocol fees are enabled', async () => {
+        describe('when protocol fees are enabled', () => {
           const protocolFee = ethToWei(0.2);
 
           beforeEach(async () => {
@@ -854,7 +854,7 @@ describe('contract DebtIssuanceModule', async () => {
         });
       });
 
-      describe('updateFeeRecipient', async () => {
+      describe('updateFeeRecipient', () => {
         let newFeeRecipient;
 
         beforeEach(async () => {
@@ -900,7 +900,7 @@ describe('contract DebtIssuanceModule', async () => {
       });
     });
 
-    describe('updateIssueFee', async () => {
+    describe('updateIssueFee', () => {
       let newIssueFee;
 
       beforeEach(async () => {
@@ -945,7 +945,7 @@ describe('contract DebtIssuanceModule', async () => {
       });
     });
 
-    describe('updateRedeemFee', async () => {
+    describe('updateRedeemFee', () => {
       let newRedeemFee;
 
       beforeEach(async () => {

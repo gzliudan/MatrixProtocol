@@ -23,7 +23,7 @@ const {
   preciseDivFloorInt,
 } = require('../helpers/mathUtil');
 
-describe('library PreciseUnitMath', async () => {
+describe('library PreciseUnitMath', () => {
   let mathMock;
 
   let snapshotId;
