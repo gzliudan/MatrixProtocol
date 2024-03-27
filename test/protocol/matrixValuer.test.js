@@ -13,7 +13,7 @@ const { preciseMul, preciseDiv } = require('../helpers/mathUtil');
 const { snapshotBlockchain, revertBlockchain } = require('../helpers/evmUtil.js');
 const { ETH_USD_PRICE, USD_USD_PRICE, SystemFixture } = require('../fixtures/systemFixture');
 
-describe('contract MatrixValuer', async () => {
+describe('contract MatrixValuer', () => {
   const [owner, feeRecipient, moduleOne] = getSigners();
   const units = [usdToWei(100), ethToWei(1)]; // 100 USDC at $1 and 1 WETH at $230
   const baseUnits = [usdToWei(1), ethToWei(1)]; // Base units of USDC and WETH
@@ -38,14 +38,14 @@ describe('contract MatrixValuer', async () => {
     await revertBlockchain(snapshotId);
   });
 
-  describe('constructor', async () => {
+  describe('constructor', () => {
     it('should have the correct controller address', async () => {
       const result = await systemFixture.matrixValuer.getController();
       expect(result).eq(systemFixture.controller.address);
     });
   });
 
-  describe('calculateMatrixTokenValuation', async () => {
+  describe('calculateMatrixTokenValuation', () => {
     let quoteAsset;
 
     beforeEach(async () => {

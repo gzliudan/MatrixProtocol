@@ -14,8 +14,8 @@ const { ZERO, ONE, ZERO_ADDRESS } = require('../../helpers/constants');
 const { snapshotBlockchain, revertBlockchain } = require('../../helpers/evmUtil.js');
 const { preciseMul, preciseDiv, preciseMulCeilUint } = require('../../helpers/mathUtil');
 
-describe('contract DebtIssuanceModuleV2', async () => {
-  const [owner, manager, protocolFeeRecipient, feeRecipient, recipient] = await getSigners();
+describe('contract DebtIssuanceModuleV2', () => {
+  const [owner, manager, protocolFeeRecipient, feeRecipient, recipient] = getSigners();
   const systemFixture = new SystemFixture(owner, protocolFeeRecipient);
   const protocolFeeRecipientAddress = protocolFeeRecipient.address;
 
@@ -87,7 +87,7 @@ describe('contract DebtIssuanceModuleV2', async () => {
       // This is to ensure the DebtIssuanceModuleV2 behaves exactly similar to DebtIssuanceModule
       // when there is no rounding error present in it's constituent components.
 
-      describe('issue', async () => {
+      describe('issue', () => {
         const debtUnits = ethToWei(100);
 
         let to;
@@ -175,7 +175,7 @@ describe('contract DebtIssuanceModuleV2', async () => {
           await expect(issue()).revertedWith('M3');
         });
 
-        describe('when an external equity position is in place', async () => {
+        describe('when an external equity position is in place', () => {
           const externalUnits = ethToWei(1);
 
           before(async () => {
@@ -220,7 +220,7 @@ describe('contract DebtIssuanceModuleV2', async () => {
           });
         });
 
-        describe('when the manager issuance fee is 0', async () => {
+        describe('when the manager issuance fee is 0', () => {
           before(async () => {
             issueFee = ZERO;
           });
@@ -288,7 +288,7 @@ describe('contract DebtIssuanceModuleV2', async () => {
           expect(newBalanceOfProtocol.sub(oldBalanceOfProtocol)).eq(protocolSplit);
         });
 
-        describe('when manager issuance hook is defined', async () => {
+        describe('when manager issuance hook is defined', () => {
           before(async () => {
             preIssueHook = managerIssuanceHookMock.address;
           });
@@ -305,7 +305,7 @@ describe('contract DebtIssuanceModuleV2', async () => {
         });
       });
 
-      describe('redeem', async () => {
+      describe('redeem', () => {
         const debtUnits = ethToWei(100);
 
         let to;
@@ -386,7 +386,7 @@ describe('contract DebtIssuanceModuleV2', async () => {
           await expect(redeem()).emit(debtIssuanceModuleV2, 'RedeemMatrixToken').withArgs(matrixToken.address, caller.address, to, quantity, feeQuantity, ZERO);
         });
 
-        describe('when an external equity position is in place', async () => {
+        describe('when an external equity position is in place', () => {
           const externalUnits = ethToWei(1);
 
           before(async () => {
@@ -431,7 +431,7 @@ describe('contract DebtIssuanceModuleV2', async () => {
           });
         });
 
-        describe('when the manager redemption fee is 0', async () => {
+        describe('when the manager redemption fee is 0', () => {
           before(async () => {
             redeemFee = ZERO;
           });
@@ -511,7 +511,7 @@ describe('contract DebtIssuanceModuleV2', async () => {
         });
       });
 
-      describe('getRequiredComponentIssuanceUnits', async () => {
+      describe('getRequiredComponentIssuanceUnits', () => {
         const debtUnits = ethToWei(100);
 
         beforeEach(async () => {
@@ -588,7 +588,7 @@ describe('contract DebtIssuanceModuleV2', async () => {
     });
 
     context('when MatrixToken components do have rounding errors', async () => {
-      describe('issue', async () => {
+      describe('issue', () => {
         const debtUnits = ethToWei(100);
 
         let to;
@@ -610,7 +610,7 @@ describe('contract DebtIssuanceModuleV2', async () => {
           return debtIssuanceModuleV2.connect(caller).issue(matrixTokenAddress, quantity, to);
         }
 
-        describe('when rounding error is negative one', async () => {
+        describe('when rounding error is negative one', () => {
           beforeEach(async () => {
             await errorErc20.setError(-1);
           });
@@ -637,7 +637,7 @@ describe('contract DebtIssuanceModuleV2', async () => {
           });
         });
 
-        describe('when rounding error is positive one', async () => {
+        describe('when rounding error is positive one', () => {
           beforeEach(async () => {
             await errorErc20.setError(ONE);
           });
@@ -676,7 +676,7 @@ describe('contract DebtIssuanceModuleV2', async () => {
         });
       });
 
-      describe('redeem', async () => {
+      describe('redeem', () => {
         const debtUnits = ethToWei(100);
 
         let to;
@@ -702,7 +702,7 @@ describe('contract DebtIssuanceModuleV2', async () => {
           return debtIssuanceModuleV2.connect(caller).redeem(matrixTokenAddress, quantity, to);
         }
 
-        describe('when rounding error is negative one', async () => {
+        describe('when rounding error is negative one', () => {
           beforeEach(async () => {
             await errorErc20.setError(-1);
           });
@@ -729,7 +729,7 @@ describe('contract DebtIssuanceModuleV2', async () => {
           });
         });
 
-        describe('when rounding error is positive one', async () => {
+        describe('when rounding error is positive one', () => {
           beforeEach(async () => {
             await errorErc20.setError(ONE);
           });
@@ -768,7 +768,7 @@ describe('contract DebtIssuanceModuleV2', async () => {
         });
       });
 
-      describe('getRequiredComponentIssuanceUnits', async () => {
+      describe('getRequiredComponentIssuanceUnits', () => {
         const debtUnits = ethToWei(100);
         const accruedBalance = ethToWei(0.00001);
 
@@ -842,7 +842,7 @@ describe('contract DebtIssuanceModuleV2', async () => {
           expect(JSON.stringify(expectedDebtFlows)).eq(JSON.stringify(totalDebtUnits));
         });
 
-        describe('when tokens have been issued', async () => {
+        describe('when tokens have been issued', () => {
           beforeEach(async () => {
             const { totalEquityUnits } = await debtIssuanceModuleV2.getRequiredComponentIssuanceUnits(matrixToken.address, ethToWei(1));
             await errorErc20.approve(debtIssuanceModuleV2.address, totalEquityUnits[0].mul(ethToWei(1.005)));

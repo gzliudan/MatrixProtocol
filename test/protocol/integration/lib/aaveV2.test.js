@@ -14,8 +14,8 @@ const { snapshotBlockchain, revertBlockchain } = require('../../../helpers/evmUt
 const { ZERO, ONE, TWO, MAX_UINT_256, ZERO_ADDRESS } = require('../../../helpers/constants');
 const { deployContract, deployContractAndLinkLibraries } = require('../../../helpers/deploy');
 
-describe('library AaveV2', async () => {
-  const [owner, protocolFeeRecipient] = await getSigners();
+describe('library AaveV2', () => {
+  const [owner, protocolFeeRecipient] = getSigners();
   const systemFixture = new SystemFixture(owner, protocolFeeRecipient);
   const aaveV2Fixture = new AaveV2Fixture(owner);
   const stableInterestRateMode = ONE;
@@ -74,7 +74,7 @@ describe('library AaveV2', async () => {
     await revertBlockchain(snapshotId);
   });
 
-  describe('getDepositCalldata', async () => {
+  describe('getDepositCalldata', () => {
     let asset;
     let onBehalfOf;
     let referralCode;
@@ -108,7 +108,7 @@ describe('library AaveV2', async () => {
     });
   });
 
-  describe('invokeDeposit', async () => {
+  describe('invokeDeposit', () => {
     let asset;
     let matrixTokenAddress;
     let lendingPoolAddress;
@@ -140,7 +140,7 @@ describe('library AaveV2', async () => {
     });
   });
 
-  describe('getSetUserUseReserveAsCollateralCalldata', async () => {
+  describe('getSetUserUseReserveAsCollateralCalldata', () => {
     let asset;
     let isUseAsCollateral;
     let lendingPoolAddress;
@@ -182,7 +182,7 @@ describe('library AaveV2', async () => {
     });
   });
 
-  describe('invokeSetUserUseReserveAsCollateral', async () => {
+  describe('invokeSetUserUseReserveAsCollateral', () => {
     let asset;
     let matrixTokenAddress;
     let isUseAsCollateral;
@@ -223,7 +223,7 @@ describe('library AaveV2', async () => {
     });
   });
 
-  describe('getWithdrawCalldata', async () => {
+  describe('getWithdrawCalldata', () => {
     let asset;
     let receiver;
     let lendingPoolAddress;
@@ -255,7 +255,7 @@ describe('library AaveV2', async () => {
     });
   });
 
-  describe('invokeWithdraw', async () => {
+  describe('invokeWithdraw', () => {
     let asset;
     let matrixTokenAddress;
     let lendingPoolAddress;
@@ -293,7 +293,7 @@ describe('library AaveV2', async () => {
     });
   });
 
-  describe('getBorrowCalldata', async () => {
+  describe('getBorrowCalldata', () => {
     let asset;
     let onBehalfOf;
     let referralCode;
@@ -335,7 +335,7 @@ describe('library AaveV2', async () => {
     });
   });
 
-  describe('invokeBorrow', async () => {
+  describe('invokeBorrow', () => {
     let asset;
     let interestRateMode;
     let matrixTokenAddress;
@@ -379,7 +379,7 @@ describe('library AaveV2', async () => {
     });
   });
 
-  describe('getRepayCalldata', async () => {
+  describe('getRepayCalldata', () => {
     let asset;
     let onBehalfOf;
     let interestRateMode;
@@ -413,7 +413,7 @@ describe('library AaveV2', async () => {
     });
   });
 
-  describe('invokeRepay', async () => {
+  describe('invokeRepay', () => {
     let asset;
     let interestRateMode;
     let matrixTokenAddress;
@@ -462,7 +462,7 @@ describe('library AaveV2', async () => {
     });
   });
 
-  describe('getSwapBorrowRateModeCalldata', async () => {
+  describe('getSwapBorrowRateModeCalldata', () => {
     let asset;
     let rateMode;
     let lendingPoolAddress;
@@ -505,7 +505,7 @@ describe('library AaveV2', async () => {
     });
   });
 
-  describe('invokeSwapBorrowRateMode', async () => {
+  describe('invokeSwapBorrowRateMode', () => {
     let asset;
     let rateMode;
     let matrixTokenAddress;

@@ -11,7 +11,7 @@ const { compareArray } = require('../helpers/arrayUtil');
 const { testCases } = require('../cases/uint256ArrayUtil.json');
 const { snapshotBlockchain, revertBlockchain } = require('../helpers/evmUtil.js');
 
-describe('library Uint256ArrayUtil', async () => {
+describe('library Uint256ArrayUtil', () => {
   let arrayMock;
 
   let snapshotId;
@@ -25,7 +25,7 @@ describe('library Uint256ArrayUtil', async () => {
   });
 
   testCases.map((testCase, i) => {
-    describe(`test case ${i}`, async () => {
+    describe(`test case ${i}`, () => {
       const array1 = testCase.array1;
       const array2 = testCase.array2;
       const result1 = testCase.result;

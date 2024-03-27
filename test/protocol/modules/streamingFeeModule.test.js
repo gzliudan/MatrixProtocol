@@ -15,8 +15,8 @@ const { ZERO_ADDRESS, ZERO, PRECISE_UNIT, ONE_YEAR_IN_SECONDS } = require('../..
 const { getStreamingFee, getPostFeePositionUnits, getStreamingFeeInflationAmount } = require('../../helpers/feeModuleUtil');
 const { snapshotBlockchain, revertBlockchain, increaseBlockTime, getLastBlockTimestamp } = require('../../helpers/evmUtil');
 
-describe('contract StreamingFeeModule', async () => {
-  const [owner, protocolFeeRecipient, feeRecipient, randomAccount] = await getSigners();
+describe('contract StreamingFeeModule', () => {
+  const [owner, protocolFeeRecipient, feeRecipient, randomAccount] = getSigners();
   const systemFixture = new SystemFixture(owner, protocolFeeRecipient);
 
   let rootSnapshotId;
@@ -29,7 +29,7 @@ describe('contract StreamingFeeModule', async () => {
     await revertBlockchain(rootSnapshotId);
   });
 
-  describe('initialize', async () => {
+  describe('initialize', () => {
     let caller;
     let matrixToken;
     let feeRecipient;
@@ -130,7 +130,7 @@ describe('contract StreamingFeeModule', async () => {
     });
   });
 
-  describe('removeModule', async () => {
+  describe('removeModule', () => {
     let matrixToken;
     let module;
 
@@ -175,7 +175,7 @@ describe('contract StreamingFeeModule', async () => {
     });
   });
 
-  describe('getFee', async () => {
+  describe('getFee', () => {
     let matrixToken;
     let feeStateSetting;
     let matrixTokenAddress;
@@ -223,7 +223,7 @@ describe('contract StreamingFeeModule', async () => {
     });
   });
 
-  describe('actualizeFee', async () => {
+  describe('actualizeFee', () => {
     let matrixToken;
     let feeStateSetting;
     let isInitialized = false;
@@ -384,7 +384,7 @@ describe('contract StreamingFeeModule', async () => {
       await expect(actualizeFee()).revertedWith('M3');
     });
 
-    describe('case 1.1: when a position is negative', async () => {
+    describe('case 1.1: when a position is negative', () => {
       beforeEach(async () => {
         await systemFixture.controller.addModule(owner.address);
         await matrixToken.addModule(owner.address);
@@ -427,7 +427,7 @@ describe('contract StreamingFeeModule', async () => {
       });
     });
 
-    describe('case 1.2: when protocolFee is 0', async () => {
+    describe('case 1.2: when protocolFee is 0', () => {
       beforeEach(async () => {
         await systemFixture.controller.editFee(systemFixture.streamingFeeModule.address, ZERO, ZERO);
       });
@@ -456,7 +456,7 @@ describe('contract StreamingFeeModule', async () => {
       });
     });
 
-    describe('case 1.3: when streamingFee is 0', async () => {
+    describe('case 1.3: when streamingFee is 0', () => {
       beforeEach(async () => {
         await systemFixture.streamingFeeModule.updateStreamingFee(matrixTokenAddress, ZERO);
       });
@@ -475,7 +475,7 @@ describe('contract StreamingFeeModule', async () => {
       });
     });
 
-    describe('case 1.4: when module is not initialized', async () => {
+    describe('case 1.4: when module is not initialized', () => {
       before(async () => {
         isInitialized = true;
       });
@@ -490,7 +490,7 @@ describe('contract StreamingFeeModule', async () => {
     });
   });
 
-  describe('updateStreamingFee', async () => {
+  describe('updateStreamingFee', () => {
     let matrixToken;
     let feeStateSetting;
     let matrixTokenAddress;
@@ -600,7 +600,7 @@ describe('contract StreamingFeeModule', async () => {
       await expect(updateStreamingFee()).revertedWith('M2');
     });
 
-    describe('when the existing fee is 0', async () => {
+    describe('when the existing fee is 0', () => {
       before(async () => {
         isInitialized = true;
       });
@@ -615,7 +615,7 @@ describe('contract StreamingFeeModule', async () => {
     });
   });
 
-  describe('updateFeeRecipient', async () => {
+  describe('updateFeeRecipient', () => {
     let matrixToken;
     let feeStateSetting;
     let isInitialized = false;
@@ -690,7 +690,7 @@ describe('contract StreamingFeeModule', async () => {
       await expect(updateFeeRecipient()).revertedWith('M3');
     });
 
-    describe('should revert when module is not initialized', async () => {
+    describe('should revert when module is not initialized', () => {
       before(async () => {
         isInitialized = true;
       });

@@ -17,7 +17,7 @@ function inverse(number) {
   return PRECISE_UNIT.mul(PRECISE_UNIT).div(number);
 }
 
-describe('contract PriceOracle', async () => {
+describe('contract PriceOracle', () => {
   const [owner, wrappedETH, wrappedBTC, usdc, adapterAsset, randomAsset, newOracle, attacker] = getSigners();
   const masterQuoteAsset = wrappedETH.address;
   const assetOnes = [wrappedETH.address, wrappedETH.address];
@@ -57,7 +57,7 @@ describe('contract PriceOracle', async () => {
     await revertBlockchain(snapshotId);
   });
 
-  describe('constructor', async () => {
+  describe('constructor', () => {
     let snapshotId;
     before(async () => {
       snapshotId = await snapshotBlockchain();
@@ -102,7 +102,7 @@ describe('contract PriceOracle', async () => {
     });
   });
 
-  describe('getPrice', async () => {
+  describe('getPrice', () => {
     const asset1 = wrappedETH.address;
     const asset2 = usdc.address;
 
@@ -149,7 +149,7 @@ describe('contract PriceOracle', async () => {
     });
   });
 
-  describe('editPair', async () => {
+  describe('editPair', () => {
     const asset1 = wrappedETH.address;
     const asset2 = usdc.address;
     const oracle = newOracle.address;
@@ -170,7 +170,9 @@ describe('contract PriceOracle', async () => {
     });
 
     it('should emit an EditPair event', async () => {
-      await expect(masterOracle.editPair(asset1, asset2, oracle)).emit(masterOracle, 'EditPair').withArgs(asset1, asset2, oracle);
+      await expect(masterOracle.editPair(asset1, asset2, oracle))
+        .emit(masterOracle, 'EditPair')
+        .withArgs(asset1, asset2, oracle);
     });
 
     it('should revert when the caller is not the owner', async () => {
@@ -182,7 +184,7 @@ describe('contract PriceOracle', async () => {
     });
   });
 
-  describe('addPair', async () => {
+  describe('addPair', () => {
     const asset1 = randomAsset.address;
     const asset2 = usdc.address;
     const oracle = newOracle.address;
@@ -206,7 +208,9 @@ describe('contract PriceOracle', async () => {
     });
 
     it('should emit an AddPair event', async () => {
-      await expect(masterOracle.addPair(asset1, asset2, oracle)).emit(masterOracle, 'AddPair').withArgs(asset1, asset2, oracle);
+      await expect(masterOracle.addPair(asset1, asset2, oracle))
+        .emit(masterOracle, 'AddPair')
+        .withArgs(asset1, asset2, oracle);
     });
 
     it('should return correct oracle address after create the new oracle', async () => {
@@ -219,7 +223,7 @@ describe('contract PriceOracle', async () => {
     });
   });
 
-  describe('removePair', async () => {
+  describe('removePair', () => {
     const asset1 = wrappedETH.address;
     const asset2 = usdc.address;
 
@@ -251,7 +255,7 @@ describe('contract PriceOracle', async () => {
     });
   });
 
-  describe('addAdapter', async () => {
+  describe('addAdapter', () => {
     const adapter = randomAsset.address;
 
     let snapshotId;
@@ -281,7 +285,7 @@ describe('contract PriceOracle', async () => {
     });
   });
 
-  describe('removeAdapter', async () => {
+  describe('removeAdapter', () => {
     let snapshotId;
     before(async () => {
       snapshotId = await snapshotBlockchain();
@@ -314,7 +318,7 @@ describe('contract PriceOracle', async () => {
     });
   });
 
-  describe('editMasterQuoteAsset', async () => {
+  describe('editMasterQuoteAsset', () => {
     const newMasterQuoteAsset = usdc.address;
 
     let snapshotId;

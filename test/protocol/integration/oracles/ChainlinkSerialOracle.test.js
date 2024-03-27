@@ -11,8 +11,8 @@ const { deployContract } = require('../../../helpers/deploy');
 const { getSigners, getRandomAddress } = require('../../../helpers/accountUtil');
 const { snapshotBlockchain, revertBlockchain } = require('../../../helpers/evmUtil.js');
 
-describe('contract ChainlinkSerialOracle', async () => {
-  const [owner] = await getSigners();
+describe('contract ChainlinkSerialOracle', () => {
+  const [owner] = getSigners();
   const name = 'BTC/ETH/USD';
   const price1 = BigNumber.from(1000);
   const price2 = BigNumber.from(10);
@@ -35,7 +35,7 @@ describe('contract ChainlinkSerialOracle', async () => {
     await revertBlockchain(snapshotId);
   });
 
-  describe('constructor', async () => {
+  describe('constructor', () => {
     let snapshotId;
     beforeEach(async () => {
       snapshotId = await snapshotBlockchain();
@@ -86,7 +86,7 @@ describe('contract ChainlinkSerialOracle', async () => {
     });
   });
 
-  describe('read', async () => {
+  describe('read', () => {
     let snapshotId;
     beforeEach(async () => {
       snapshotId = await snapshotBlockchain();

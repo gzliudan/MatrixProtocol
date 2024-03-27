@@ -16,7 +16,7 @@ const { preciseMul } = require('../../helpers/mathUtil');
 const { snapshotBlockchain, revertBlockchain } = require('../../helpers/evmUtil.js');
 
 describe('contract StakingModule', async () => {
-  const [owner, protocolFeeRecipient, dummyIssuanceModule, randomAccount] = await getSigners();
+  const [owner, protocolFeeRecipient, dummyIssuanceModule, randomAccount] = getSigners();
   const systemFixture = new SystemFixture(owner, protocolFeeRecipient);
   const STAKE_NAME1 = 'WETH_STAKER1';
   const STAKE_NAME2 = 'WETH_STAKER2';
@@ -56,7 +56,7 @@ describe('contract StakingModule', async () => {
     await revertBlockchain(rootSnapshotId);
   });
 
-  describe('initialize', async () => {
+  describe('initialize', () => {
     let caller;
     let matrixToken;
     let matrixTokenAddress;
@@ -100,7 +100,7 @@ describe('contract StakingModule', async () => {
     });
   });
 
-  describe('removeModule', async () => {
+  describe('removeModule', () => {
     let module;
 
     let snapshotId;
@@ -132,7 +132,7 @@ describe('contract StakingModule', async () => {
     });
   });
 
-  describe('stake', async () => {
+  describe('stake', () => {
     const issuedSupply = ethToWei(2);
 
     let caller;
@@ -240,7 +240,7 @@ describe('contract StakingModule', async () => {
       await expect(stake()).revertedWith('M1b');
     });
 
-    describe('when the position is being added to', async () => {
+    describe('when the position is being added to', () => {
       beforeEach(async () => {
         await stake();
       });
@@ -293,7 +293,7 @@ describe('contract StakingModule', async () => {
       });
     });
 
-    describe('when module is not initialized', async () => {
+    describe('when module is not initialized', () => {
       before(async () => {
         notInitialized = false;
       });
@@ -308,7 +308,7 @@ describe('contract StakingModule', async () => {
     });
   });
 
-  describe('unstake', async () => {
+  describe('unstake', () => {
     let issuedSupply = ethToWei(2);
 
     let caller;
@@ -432,7 +432,7 @@ describe('contract StakingModule', async () => {
       await expect(unstake()).revertedWith('M1b');
     });
 
-    describe('when the full position is not being removed', async () => {
+    describe('when the full position is not being removed', () => {
       beforeEach(async () => {
         componentPositionUnits = ethToWei(0.25);
       });
@@ -485,7 +485,7 @@ describe('contract StakingModule', async () => {
       });
     });
 
-    describe('when module is not initialized', async () => {
+    describe('when module is not initialized', () => {
       before(async () => {
         notInitialized = false;
       });
@@ -500,7 +500,7 @@ describe('contract StakingModule', async () => {
     });
   });
 
-  describe('issueHook', async () => {
+  describe('issueHook', () => {
     const tokenTransferAmount = ethToWei(0.5);
 
     let caller;
@@ -574,7 +574,7 @@ describe('contract StakingModule', async () => {
     });
   });
 
-  describe('redeemHook', async () => {
+  describe('redeemHook', () => {
     const tokenTransferAmount = ethToWei(0.5);
     const matrixTokenQuantity = ethToWei(0.5);
 

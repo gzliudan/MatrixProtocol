@@ -12,7 +12,7 @@ const { getCreatedMatrixTokenAddress } = require('../helpers/protocolUtil');
 const { ZERO_ADDRESS, ZERO, PRECISE_UNIT } = require('../helpers/constants');
 const { snapshotBlockchain, revertBlockchain } = require('../helpers/evmUtil.js');
 
-describe('contract MatrixTokenFactory', async () => {
+describe('contract MatrixTokenFactory', () => {
   const [owner, feeRecipient] = getSigners();
 
   let controller;
@@ -31,14 +31,14 @@ describe('contract MatrixTokenFactory', async () => {
     revertBlockchain(snapshotId);
   });
 
-  describe('constructor', async () => {
+  describe('constructor', () => {
     it('should have the correct controller', async () => {
       const result = await factoryMock.getController();
       expect(result).eq(controller.address);
     });
   });
 
-  describe('create', async () => {
+  describe('create', () => {
     let firstComponent;
     let secondComponent;
     let firstModule;

@@ -13,8 +13,8 @@ const { SystemFixture } = require('../../../fixtures/systemFixture');
 const { snapshotBlockchain, revertBlockchain } = require('../../../helpers/evmUtil.js');
 const { ZERO, MAX_UINT_256, ZERO_ADDRESS, EMPTY_BYTES } = require('../../../helpers/constants');
 
-describe('contract KyberLegacyExchangeAdapter', async () => {
-  const [owner, protocolFeeRecipient, matrixTokenMock] = await getSigners();
+describe('contract KyberLegacyExchangeAdapter', () => {
+  const [owner, protocolFeeRecipient, matrixTokenMock] = getSigners();
   const systemFixture = new SystemFixture(owner, protocolFeeRecipient);
   const wbtcRate = ethToWei(33); // 1 WBTC = 33 ETH
 
@@ -37,14 +37,14 @@ describe('contract KyberLegacyExchangeAdapter', async () => {
     await revertBlockchain(snapshotId);
   });
 
-  describe('getSpender', async () => {
+  describe('getSpender', () => {
     it('should return the correct spender address', async () => {
       const actualKyberAddress = await kyberLegacyExchangeAdapter.getSpender();
       expect(actualKyberAddress).eq(kyberNetworkProxy.address);
     });
   });
 
-  describe('getConversionRates', async () => {
+  describe('getConversionRates', () => {
     async function getConversionRates() {
       const srcToken = systemFixture.wbtc.address;
       const destToken = systemFixture.weth.address;
@@ -58,7 +58,7 @@ describe('contract KyberLegacyExchangeAdapter', async () => {
     });
   });
 
-  describe('getTradeCalldata', async () => {
+  describe('getTradeCalldata', () => {
     const srcQuantity = btcToWei(1); // Trade 1 WBTC
     const minDestQuantity = ethToWei(33); // Receive at least 33 ETH
     const pathBytes = EMPTY_BYTES;

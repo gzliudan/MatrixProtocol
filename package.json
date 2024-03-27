@@ -86,7 +86,7 @@
     "ethereum-checksum-address": "^0.0.8",
     "ethereum-waffle": "^3.4.4",
     "ethers": "^5.7.2",
-    "hardhat": "~2.20.1",
+    "hardhat": "~2.22.2",
     "hardhat-contract-sizer": "^2.10.0",
     "hardhat-gas-reporter": "^2.0.2",
     "prettier": "^3.2.5",

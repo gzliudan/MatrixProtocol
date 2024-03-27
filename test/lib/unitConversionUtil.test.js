@@ -11,7 +11,7 @@ const { ethToWei, usdToWei } = require('../helpers/unitUtil');
 const { testCases } = require('../cases/unitConversionUtil.json');
 const { snapshotBlockchain, revertBlockchain } = require('../helpers/evmUtil.js');
 
-describe('library UnitConversionUtil', async () => {
+describe('library UnitConversionUtil', () => {
   const usdcDecimals = 6;
   let unitMock;
 

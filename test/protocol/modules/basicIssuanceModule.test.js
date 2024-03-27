@@ -14,8 +14,8 @@ const { getSigners, getRandomAddress } = require('../../helpers/accountUtil');
 const { ZERO_ADDRESS, ZERO, ONE, MODULE_STATE } = require('../../helpers/constants');
 const { snapshotBlockchain, revertBlockchain } = require('../../helpers/evmUtil.js');
 
-describe('contract BasicIssuanceModule', async () => {
-  const [owner, feeRecipient, recipient, randomAccount] = await getSigners();
+describe('contract BasicIssuanceModule', () => {
+  const [owner, feeRecipient, recipient, randomAccount] = getSigners();
   const systemFixture = new SystemFixture(owner, feeRecipient);
 
   let caller;
@@ -32,7 +32,7 @@ describe('contract BasicIssuanceModule', async () => {
     await revertBlockchain(snapshotId);
   });
 
-  describe('initialize', async () => {
+  describe('initialize', () => {
     let preIssueHookAddress;
 
     let snapshotId;
@@ -94,13 +94,13 @@ describe('contract BasicIssuanceModule', async () => {
     });
   });
 
-  describe('removeModule', async () => {
+  describe('removeModule', () => {
     it('should revert when remove BasicIssuanceModule', async () => {
       await expect(systemFixture.basicIssuanceModule.connect(owner).removeModule()).revertedWith('BI0');
     });
   });
 
-  describe('issue', async () => {
+  describe('issue', () => {
     const units = [ethToWei(1), btcToWei(2)];
 
     let components;
@@ -268,7 +268,7 @@ describe('contract BasicIssuanceModule', async () => {
     });
   });
 
-  describe('redeem', async () => {
+  describe('redeem', () => {
     const units = [ethToWei(1), btcToWei(2)];
 
     let components;
