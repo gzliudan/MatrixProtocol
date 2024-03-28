@@ -5,20 +5,31 @@
 const { ethers, waffle } = require('hardhat');
 const { provider } = waffle;
 
-const getSigners = () => provider.getWallets();
+function getSigners() {
+  return provider.getWallets();
+}
 
-const getLastSigner = () => {
+function getLastSigner() {
   const accounts = getSigners();
   return accounts[accounts.length - 1];
-};
+}
 
 // NOTE: no ETH in random account
-const getRandomAccount = () => ethers.Wallet.createRandom().connect(provider);
+function getRandomAccount() {
+  return ethers.Wallet.createRandom().connect(provider);
+}
 
-const getRandomAddress = () => getRandomAccount().getAddress();
+function getRandomAddress() {
+  return getRandomAccount().getAddress();
+}
 
-const getEthBalance = async (account) => await provider.getBalance(account);
-const setEthBalance = async (account, balance) => await provider.send('hardhat_setBalance', [account, balance]);
+async function getEthBalance(account) {
+  return await provider.getBalance(account);
+}
+
+async function setEthBalance(account, balance) {
+  await provider.send('hardhat_setBalance', [account, balance]);
+}
 
 module.exports = {
   getSigners,

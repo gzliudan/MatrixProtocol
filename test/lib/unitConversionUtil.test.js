@@ -11,36 +11,36 @@ const { ethToWei, usdToWei } = require('../helpers/unitUtil');
 const { testCases } = require('../cases/unitConversionUtil.json');
 const { snapshotBlockchain, revertBlockchain } = require('../helpers/evmUtil.js');
 
-describe('library UnitConversionUtil', () => {
+describe('library UnitConversionUtil', function () {
   const usdcDecimals = 6;
   let unitMock;
 
   let snapshotId;
-  before(async () => {
+  before(async function () {
     snapshotId = await snapshotBlockchain();
     unitMock = await deployContract('UnitConversionUtilMock');
   });
 
-  after(async () => {
+  after(async function () {
     await revertBlockchain(snapshotId);
   });
 
-  testCases.map((testCase, i) => {
+  testCases.map(function (testCase, i) {
     const weiOfEth = ethToWei(testCase);
     const weiOfUsd = usdToWei(testCase);
 
-    describe(`test case ${i}`, () => {
-      it(`test fromPreciseUnitToDecimals(${weiOfEth}, ${usdcDecimals}) - uint256`, async () => {
+    describe(`test case ${i}`, function () {
+      it(`test fromPreciseUnitToDecimals(${weiOfEth}, ${usdcDecimals}) - uint256`, async function () {
         const result = await unitMock.fromPreciseUnitToDecimalsUint(weiOfEth, usdcDecimals);
         expect(result).eq(weiOfUsd);
       });
 
-      it(`test fromPreciseUnitToDecimals(${weiOfEth}, ${usdcDecimals}) - int256`, async () => {
+      it(`test fromPreciseUnitToDecimals(${weiOfEth}, ${usdcDecimals}) - int256`, async function () {
         const result = await unitMock.fromPreciseUnitToDecimalsInt(weiOfEth, usdcDecimals);
         expect(result).eq(weiOfUsd);
       });
 
-      it(`test toPreciseUnitsFromDecimals(${weiOfUsd}, ${usdcDecimals}) - int256`, async () => {
+      it(`test toPreciseUnitsFromDecimals(${weiOfUsd}, ${usdcDecimals}) - int256`, async function () {
         const result = await unitMock.toPreciseUnitsFromDecimals(weiOfUsd, usdcDecimals);
         expect(result).eq(weiOfEth);
       });

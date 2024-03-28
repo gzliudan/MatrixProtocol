@@ -14,7 +14,7 @@ const { ZERO, ONE, ZERO_ADDRESS } = require('../../helpers/constants');
 const { snapshotBlockchain, revertBlockchain } = require('../../helpers/evmUtil.js');
 const { preciseMul, preciseDiv, preciseMulCeilUint } = require('../../helpers/mathUtil');
 
-describe('contract DebtIssuanceModuleV2', () => {
+describe('contract DebtIssuanceModuleV2', function () {
   const [owner, manager, protocolFeeRecipient, feeRecipient, recipient] = getSigners();
   const systemFixture = new SystemFixture(owner, protocolFeeRecipient);
   const protocolFeeRecipientAddress = protocolFeeRecipient.address;
@@ -30,7 +30,7 @@ describe('contract DebtIssuanceModuleV2', () => {
   let debtIssuanceModuleV2; // DebtIssuanceModuleV2
 
   let snapshotId;
-  before(async () => {
+  before(async function () {
     snapshotId = await snapshotBlockchain();
     await systemFixture.initAll();
 
@@ -51,17 +51,17 @@ describe('contract DebtIssuanceModuleV2', () => {
     await externalPositionModule.initialize(matrixToken.address);
   });
 
-  after(async () => {
+  after(async function () {
     await revertBlockchain(snapshotId);
   });
 
-  context('when DebtIssuanceModuleV2 is initialized', async () => {
+  context('when DebtIssuanceModuleV2 is initialized', async function () {
     let preIssueHook;
     let maxFee;
     let issueFee;
     let redeemFee;
 
-    before(async () => {
+    before(async function () {
       await errorErc20.setError(ZERO);
       preIssueHook = ZERO_ADDRESS;
       maxFee = ethToWei(0.02);
@@ -70,29 +70,29 @@ describe('contract DebtIssuanceModuleV2', () => {
     });
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
 
       await debtIssuanceModuleV2.connect(manager).initialize(matrixToken.address, maxFee, issueFee, redeemFee, feeRecipient.address, preIssueHook);
       await debtModuleMock.connect(manager).initialize(matrixToken.address);
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
-    context('when MatrixToken components do not have any rounding error', async () => {
+    context('when MatrixToken components do not have any rounding error', async function () {
       // Note: Tests below are an EXACT copy of the tests for DebtIssuanceModule.
       // Only difference is this MatrixToken contains errorErc20 instead of weth as a default position.
       // This is to ensure the DebtIssuanceModuleV2 behaves exactly similar to DebtIssuanceModule
       // when there is no rounding error present in it's constituent components.
 
-      describe('issue', () => {
+      describe('issue', function () {
         const debtUnits = ethToWei(100);
 
         let to;
 
-        beforeEach(async () => {
+        beforeEach(async function () {
           await debtModuleMock.addDebt(matrixToken.address, systemFixture.dai.address, debtUnits);
           await systemFixture.dai.transfer(debtModuleMock.address, ethToWei(100.5));
           const { totalEquityUnits } = await debtIssuanceModuleV2.getRequiredComponentIssuanceUnits(matrixToken.address, ethToWei(1));
@@ -107,7 +107,7 @@ describe('contract DebtIssuanceModuleV2', () => {
           return debtIssuanceModuleV2.connect(caller).issue(matrixTokenAddress, quantity, to);
         }
 
-        it('should mint MatrixToken to the correct addresses', async () => {
+        it('should mint MatrixToken to the correct addresses', async function () {
           const oldBalanceOfManager = await matrixToken.balanceOf(feeRecipient.address);
           const oldBalanceOfTo = await matrixToken.balanceOf(to);
 
@@ -122,7 +122,7 @@ describe('contract DebtIssuanceModuleV2', () => {
           expect(newBalanceOfManager.sub(oldBalanceOfManager)).eq(feeQuantity);
         });
 
-        it('should have the correct token balances', async () => {
+        it('should have the correct token balances', async function () {
           const oldDaiBalanceOfMinter = await systemFixture.dai.balanceOf(caller.address);
           const oldDaiBalanceOfMatrix = await systemFixture.dai.balanceOf(matrixTokenAddress);
           const oldDaiBalanceOfExternal = await systemFixture.dai.balanceOf(debtModuleMock.address);
@@ -151,42 +151,42 @@ describe('contract DebtIssuanceModuleV2', () => {
           expect(newDaiBalanceOfMatrix).eq(oldDaiBalanceOfMatrix);
         });
 
-        it('should have called the module issue hook', async () => {
+        it('should have called the module issue hook', async function () {
           await issue();
           const result = await debtModuleMock.isModuleIssueHookCalled();
           expect(result).is.true;
         });
 
-        it('should emit the correct IssueMatrixToken event', async () => {
+        it('should emit the correct IssueMatrixToken event', async function () {
           const feeQuantity = preciseMulCeilUint(quantity, issueFee);
           await expect(issue())
             .emit(debtIssuanceModuleV2, 'IssueMatrixToken')
             .withArgs(matrixToken.address, caller.address, to, preIssueHook, quantity, feeQuantity, ZERO);
         });
 
-        it('should revert when the issue quantity is 0', async () => {
+        it('should revert when the issue quantity is 0', async function () {
           quantity = ZERO;
           await expect(issue()).revertedWith('Db0');
         });
 
-        it('should revert when the MatrixToken is not enabled on the controller', async () => {
+        it('should revert when the MatrixToken is not enabled on the controller', async function () {
           const newToken = await systemFixture.createRawMatrixToken([errorErc20.address], [ethToWei(1)], [debtIssuanceModuleV2.address], manager.address);
           matrixTokenAddress = newToken.address;
           await expect(issue()).revertedWith('M3');
         });
 
-        describe('when an external equity position is in place', () => {
+        describe('when an external equity position is in place', function () {
           const externalUnits = ethToWei(1);
 
-          before(async () => {
+          before(async function () {
             await externalPositionModule.addExternalPosition(matrixToken.address, errorErc20.address, externalUnits);
           });
 
-          after(async () => {
+          after(async function () {
             await externalPositionModule.addExternalPosition(matrixToken.address, errorErc20.address, ZERO);
           });
 
-          it('should have the correct token balances when an external equity position is in place', async () => {
+          it('should have the correct token balances when an external equity position is in place', async function () {
             const oldWethBalanceOfMinter = await errorErc20.balanceOf(caller.address);
             const oldWethBalanceOfMatrix = await errorErc20.balanceOf(matrixTokenAddress);
             const oldWethBalanceOfExternal = await errorErc20.balanceOf(externalPositionModule.address);
@@ -220,23 +220,23 @@ describe('contract DebtIssuanceModuleV2', () => {
           });
         });
 
-        describe('when the manager issuance fee is 0', () => {
-          before(async () => {
+        describe('when the manager issuance fee is 0', function () {
+          before(async function () {
             issueFee = ZERO;
           });
 
-          after(async () => {
+          after(async function () {
             issueFee = ethToWei(0.005);
           });
 
-          it('should mint MatrixToken to the correct addresses when the manager issuance fee is 0', async () => {
+          it('should mint MatrixToken to the correct addresses when the manager issuance fee is 0', async function () {
             const oldBalanceOfTo = await matrixToken.balanceOf(to);
             await issue();
             const newBalanceOfTo = await matrixToken.balanceOf(to);
             expect(newBalanceOfTo.sub(oldBalanceOfTo)).eq(quantity);
           });
 
-          it('should have the correct token balances when the manager issuance fee is 0', async () => {
+          it('should have the correct token balances when the manager issuance fee is 0', async function () {
             const oldDaiBalanceOfMinter = await systemFixture.dai.balanceOf(caller.address);
             const oldDaiBalanceOfMatrix = await systemFixture.dai.balanceOf(matrixTokenAddress);
             const oldDaiBalanceOfExternal = await systemFixture.dai.balanceOf(debtModuleMock.address);
@@ -266,7 +266,7 @@ describe('contract DebtIssuanceModuleV2', () => {
           });
         });
 
-        it('should mint MatrixToken to the correct addresses when protocol fees are enabled', async () => {
+        it('should mint MatrixToken to the correct addresses when protocol fees are enabled', async function () {
           const protocolFee = ethToWei(0.2);
           await systemFixture.controller.addFee(debtIssuanceModuleV2.address, ZERO, protocolFee);
 
@@ -288,16 +288,16 @@ describe('contract DebtIssuanceModuleV2', () => {
           expect(newBalanceOfProtocol.sub(oldBalanceOfProtocol)).eq(protocolSplit);
         });
 
-        describe('when manager issuance hook is defined', () => {
-          before(async () => {
+        describe('when manager issuance hook is defined', function () {
+          before(async function () {
             preIssueHook = managerIssuanceHookMock.address;
           });
 
-          after(async () => {
+          after(async function () {
             preIssueHook = ZERO_ADDRESS;
           });
 
-          it('should call the issuance hook when manager issuance hook is defined', async () => {
+          it('should call the issuance hook when manager issuance hook is defined', async function () {
             await issue();
             const matrixToken = await managerIssuanceHookMock.getToken();
             expect(matrixToken).eq(matrixTokenAddress);
@@ -305,12 +305,12 @@ describe('contract DebtIssuanceModuleV2', () => {
         });
       });
 
-      describe('redeem', () => {
+      describe('redeem', function () {
         const debtUnits = ethToWei(100);
 
         let to;
 
-        beforeEach(async () => {
+        beforeEach(async function () {
           await debtModuleMock.addDebt(matrixToken.address, systemFixture.dai.address, debtUnits);
           await systemFixture.dai.transfer(debtModuleMock.address, ethToWei(100.5));
 
@@ -331,7 +331,7 @@ describe('contract DebtIssuanceModuleV2', () => {
           return debtIssuanceModuleV2.connect(caller).redeem(matrixTokenAddress, quantity, to);
         }
 
-        it('should mint MatrixToken to the correct addresses', async () => {
+        it('should mint MatrixToken to the correct addresses', async function () {
           const oldBalanceOfCaller = await matrixToken.balanceOf(caller.address);
           const oldBalanceOfManager = await matrixToken.balanceOf(feeRecipient.address);
 
@@ -346,7 +346,7 @@ describe('contract DebtIssuanceModuleV2', () => {
           expect(newBalanceOfManager.sub(oldBalanceOfManager)).eq(feeQuantity);
         });
 
-        it('should have the correct token balances', async () => {
+        it('should have the correct token balances', async function () {
           const oldWethBalanceOfTo = await errorErc20.balanceOf(to);
           const oldWethBalanceOfMatrix = await errorErc20.balanceOf(matrixTokenAddress);
 
@@ -375,29 +375,29 @@ describe('contract DebtIssuanceModuleV2', () => {
           expect(newDaiBalanceOfMatrix).eq(oldDaiBalanceOfMatrix);
         });
 
-        it('should have called the module issue hook', async () => {
+        it('should have called the module issue hook', async function () {
           await redeem();
           const result = await debtModuleMock.isModuleRedeemHookCalled();
           expect(result).is.true;
         });
 
-        it('should emit the correct RedeemMatrixToken event', async () => {
+        it('should emit the correct RedeemMatrixToken event', async function () {
           const feeQuantity = preciseMulCeilUint(quantity, issueFee);
           await expect(redeem()).emit(debtIssuanceModuleV2, 'RedeemMatrixToken').withArgs(matrixToken.address, caller.address, to, quantity, feeQuantity, ZERO);
         });
 
-        describe('when an external equity position is in place', () => {
+        describe('when an external equity position is in place', function () {
           const externalUnits = ethToWei(1);
 
-          before(async () => {
+          before(async function () {
             await externalPositionModule.addExternalPosition(matrixToken.address, errorErc20.address, externalUnits);
           });
 
-          after(async () => {
+          after(async function () {
             await externalPositionModule.addExternalPosition(matrixToken.address, errorErc20.address, ZERO);
           });
 
-          it('should have the correct token balances when an external equity position is in place', async () => {
+          it('should have the correct token balances when an external equity position is in place', async function () {
             const oldWethBalanceOfTo = await errorErc20.balanceOf(to);
             const oldWethBalanceOfMatrix = await errorErc20.balanceOf(matrixTokenAddress);
             const oldWethBalanceOfExternal = await errorErc20.balanceOf(externalPositionModule.address);
@@ -431,23 +431,23 @@ describe('contract DebtIssuanceModuleV2', () => {
           });
         });
 
-        describe('when the manager redemption fee is 0', () => {
-          before(async () => {
+        describe('when the manager redemption fee is 0', function () {
+          before(async function () {
             redeemFee = ZERO;
           });
 
-          after(async () => {
+          after(async function () {
             redeemFee = ethToWei(0.005);
           });
 
-          it('should mint MatrixToken to the correct addresses when the manager redemption fee is 0', async () => {
+          it('should mint MatrixToken to the correct addresses when the manager redemption fee is 0', async function () {
             const oldBalanceOfTo = await matrixToken.balanceOf(to);
             await redeem();
             const newBalanceOfTo = await matrixToken.balanceOf(to);
             expect(newBalanceOfTo).eq(oldBalanceOfTo);
           });
 
-          it('should have the correct token balances when the manager redemption fee is 0', async () => {
+          it('should have the correct token balances when the manager redemption fee is 0', async function () {
             const oldWethBalanceOfTo = await errorErc20.balanceOf(to);
             const oldWethBalanceOfMatrix = await errorErc20.balanceOf(matrixTokenAddress);
 
@@ -477,7 +477,7 @@ describe('contract DebtIssuanceModuleV2', () => {
           });
         });
 
-        it('should mint MatrixToken to the correct addresses when protocol fees are enabled', async () => {
+        it('should mint MatrixToken to the correct addresses when protocol fees are enabled', async function () {
           const protocolFee = ethToWei(0.2);
           await systemFixture.controller.addFee(debtIssuanceModuleV2.address, ZERO, protocolFee);
 
@@ -499,22 +499,22 @@ describe('contract DebtIssuanceModuleV2', () => {
           expect(newBalanceOfProtocol).eq(oldBalanceOfProtocol.add(protocolSplit));
         });
 
-        it('should revert when the issue quantity is 0', async () => {
+        it('should revert when the issue quantity is 0', async function () {
           quantity = ZERO;
           await expect(redeem()).revertedWith('Db1');
         });
 
-        it('should revert when the MatrixToken is not enabled on the controller', async () => {
+        it('should revert when the MatrixToken is not enabled on the controller', async function () {
           const newToken = await systemFixture.createRawMatrixToken([errorErc20.address], [ethToWei(1)], [debtIssuanceModuleV2.address], manager.address);
           matrixTokenAddress = newToken.address;
           await expect(redeem()).revertedWith('M3');
         });
       });
 
-      describe('getRequiredComponentIssuanceUnits', () => {
+      describe('getRequiredComponentIssuanceUnits', function () {
         const debtUnits = ethToWei(100);
 
-        beforeEach(async () => {
+        beforeEach(async function () {
           await debtModuleMock.addDebt(matrixToken.address, systemFixture.dai.address, debtUnits);
           await systemFixture.dai.transfer(debtModuleMock.address, ethToWei(100.5));
 
@@ -531,7 +531,7 @@ describe('contract DebtIssuanceModuleV2', () => {
           return debtIssuanceModuleV2.getRequiredComponentIssuanceUnits(matrixTokenAddress, quantity);
         }
 
-        it('should return the correct issue token amounts', async () => {
+        it('should return the correct issue token amounts', async function () {
           const { components, totalEquityUnits, totalDebtUnits } = await getRequiredComponentIssuanceUnits();
 
           const mintQuantity = preciseMul(quantity, ethToWei(1).add(issueFee));
@@ -547,7 +547,7 @@ describe('contract DebtIssuanceModuleV2', () => {
           expect(JSON.stringify(expectedDebtFlows)).eq(JSON.stringify(totalDebtUnits));
         });
 
-        it('should return the correct issue token amounts when an additive external equity position is in place', async () => {
+        it('should return the correct issue token amounts when an additive external equity position is in place', async function () {
           const externalUnits = ethToWei(1);
           await externalPositionModule.addExternalPosition(matrixToken.address, errorErc20.address, externalUnits);
           const { components, totalEquityUnits, totalDebtUnits } = await getRequiredComponentIssuanceUnits();
@@ -565,7 +565,7 @@ describe('contract DebtIssuanceModuleV2', () => {
           expect(JSON.stringify(expectedDebtFlows)).eq(JSON.stringify(totalDebtUnits));
         });
 
-        it('should return the correct issue token amounts when a non-additive external equity position is in place', async () => {
+        it('should return the correct issue token amounts when a non-additive external equity position is in place', async function () {
           const externalUnits = ethToWei(50);
 
           await externalPositionModule.addExternalPosition(matrixToken.address, systemFixture.dai.address, externalUnits);
@@ -587,13 +587,13 @@ describe('contract DebtIssuanceModuleV2', () => {
       });
     });
 
-    context('when MatrixToken components do have rounding errors', async () => {
-      describe('issue', () => {
+    context('when MatrixToken components do have rounding errors', async function () {
+      describe('issue', function () {
         const debtUnits = ethToWei(100);
 
         let to;
 
-        beforeEach(async () => {
+        beforeEach(async function () {
           await debtModuleMock.addDebt(matrixToken.address, systemFixture.dai.address, debtUnits);
           await systemFixture.dai.transfer(debtModuleMock.address, ethToWei(100.5));
 
@@ -610,16 +610,16 @@ describe('contract DebtIssuanceModuleV2', () => {
           return debtIssuanceModuleV2.connect(caller).issue(matrixTokenAddress, quantity, to);
         }
 
-        describe('when rounding error is negative one', () => {
-          beforeEach(async () => {
+        describe('when rounding error is negative one', function () {
+          beforeEach(async function () {
             await errorErc20.setError(-1);
           });
 
-          it('should revert when MatrixToken is exactly collateralized when rounding error is negative one', async () => {
+          it('should revert when MatrixToken is exactly collateralized when rounding error is negative one', async function () {
             await expect(issue()).revertedWith('IV0');
           });
 
-          it('should mint MatrixToken to the correct addresses when MatrixToken is over-collateralized by at least 1 wei', async () => {
+          it('should mint MatrixToken to the correct addresses when MatrixToken is over-collateralized by at least 1 wei', async function () {
             await errorErc20.connect(owner).transfer(matrixToken.address, ONE);
 
             const oldBalanceOfTo = await matrixToken.balanceOf(to);
@@ -637,12 +637,12 @@ describe('contract DebtIssuanceModuleV2', () => {
           });
         });
 
-        describe('when rounding error is positive one', () => {
-          beforeEach(async () => {
+        describe('when rounding error is positive one', function () {
+          beforeEach(async function () {
             await errorErc20.setError(ONE);
           });
 
-          it('should mint MatrixToken to the correct addresses when MatrixToken is exactly collateralized', async () => {
+          it('should mint MatrixToken to the correct addresses when MatrixToken is exactly collateralized', async function () {
             const oldBalanceOfTo = await matrixToken.balanceOf(to);
             const oldBalanceOfManager = await matrixToken.balanceOf(feeRecipient.address);
 
@@ -657,7 +657,7 @@ describe('contract DebtIssuanceModuleV2', () => {
             expect(newBalanceOfManager.sub(oldBalanceOfManager)).eq(feeQuantity);
           });
 
-          it('should mint MatrixToken to the correct addresses when MatrixToken is over-collateralized by at least 1 wei', async () => {
+          it('should mint MatrixToken to the correct addresses when MatrixToken is over-collateralized by at least 1 wei', async function () {
             await errorErc20.connect(owner).transfer(matrixToken.address, ONE);
 
             const oldBalanceOfTo = await matrixToken.balanceOf(to);
@@ -676,12 +676,12 @@ describe('contract DebtIssuanceModuleV2', () => {
         });
       });
 
-      describe('redeem', () => {
+      describe('redeem', function () {
         const debtUnits = ethToWei(100);
 
         let to;
 
-        beforeEach(async () => {
+        beforeEach(async function () {
           await debtModuleMock.addDebt(matrixToken.address, systemFixture.dai.address, debtUnits);
           await systemFixture.dai.transfer(debtModuleMock.address, ethToWei(100.5));
 
@@ -702,16 +702,16 @@ describe('contract DebtIssuanceModuleV2', () => {
           return debtIssuanceModuleV2.connect(caller).redeem(matrixTokenAddress, quantity, to);
         }
 
-        describe('when rounding error is negative one', () => {
-          beforeEach(async () => {
+        describe('when rounding error is negative one', function () {
+          beforeEach(async function () {
             await errorErc20.setError(-1);
           });
 
-          it('should revert when MatrixToken is exactly collateralized', async () => {
+          it('should revert when MatrixToken is exactly collateralized', async function () {
             await expect(redeem()).revertedWith('IV1');
           });
 
-          it('should mint MatrixToken to the correct addresses when MatrixToken is over-collateralized by at least 1 wei', async () => {
+          it('should mint MatrixToken to the correct addresses when MatrixToken is over-collateralized by at least 1 wei', async function () {
             await errorErc20.connect(owner).transfer(matrixToken.address, ONE);
 
             const oldBalanceOfCaller = await matrixToken.balanceOf(caller.address);
@@ -729,12 +729,12 @@ describe('contract DebtIssuanceModuleV2', () => {
           });
         });
 
-        describe('when rounding error is positive one', () => {
-          beforeEach(async () => {
+        describe('when rounding error is positive one', function () {
+          beforeEach(async function () {
             await errorErc20.setError(ONE);
           });
 
-          it('should mint MatrixToken to the correct addresses when MatrixToken is exactly collateralized', async () => {
+          it('should mint MatrixToken to the correct addresses when MatrixToken is exactly collateralized', async function () {
             const oldBalanceOfCaller = await matrixToken.balanceOf(caller.address);
             const oldBalanceOfManager = await matrixToken.balanceOf(feeRecipient.address);
 
@@ -749,7 +749,7 @@ describe('contract DebtIssuanceModuleV2', () => {
             expect(newBalanceOfCaller).eq(oldBalanceOfCaller.sub(quantity));
           });
 
-          it('should mint MatrixToken to the correct addresses when MatrixToken is over-collateralized by at least 1 wei', async () => {
+          it('should mint MatrixToken to the correct addresses when MatrixToken is over-collateralized by at least 1 wei', async function () {
             await errorErc20.connect(owner).transfer(matrixToken.address, ONE);
 
             const oldBalanceOfCaller = await matrixToken.balanceOf(caller.address);
@@ -768,11 +768,11 @@ describe('contract DebtIssuanceModuleV2', () => {
         });
       });
 
-      describe('getRequiredComponentIssuanceUnits', () => {
+      describe('getRequiredComponentIssuanceUnits', function () {
         const debtUnits = ethToWei(100);
         const accruedBalance = ethToWei(0.00001);
 
-        beforeEach(async () => {
+        beforeEach(async function () {
           quantity = ethToWei(1);
           matrixTokenAddress = matrixToken.address;
 
@@ -785,7 +785,7 @@ describe('contract DebtIssuanceModuleV2', () => {
           return debtIssuanceModuleV2.getRequiredComponentIssuanceUnits(matrixTokenAddress, quantity);
         }
 
-        it('should return the correct issue token amounts', async () => {
+        it('should return the correct issue token amounts', async function () {
           const { components, totalEquityUnits, totalDebtUnits } = await getRequiredComponentIssuanceUnits();
 
           const mintQuantity = preciseMul(quantity, ethToWei(1).add(issueFee));
@@ -801,7 +801,7 @@ describe('contract DebtIssuanceModuleV2', () => {
           expect(JSON.stringify(expectedDebtFlows)).eq(JSON.stringify(totalDebtUnits));
         });
 
-        it('should return the correct issue token amounts when an additive external equity position is in place', async () => {
+        it('should return the correct issue token amounts when an additive external equity position is in place', async function () {
           const externalUnits = ethToWei(1);
 
           await externalPositionModule.addExternalPosition(matrixToken.address, errorErc20.address, externalUnits);
@@ -821,7 +821,7 @@ describe('contract DebtIssuanceModuleV2', () => {
           expect(JSON.stringify(expectedDebtFlows)).eq(JSON.stringify(totalDebtUnits));
         });
 
-        it('should return the correct issue token amounts when a non-additive external equity position is in place', async () => {
+        it('should return the correct issue token amounts when a non-additive external equity position is in place', async function () {
           const externalUnits = ethToWei(50);
 
           await externalPositionModule.addExternalPosition(matrixToken.address, systemFixture.dai.address, externalUnits);
@@ -842,14 +842,14 @@ describe('contract DebtIssuanceModuleV2', () => {
           expect(JSON.stringify(expectedDebtFlows)).eq(JSON.stringify(totalDebtUnits));
         });
 
-        describe('when tokens have been issued', () => {
-          beforeEach(async () => {
+        describe('when tokens have been issued', function () {
+          beforeEach(async function () {
             const { totalEquityUnits } = await debtIssuanceModuleV2.getRequiredComponentIssuanceUnits(matrixToken.address, ethToWei(1));
             await errorErc20.approve(debtIssuanceModuleV2.address, totalEquityUnits[0].mul(ethToWei(1.005)));
             await debtIssuanceModuleV2.issue(matrixTokenAddress, quantity, owner.address);
           });
 
-          it('should return the correct issue token amounts', async () => {
+          it('should return the correct issue token amounts', async function () {
             const { components, totalEquityUnits, totalDebtUnits } = await getRequiredComponentIssuanceUnits();
 
             const mintQuantity = preciseMul(quantity, ethToWei(1).add(issueFee));
@@ -865,7 +865,7 @@ describe('contract DebtIssuanceModuleV2', () => {
             expect(JSON.stringify(expectedDebtFlows)).eq(JSON.stringify(totalDebtUnits));
           });
 
-          it('should return the correct issue token amounts when an additive external equity position is in place', async () => {
+          it('should return the correct issue token amounts when an additive external equity position is in place', async function () {
             const externalUnits = ethToWei(1);
 
             await externalPositionModule.addExternalPosition(matrixToken.address, errorErc20.address, externalUnits);

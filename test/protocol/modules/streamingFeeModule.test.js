@@ -15,21 +15,21 @@ const { ZERO_ADDRESS, ZERO, PRECISE_UNIT, ONE_YEAR_IN_SECONDS } = require('../..
 const { getStreamingFee, getPostFeePositionUnits, getStreamingFeeInflationAmount } = require('../../helpers/feeModuleUtil');
 const { snapshotBlockchain, revertBlockchain, increaseBlockTime, getLastBlockTimestamp } = require('../../helpers/evmUtil');
 
-describe('contract StreamingFeeModule', () => {
+describe('contract StreamingFeeModule', function () {
   const [owner, protocolFeeRecipient, feeRecipient, randomAccount] = getSigners();
   const systemFixture = new SystemFixture(owner, protocolFeeRecipient);
 
   let rootSnapshotId;
-  before(async () => {
+  before(async function () {
     rootSnapshotId = await snapshotBlockchain();
     await systemFixture.initAll();
   });
 
-  after(async () => {
+  after(async function () {
     await revertBlockchain(rootSnapshotId);
   });
 
-  describe('initialize', () => {
+  describe('initialize', function () {
     let caller;
     let matrixToken;
     let feeRecipient;
@@ -39,7 +39,7 @@ describe('contract StreamingFeeModule', () => {
     let feeStateSetting;
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
 
       matrixToken = await systemFixture.createMatrixToken(
@@ -63,7 +63,7 @@ describe('contract StreamingFeeModule', () => {
       };
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
@@ -71,13 +71,13 @@ describe('contract StreamingFeeModule', () => {
       return systemFixture.streamingFeeModule.connect(caller).initialize(matrixTokenAddress, feeStateSetting);
     }
 
-    it('should enable the Module on the MatrixToken', async () => {
+    it('should enable the Module on the MatrixToken', async function () {
       await initialize();
       const isModuleEnabled = await matrixToken.isInitializedModule(systemFixture.streamingFeeModule.address);
       expect(isModuleEnabled).is.true;
     });
 
-    it('should set all the fields in FeeState correctly', async () => {
+    it('should set all the fields in FeeState correctly', async function () {
       const txTimestamp = await getTransactionTimestamp(initialize());
       const feeState = await systemFixture.streamingFeeModule.getFeeState(matrixToken.address);
 
@@ -87,23 +87,23 @@ describe('contract StreamingFeeModule', () => {
       expect(feeState.streamingFeePercentage).eq(feeStateSetting.streamingFeePercentage);
     });
 
-    it('should revert when the caller is not the MatrixToken manager', async () => {
+    it('should revert when the caller is not the MatrixToken manager', async function () {
       caller = randomAccount;
       await expect(initialize()).revertedWith('M2');
     });
 
-    it('should revert when module is in NONE state', async () => {
+    it('should revert when module is in NONE state', async function () {
       await initialize();
       await matrixToken.removeModule(systemFixture.streamingFeeModule.address);
       await expect(initialize()).revertedWith('M5b');
     });
 
-    it('should revert when module is in INITIALIZED state', async () => {
+    it('should revert when module is in INITIALIZED state', async function () {
       await initialize();
       await expect(initialize()).revertedWith('M5b');
     });
 
-    it('should revert when the MatrixToken is not enabled on the controller', async () => {
+    it('should revert when the MatrixToken is not enabled on the controller', async function () {
       const newToken = await systemFixture.createRawMatrixToken(
         [systemFixture.weth.address],
         [ethToWei(1)],
@@ -114,28 +114,28 @@ describe('contract StreamingFeeModule', () => {
       await expect(initialize()).revertedWith('M5a');
     });
 
-    it('should revert when passed max fee is greater than 100%', async () => {
+    it('should revert when passed max fee is greater than 100%', async function () {
       feeStateSetting.maxStreamingFeePercentage = ethToWei(1.1);
       await expect(initialize()).revertedWith('SF0b');
     });
 
-    it('should revert when passed fee is greater than max fee', async () => {
+    it('should revert when passed fee is greater than max fee', async function () {
       feeStateSetting.streamingFeePercentage = ethToWei(0.11);
       await expect(initialize()).revertedWith('SF0c');
     });
 
-    it('should revert when feeRecipient is zero address', async () => {
+    it('should revert when feeRecipient is zero address', async function () {
       feeStateSetting.feeRecipient = ZERO_ADDRESS;
       await expect(initialize()).revertedWith('SF0a');
     });
   });
 
-  describe('removeModule', () => {
+  describe('removeModule', function () {
     let matrixToken;
     let module;
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
 
       matrixToken = await systemFixture.createMatrixToken(
@@ -161,11 +161,11 @@ describe('contract StreamingFeeModule', () => {
       module = systemFixture.streamingFeeModule.address;
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
-    it('should delete the feeState', async () => {
+    it('should delete the feeState', async function () {
       await matrixToken.removeModule(module);
       const feeState = await systemFixture.streamingFeeModule.getFeeState(matrixToken.address);
       expect(feeState.feeRecipient).eq(ZERO_ADDRESS);
@@ -175,13 +175,13 @@ describe('contract StreamingFeeModule', () => {
     });
   });
 
-  describe('getFee', () => {
+  describe('getFee', function () {
     let matrixToken;
     let feeStateSetting;
     let matrixTokenAddress;
     let timeFastForward;
 
-    before(async () => {
+    before(async function () {
       feeStateSetting = {
         feeRecipient: feeRecipient.address,
         maxStreamingFeePercentage: ethToWei(0.1),
@@ -191,7 +191,7 @@ describe('contract StreamingFeeModule', () => {
     });
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
 
       matrixToken = await systemFixture.createMatrixToken(
@@ -205,7 +205,7 @@ describe('contract StreamingFeeModule', () => {
       timeFastForward = ONE_YEAR_IN_SECONDS;
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
@@ -214,7 +214,7 @@ describe('contract StreamingFeeModule', () => {
       return systemFixture.streamingFeeModule.getFee(matrixTokenAddress);
     }
 
-    it('return the correct fee inflation percentage', async () => {
+    it('return the correct fee inflation percentage', async function () {
       const feeState = await systemFixture.streamingFeeModule.getFeeState(matrixTokenAddress);
       const feeInflation = await getFee();
       const callTimestamp = await getLastBlockTimestamp();
@@ -223,7 +223,7 @@ describe('contract StreamingFeeModule', () => {
     });
   });
 
-  describe('actualizeFee', () => {
+  describe('actualizeFee', function () {
     let matrixToken;
     let feeStateSetting;
     let isInitialized = false;
@@ -231,7 +231,7 @@ describe('contract StreamingFeeModule', () => {
     let matrixTokenAddress;
     let timeFastForward;
 
-    before(async () => {
+    before(async function () {
       feeStateSetting = {
         feeRecipient: feeRecipient.address,
         maxStreamingFeePercentage: ethToWei(0.1),
@@ -241,7 +241,7 @@ describe('contract StreamingFeeModule', () => {
     });
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
 
       const modules = [systemFixture.basicIssuanceModule.address, systemFixture.streamingFeeModule.address];
@@ -262,7 +262,7 @@ describe('contract StreamingFeeModule', () => {
       timeFastForward = ONE_YEAR_IN_SECONDS;
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
@@ -271,7 +271,7 @@ describe('contract StreamingFeeModule', () => {
       return systemFixture.streamingFeeModule.actualizeFee(matrixTokenAddress);
     }
 
-    it('mints the correct amount of new MatrixToken to the feeRecipient', async () => {
+    it('mints the correct amount of new MatrixToken to the feeRecipient', async function () {
       const feeState = await systemFixture.streamingFeeModule.getFeeState(matrixTokenAddress);
       const oldBalance = await matrixToken.balanceOf(feeState.feeRecipient);
       const oldTotalSupply = await matrixToken.totalSupply();
@@ -288,7 +288,7 @@ describe('contract StreamingFeeModule', () => {
       expect(newBalance.sub(oldBalance)).eq(feeInflation.sub(protocolFeeAmount));
     });
 
-    it('mints the correct amount of new Sets to the protocol feeRecipient', async () => {
+    it('mints the correct amount of new Sets to the protocol feeRecipient', async function () {
       const feeState = await systemFixture.streamingFeeModule.getFeeState(matrixTokenAddress);
       const oldTotalSupply = await matrixToken.totalSupply();
       const oldBalance = await matrixToken.balanceOf(systemFixture.feeRecipient.address);
@@ -304,7 +304,7 @@ describe('contract StreamingFeeModule', () => {
       expect(newBalance.sub(oldBalance)).eq(preciseMul(feeInflation, protocolFee));
     });
 
-    it('emits the correct ActualizeFee event', async () => {
+    it('emits the correct ActualizeFee event', async function () {
       const feeState = await systemFixture.streamingFeeModule.getFeeState(matrixTokenAddress);
       const oldTotalSupply = await matrixToken.totalSupply();
       const promise = actualizeFee();
@@ -323,7 +323,7 @@ describe('contract StreamingFeeModule', () => {
         .withArgs(matrixToken.address, feeRecipient.address, managerFee, systemFixture.feeRecipient.address, protocolFeeAmount);
     });
 
-    it('update totalSupply correctly', async () => {
+    it('update totalSupply correctly', async function () {
       const feeState = await systemFixture.streamingFeeModule.getFeeState(matrixTokenAddress);
       const oldTotalSupply = await matrixToken.totalSupply();
       const txnTimestamp = await getTransactionTimestamp(actualizeFee());
@@ -338,13 +338,13 @@ describe('contract StreamingFeeModule', () => {
       expect(newTotalSupply.sub(oldTotalSupply)).eq(feeInflation);
     });
 
-    it('sets a new lastStreamingFeeTimestamp', async () => {
+    it('sets a new lastStreamingFeeTimestamp', async function () {
       const txnTimestamp = await getTransactionTimestamp(actualizeFee());
       const feeState = await systemFixture.streamingFeeModule.getFeeState(matrixTokenAddress);
       expect(feeState.lastStreamingFeeTimestamp).eq(txnTimestamp);
     });
 
-    it('updates positionMultiplier correctly', async () => {
+    it('updates positionMultiplier correctly', async function () {
       const feeState = await systemFixture.streamingFeeModule.getFeeState(matrixTokenAddress);
       const txnTimestamp = await getTransactionTimestamp(actualizeFee());
       const newMultiplier = await matrixToken.getPositionMultiplier();
@@ -358,7 +358,7 @@ describe('contract StreamingFeeModule', () => {
       expect(newMultiplier).eq(expectedNewMultiplier);
     });
 
-    it('updates position units correctly', async () => {
+    it('updates position units correctly', async function () {
       const feeState = await systemFixture.streamingFeeModule.getFeeState(matrixTokenAddress);
       const oldPositions = await matrixToken.getPositions();
       const txnTimestamp = await getTransactionTimestamp(actualizeFee());
@@ -373,7 +373,7 @@ describe('contract StreamingFeeModule', () => {
       expect(newPositions[0].unit).eq(expectedNewUnits[0]);
     });
 
-    it('should revert when MatrixToken is not valid', async () => {
+    it('should revert when MatrixToken is not valid', async function () {
       const newToken = await systemFixture.createRawMatrixToken(
         [systemFixture.weth.address],
         [ethToWei(1)],
@@ -384,8 +384,8 @@ describe('contract StreamingFeeModule', () => {
       await expect(actualizeFee()).revertedWith('M3');
     });
 
-    describe('case 1.1: when a position is negative', () => {
-      beforeEach(async () => {
+    describe('case 1.1: when a position is negative', function () {
+      beforeEach(async function () {
         await systemFixture.controller.addModule(owner.address);
         await matrixToken.addModule(owner.address);
         await matrixToken.initializeModule();
@@ -395,7 +395,7 @@ describe('contract StreamingFeeModule', () => {
         await matrixToken.editExternalPositionUnit(systemFixture.usdc.address, owner.address, ethToWei(0.01).mul(-1));
       });
 
-      it('case 1.1: updates positionMultiplier correctly', async () => {
+      it('case 1.1: updates positionMultiplier correctly', async function () {
         const feeState = await systemFixture.streamingFeeModule.getFeeState(matrixTokenAddress);
         const txnTimestamp = await getTransactionTimestamp(actualizeFee());
         const expectedFeeInflation = await getStreamingFee(
@@ -409,7 +409,7 @@ describe('contract StreamingFeeModule', () => {
         expect(newMultiplier).eq(expectedNewMultiplier);
       });
 
-      it('case 1.1: update position units correctly', async () => {
+      it('case 1.1: update position units correctly', async function () {
         const feeState = await systemFixture.streamingFeeModule.getFeeState(matrixTokenAddress);
         const oldPositions = await matrixToken.getPositions();
         const txnTimestamp = await getTransactionTimestamp(actualizeFee());
@@ -427,12 +427,12 @@ describe('contract StreamingFeeModule', () => {
       });
     });
 
-    describe('case 1.2: when protocolFee is 0', () => {
-      beforeEach(async () => {
+    describe('case 1.2: when protocolFee is 0', function () {
+      beforeEach(async function () {
         await systemFixture.controller.editFee(systemFixture.streamingFeeModule.address, ZERO, ZERO);
       });
 
-      it('case 1.2: mints the correct amount of new Sets to the feeRecipient', async () => {
+      it('case 1.2: mints the correct amount of new Sets to the feeRecipient', async function () {
         const feeState = await systemFixture.streamingFeeModule.getFeeState(matrixTokenAddress);
         const oldTotalSupply = await matrixToken.totalSupply();
         const oldBalance = await matrixToken.balanceOf(feeState.feeRecipient);
@@ -448,7 +448,7 @@ describe('contract StreamingFeeModule', () => {
         expect(newBalance.sub(oldBalance)).eq(feeInflation);
       });
 
-      it('case 1.2: mints no MatrixToken to the protocol feeRecipient', async () => {
+      it('case 1.2: mints no MatrixToken to the protocol feeRecipient', async function () {
         const oldBalance = await matrixToken.balanceOf(systemFixture.feeRecipient.address);
         await actualizeFee();
         const newBalance = await matrixToken.balanceOf(systemFixture.feeRecipient.address);
@@ -456,18 +456,18 @@ describe('contract StreamingFeeModule', () => {
       });
     });
 
-    describe('case 1.3: when streamingFee is 0', () => {
-      beforeEach(async () => {
+    describe('case 1.3: when streamingFee is 0', function () {
+      beforeEach(async function () {
         await systemFixture.streamingFeeModule.updateStreamingFee(matrixTokenAddress, ZERO);
       });
 
-      it('case 1.3: should update the last timestamp', async () => {
+      it('case 1.3: should update the last timestamp', async function () {
         const txnTimestamp = await getTransactionTimestamp(actualizeFee());
         const feeState = await systemFixture.streamingFeeModule.getFeeState(matrixTokenAddress);
         expect(feeState.lastStreamingFeeTimestamp).eq(txnTimestamp);
       });
 
-      it('case 1.3: emits the correct ActualizeFee event', async () => {
+      it('case 1.3: emits the correct ActualizeFee event', async function () {
         const promise = actualizeFee();
         await expect(promise)
           .emit(systemFixture.streamingFeeModule, 'ActualizeFee')
@@ -475,22 +475,22 @@ describe('contract StreamingFeeModule', () => {
       });
     });
 
-    describe('case 1.4: when module is not initialized', () => {
-      before(async () => {
+    describe('case 1.4: when module is not initialized', function () {
+      before(async function () {
         isInitialized = true;
       });
 
-      after(async () => {
+      after(async function () {
         isInitialized = false;
       });
 
-      it('case 1.4: should revert', async () => {
+      it('case 1.4: should revert', async function () {
         await expect(actualizeFee()).revertedWith('M3');
       });
     });
   });
 
-  describe('updateStreamingFee', () => {
+  describe('updateStreamingFee', function () {
     let matrixToken;
     let feeStateSetting;
     let matrixTokenAddress;
@@ -500,7 +500,7 @@ describe('contract StreamingFeeModule', () => {
 
     let isInitialized = false;
 
-    before(async () => {
+    before(async function () {
       feeStateSetting = {
         feeRecipient: feeRecipient.address,
         maxStreamingFeePercentage: ethToWei(0.1),
@@ -510,7 +510,7 @@ describe('contract StreamingFeeModule', () => {
     });
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
 
       const modules = [systemFixture.basicIssuanceModule.address, systemFixture.streamingFeeModule.address];
@@ -530,7 +530,7 @@ describe('contract StreamingFeeModule', () => {
       timeFastForward = ONE_YEAR_IN_SECONDS;
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
@@ -539,13 +539,13 @@ describe('contract StreamingFeeModule', () => {
       return systemFixture.streamingFeeModule.connect(caller).updateStreamingFee(matrixTokenAddress, newFee);
     }
 
-    it('sets the new fee percentage', async () => {
+    it('sets the new fee percentage', async function () {
       await updateStreamingFee();
       const feeState = await systemFixture.streamingFeeModule.getFeeState(matrixTokenAddress);
       expect(feeState.streamingFeePercentage).eq(newFee);
     });
 
-    it('accrues fees to the feeRecipient at old fee rate', async () => {
+    it('accrues fees to the feeRecipient at old fee rate', async function () {
       const feeState = await systemFixture.streamingFeeModule.getFeeState(matrixTokenAddress);
 
       const oldTotalSupply = await matrixToken.totalSupply();
@@ -565,13 +565,13 @@ describe('contract StreamingFeeModule', () => {
       expect(newBalance.sub(oldBalance)).eq(feeInflation);
     });
 
-    it('emits the UpdateStreamingFee event', async () => {
+    it('emits the UpdateStreamingFee event', async function () {
       await expect(updateStreamingFee())
         .emit(systemFixture.streamingFeeModule, 'UpdateStreamingFee')
         .withArgs(matrixTokenAddress, feeStateSetting.streamingFeePercentage, newFee);
     });
 
-    it('sets the new fee percentage when the streaming fee is initially 0', async () => {
+    it('sets the new fee percentage when the streaming fee is initially 0', async function () {
       feeStateSetting.streamingFeePercentage = ZERO;
       await updateStreamingFee();
       feeStateSetting.streamingFeePercentage = ethToWei(0.02);
@@ -579,7 +579,7 @@ describe('contract StreamingFeeModule', () => {
       expect(feeState.streamingFeePercentage).eq(newFee);
     });
 
-    it('should revert when MatrixToken is not valid', async () => {
+    it('should revert when MatrixToken is not valid', async function () {
       const newToken = await systemFixture.createRawMatrixToken(
         [systemFixture.weth.address],
         [ethToWei(1)],
@@ -590,32 +590,32 @@ describe('contract StreamingFeeModule', () => {
       await expect(updateStreamingFee()).revertedWith('M3');
     });
 
-    it('should revert when passed fee is greater than max fee', async () => {
+    it('should revert when passed fee is greater than max fee', async function () {
       newFee = ethToWei(0.11);
       await expect(updateStreamingFee()).revertedWith('SF1');
     });
 
-    it('should revert when the caller is not the MatrixToken manager', async () => {
+    it('should revert when the caller is not the MatrixToken manager', async function () {
       caller = randomAccount;
       await expect(updateStreamingFee()).revertedWith('M2');
     });
 
-    describe('when the existing fee is 0', () => {
-      before(async () => {
+    describe('when the existing fee is 0', function () {
+      before(async function () {
         isInitialized = true;
       });
 
-      after(async () => {
+      after(async function () {
         isInitialized = false;
       });
 
-      it('should revert', async () => {
+      it('should revert', async function () {
         await expect(updateStreamingFee()).revertedWith('M3');
       });
     });
   });
 
-  describe('updateFeeRecipient', () => {
+  describe('updateFeeRecipient', function () {
     let matrixToken;
     let feeStateSetting;
     let isInitialized = false;
@@ -624,7 +624,7 @@ describe('contract StreamingFeeModule', () => {
     let newFeeRecipient;
     let caller;
 
-    before(async () => {
+    before(async function () {
       feeStateSetting = {
         feeRecipient: feeRecipient.address,
         maxStreamingFeePercentage: ethToWei(0.1),
@@ -634,7 +634,7 @@ describe('contract StreamingFeeModule', () => {
     });
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
 
       const modules = [systemFixture.basicIssuanceModule.address, systemFixture.streamingFeeModule.address];
@@ -649,7 +649,7 @@ describe('contract StreamingFeeModule', () => {
       newFeeRecipient = owner.address;
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
@@ -657,29 +657,29 @@ describe('contract StreamingFeeModule', () => {
       return systemFixture.streamingFeeModule.connect(caller).updateFeeRecipient(matrixTokenAddress, newFeeRecipient);
     }
 
-    it('sets the fee recipient', async () => {
+    it('sets the fee recipient', async function () {
       await updateFeeRecipient();
       const feeState = await systemFixture.streamingFeeModule.getFeeState(matrixTokenAddress);
       expect(feeState.feeRecipient).eq(newFeeRecipient);
     });
 
-    it('emits the UpdateFeeRecipient event', async () => {
+    it('emits the UpdateFeeRecipient event', async function () {
       await expect(updateFeeRecipient())
         .emit(systemFixture.streamingFeeModule, 'UpdateFeeRecipient')
         .withArgs(matrixTokenAddress, feeRecipient.address, newFeeRecipient);
     });
 
-    it('should revert when feeRecipient is zero address', async () => {
+    it('should revert when feeRecipient is zero address', async function () {
       newFeeRecipient = ZERO_ADDRESS;
       await expect(updateFeeRecipient()).revertedWith('SF2');
     });
 
-    it('should revert when the caller is not the MatrixToken manager', async () => {
+    it('should revert when the caller is not the MatrixToken manager', async function () {
       caller = randomAccount;
       await expect(updateFeeRecipient()).revertedWith('M2');
     });
 
-    it('should revert when MatrixToken is not valid', async () => {
+    it('should revert when MatrixToken is not valid', async function () {
       const newToken = await systemFixture.createRawMatrixToken(
         [systemFixture.weth.address],
         [ethToWei(1)],
@@ -690,16 +690,16 @@ describe('contract StreamingFeeModule', () => {
       await expect(updateFeeRecipient()).revertedWith('M3');
     });
 
-    describe('should revert when module is not initialized', () => {
-      before(async () => {
+    describe('should revert when module is not initialized', function () {
+      before(async function () {
         isInitialized = true;
       });
 
-      after(async () => {
+      after(async function () {
         isInitialized = false;
       });
 
-      it('should revert', async () => {
+      it('should revert', async function () {
         await expect(updateFeeRecipient()).revertedWith('M3');
       });
     });

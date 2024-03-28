@@ -4,11 +4,21 @@
 
 const { ethers } = require('hardhat');
 
-const ethToWei = (quantity) => ethers.utils.parseEther(`${quantity}`);
-const weiToEth = (quantity) => parseFloat(ethers.utils.formatEther(`${quantity}`));
+function ethToWei(quantity) {
+  return ethers.utils.parseEther(`${quantity}`);
+}
 
-const usdToWei = (quantity) => ethers.utils.parseUnits(`${quantity}`, 6); // USDC, USDT
-const btcToWei = (quantity) => ethers.utils.parseUnits(`${quantity}`, 8);
+function weiToEth(quantity) {
+  return parseFloat(ethers.utils.formatEther(`${quantity}`));
+}
+
+function usdToWei(quantity) {
+  return ethers.utils.parseUnits(`${quantity}`, 6); // USDC, USDT
+}
+
+function btcToWei(quantity) {
+  return ethers.utils.parseUnits(`${quantity}`, 8);
+}
 
 module.exports = {
   ethToWei,

@@ -14,7 +14,7 @@ const { getSigners, getRandomAddress, getEthBalance } = require('../../helpers/a
 const { snapshotBlockchain, revertBlockchain } = require('../../helpers/evmUtil.js');
 const { ZERO, ZERO_ADDRESS, ZERO_BYTES } = require('../../helpers/constants');
 
-describe('contract WrapModuleV2', () => {
+describe('contract WrapModuleV2', function () {
   const [owner, protocolFeeRecipient, randomAccount] = getSigners();
   const systemFixture = new SystemFixture(owner, protocolFeeRecipient);
   const wrapV2AdapterName = 'WRAP_V2_ADAPTER';
@@ -23,7 +23,7 @@ describe('contract WrapModuleV2', () => {
   let wrapV2Adapter; // WrapV2AdapterMock
 
   let snapshotId;
-  before(async () => {
+  before(async function () {
     snapshotId = await snapshotBlockchain();
 
     await systemFixture.initAll();
@@ -35,27 +35,27 @@ describe('contract WrapModuleV2', () => {
     await systemFixture.integrationRegistry.addIntegration(wrapV2Module.address, wrapV2AdapterName, wrapV2Adapter.address);
   });
 
-  after(async () => {
+  after(async function () {
     await revertBlockchain(snapshotId);
   });
 
-  describe('constructor', () => {
-    it('should set the correct controller', async () => {
+  describe('constructor', function () {
+    it('should set the correct controller', async function () {
       expect(await wrapV2Module.getController()).eq(systemFixture.controller.address);
     });
 
-    it('should set the correct weth contract', async () => {
+    it('should set the correct weth contract', async function () {
       expect(await wrapV2Module.getWeth()).eq(systemFixture.weth.address);
     });
   });
 
-  describe('initialize', () => {
+  describe('initialize', function () {
     let caller;
     let matrixToken;
     let matrixTokenAddress;
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
 
       matrixToken = await systemFixture.createMatrixToken([systemFixture.weth.address], [ethToWei(1)], [wrapV2Module.address], owner);
@@ -63,7 +63,7 @@ describe('contract WrapModuleV2', () => {
       caller = owner;
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
@@ -71,17 +71,17 @@ describe('contract WrapModuleV2', () => {
       return wrapV2Module.connect(caller).initialize(matrixTokenAddress);
     }
 
-    it('should enable the Module on the MatrixToken', async () => {
+    it('should enable the Module on the MatrixToken', async function () {
       await initialize();
       expect(await matrixToken.isInitializedModule(wrapV2Module.address)).is.true;
     });
 
-    it('should revert when the caller is not the MatrixToken manager', async () => {
+    it('should revert when the caller is not the MatrixToken manager', async function () {
       caller = randomAccount;
       await expect(initialize()).revertedWith('M2');
     });
 
-    it('should revert when MatrixToken is not in pending state', async () => {
+    it('should revert when MatrixToken is not in pending state', async function () {
       const newModule = await getRandomAddress();
       await systemFixture.controller.addModule(newModule);
       const wrapModuleNotPendingSetToken = await systemFixture.createMatrixToken([systemFixture.weth.address], [ethToWei(1)], [newModule], owner);
@@ -89,20 +89,20 @@ describe('contract WrapModuleV2', () => {
       await expect(initialize()).revertedWith('WMb0b');
     });
 
-    it('should revert when the MatrixToken is not enabled on the controller', async () => {
+    it('should revert when the MatrixToken is not enabled on the controller', async function () {
       const nonEnabledToken = await systemFixture.createRawMatrixToken([systemFixture.weth.address], [ethToWei(1)], [wrapV2Module.address], owner);
       matrixTokenAddress = nonEnabledToken.address;
       await expect(initialize()).revertedWith('WMb0a');
     });
   });
 
-  describe('removeModule', () => {
+  describe('removeModule', function () {
     let caller;
     let module;
     let matrixToken;
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
 
       matrixToken = await systemFixture.createMatrixToken([systemFixture.weth.address], [ethToWei(1)], [wrapV2Module.address], owner);
@@ -111,7 +111,7 @@ describe('contract WrapModuleV2', () => {
       caller = owner;
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
@@ -119,27 +119,27 @@ describe('contract WrapModuleV2', () => {
       return matrixToken.connect(caller).removeModule(module);
     }
 
-    it('should properly remove the module', async () => {
+    it('should properly remove the module', async function () {
       await removeModule();
       expect(await matrixToken.isInitializedModule(module)).is.false;
     });
   });
 
-  context('when a MatrixToken has been deployed and issued', async () => {
+  context('when a MatrixToken has been deployed and issued', async function () {
     const matrixTokensIssued = ethToWei(10);
 
     let matrixToken;
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
-    before(async () => {
+    before(async function () {
       matrixToken = await systemFixture.createMatrixToken(
         [systemFixture.weth.address],
         [ethToWei(1)],
@@ -154,7 +154,7 @@ describe('contract WrapModuleV2', () => {
       await systemFixture.basicIssuanceModule.issue(matrixToken.address, matrixTokensIssued, owner.address);
     });
 
-    describe('wrap', () => {
+    describe('wrap', function () {
       let caller;
       let wrapData;
       let wrappedToken;
@@ -163,7 +163,7 @@ describe('contract WrapModuleV2', () => {
       let underlyingToken;
       let matrixTokenAddress;
 
-      beforeEach(async () => {
+      beforeEach(async function () {
         caller = owner;
         wrapData = ZERO_BYTES;
         underlyingUnits = ethToWei(1);
@@ -177,21 +177,21 @@ describe('contract WrapModuleV2', () => {
         return wrapV2Module.connect(caller).wrap(matrixTokenAddress, underlyingToken, wrappedToken, underlyingUnits, integrationName, wrapData);
       }
 
-      it('should mint the correct wrapped asset to the MatrixToken', async () => {
+      it('should mint the correct wrapped asset to the MatrixToken', async function () {
         const oldWrappedBalance = await wrapV2Adapter.balanceOf(matrixToken.address);
         await wrap();
         const newWrappedBalance = await wrapV2Adapter.balanceOf(matrixToken.address);
         expect(newWrappedBalance.sub(oldWrappedBalance)).eq(matrixTokensIssued);
       });
 
-      it('should reduce the correct quantity of the underlying quantity', async () => {
+      it('should reduce the correct quantity of the underlying quantity', async function () {
         const oldUnderlyingBalance = await systemFixture.weth.balanceOf(matrixToken.address);
         await wrap();
         const newUnderlyingBalance = await systemFixture.weth.balanceOf(matrixToken.address);
         expect(oldUnderlyingBalance.sub(newUnderlyingBalance)).eq(matrixTokensIssued);
       });
 
-      it('remove the underlying position and replace with the wrapped token position', async () => {
+      it('remove the underlying position and replace with the wrapped token position', async function () {
         await wrap();
 
         const positions = await matrixToken.getPositions();
@@ -202,23 +202,23 @@ describe('contract WrapModuleV2', () => {
         expect(receivedWrappedTokenPosition.unit).eq(underlyingUnits);
       });
 
-      it('emits the correct WrapComponent event', async () => {
+      it('emits the correct WrapComponent event', async function () {
         await expect(wrap())
           .to.emit(wrapV2Module, 'WrapComponent')
           .withArgs(matrixToken.address, underlyingToken, wrappedToken, preciseMul(underlyingUnits, matrixTokensIssued), matrixTokensIssued, integrationName);
       });
 
-      it('should revert when the integration ID is invalid', async () => {
+      it('should revert when the integration ID is invalid', async function () {
         integrationName = 'INVALID_NAME';
         await expect(wrap()).revertedWith('M0');
       });
 
-      it('should revert when the caller is not the manager', async () => {
+      it('should revert when the caller is not the manager', async function () {
         caller = randomAccount;
         await expect(wrap()).revertedWith('M1a');
       });
 
-      it('should revert when the MatrixToken has not initialized the module', async () => {
+      it('should revert when the MatrixToken has not initialized the module', async function () {
         const newMatrixToken = await systemFixture.createMatrixToken(
           [systemFixture.weth.address],
           [ethToWei(1)],
@@ -230,23 +230,23 @@ describe('contract WrapModuleV2', () => {
         await expect(wrap()).revertedWith('M1b');
       });
 
-      it('should revert when the subjectComponent is not a Default Position', async () => {
+      it('should revert when the subjectComponent is not a Default Position', async function () {
         underlyingToken = await getRandomAddress();
         await expect(wrap()).revertedWith('WMb1b');
       });
 
-      it('should revert when the units is greater than on the position', async () => {
+      it('should revert when the units is greater than on the position', async function () {
         underlyingUnits = ethToWei(100);
         await expect(wrap()).revertedWith('WMb1c');
       });
 
-      it('should revert when the underlying units is 0', async () => {
+      it('should revert when the underlying units is 0', async function () {
         underlyingUnits = ZERO;
         await expect(wrap()).revertedWith('WMb1a');
       });
     });
 
-    describe('wrapWithEther', () => {
+    describe('wrapWithEther', function () {
       let caller;
       let wrapData;
       let wrappedToken;
@@ -254,7 +254,7 @@ describe('contract WrapModuleV2', () => {
       let integrationName;
       let matrixTokenAddress;
 
-      beforeEach(async () => {
+      beforeEach(async function () {
         caller = owner;
         wrapData = ZERO_BYTES;
         underlyingUnits = ethToWei(1);
@@ -267,28 +267,28 @@ describe('contract WrapModuleV2', () => {
         return wrapV2Module.connect(caller).wrapWithEther(matrixTokenAddress, wrappedToken, underlyingUnits, integrationName, wrapData);
       }
 
-      it('should mint the correct wrapped asset to the MatrixToken', async () => {
+      it('should mint the correct wrapped asset to the MatrixToken', async function () {
         const oldWrappedBalance = await wrapV2Adapter.balanceOf(matrixToken.address);
         await wrapWithEther();
         const newWrappedBalance = await wrapV2Adapter.balanceOf(matrixToken.address);
         expect(newWrappedBalance.sub(oldWrappedBalance)).eq(matrixTokensIssued);
       });
 
-      it('should reduce the correct quantity of WETH', async () => {
+      it('should reduce the correct quantity of WETH', async function () {
         const oldUnderlyingBalance = await systemFixture.weth.balanceOf(matrixToken.address);
         await wrapWithEther();
         const newUnderlyingBalance = await systemFixture.weth.balanceOf(matrixToken.address);
         expect(oldUnderlyingBalance.sub(newUnderlyingBalance)).eq(matrixTokensIssued);
       });
 
-      it('should send the correct quantity of ETH to the external protocol', async () => {
+      it('should send the correct quantity of ETH to the external protocol', async function () {
         const oldEthBalance = await getEthBalance(wrapV2Adapter.address);
         await wrapWithEther();
         const newEthBalance = await getEthBalance(wrapV2Adapter.address);
         expect(newEthBalance.sub(oldEthBalance)).eq(preciseMul(underlyingUnits, matrixTokensIssued));
       });
 
-      it('removes the underlying position and replace with the wrapped token position', async () => {
+      it('removes the underlying position and replace with the wrapped token position', async function () {
         await wrapWithEther();
 
         const positions = await matrixToken.getPositions();
@@ -299,7 +299,7 @@ describe('contract WrapModuleV2', () => {
         expect(receivedWrappedTokenPosition.unit).eq(underlyingUnits);
       });
 
-      it('emits the correct WrapComponent event', async () => {
+      it('emits the correct WrapComponent event', async function () {
         await expect(wrapWithEther())
           .to.emit(wrapV2Module, 'WrapComponent')
           .withArgs(
@@ -312,17 +312,17 @@ describe('contract WrapModuleV2', () => {
           );
       });
 
-      it('should revert when the integration ID is invalid', async () => {
+      it('should revert when the integration ID is invalid', async function () {
         integrationName = 'INVALID_NAME';
         await expect(wrapWithEther()).revertedWith('M0');
       });
 
-      it('should revert when the caller is not the manager', async () => {
+      it('should revert when the caller is not the manager', async function () {
         caller = randomAccount;
         await expect(wrapWithEther()).revertedWith('M1a');
       });
 
-      it('should revert when the MatrixToken has not initialized the module', async () => {
+      it('should revert when the MatrixToken has not initialized the module', async function () {
         const newMatrixToken = await systemFixture.createMatrixToken(
           [systemFixture.weth.address],
           [ethToWei(1)],
@@ -334,7 +334,7 @@ describe('contract WrapModuleV2', () => {
         await expect(wrapWithEther()).revertedWith('M1b');
       });
 
-      it('should revert when WETH is not a Default Position', async () => {
+      it('should revert when WETH is not a Default Position', async function () {
         const nonWethMatrixToken = await systemFixture.createMatrixToken(
           [systemFixture.wbtc.address],
           [ethToWei(1)],
@@ -349,18 +349,18 @@ describe('contract WrapModuleV2', () => {
         await expect(wrapWithEther()).revertedWith('WMb1b');
       });
 
-      it('should revert when the units is greater than on the position', async () => {
+      it('should revert when the units is greater than on the position', async function () {
         underlyingUnits = ethToWei(100);
         await expect(wrapWithEther()).revertedWith('WMb1c');
       });
 
-      it('should revert when the underlying units is 0', async () => {
+      it('should revert when the underlying units is 0', async function () {
         underlyingUnits = ZERO;
         await expect(wrapWithEther()).revertedWith('WMb1a');
       });
     });
 
-    describe('unwrap', () => {
+    describe('unwrap', function () {
       let caller;
       let unwrapData;
       let wrappedToken;
@@ -370,7 +370,7 @@ describe('contract WrapModuleV2', () => {
       let wrappedTokenUnits;
       let matrixTokenAddress;
 
-      beforeEach(async () => {
+      beforeEach(async function () {
         caller = owner;
         unwrapData = ZERO_BYTES;
         wrappedQuantity = ethToWei(1);
@@ -387,7 +387,7 @@ describe('contract WrapModuleV2', () => {
         return wrapV2Module.connect(caller).unwrap(matrixTokenAddress, underlyingToken, wrappedToken, wrappedTokenUnits, integrationName, unwrapData);
       }
 
-      it('should burn the correct wrapped asset to the MatrixToken', async () => {
+      it('should burn the correct wrapped asset to the MatrixToken', async function () {
         const oldWrappedBalance = await wrapV2Adapter.balanceOf(matrixToken.address);
         await unwrap();
         const newWrappedBalance = await wrapV2Adapter.balanceOf(matrixToken.address);
@@ -395,7 +395,7 @@ describe('contract WrapModuleV2', () => {
         expect(oldWrappedBalance.sub(newWrappedBalance)).eq(expectedTokenBalance);
       });
 
-      it('should properly update the underlying and wrapped token units', async () => {
+      it('should properly update the underlying and wrapped token units', async function () {
         await unwrap();
 
         const positions = await matrixToken.getPositions();
@@ -410,7 +410,7 @@ describe('contract WrapModuleV2', () => {
         expect(receivedUnderlyingPosition.unit).eq(ethToWei(0.5));
       });
 
-      it('emits the correct UnwrapComponent event', async () => {
+      it('emits the correct UnwrapComponent event', async function () {
         const underlyingQuantity = preciseMul(wrappedTokenUnits, matrixTokensIssued);
         const wrapQuantity = preciseMul(matrixTokensIssued, wrappedQuantity.sub(wrappedTokenUnits));
         await expect(unwrap())
@@ -418,17 +418,17 @@ describe('contract WrapModuleV2', () => {
           .withArgs(matrixToken.address, underlyingToken, wrappedToken, underlyingQuantity, wrapQuantity, integrationName);
       });
 
-      it('should revert when the integration ID is invalid', async () => {
+      it('should revert when the integration ID is invalid', async function () {
         integrationName = 'INVALID_NAME';
         await expect(unwrap()).revertedWith('M0');
       });
 
-      it('should revert when the caller is not the manager', async () => {
+      it('should revert when the caller is not the manager', async function () {
         caller = randomAccount;
         await expect(unwrap()).revertedWith('M1a');
       });
 
-      it('should revert when the MatrixToken has not initialized the module', async () => {
+      it('should revert when the MatrixToken has not initialized the module', async function () {
         const newMatrixToken = await systemFixture.createMatrixToken(
           [systemFixture.weth.address],
           [ethToWei(1)],
@@ -440,23 +440,23 @@ describe('contract WrapModuleV2', () => {
         await expect(unwrap()).revertedWith('M1b');
       });
 
-      it('should revert when the component is not a Default Position', async () => {
+      it('should revert when the component is not a Default Position', async function () {
         wrappedToken = await getRandomAddress();
         await expect(unwrap()).revertedWith('WMb1b');
       });
 
-      it('should revert when the units is greater than on the position', async () => {
+      it('should revert when the units is greater than on the position', async function () {
         wrappedTokenUnits = ethToWei(100);
         await expect(unwrap()).revertedWith('WMb1c');
       });
 
-      it('should revert when the underlying units is 0', async () => {
+      it('should revert when the underlying units is 0', async function () {
         wrappedTokenUnits = ZERO;
         await expect(unwrap()).revertedWith('WMb1a');
       });
     });
 
-    describe('unwrapWithEther', () => {
+    describe('unwrapWithEther', function () {
       let caller;
       let unwrapData;
       let wrappedToken;
@@ -465,7 +465,7 @@ describe('contract WrapModuleV2', () => {
       let wrappedTokenUnits;
       let matrixTokenAddress;
 
-      beforeEach(async () => {
+      beforeEach(async function () {
         caller = owner;
         unwrapData = ZERO_BYTES;
         wrappedQuantity = ethToWei(1);
@@ -481,7 +481,7 @@ describe('contract WrapModuleV2', () => {
         return wrapV2Module.connect(caller).unwrapWithEther(matrixTokenAddress, wrappedToken, wrappedTokenUnits, integrationName, unwrapData);
       }
 
-      it('should burn the correct wrapped asset to the MatrixToken', async () => {
+      it('should burn the correct wrapped asset to the MatrixToken', async function () {
         const oldWrappedBalance = await wrapV2Adapter.balanceOf(matrixToken.address);
         await unwrapWithEther();
         const newWrappedBalance = await wrapV2Adapter.balanceOf(matrixToken.address);
@@ -489,7 +489,7 @@ describe('contract WrapModuleV2', () => {
         expect(oldWrappedBalance.sub(newWrappedBalance)).eq(expectedTokenBalance);
       });
 
-      it('should properly update the underlying and wrapped token units', async () => {
+      it('should properly update the underlying and wrapped token units', async function () {
         await unwrapWithEther();
 
         const positions = await matrixToken.getPositions();
@@ -504,14 +504,14 @@ describe('contract WrapModuleV2', () => {
         expect(receivedUnderlyingPosition.unit).eq(ethToWei(0.5));
       });
 
-      it('should have sent the correct quantity of ETH to the MatrixToken', async () => {
+      it('should have sent the correct quantity of ETH to the MatrixToken', async function () {
         const oldEthBalance = await getEthBalance(wrapV2Adapter.address);
         await unwrapWithEther();
         const newEthBalance = await getEthBalance(wrapV2Adapter.address);
         expect(oldEthBalance.sub(newEthBalance)).eq(preciseMul(wrappedTokenUnits, matrixTokensIssued));
       });
 
-      it('emits the correct UnwrapComponent event', async () => {
+      it('emits the correct UnwrapComponent event', async function () {
         const underlyingQuantity = preciseMul(wrappedTokenUnits, matrixTokensIssued);
         const wrapQuantity = preciseMul(matrixTokensIssued, wrappedQuantity.sub(wrappedTokenUnits));
 
@@ -520,17 +520,17 @@ describe('contract WrapModuleV2', () => {
           .withArgs(matrixToken.address, systemFixture.weth.address, wrappedToken, underlyingQuantity, wrapQuantity, integrationName);
       });
 
-      it('should revert when the integration ID is invalid', async () => {
+      it('should revert when the integration ID is invalid', async function () {
         integrationName = 'INVALID_NAME';
         await expect(unwrapWithEther()).revertedWith('M0');
       });
 
-      it('should revert when the caller is not the manager', async () => {
+      it('should revert when the caller is not the manager', async function () {
         caller = randomAccount;
         await expect(unwrapWithEther()).revertedWith('M1a');
       });
 
-      it('should revert when the MatrixToken has not initialized the module', async () => {
+      it('should revert when the MatrixToken has not initialized the module', async function () {
         const newMatrixToken = await systemFixture.createMatrixToken(
           [systemFixture.weth.address],
           [ethToWei(1)],
@@ -542,17 +542,17 @@ describe('contract WrapModuleV2', () => {
         await expect(unwrapWithEther()).revertedWith('M1b');
       });
 
-      it('should revert when the subjectComponent is not a Default Position', async () => {
+      it('should revert when the subjectComponent is not a Default Position', async function () {
         wrappedToken = await getRandomAddress();
         await expect(unwrapWithEther()).revertedWith('WMb1b');
       });
 
-      it('should revert when the units is greater than on the position', async () => {
+      it('should revert when the units is greater than on the position', async function () {
         wrappedTokenUnits = ethToWei(100);
         await expect(unwrapWithEther()).revertedWith('WMb1c');
       });
 
-      it('should revert when the underlying units is 0', async () => {
+      it('should revert when the underlying units is 0', async function () {
         wrappedTokenUnits = ZERO;
         await expect(unwrapWithEther()).revertedWith('WMb1a');
       });

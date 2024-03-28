@@ -10,11 +10,21 @@ function divFloor(a, b) {
   return mod.isZero() || (a.gt(0) && b.gt(0)) || (a.lt(0) && b.lt(0)) ? result : result.sub(1);
 }
 
-const preciseMul = (a, b) => a.mul(b).div(PRECISE_UNIT);
-const preciseDiv = (a, b) => a.mul(PRECISE_UNIT).div(b);
+function preciseMul(a, b) {
+  return a.mul(b).div(PRECISE_UNIT);
+}
 
-const preciseMulCeilUint = (a, b) => (a.isZero() || b.isZero() ? ZERO : a.mul(b).sub(1).div(PRECISE_UNIT).add(1)); // preciseMulCeil
-const preciseDivCeilUint = (a, b) => (a.isZero() || b.isZero() ? ZERO : a.mul(PRECISE_UNIT).sub(1).div(b).add(1)); // preciseDivCeil
+function preciseDiv(a, b) {
+  return a.mul(PRECISE_UNIT).div(b);
+}
+
+function preciseMulCeilUint(a, b) {
+  return a.isZero() || b.isZero() ? ZERO : a.mul(b).sub(1).div(PRECISE_UNIT).add(1); // preciseMulCeil
+}
+
+function preciseDivCeilUint(a, b) {
+  return a.isZero() || b.isZero() ? ZERO : a.mul(PRECISE_UNIT).sub(1).div(b).add(1); // preciseDivCeil
+}
 
 function preciseMulCeilInt(a, b) {
   const c = a.mul(b);
@@ -46,9 +56,13 @@ function preciseMulFloorInt(a, b) {
 }
 
 // Error: cannot modulo negative values (fault="cannot modulo negative values", operation="mod", code=NUMERIC_FAULT, version=bignumber/5.5.0)
-const preciseDivFloorInt = (a, b) => divFloor(a.mul(PRECISE_UNIT), b);
+function preciseDivFloorInt(a, b) {
+  return divFloor(a.mul(PRECISE_UNIT), b);
+}
 
-const min = (valueOne, valueTwo) => (valueOne.lt(valueTwo) ? valueOne : valueTwo);
+function min(valueOne, valueTwo) {
+  return valueOne.lt(valueTwo) ? valueOne : valueTwo;
+}
 
 module.exports = {
   divFloor,

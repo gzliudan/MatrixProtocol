@@ -14,7 +14,7 @@ const { snapshotBlockchain, revertBlockchain } = require('../../../helpers/evmUt
 const { ZERO, ONE, TWO, MAX_UINT_256, ZERO_ADDRESS } = require('../../../helpers/constants');
 const { deployContract, deployContractAndLinkLibraries } = require('../../../helpers/deploy');
 
-describe('library AaveV2', () => {
+describe('library AaveV2', function () {
   const [owner, protocolFeeRecipient] = getSigners();
   const systemFixture = new SystemFixture(owner, protocolFeeRecipient);
   const aaveV2Fixture = new AaveV2Fixture(owner);
@@ -31,7 +31,7 @@ describe('library AaveV2', () => {
   let matrixToken;
 
   let snapshotId;
-  before(async () => {
+  before(async function () {
     snapshotId = await snapshotBlockchain();
 
     await systemFixture.initAll();
@@ -70,18 +70,18 @@ describe('library AaveV2', () => {
     await systemFixture.basicIssuanceModule.issue(matrixToken.address, ethToWei(1), owner.address);
   });
 
-  after(async () => {
+  after(async function () {
     await revertBlockchain(snapshotId);
   });
 
-  describe('getDepositCalldata', () => {
+  describe('getDepositCalldata', function () {
     let asset;
     let onBehalfOf;
     let referralCode;
     let lendingPoolAddress;
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
 
       referralCode = ZERO;
@@ -90,7 +90,7 @@ describe('library AaveV2', () => {
       lendingPoolAddress = aaveV2Fixture.lendingPool.address;
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
@@ -98,7 +98,7 @@ describe('library AaveV2', () => {
       return await aaveLibMock.testGetDepositCalldata(lendingPoolAddress, asset, amountNotional, onBehalfOf, referralCode);
     }
 
-    it('should get correct data', async () => {
+    it('should get correct data', async function () {
       const [target, value, calldata] = await getDepositCalldata();
       const expectedCalldata = aaveV2Fixture.lendingPool.interface.encodeFunctionData('deposit', [asset, amountNotional, onBehalfOf, referralCode]);
 
@@ -108,13 +108,13 @@ describe('library AaveV2', () => {
     });
   });
 
-  describe('invokeDeposit', () => {
+  describe('invokeDeposit', function () {
     let asset;
     let matrixTokenAddress;
     let lendingPoolAddress;
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
 
       await invokeLibMock.testInvokeApprove(matrixToken.address, systemFixture.weth.address, aaveV2Fixture.lendingPool.address, MAX_UINT_256);
@@ -124,7 +124,7 @@ describe('library AaveV2', () => {
       lendingPoolAddress = aaveV2Fixture.lendingPool.address;
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
@@ -132,7 +132,7 @@ describe('library AaveV2', () => {
       return await aaveLibMock.testInvokeDeposit(matrixTokenAddress, lendingPoolAddress, asset, amountNotional);
     }
 
-    it('should mint aWETH', async () => {
+    it('should mint aWETH', async function () {
       const oldATokenBalance = await aWETH.balanceOf(matrixToken.address);
       await invokeDeposit();
       const newATokenBalance = await aWETH.balanceOf(matrixToken.address);
@@ -140,20 +140,20 @@ describe('library AaveV2', () => {
     });
   });
 
-  describe('getSetUserUseReserveAsCollateralCalldata', () => {
+  describe('getSetUserUseReserveAsCollateralCalldata', function () {
     let asset;
     let isUseAsCollateral;
     let lendingPoolAddress;
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
 
       asset = systemFixture.weth.address;
       lendingPoolAddress = aaveV2Fixture.lendingPool.address;
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
@@ -161,7 +161,7 @@ describe('library AaveV2', () => {
       return await aaveLibMock.testGetSetUserUseReserveAsCollateralCalldata(lendingPoolAddress, asset, isUseAsCollateral);
     }
 
-    it('should get correct data when use as collateral is true', async () => {
+    it('should get correct data when use as collateral is true', async function () {
       isUseAsCollateral = true;
       const [target, value, calldata] = await getSetUserUseReserveAsCollateralCalldata();
       const expectedCalldata = aaveV2Fixture.lendingPool.interface.encodeFunctionData('setUserUseReserveAsCollateral', [asset, isUseAsCollateral]);
@@ -171,7 +171,7 @@ describe('library AaveV2', () => {
       expect(calldata).eq(expectedCalldata);
     });
 
-    it('should get correct data when use as collateral is false', async () => {
+    it('should get correct data when use as collateral is false', async function () {
       isUseAsCollateral = false;
       const [target, value, calldata] = await getSetUserUseReserveAsCollateralCalldata();
       const expectedCalldata = aaveV2Fixture.lendingPool.interface.encodeFunctionData('setUserUseReserveAsCollateral', [asset, isUseAsCollateral]);
@@ -182,14 +182,14 @@ describe('library AaveV2', () => {
     });
   });
 
-  describe('invokeSetUserUseReserveAsCollateral', () => {
+  describe('invokeSetUserUseReserveAsCollateral', function () {
     let asset;
     let matrixTokenAddress;
     let isUseAsCollateral;
     let lendingPoolAddress;
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
 
       await invokeLibMock.testInvokeApprove(matrixToken.address, systemFixture.weth.address, aaveV2Fixture.lendingPool.address, MAX_UINT_256);
@@ -200,7 +200,7 @@ describe('library AaveV2', () => {
       lendingPoolAddress = aaveV2Fixture.lendingPool.address;
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
@@ -208,14 +208,14 @@ describe('library AaveV2', () => {
       return await aaveLibMock.testInvokeSetUserUseReserveAsCollateral(matrixTokenAddress, lendingPoolAddress, asset, isUseAsCollateral);
     }
 
-    it('should set use reserve as collateral by MatrixToken to true when use as collateral is true', async () => {
+    it('should set use reserve as collateral by MatrixToken to true when use as collateral is true', async function () {
       isUseAsCollateral = true;
       await invokeSetUserUseReserveAsCollateral();
       const currentUseAsCollateral = (await aaveV2Fixture.protocolDataProvider.getUserReserveData(asset, matrixTokenAddress)).usageAsCollateralEnabled;
       expect(currentUseAsCollateral).eq(isUseAsCollateral);
     });
 
-    it('should set use reserve as collateral by MatrixToken to false when use as collateral is false', async () => {
+    it('should set use reserve as collateral by MatrixToken to false when use as collateral is false', async function () {
       isUseAsCollateral = false;
       await invokeSetUserUseReserveAsCollateral();
       const currentUseAsCollateral = (await aaveV2Fixture.protocolDataProvider.getUserReserveData(asset, matrixTokenAddress)).usageAsCollateralEnabled;
@@ -223,13 +223,13 @@ describe('library AaveV2', () => {
     });
   });
 
-  describe('getWithdrawCalldata', () => {
+  describe('getWithdrawCalldata', function () {
     let asset;
     let receiver;
     let lendingPoolAddress;
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
 
       receiver = owner.address;
@@ -237,7 +237,7 @@ describe('library AaveV2', () => {
       lendingPoolAddress = aaveV2Fixture.lendingPool.address;
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
@@ -245,7 +245,7 @@ describe('library AaveV2', () => {
       return await aaveLibMock.testGetWithdrawCalldata(lendingPoolAddress, asset, amountNotional, receiver);
     }
 
-    it('should get correct data', async () => {
+    it('should get correct data', async function () {
       const [target, value, calldata] = await getWithdrawCalldata();
       const expectedCalldata = aaveV2Fixture.lendingPool.interface.encodeFunctionData('withdraw', [asset, amountNotional, receiver]);
 
@@ -255,13 +255,13 @@ describe('library AaveV2', () => {
     });
   });
 
-  describe('invokeWithdraw', () => {
+  describe('invokeWithdraw', function () {
     let asset;
     let matrixTokenAddress;
     let lendingPoolAddress;
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
 
       await invokeLibMock.testInvokeApprove(matrixToken.address, systemFixture.weth.address, aaveV2Fixture.lendingPool.address, MAX_UINT_256);
@@ -272,7 +272,7 @@ describe('library AaveV2', () => {
       lendingPoolAddress = aaveV2Fixture.lendingPool.address;
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
@@ -280,7 +280,7 @@ describe('library AaveV2', () => {
       return await aaveLibMock.testInvokeWithdraw(matrixTokenAddress, lendingPoolAddress, asset, amountNotional);
     }
 
-    it('should burn aWETH and return underlying WETH', async () => {
+    it('should burn aWETH and return underlying WETH', async function () {
       const oldATokenBalance = await aWETH.balanceOf(matrixToken.address);
       const oldUnderlyingBalance = await systemFixture.weth.balanceOf(matrixToken.address);
       await invokeWithdraw();
@@ -293,7 +293,7 @@ describe('library AaveV2', () => {
     });
   });
 
-  describe('getBorrowCalldata', () => {
+  describe('getBorrowCalldata', function () {
     let asset;
     let onBehalfOf;
     let referralCode;
@@ -301,7 +301,7 @@ describe('library AaveV2', () => {
     let lendingPoolAddress;
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
 
       referralCode = ZERO;
@@ -311,7 +311,7 @@ describe('library AaveV2', () => {
       lendingPoolAddress = aaveV2Fixture.lendingPool.address;
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
@@ -319,7 +319,7 @@ describe('library AaveV2', () => {
       return await aaveLibMock.testGetBorrowCalldata(lendingPoolAddress, asset, amountNotional, interestRateMode, referralCode, onBehalfOf);
     }
 
-    it('should get correct data', async () => {
+    it('should get correct data', async function () {
       const [target, value, calldata] = await getBorrowCalldata();
       const expectedCalldata = aaveV2Fixture.lendingPool.interface.encodeFunctionData('borrow', [
         asset,
@@ -335,14 +335,14 @@ describe('library AaveV2', () => {
     });
   });
 
-  describe('invokeBorrow', () => {
+  describe('invokeBorrow', function () {
     let asset;
     let interestRateMode;
     let matrixTokenAddress;
     let lendingPoolAddress;
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
 
       await invokeLibMock.testInvokeApprove(matrixToken.address, systemFixture.weth.address, aaveV2Fixture.lendingPool.address, MAX_UINT_256);
@@ -354,7 +354,7 @@ describe('library AaveV2', () => {
       lendingPoolAddress = aaveV2Fixture.lendingPool.address;
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
@@ -362,7 +362,7 @@ describe('library AaveV2', () => {
       return await aaveLibMock.testInvokeBorrow(matrixTokenAddress, lendingPoolAddress, asset, amountNotional, interestRateMode);
     }
 
-    it('should mint stableDebtDAI when selected intereset rate mode is stable', async () => {
+    it('should mint stableDebtDAI when selected intereset rate mode is stable', async function () {
       interestRateMode = stableInterestRateMode;
       const oldDebtTokenBalance = await stableDebtDAI.balanceOf(matrixToken.address);
       await invokeBorrow();
@@ -370,7 +370,7 @@ describe('library AaveV2', () => {
       expect(newDebtTokenBalance.sub(oldDebtTokenBalance)).eq(amountNotional);
     });
 
-    it('should mint variableDebtDAI when selected intereset rate mode is variable', async () => {
+    it('should mint variableDebtDAI when selected intereset rate mode is variable', async function () {
       interestRateMode = variableInterestRateMode;
       const oldDebtTokenBalance = await variableDebtDAI.balanceOf(matrixToken.address);
       await invokeBorrow();
@@ -379,14 +379,14 @@ describe('library AaveV2', () => {
     });
   });
 
-  describe('getRepayCalldata', () => {
+  describe('getRepayCalldata', function () {
     let asset;
     let onBehalfOf;
     let interestRateMode;
     let lendingPoolAddress;
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
 
       onBehalfOf = owner.address;
@@ -395,7 +395,7 @@ describe('library AaveV2', () => {
       lendingPoolAddress = aaveV2Fixture.lendingPool.address;
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
@@ -403,7 +403,7 @@ describe('library AaveV2', () => {
       return await aaveLibMock.testGetRepayCalldata(lendingPoolAddress, asset, amountNotional, interestRateMode, onBehalfOf);
     }
 
-    it('should get correct data', async () => {
+    it('should get correct data', async function () {
       const [target, value, calldata] = await getRepayCalldata();
       const expectedCalldata = aaveV2Fixture.lendingPool.interface.encodeFunctionData('repay', [asset, amountNotional, interestRateMode, onBehalfOf]);
 
@@ -413,14 +413,14 @@ describe('library AaveV2', () => {
     });
   });
 
-  describe('invokeRepay', () => {
+  describe('invokeRepay', function () {
     let asset;
     let interestRateMode;
     let matrixTokenAddress;
     let lendingPoolAddress;
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
 
       await invokeLibMock.testInvokeApprove(matrixToken.address, systemFixture.weth.address, aaveV2Fixture.lendingPool.address, MAX_UINT_256);
@@ -433,7 +433,7 @@ describe('library AaveV2', () => {
       lendingPoolAddress = aaveV2Fixture.lendingPool.address;
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
@@ -441,7 +441,7 @@ describe('library AaveV2', () => {
       return await aaveLibMock.testInvokeRepay(matrixTokenAddress, lendingPoolAddress, asset, amountNotional, interestRateMode);
     }
 
-    it('should repay DAI and burn stableDebtDAI when selected intereset rate mode is stable', async () => {
+    it('should repay DAI and burn stableDebtDAI when selected intereset rate mode is stable', async function () {
       interestRateMode = stableInterestRateMode;
       await aaveLibMock.testInvokeBorrow(matrixTokenAddress, lendingPoolAddress, asset, amountNotional, stableInterestRateMode);
 
@@ -451,7 +451,7 @@ describe('library AaveV2', () => {
       expect(oldUnderlyingBalance.sub(newUnderlyingBalance)).eq(amountNotional);
     });
 
-    it('should repay DAI and burn variableDebtDAI when selected intereset rate mode is variable', async () => {
+    it('should repay DAI and burn variableDebtDAI when selected intereset rate mode is variable', async function () {
       interestRateMode = variableInterestRateMode;
       await aaveLibMock.testInvokeBorrow(matrixTokenAddress, lendingPoolAddress, asset, amountNotional, variableInterestRateMode);
 
@@ -462,13 +462,13 @@ describe('library AaveV2', () => {
     });
   });
 
-  describe('getSwapBorrowRateModeCalldata', () => {
+  describe('getSwapBorrowRateModeCalldata', function () {
     let asset;
     let rateMode;
     let lendingPoolAddress;
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
 
       asset = systemFixture.weth.address;
@@ -476,7 +476,7 @@ describe('library AaveV2', () => {
       lendingPoolAddress = aaveV2Fixture.lendingPool.address;
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
@@ -484,7 +484,7 @@ describe('library AaveV2', () => {
       return await aaveLibMock.testGetSwapBorrowRateModeCalldata(lendingPoolAddress, asset, rateMode);
     }
 
-    it('should get correct data', async () => {
+    it('should get correct data', async function () {
       const [target, value, calldata] = await getSwapBorrowRateModeCalldata();
       const expectedCalldata = aaveV2Fixture.lendingPool.interface.encodeFunctionData('swapBorrowRateMode', [asset, rateMode]);
 
@@ -493,7 +493,7 @@ describe('library AaveV2', () => {
       expect(calldata).eq(expectedCalldata);
     });
 
-    it('should get correct data when borrow rate mode is variable', async () => {
+    it('should get correct data when borrow rate mode is variable', async function () {
       rateMode = variableInterestRateMode;
 
       const [target, value, calldata] = await getSwapBorrowRateModeCalldata();
@@ -505,14 +505,14 @@ describe('library AaveV2', () => {
     });
   });
 
-  describe('invokeSwapBorrowRateMode', () => {
+  describe('invokeSwapBorrowRateMode', function () {
     let asset;
     let rateMode;
     let matrixTokenAddress;
     let lendingPoolAddress;
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
 
       await invokeLibMock.testInvokeApprove(matrixToken.address, systemFixture.weth.address, aaveV2Fixture.lendingPool.address, MAX_UINT_256);
@@ -524,7 +524,7 @@ describe('library AaveV2', () => {
       lendingPoolAddress = aaveV2Fixture.lendingPool.address;
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
@@ -532,7 +532,7 @@ describe('library AaveV2', () => {
       return await aaveLibMock.testInvokeSwapBorrowRateMode(matrixTokenAddress, lendingPoolAddress, asset, rateMode);
     }
 
-    it('should burn stableDebtDAI and mint equivalent amount of variableDebtDAI when moving to stable mode from variable mode', async () => {
+    it('should burn stableDebtDAI and mint equivalent amount of variableDebtDAI when moving to stable mode from variable mode', async function () {
       expect(await stableDebtDAI.balanceOf(matrixToken.address)).eq(ZERO);
       expect(await variableDebtDAI.balanceOf(matrixToken.address)).eq(ZERO);
 
@@ -555,7 +555,7 @@ describe('library AaveV2', () => {
       expect(await variableDebtDAI.balanceOf(matrixToken.address)).eq(ZERO);
     });
 
-    it('should burn variableDebtDAI and mint equivalent amount of stableDebtDAI when moving to variable mode from stable mode', async () => {
+    it('should burn variableDebtDAI and mint equivalent amount of stableDebtDAI when moving to variable mode from stable mode', async function () {
       expect(await stableDebtDAI.balanceOf(matrixToken.address)).eq(ZERO);
       expect(await variableDebtDAI.balanceOf(matrixToken.address)).eq(ZERO);
 

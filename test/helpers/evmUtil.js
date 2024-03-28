@@ -4,8 +4,13 @@
 
 const { provider } = require('hardhat').waffle;
 
-const snapshotBlockchain = async () => await provider.send('evm_snapshot', []);
-const revertBlockchain = async (snapshotId) => await provider.send('evm_revert', [snapshotId]);
+async function snapshotBlockchain() {
+  return await provider.send('evm_snapshot', []);
+}
+
+async function revertBlockchain(snapshotId) {
+  await provider.send('evm_revert', [snapshotId]);
+}
 
 async function increaseBlockTime(seconds) {
   await provider.send('evm_increaseTime', [seconds]);

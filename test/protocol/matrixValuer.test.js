@@ -13,7 +13,7 @@ const { preciseMul, preciseDiv } = require('../helpers/mathUtil');
 const { snapshotBlockchain, revertBlockchain } = require('../helpers/evmUtil.js');
 const { ETH_USD_PRICE, USD_USD_PRICE, SystemFixture } = require('../fixtures/systemFixture');
 
-describe('contract MatrixValuer', () => {
+describe('contract MatrixValuer', function () {
   const [owner, feeRecipient, moduleOne] = getSigners();
   const units = [usdToWei(100), ethToWei(1)]; // 100 USDC at $1 and 1 WETH at $230
   const baseUnits = [usdToWei(1), ethToWei(1)]; // Base units of USDC and WETH
@@ -24,7 +24,7 @@ describe('contract MatrixValuer', () => {
   let modules;
 
   let snapshotId;
-  before(async () => {
+  before(async function () {
     snapshotId = await snapshotBlockchain();
     await systemFixture.initAll();
     components = [systemFixture.usdc.address, systemFixture.weth.address];
@@ -34,21 +34,21 @@ describe('contract MatrixValuer', () => {
     matrixToken.connect(moduleOne).initializeModule();
   });
 
-  after(async () => {
+  after(async function () {
     await revertBlockchain(snapshotId);
   });
 
-  describe('constructor', () => {
-    it('should have the correct controller address', async () => {
+  describe('constructor', function () {
+    it('should have the correct controller address', async function () {
       const result = await systemFixture.matrixValuer.getController();
       expect(result).eq(systemFixture.controller.address);
     });
   });
 
-  describe('calculateMatrixTokenValuation', () => {
+  describe('calculateMatrixTokenValuation', function () {
     let quoteAsset;
 
-    beforeEach(async () => {
+    beforeEach(async function () {
       quoteAsset = systemFixture.usdc.address;
     });
 
@@ -56,7 +56,7 @@ describe('contract MatrixValuer', () => {
       return await systemFixture.matrixValuer.calculateMatrixTokenValuation(matrixToken.address, quoteAsset);
     }
 
-    it('should calculate correct MatrixToken valuation', async () => {
+    it('should calculate correct MatrixToken valuation', async function () {
       const result = await calculateMatrixTokenValuation();
       const usdcNormalizedUnit = preciseDiv(units[0], baseUnits[0]);
       const wethNormalizedUnit = preciseDiv(units[1], baseUnits[1]);
@@ -64,7 +64,7 @@ describe('contract MatrixValuer', () => {
       expect(result).eq(expected);
     });
 
-    it('should calculate correct MatrixToken valuation when the quote asset is not the master quote asset', async () => {
+    it('should calculate correct MatrixToken valuation when the quote asset is not the master quote asset', async function () {
       quoteAsset = systemFixture.weth.address;
       const result = await calculateMatrixTokenValuation();
       const usdcNormalizedUnit = preciseDiv(units[0], baseUnits[0]);
@@ -75,7 +75,7 @@ describe('contract MatrixValuer', () => {
       expect(result).eq(expected);
     });
 
-    it('should calculate correct MatrixToken valuation when a Set token has an external position', async () => {
+    it('should calculate correct MatrixToken valuation when a Set token has an external position', async function () {
       const externalUnits = ethToWei(100);
       await matrixToken.connect(moduleOne).addExternalPositionModule(systemFixture.usdc.address, ZERO_ADDRESS);
       await matrixToken.connect(moduleOne).editExternalPositionUnit(systemFixture.usdc.address, ZERO_ADDRESS, externalUnits);
@@ -86,7 +86,7 @@ describe('contract MatrixValuer', () => {
       expect(result).eq(expected);
     });
 
-    it('should calculate correct MatrixToken valuation when has a negative external position', async () => {
+    it('should calculate correct MatrixToken valuation when has a negative external position', async function () {
       const externalUnits = usdToWei(-10);
       await matrixToken.connect(moduleOne).editExternalPositionUnit(systemFixture.usdc.address, ZERO_ADDRESS, externalUnits);
       const result = await calculateMatrixTokenValuation();
@@ -96,7 +96,7 @@ describe('contract MatrixValuer', () => {
       expect(result).eq(expected);
     });
 
-    it('should revert when valuation is negative', async () => {
+    it('should revert when valuation is negative', async function () {
       const externalUnits = ethToWei(-500);
       await matrixToken.connect(moduleOne).editExternalPositionUnit(systemFixture.usdc.address, ZERO_ADDRESS, externalUnits);
       await expect(calculateMatrixTokenValuation()).revertedWith('SafeCast: value must be positive');

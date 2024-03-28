@@ -14,7 +14,7 @@ const { ethToWei, btcToWei } = require('../../../helpers/unitUtil');
 const { snapshotBlockchain, revertBlockchain } = require('../../../helpers/evmUtil.js');
 const { ZERO, ONE, EMPTY_BYTES, ZERO_ADDRESS } = require('../../../helpers/constants');
 
-describe('contract OneInchExchangeAdapter', () => {
+describe('contract OneInchExchangeAdapter', function () {
   const [owner, matrixTokenMock, wbtcMock, wethMock, oneInchSpenderMock, randomAccount] = getSigners();
 
   let oneInchExchangeMock;
@@ -22,7 +22,7 @@ describe('contract OneInchExchangeAdapter', () => {
   let oneInchFunctionSignature; // Bytes;
 
   let snapshotId;
-  before(async () => {
+  before(async function () {
     snapshotId = await snapshotBlockchain();
 
     // Mock OneInch exchange that allows for only fixed exchange amounts
@@ -38,28 +38,28 @@ describe('contract OneInchExchangeAdapter', () => {
     );
   });
 
-  after(async () => {
+  after(async function () {
     await revertBlockchain(snapshotId);
   });
 
-  describe('constructor', () => {
-    it('should have the correct approve address', async () => {
+  describe('constructor', function () {
+    it('should have the correct approve address', async function () {
       const actualAddress = await oneInchExchangeAdapter.getSpender();
       expect(actualAddress).eq(oneInchSpenderMock.address);
     });
 
-    it('should have the correct exchange address', async () => {
+    it('should have the correct exchange address', async function () {
       const actualAddress = await oneInchExchangeAdapter.getExchangeAddress();
       expect(actualAddress).eq(oneInchExchangeMock.address);
     });
 
-    it('should have the correct swap function signature stored', async () => {
+    it('should have the correct swap function signature stored', async function () {
       const actualAddress = await oneInchExchangeAdapter.getFunctionSignature();
       expect(actualAddress).eq(oneInchFunctionSignature);
     });
   });
 
-  describe('getTradeCalldata', () => {
+  describe('getTradeCalldata', function () {
     const srcQuantity = ONE;
     const minDestQuantity = ONE;
 
@@ -68,7 +68,7 @@ describe('contract OneInchExchangeAdapter', () => {
     let dataBytes;
     let matrixTokenAddress;
 
-    beforeEach(async () => {
+    beforeEach(async function () {
       // 1inch trades only need byte data as all method call data is generaged offchain
       srcToken = wbtcMock.address;
       destToken = wethMock.address;
@@ -93,18 +93,18 @@ describe('contract OneInchExchangeAdapter', () => {
       return await oneInchExchangeAdapter.getTradeCalldata(srcToken, destToken, matrixTokenAddress, srcQuantity, minDestQuantity, dataBytes);
     }
 
-    it('should return the correct trade calldata', async () => {
+    it('should return the correct trade calldata', async function () {
       const calldata = await getTradeCalldata();
       const expectedCallData = [oneInchExchangeMock.address, ZERO, dataBytes];
       expect(JSON.stringify(calldata)).eq(JSON.stringify(expectedCallData));
     });
 
-    it('should revert when function signature does not match', async () => {
+    it('should revert when function signature does not match', async function () {
       dataBytes = EMPTY_BYTES;
       await expect(getTradeCalldata()).revertedWith('OIEA0a');
     });
 
-    it('should revert when send token does not match calldata', async () => {
+    it('should revert when send token does not match calldata', async function () {
       const randomToken = randomAccount; // Get random source token
       dataBytes = oneInchExchangeMock.interface.encodeFunctionData('swap', [
         randomToken.address, // Send token
@@ -122,7 +122,7 @@ describe('contract OneInchExchangeAdapter', () => {
       await expect(getTradeCalldata()).revertedWith('OIEA0b');
     });
 
-    it('should revert when receive token does not match calldata', async () => {
+    it('should revert when receive token does not match calldata', async function () {
       const randomToken = randomAccount; // Get random source token
       dataBytes = oneInchExchangeMock.interface.encodeFunctionData('swap', [
         wbtcMock.address, // Send token
@@ -140,7 +140,7 @@ describe('contract OneInchExchangeAdapter', () => {
       await expect(getTradeCalldata()).revertedWith('OIEA0c');
     });
 
-    it('should revert when send token quantity does not match calldata', async () => {
+    it('should revert when send token quantity does not match calldata', async function () {
       dataBytes = oneInchExchangeMock.interface.encodeFunctionData('swap', [
         wbtcMock.address, // Send token
         wethMock.address, // Receive token
@@ -157,7 +157,7 @@ describe('contract OneInchExchangeAdapter', () => {
       await expect(getTradeCalldata()).revertedWith('OIEA0d');
     });
 
-    it('should revert when min receive token quantity does not match calldata', async () => {
+    it('should revert when min receive token quantity does not match calldata', async function () {
       dataBytes = oneInchExchangeMock.interface.encodeFunctionData('swap', [
         wbtcMock.address, // Send token
         wethMock.address, // Receive token

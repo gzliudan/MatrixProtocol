@@ -14,7 +14,7 @@ const { SystemFixture } = require('../../../fixtures/systemFixture');
 const { getSigners, getRandomAddress } = require('../../../helpers/accountUtil');
 const { snapshotBlockchain, revertBlockchain } = require('../../../helpers/evmUtil.js');
 
-describe('contract CurveStakingAdapter', () => {
+describe('contract CurveStakingAdapter', function () {
   const [owner, protocolFeeRecipient] = getSigners();
   const systemFixture = new SystemFixture(owner, protocolFeeRecipient);
 
@@ -22,7 +22,7 @@ describe('contract CurveStakingAdapter', () => {
   let gaugeControllerMock;
 
   let snapshotId;
-  before(async () => {
+  before(async function () {
     snapshotId = await snapshotBlockchain();
     await systemFixture.initAll();
 
@@ -30,40 +30,43 @@ describe('contract CurveStakingAdapter', () => {
     curveStakingAdapter = await deployContract('CurveStakingAdapter', [gaugeControllerMock.address], owner);
   });
 
-  after(async () => {
+  after(async function () {
     await revertBlockchain(snapshotId);
   });
 
-  describe('constructor', () => {
-    it('set the correct variables', async () => {
+  describe('constructor', function () {
+    it('set the correct variables', async function () {
       expect(await curveStakingAdapter.getGaugeController()).eq(gaugeControllerMock.address);
     });
   });
 
-  describe('getSpenderAddress', () => {
-    it('should return the correct address', async () => {
+  describe('getSpenderAddress', function () {
+    it('should return the correct address', async function () {
       const stakingContract = await getRandomAddress();
       const spender = await curveStakingAdapter.getSpenderAddress(stakingContract);
       expect(spender).eq(stakingContract);
     });
   });
 
-  describe('getStakeCallData', () => {
+  describe('getStakeCallData', function () {
     const amount = ethToWei(1);
     const stakeSignature = '0xb6b55f25'; // deposit(uint256)
-    const generateCallData = (amount) => stakeSignature + bigNumberToData(amount);
+
+    function generateCallData(amount) {
+      return stakeSignature + bigNumberToData(amount);
+    }
 
     let stakingContract;
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
 
       stakingContract = await getRandomAddress();
       await gaugeControllerMock.addGaugeType(stakingContract, 0);
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
@@ -71,7 +74,7 @@ describe('contract CurveStakingAdapter', () => {
       return curveStakingAdapter.getStakeCallData(stakingContract, amount);
     }
 
-    it('should return the correct target, value and calldata', async () => {
+    it('should return the correct target, value and calldata', async function () {
       const [targetAddress, ethValue, callData] = await getStakeCallData();
 
       expect(targetAddress).eq(stakingContract);
@@ -79,28 +82,31 @@ describe('contract CurveStakingAdapter', () => {
       expect(callData).eq(generateCallData(amount));
     });
 
-    it('should revert when an invalid staking contract is used', async () => {
+    it('should revert when an invalid staking contract is used', async function () {
       stakingContract = await getRandomAddress();
       await expect(getStakeCallData()).revertedWith('CSA0');
     });
   });
 
-  describe('getUnstakeCallData', () => {
+  describe('getUnstakeCallData', function () {
     const amount = ethToWei(1);
     const unstakeSignature = '0x2e1a7d4d'; // withdraw(uint256)
-    const generateCallData = (amount) => unstakeSignature + bigNumberToData(amount);
+
+    function generateCallData(amount) {
+      return unstakeSignature + bigNumberToData(amount);
+    }
 
     let stakingContract;
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
 
       stakingContract = await getRandomAddress();
       await gaugeControllerMock.addGaugeType(stakingContract, 0);
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
@@ -108,7 +114,7 @@ describe('contract CurveStakingAdapter', () => {
       return curveStakingAdapter.getUnstakeCallData(stakingContract, amount);
     }
 
-    it('should return the correct target, value and calldata', async () => {
+    it('should return the correct target, value and calldata', async function () {
       const [targetAddress, ethValue, callData] = await getUnstakeCallData();
 
       expect(targetAddress).eq(stakingContract);
@@ -116,7 +122,7 @@ describe('contract CurveStakingAdapter', () => {
       expect(callData).eq(generateCallData(amount));
     });
 
-    it('should revert when an invalid staking contract is used', async () => {
+    it('should revert when an invalid staking contract is used', async function () {
       stakingContract = await getRandomAddress();
       await expect(getUnstakeCallData()).revertedWith('CSA1');
     });

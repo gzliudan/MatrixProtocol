@@ -31,21 +31,25 @@ async function getCreatedMatrixTokenAddress(txnHash) {
   return lastLog.args.matrixToken;
 }
 
-const getDefaultPosition = (component, unit) => ({
-  unit,
-  module: ZERO_ADDRESS,
-  component,
-  positionState: 0,
-  data: EMPTY_BYTES,
-});
+function getDefaultPosition(component, unit) {
+  return {
+    unit,
+    module: ZERO_ADDRESS,
+    component,
+    positionState: 0,
+    data: EMPTY_BYTES,
+  };
+}
 
-const getExternalPosition = (component, module, unit, data) => ({
-  unit,
-  module,
-  component,
-  positionState: 1,
-  data,
-});
+function getExternalPosition(component, module, unit, data) {
+  return {
+    unit,
+    module,
+    component,
+    positionState: 1,
+    data,
+  };
+}
 
 module.exports = {
   getCreatedMatrixTokenAddress,

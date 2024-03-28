@@ -17,7 +17,7 @@ function inverse(number) {
   return PRECISE_UNIT.mul(PRECISE_UNIT).div(number);
 }
 
-describe('contract PriceOracle', () => {
+describe('contract PriceOracle', function () {
   const [owner, wrappedETH, wrappedBTC, usdc, adapterAsset, randomAsset, newOracle, attacker] = getSigners();
   const masterQuoteAsset = wrappedETH.address;
   const assetOnes = [wrappedETH.address, wrappedETH.address];
@@ -35,7 +35,7 @@ describe('contract PriceOracle', () => {
   let oracleAdapters;
 
   let snapshotId;
-  before(async () => {
+  before(async function () {
     snapshotId = await snapshotBlockchain();
     const modules = [owner.address];
 
@@ -53,297 +53,297 @@ describe('contract PriceOracle', () => {
     masterOracle = await deployContract('PriceOracle', [controller.address, masterQuoteAsset, oracleAdapters, assetOnes, assetTwos, oracles], owner);
   });
 
-  after(async () => {
+  after(async function () {
     await revertBlockchain(snapshotId);
   });
 
-  describe('constructor', () => {
+  describe('constructor', function () {
     let snapshotId;
-    before(async () => {
+    before(async function () {
       snapshotId = await snapshotBlockchain();
     });
 
-    after(async () => {
+    after(async function () {
       await revertBlockchain(snapshotId);
     });
 
-    it('should have the correct controller address', async () => {
+    it('should have the correct controller address', async function () {
       const result = await masterOracle.getController();
       expect(result).eq(controller.address);
     });
 
-    it('should have the correct masterQuoteAsset address', async () => {
+    it('should have the correct masterQuoteAsset address', async function () {
       const result = await masterOracle.getMasterQuoteAsset();
       expect(result).eq(masterQuoteAsset);
     });
 
-    it('should have the correct oracle adapters', async () => {
+    it('should have the correct oracle adapters', async function () {
       const result = await masterOracle.getAdapters();
       expect(compareArray(result, oracleAdapters)).is.true;
     });
 
-    it('should have the oracles mapped correctly', async () => {
+    it('should have the oracles mapped correctly', async function () {
       const oracleOne = await masterOracle.getOracle(assetOnes[0], assetTwos[0]);
       const oracleTwo = await masterOracle.getOracle(assetOnes[1], assetTwos[1]);
       expect(oracleOne).eq(oracles[0]);
       expect(oracleTwo).eq(oracles[1]);
     });
 
-    it('should revert when the assetOnes and assetTwos arrays are different lengths', async () => {
+    it('should revert when the assetOnes and assetTwos arrays are different lengths', async function () {
       await expect(
         deployContract('PriceOracle', [controller.address, masterQuoteAsset, oracleAdapters, [wrappedETH.address], assetTwos, oracles], owner)
       ).revertedWith('PO0a');
     });
 
-    it('should revert when the assetTwos and oracles arrays are different lengths', async () => {
+    it('should revert when the assetTwos and oracles arrays are different lengths', async function () {
       await expect(
         deployContract('PriceOracle', [controller.address, masterQuoteAsset, oracleAdapters, assetOnes, assetTwos, [ethUsdcOracle.address]], owner)
       ).revertedWith('PO0b');
     });
   });
 
-  describe('getPrice', () => {
+  describe('getPrice', function () {
     const asset1 = wrappedETH.address;
     const asset2 = usdc.address;
 
     let snapshotId;
-    before(async () => {
+    before(async function () {
       snapshotId = await snapshotBlockchain();
     });
 
-    after(async () => {
+    after(async function () {
       await revertBlockchain(snapshotId);
     });
 
-    it('should return the price', async () => {
+    it('should return the price', async function () {
       const result = await masterOracle.getPrice(asset1, asset2);
       const expected = await ethUsdcOracle.read();
       expect(result).eq(expected);
     });
 
-    it('should return inverse price when an inverse price is requested', async () => {
+    it('should return inverse price when an inverse price is requested', async function () {
       const result = await masterOracle.getPrice(asset2, asset1);
       const expected = inverse(initialEthValue);
       expect(result).eq(expected);
     });
 
-    it('should return price computed with two oracles when the master quote asset must be used', async () => {
+    it('should return price computed with two oracles when the master quote asset must be used', async function () {
       const result = await masterOracle.getPrice(wrappedBTC.address, usdc.address);
       const expected = inverse(initialEthBtcValue).mul(PRECISE_UNIT).div(inverse(initialEthValue));
       expect(result).eq(expected);
     });
 
-    it('should return price computed with two oracles when the master quote asset must be used', async () => {
+    it('should return price computed with two oracles when the master quote asset must be used', async function () {
       const result = await masterOracle.getPrice(usdc.address, wrappedBTC.address);
       const expected = inverse(initialEthValue).mul(PRECISE_UNIT).div(inverse(initialEthBtcValue));
       expect(result).eq(expected);
     });
 
-    it('should return price computed by adapter when the price is on an adapter', async () => {
+    it('should return price computed by adapter when the price is on an adapter', async function () {
       const result = await masterOracle.getPrice(adapterAsset.address, usdc.address);
       expect(result).eq(adapterDummyPrice);
     });
 
-    it('should revert when there is no price for the asset pair', async () => {
+    it('should revert when there is no price for the asset pair', async function () {
       await expect(masterOracle.getPrice(randomAsset.address, usdc.address)).revertedWith('PO1c');
     });
   });
 
-  describe('editPair', () => {
+  describe('editPair', function () {
     const asset1 = wrappedETH.address;
     const asset2 = usdc.address;
     const oracle = newOracle.address;
 
     let snapshotId;
-    before(async () => {
+    before(async function () {
       snapshotId = await snapshotBlockchain();
     });
 
-    after(async () => {
+    after(async function () {
       await revertBlockchain(snapshotId);
     });
 
-    it('should replace the old oracle', async () => {
+    it('should replace the old oracle', async function () {
       await masterOracle.editPair(asset1, asset2, oracle);
       const result = await masterOracle.getOracle(asset1, asset2);
       expect(result).eq(oracle);
     });
 
-    it('should emit an EditPair event', async () => {
+    it('should emit an EditPair event', async function () {
       await expect(masterOracle.editPair(asset1, asset2, oracle))
         .emit(masterOracle, 'EditPair')
         .withArgs(asset1, asset2, oracle);
     });
 
-    it('should revert when the caller is not the owner', async () => {
+    it('should revert when the caller is not the owner', async function () {
       await expect(masterOracle.connect(attacker).editPair(asset1, asset2, oracle)).revertedWith('PO7');
     });
 
-    it('should revert when the asset pair has no oracle', async () => {
+    it('should revert when the asset pair has no oracle', async function () {
       await expect(masterOracle.editPair(randomAsset.address, usdc.address, oracle)).revertedWith('PO3');
     });
   });
 
-  describe('addPair', () => {
+  describe('addPair', function () {
     const asset1 = randomAsset.address;
     const asset2 = usdc.address;
     const oracle = newOracle.address;
 
     let snapshotId;
-    before(async () => {
+    before(async function () {
       snapshotId = await snapshotBlockchain();
     });
 
-    after(async () => {
+    after(async function () {
       await revertBlockchain(snapshotId);
     });
 
-    it('should revert when the caller is not the owner', async () => {
+    it('should revert when the caller is not the owner', async function () {
       await expect(masterOracle.connect(attacker).addPair(asset1, asset2, oracle)).revertedWith('PO7');
     });
 
-    it('should return zero address before create the new oracle', async () => {
+    it('should return zero address before create the new oracle', async function () {
       let result = await masterOracle.getOracle(asset1, asset2);
       expect(result).eq(ZERO_ADDRESS);
     });
 
-    it('should emit an AddPair event', async () => {
+    it('should emit an AddPair event', async function () {
       await expect(masterOracle.addPair(asset1, asset2, oracle))
         .emit(masterOracle, 'AddPair')
         .withArgs(asset1, asset2, oracle);
     });
 
-    it('should return correct oracle address after create the new oracle', async () => {
+    it('should return correct oracle address after create the new oracle', async function () {
       const result = await masterOracle.getOracle(asset1, asset2);
       expect(result).eq(oracle);
     });
 
-    it('should revert when the asset pair already has an oracle', async () => {
+    it('should revert when the asset pair already has an oracle', async function () {
       await expect(masterOracle.addPair(asset1, asset2, oracle)).revertedWith('PO2');
     });
   });
 
-  describe('removePair', () => {
+  describe('removePair', function () {
     const asset1 = wrappedETH.address;
     const asset2 = usdc.address;
 
     let snapshotId;
-    before(async () => {
+    before(async function () {
       snapshotId = await snapshotBlockchain();
     });
 
-    after(async () => {
+    after(async function () {
       await revertBlockchain(snapshotId);
     });
 
-    it('should revert when the caller is not the owner', async () => {
+    it('should revert when the caller is not the owner', async function () {
       await expect(masterOracle.connect(attacker).removePair(asset1, asset2)).revertedWith('PO7');
     });
 
-    it('should revert when the asset pair has no oracle', async () => {
+    it('should revert when the asset pair has no oracle', async function () {
       await expect(masterOracle.removePair(randomAsset.address, asset2)).revertedWith('PO4');
     });
 
-    it('should emit an RemovePair event', async () => {
+    it('should emit an RemovePair event', async function () {
       const oldOracle = await masterOracle.getOracle(asset1, asset2);
       await expect(masterOracle.removePair(asset1, asset2)).emit(masterOracle, 'RemovePair').withArgs(asset1, asset2, oldOracle);
     });
 
-    it('should return zero address after remove pair', async () => {
+    it('should return zero address after remove pair', async function () {
       const result = await masterOracle.getOracle(asset1, asset2);
       expect(result).eq(ZERO_ADDRESS);
     });
   });
 
-  describe('addAdapter', () => {
+  describe('addAdapter', function () {
     const adapter = randomAsset.address;
 
     let snapshotId;
-    before(async () => {
+    before(async function () {
       snapshotId = await snapshotBlockchain();
     });
 
-    after(async () => {
+    after(async function () {
       await revertBlockchain(snapshotId);
     });
 
-    it('should revert when the caller is not the owner', async () => {
+    it('should revert when the caller is not the owner', async function () {
       await expect(masterOracle.connect(attacker).addAdapter(adapter)).revertedWith('PO7');
     });
 
-    it('should emit an AddAdapter event', async () => {
+    it('should emit an AddAdapter event', async function () {
       await expect(masterOracle.addAdapter(adapter)).emit(masterOracle, 'AddAdapter').withArgs(adapter);
     });
 
-    it('should in adapter list after add an adapter', async () => {
+    it('should in adapter list after add an adapter', async function () {
       const adapters = await masterOracle.getAdapters();
       expect(adapters).contain(adapter);
     });
 
-    it('should revert when the adapter already exists', async () => {
+    it('should revert when the adapter already exists', async function () {
       await expect(masterOracle.addAdapter(adapter)).revertedWith('PO5');
     });
   });
 
-  describe('removeAdapter', () => {
+  describe('removeAdapter', function () {
     let snapshotId;
-    before(async () => {
+    before(async function () {
       snapshotId = await snapshotBlockchain();
     });
 
-    after(async () => {
+    after(async function () {
       await revertBlockchain(snapshotId);
     });
 
-    it('should in adapter list before remove an adapter', async () => {
+    it('should in adapter list before remove an adapter', async function () {
       const adapters = await masterOracle.getAdapters();
       expect(adapters).contain(oracleAdapter);
     });
 
-    it('should revert when the caller is not the owner', async () => {
+    it('should revert when the caller is not the owner', async function () {
       await expect(masterOracle.connect(attacker).removeAdapter(oracleAdapter)).revertedWith('PO7');
     });
 
-    it('should emit an RemoveAdapter event', async () => {
+    it('should emit an RemoveAdapter event', async function () {
       await expect(masterOracle.removeAdapter(oracleAdapter)).emit(masterOracle, 'RemoveAdapter').withArgs(oracleAdapter);
     });
 
-    it('should not in adapter list after remove an adapter', async () => {
+    it('should not in adapter list after remove an adapter', async function () {
       const adapters = await masterOracle.getAdapters();
       expect(adapters).not.contain(oracleAdapter);
     });
 
-    it('should revert when the adapter does not exist', async () => {
+    it('should revert when the adapter does not exist', async function () {
       await expect(masterOracle.removeAdapter(randomAsset.address)).revertedWith('PO6');
     });
   });
 
-  describe('editMasterQuoteAsset', () => {
+  describe('editMasterQuoteAsset', function () {
     const newMasterQuoteAsset = usdc.address;
 
     let snapshotId;
-    before(async () => {
+    before(async function () {
       snapshotId = await snapshotBlockchain();
     });
 
-    after(async () => {
+    after(async function () {
       await revertBlockchain(snapshotId);
     });
 
-    it('should return correct asset before change the master quote asset', async () => {
+    it('should return correct asset before change the master quote asset', async function () {
       const result = await masterOracle.getMasterQuoteAsset();
       expect(result).eq(masterQuoteAsset);
     });
 
-    it('should revert when the caller is not the owner', async () => {
+    it('should revert when the caller is not the owner', async function () {
       await expect(masterOracle.connect(attacker).editMasterQuoteAsset(newMasterQuoteAsset)).revertedWith('PO7');
     });
 
-    it('should emit an EditMasterQuoteAsset event', async () => {
+    it('should emit an EditMasterQuoteAsset event', async function () {
       await expect(masterOracle.editMasterQuoteAsset(newMasterQuoteAsset)).emit(masterOracle, 'EditMasterQuoteAsset').withArgs(newMasterQuoteAsset);
     });
 
-    it('should return correct asset after change the master quote asset', async () => {
+    it('should return correct asset after change the master quote asset', async function () {
       const result = await masterOracle.getMasterQuoteAsset();
       expect(result).eq(newMasterQuoteAsset);
     });

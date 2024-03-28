@@ -13,26 +13,26 @@ const { deployContract } = require('../helpers/deploy');
 const { testCases } = require('../cases/exactSafeErc20.json');
 const { snapshotBlockchain, revertBlockchain } = require('../helpers/evmUtil.js');
 
-describe('library ExactSafeErc20', () => {
+describe('library ExactSafeErc20', function () {
   let appMock;
   let erc20Mock;
   const [owner, userA, userB] = provider.getWallets();
 
   let snapshotId;
-  before(async () => {
+  before(async function () {
     snapshotId = await snapshotBlockchain();
     appMock = await deployContract('ExactSafeErc20Mock', [], owner);
   });
 
-  after(async () => {
+  after(async function () {
     await revertBlockchain(snapshotId);
   });
 
-  testCases.map((testCase, i) => {
-    context(`test case ${i}`, async () => {
+  testCases.map(function (testCase, i) {
+    context(`test case ${i}`, async function () {
       const { name, symbol, fee_percentage: feePercentage, amounts } = testCase;
 
-      before(async () => {
+      before(async function () {
         erc20Mock = await deployContract('Erc20WithFeeMock', [name, symbol, feePercentage], owner);
 
         await appMock.setErc20(erc20Mock.address);
@@ -43,8 +43,8 @@ describe('library ExactSafeErc20', () => {
         await approve(userA, erc20Mock, appMock.address, ethToWei(10000));
       });
 
-      amounts.map((amount, j) => {
-        it(`${j}: exactSafeTransfer(userB, ${amount})`, async () => {
+      amounts.map(function (amount, j) {
+        it(`${j}: exactSafeTransfer(userB, ${amount})`, async function () {
           if (amount > 0 && feePercentage > 0) {
             await expect(appMock.testExactSafeTransfer(userB.address, ethToWei(amount))).revertedWith('ES0');
           } else {
@@ -55,7 +55,7 @@ describe('library ExactSafeErc20', () => {
           }
         });
 
-        it(`${j}: exactSafeTransferFrom(userA, userB, ${amount})`, async () => {
+        it(`${j}: exactSafeTransferFrom(userA, userB, ${amount})`, async function () {
           if (amount > 0 && feePercentage > 0) {
             await expect(appMock.testExactSafeTransferFrom(userA.address, userB.address, ethToWei(amount))).revertedWith('ES1');
           } else {

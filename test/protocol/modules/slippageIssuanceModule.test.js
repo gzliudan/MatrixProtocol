@@ -14,7 +14,7 @@ const { ethToWei, btcToWei, usdToWei } = require('../../helpers/unitUtil');
 const { preciseMul, preciseMulCeilUint } = require('../../helpers/mathUtil');
 const { snapshotBlockchain, revertBlockchain } = require('../../helpers/evmUtil.js');
 
-describe('contract SlippageIssuanceModule', () => {
+describe('contract SlippageIssuanceModule', function () {
   const [owner, manager, protocolFeeRecipient, feeRecipient, recipient] = getSigners();
   const systemFixture = new SystemFixture(owner, protocolFeeRecipient);
   const protocolFeeRecipientAddress = protocolFeeRecipient.address;
@@ -34,7 +34,7 @@ describe('contract SlippageIssuanceModule', () => {
   let redeemFee;
 
   let snapshotId;
-  before(async () => {
+  before(async function () {
     snapshotId = await snapshotBlockchain();
     await systemFixture.initAll();
 
@@ -59,13 +59,13 @@ describe('contract SlippageIssuanceModule', () => {
     redeemFee = ethToWei(0.005);
   });
 
-  after(async () => {
+  after(async function () {
     await revertBlockchain(snapshotId);
   });
 
-  context('External debt module has been registered with SlippageIssuanceModule', async () => {
+  context('External debt module has been registered with SlippageIssuanceModule', async function () {
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
 
       if (initialize) {
@@ -75,16 +75,16 @@ describe('contract SlippageIssuanceModule', () => {
       await debtModuleMock.connect(manager).initialize(matrixToken.address);
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
-    describe('getRequiredComponentIssuanceUnitsOffChain', () => {
+    describe('getRequiredComponentIssuanceUnitsOffChain', function () {
       const debtUnits = ethToWei(100);
 
       let issueQuantity;
 
-      beforeEach(async () => {
+      beforeEach(async function () {
         issueQuantity = ethToWei(1);
         matrixTokenAddress = matrixToken.address;
         await debtModuleMock.addDebt(matrixToken.address, systemFixture.dai.address, debtUnits);
@@ -94,7 +94,7 @@ describe('contract SlippageIssuanceModule', () => {
         return slippageIssuance.callStatic.getRequiredComponentIssuanceUnitsOffChain(matrixTokenAddress, issueQuantity);
       }
 
-      it('should return the correct issue token amounts', async () => {
+      it('should return the correct issue token amounts', async function () {
         const { components, totalEquityUnits, totalDebtUnits } = await getRequiredComponentIssuanceUnitsOffChain();
 
         const mintQuantity = preciseMul(issueQuantity, ethToWei(1).add(issueFee));
@@ -110,7 +110,7 @@ describe('contract SlippageIssuanceModule', () => {
         expect(JSON.stringify(expectedDebtFlows)).eq(JSON.stringify(totalDebtUnits));
       });
 
-      it('should return the correct issue token amounts when an additive external equity position is in place', async () => {
+      it('should return the correct issue token amounts when an additive external equity position is in place', async function () {
         const externalUnits = ethToWei(1);
         await externalPositionModule.addExternalPosition(matrixToken.address, systemFixture.weth.address, externalUnits);
 
@@ -129,7 +129,7 @@ describe('contract SlippageIssuanceModule', () => {
         expect(JSON.stringify(expectedDebtFlows)).eq(JSON.stringify(totalDebtUnits));
       });
 
-      it('should return the correct issue token amounts when a non-additive external equity position is in place', async () => {
+      it('should return the correct issue token amounts when a non-additive external equity position is in place', async function () {
         const externalUnits = btcToWei(0.5);
         await externalPositionModule.addExternalPosition(matrixToken.address, systemFixture.wbtc.address, externalUnits);
 
@@ -149,27 +149,27 @@ describe('contract SlippageIssuanceModule', () => {
         expect(JSON.stringify(expectedDebtFlows)).eq(JSON.stringify(totalDebtUnits));
       });
 
-      describe('when positional adjustments are needed to account for positions changed during issuance', () => {
+      describe('when positional adjustments are needed to account for positions changed during issuance', function () {
         let ethIssuanceAdjustment;
         let daiDebtAdjustment;
 
-        beforeEach(async () => {
+        beforeEach(async function () {
           await debtModuleMock.addEquityIssuanceAdjustment(systemFixture.weth.address, ethIssuanceAdjustment);
           await debtModuleMock.addDebtIssuanceAdjustment(systemFixture.dai.address, daiDebtAdjustment);
         });
 
-        describe('when positional adjustments are positive numbers', () => {
-          before(async () => {
+        describe('when positional adjustments are positive numbers', function () {
+          before(async function () {
             ethIssuanceAdjustment = ethToWei(0.01);
             daiDebtAdjustment = ethToWei(1.5);
           });
 
-          after(async () => {
+          after(async function () {
             ethIssuanceAdjustment = ZERO;
             daiDebtAdjustment = ZERO;
           });
 
-          it('should return the correct issue token amounts', async () => {
+          it('should return the correct issue token amounts', async function () {
             const { components, totalEquityUnits, totalDebtUnits } = await getRequiredComponentIssuanceUnitsOffChain();
 
             const mintQuantity = preciseMul(issueQuantity, ethToWei(1).add(issueFee));
@@ -186,18 +186,18 @@ describe('contract SlippageIssuanceModule', () => {
           });
         });
 
-        describe('when positional adjustments are negative numbers', () => {
-          before(async () => {
+        describe('when positional adjustments are negative numbers', function () {
+          before(async function () {
             ethIssuanceAdjustment = ethToWei(0.01).mul(-1);
             daiDebtAdjustment = ethToWei(1.5).mul(-1);
           });
 
-          after(async () => {
+          after(async function () {
             ethIssuanceAdjustment = ZERO;
             daiDebtAdjustment = ZERO;
           });
 
-          it('should return the correct issue token amounts', async () => {
+          it('should return the correct issue token amounts', async function () {
             const { components, totalEquityUnits, totalDebtUnits } = await getRequiredComponentIssuanceUnitsOffChain();
 
             const mintQuantity = preciseMul(issueQuantity, ethToWei(1).add(issueFee));
@@ -214,44 +214,44 @@ describe('contract SlippageIssuanceModule', () => {
           });
         });
 
-        describe('when equity positional adjustments lead to negative results', () => {
-          before(async () => {
+        describe('when equity positional adjustments lead to negative results', function () {
+          before(async function () {
             ethIssuanceAdjustment = ethToWei(1.1).mul(-1);
           });
 
-          after(async () => {
+          after(async function () {
             ethIssuanceAdjustment = ZERO;
             daiDebtAdjustment = ZERO;
           });
 
-          it('should revert', async () => {
+          it('should revert', async function () {
             await expect(getRequiredComponentIssuanceUnitsOffChain()).revertedWith('SafeCast: value must be positive');
           });
         });
 
-        describe('when debt positional adjustments lead to negative results', () => {
-          before(async () => {
+        describe('when debt positional adjustments lead to negative results', function () {
+          before(async function () {
             daiDebtAdjustment = ethToWei(101);
           });
 
-          after(async () => {
+          after(async function () {
             ethIssuanceAdjustment = ZERO;
             daiDebtAdjustment = ZERO;
           });
 
-          it('should revert', async () => {
+          it('should revert', async function () {
             await expect(getRequiredComponentIssuanceUnitsOffChain()).revertedWith('SafeCast: value must be positive');
           });
         });
       });
     });
 
-    describe('getRequiredComponentRedemptionUnitsOffChain', () => {
+    describe('getRequiredComponentRedemptionUnitsOffChain', function () {
       const debtUnits = ethToWei(100);
 
       let redeemQuantity;
 
-      beforeEach(async () => {
+      beforeEach(async function () {
         redeemQuantity = ethToWei(1);
         matrixTokenAddress = matrixToken.address;
         await debtModuleMock.addDebt(matrixToken.address, systemFixture.dai.address, debtUnits);
@@ -261,7 +261,7 @@ describe('contract SlippageIssuanceModule', () => {
         return slippageIssuance.callStatic.getRequiredComponentRedemptionUnitsOffChain(matrixTokenAddress, redeemQuantity);
       }
 
-      it('should return the correct redeem token amounts', async () => {
+      it('should return the correct redeem token amounts', async function () {
         const { components, totalEquityUnits, totalDebtUnits } = await getRequiredComponentRedemptionUnitsOffChain();
 
         const mintQuantity = preciseMul(redeemQuantity, ethToWei(1).sub(issueFee));
@@ -277,14 +277,14 @@ describe('contract SlippageIssuanceModule', () => {
         expect(JSON.stringify(expectedDebtFlows)).eq(JSON.stringify(totalDebtUnits));
       });
 
-      describe('when an additive external equity position is in place', () => {
+      describe('when an additive external equity position is in place', function () {
         const externalUnits = ethToWei(1);
 
-        beforeEach(async () => {
+        beforeEach(async function () {
           await externalPositionModule.addExternalPosition(matrixToken.address, systemFixture.weth.address, externalUnits);
         });
 
-        it('should return the correct redeem token amounts', async () => {
+        it('should return the correct redeem token amounts', async function () {
           const { components, totalEquityUnits, totalDebtUnits } = await getRequiredComponentRedemptionUnitsOffChain();
 
           const mintQuantity = preciseMul(redeemQuantity, ethToWei(1).sub(issueFee));
@@ -301,14 +301,14 @@ describe('contract SlippageIssuanceModule', () => {
         });
       });
 
-      describe('when a non-additive external equity position is in place', () => {
+      describe('when a non-additive external equity position is in place', function () {
         const externalUnits = btcToWei(0.5);
 
-        beforeEach(async () => {
+        beforeEach(async function () {
           await externalPositionModule.addExternalPosition(matrixToken.address, systemFixture.wbtc.address, externalUnits);
         });
 
-        it('should return the correct redeem token amounts', async () => {
+        it('should return the correct redeem token amounts', async function () {
           const { components, totalEquityUnits, totalDebtUnits } = await getRequiredComponentRedemptionUnitsOffChain();
 
           const mintQuantity = preciseMul(redeemQuantity, ethToWei(1).sub(issueFee));
@@ -326,22 +326,22 @@ describe('contract SlippageIssuanceModule', () => {
         });
       });
 
-      describe('when positional adjustments are needed to account for positions changed during redemption', () => {
+      describe('when positional adjustments are needed to account for positions changed during redemption', function () {
         let daiDebtAdjustment;
         let ethIssuanceAdjustment;
 
-        beforeEach(async () => {
+        beforeEach(async function () {
           await debtModuleMock.addDebtIssuanceAdjustment(systemFixture.dai.address, daiDebtAdjustment);
           await debtModuleMock.addEquityIssuanceAdjustment(systemFixture.weth.address, ethIssuanceAdjustment);
         });
 
-        describe('when positional adjustments are positive numbers', () => {
-          before(async () => {
+        describe('when positional adjustments are positive numbers', function () {
+          before(async function () {
             daiDebtAdjustment = ethToWei(1.5);
             ethIssuanceAdjustment = ethToWei(0.01);
           });
 
-          it('should return the correct issue token amounts', async () => {
+          it('should return the correct issue token amounts', async function () {
             const { components, totalEquityUnits, totalDebtUnits } = await getRequiredComponentRedemptionUnitsOffChain();
 
             const mintQuantity = preciseMul(redeemQuantity, ethToWei(1).sub(issueFee));
@@ -358,13 +358,13 @@ describe('contract SlippageIssuanceModule', () => {
           });
         });
 
-        describe('when positional adjustments are negative numbers', () => {
-          before(async () => {
+        describe('when positional adjustments are negative numbers', function () {
+          before(async function () {
             ethIssuanceAdjustment = ethToWei(0.01).mul(-1);
             daiDebtAdjustment = ethToWei(1.5).mul(-1);
           });
 
-          it('should return the correct issue token amounts', async () => {
+          it('should return the correct issue token amounts', async function () {
             const { components, totalEquityUnits, totalDebtUnits } = await getRequiredComponentRedemptionUnitsOffChain();
 
             const mintQuantity = preciseMul(redeemQuantity, ethToWei(1).sub(issueFee));
@@ -381,39 +381,39 @@ describe('contract SlippageIssuanceModule', () => {
           });
         });
 
-        describe('when equity positional adjustments lead to negative results', () => {
-          before(async () => {
+        describe('when equity positional adjustments lead to negative results', function () {
+          before(async function () {
             ethIssuanceAdjustment = ethToWei(1.1).mul(-1);
           });
 
-          after(async () => {
+          after(async function () {
             ethIssuanceAdjustment = ZERO;
             daiDebtAdjustment = ZERO;
           });
 
-          it('should revert', async () => {
+          it('should revert', async function () {
             await expect(getRequiredComponentRedemptionUnitsOffChain()).revertedWith('SafeCast: value must be positive');
           });
         });
 
-        describe('when debt positional adjustments lead to negative results', () => {
-          before(async () => {
+        describe('when debt positional adjustments lead to negative results', function () {
+          before(async function () {
             daiDebtAdjustment = ethToWei(101);
           });
 
-          after(async () => {
+          after(async function () {
             ethIssuanceAdjustment = ZERO;
             daiDebtAdjustment = ZERO;
           });
 
-          it('should revert', async () => {
+          it('should revert', async function () {
             await expect(getRequiredComponentRedemptionUnitsOffChain()).revertedWith('SafeCast: value must be positive');
           });
         });
       });
     });
 
-    describe('issueWithSlippage', () => {
+    describe('issueWithSlippage', function () {
       const debtUnits = ethToWei(100);
 
       let to;
@@ -421,7 +421,7 @@ describe('contract SlippageIssuanceModule', () => {
       let checkedComponents;
       let maxTokenAmountsIn;
 
-      beforeEach(async () => {
+      beforeEach(async function () {
         caller = owner;
         to = recipient.address;
         checkedComponents = [];
@@ -439,7 +439,7 @@ describe('contract SlippageIssuanceModule', () => {
         return slippageIssuance.connect(caller).issueWithSlippage(matrixTokenAddress, issueQuantity, checkedComponents, maxTokenAmountsIn, to);
       }
 
-      it('should mint MatrixToken to the correct addresses', async () => {
+      it('should mint MatrixToken to the correct addresses', async function () {
         const oldBalanceOfTo = await matrixToken.balanceOf(to);
         const oldBalanceOfManager = await matrixToken.balanceOf(feeRecipient.address);
         await issueWithSlippage();
@@ -452,7 +452,7 @@ describe('contract SlippageIssuanceModule', () => {
         expect(newBalanceOfManager.sub(oldBalanceOfManager)).eq(feeQuantity);
       });
 
-      it('should have the correct token balances', async () => {
+      it('should have the correct token balances', async function () {
         const oldDaiBalanceOfMinter = await systemFixture.dai.balanceOf(caller.address);
         const oldWethBalanceOfMinter = await systemFixture.weth.balanceOf(caller.address);
         const oldDaiBalanceOfMatrix = await systemFixture.dai.balanceOf(matrixTokenAddress);
@@ -479,31 +479,31 @@ describe('contract SlippageIssuanceModule', () => {
         expect(newDaiBalanceOfMatrix).eq(oldDaiBalanceOfMatrix);
       });
 
-      it('should have called the module issue hook', async () => {
+      it('should have called the module issue hook', async function () {
         await issueWithSlippage();
         const result = await debtModuleMock.isModuleIssueHookCalled();
         expect(result).is.true;
       });
 
-      it('should emit the correct IssueMatrixToken event', async () => {
+      it('should emit the correct IssueMatrixToken event', async function () {
         const feeQuantity = preciseMulCeilUint(issueQuantity, issueFee);
         await expect(issueWithSlippage())
           .emit(slippageIssuance, 'IssueMatrixToken')
           .withArgs(matrixToken.address, caller.address, to, preIssueHook, issueQuantity, feeQuantity, ZERO);
       });
 
-      describe('when an external equity position is in place', () => {
+      describe('when an external equity position is in place', function () {
         const externalUnits = ethToWei(1);
 
-        before(async () => {
+        before(async function () {
           await externalPositionModule.addExternalPosition(matrixToken.address, systemFixture.weth.address, externalUnits);
         });
 
-        after(async () => {
+        after(async function () {
           await externalPositionModule.addExternalPosition(matrixToken.address, systemFixture.weth.address, ZERO);
         });
 
-        it('should have the correct token balances', async () => {
+        it('should have the correct token balances', async function () {
           const oldDaiBalanceOfMinter = await systemFixture.dai.balanceOf(caller.address);
           const oldWethBalanceOfMinter = await systemFixture.weth.balanceOf(caller.address);
           const oldDaiBalanceOfMatrix = await systemFixture.dai.balanceOf(matrixTokenAddress);
@@ -535,23 +535,23 @@ describe('contract SlippageIssuanceModule', () => {
         });
       });
 
-      describe('when the manager issuance fee is 0', () => {
-        before(async () => {
+      describe('when the manager issuance fee is 0', function () {
+        before(async function () {
           issueFee = ZERO;
         });
 
-        after(async () => {
+        after(async function () {
           issueFee = ethToWei(0.005);
         });
 
-        it('should mint MatrixToken to the correct addresses', async () => {
+        it('should mint MatrixToken to the correct addresses', async function () {
           const oldBalanceOfTo = await matrixToken.balanceOf(to);
           await issueWithSlippage();
           const newBalanceOfTo = await matrixToken.balanceOf(to);
           expect(newBalanceOfTo.sub(oldBalanceOfTo)).eq(issueQuantity);
         });
 
-        it('should have the correct token balances', async () => {
+        it('should have the correct token balances', async function () {
           const oldDaiBalanceOfMinter = await systemFixture.dai.balanceOf(caller.address);
           const oldWethBalanceOfMinter = await systemFixture.weth.balanceOf(caller.address);
           const oldDaiBalanceOfMatrix = await systemFixture.dai.balanceOf(matrixTokenAddress);
@@ -579,7 +579,7 @@ describe('contract SlippageIssuanceModule', () => {
         });
       });
 
-      it('should mint MatrixToken to the correct addresses when protocol fees are enabled', async () => {
+      it('should mint MatrixToken to the correct addresses when protocol fees are enabled', async function () {
         const protocolFee = ethToWei(0.2);
         await systemFixture.controller.addFee(slippageIssuance.address, ZERO, protocolFee);
 
@@ -601,24 +601,24 @@ describe('contract SlippageIssuanceModule', () => {
         expect(newBalanceOfProtocol.sub(oldBalanceOfProtocol)).eq(protocolSplit);
       });
 
-      describe('when manager issuance hook is defined', () => {
-        before(async () => {
+      describe('when manager issuance hook is defined', function () {
+        before(async function () {
           preIssueHook = managerIssuanceHookMock.address;
         });
 
-        after(async () => {
+        after(async function () {
           preIssueHook = ZERO_ADDRESS;
         });
 
-        it('should call the issuance hook', async () => {
+        it('should call the issuance hook', async function () {
           await issueWithSlippage();
           const matrixToken = await managerIssuanceHookMock.getToken();
           expect(matrixToken).eq(matrixTokenAddress);
         });
       });
 
-      describe('when a max token amount in is submitted', () => {
-        beforeEach(async () => {
+      describe('when a max token amount in is submitted', function () {
+        beforeEach(async function () {
           const mintQuantity = preciseMul(issueQuantity, ethToWei(1).add(issueFee));
           const expectedWethFlows = preciseMul(mintQuantity, ethToWei(1));
 
@@ -626,7 +626,7 @@ describe('contract SlippageIssuanceModule', () => {
           maxTokenAmountsIn = [expectedWethFlows];
         });
 
-        it('should mint MatrixToken to the correct addresses', async () => {
+        it('should mint MatrixToken to the correct addresses', async function () {
           const oldBalanceOfTo = await matrixToken.balanceOf(to);
           const oldBalanceOfManager = await matrixToken.balanceOf(feeRecipient.address);
 
@@ -641,7 +641,7 @@ describe('contract SlippageIssuanceModule', () => {
           expect(newBalanceOfManager.sub(oldBalanceOfManager)).eq(feeQuantity);
         });
 
-        it('should have the correct token balances', async () => {
+        it('should have the correct token balances', async function () {
           const oldDaiBalanceOfMinter = await systemFixture.dai.balanceOf(caller.address);
           const oldWethBalanceOfMinter = await systemFixture.weth.balanceOf(caller.address);
           const oldDaiBalanceOfMatrix = await systemFixture.dai.balanceOf(matrixTokenAddress);
@@ -668,7 +668,7 @@ describe('contract SlippageIssuanceModule', () => {
           expect(newDaiBalanceOfExternal).eq(oldDaiBalanceOfExternal.sub(daiFlows));
         });
 
-        it('should revert but the required amount exceeds the max limit', async () => {
+        it('should revert but the required amount exceeds the max limit', async function () {
           const mintQuantity = preciseMul(issueQuantity, ethToWei(1).add(issueFee));
           const expectedWethFlows = preciseMul(mintQuantity, ethToWei(1));
 
@@ -677,38 +677,38 @@ describe('contract SlippageIssuanceModule', () => {
           await expect(issueWithSlippage()).revertedWith('SI0b');
         });
 
-        it('should revert but a specified component is not part of the MatrixToken', async () => {
+        it('should revert but a specified component is not part of the MatrixToken', async function () {
           checkedComponents = [systemFixture.usdc.address];
           maxTokenAmountsIn = [usdToWei(100)];
           await expect(issueWithSlippage()).revertedWith('SI0a');
         });
 
-        it('should revert but the array lengths mismatch', async () => {
+        it('should revert but the array lengths mismatch', async function () {
           checkedComponents = [systemFixture.weth.address];
           maxTokenAmountsIn = [];
           await expect(issueWithSlippage()).revertedWith('SI1b');
         });
 
-        it('should revert but there are duplicates in the components array', async () => {
+        it('should revert but there are duplicates in the components array', async function () {
           checkedComponents = [systemFixture.weth.address, systemFixture.weth.address];
           maxTokenAmountsIn = [ethToWei(1), ethToWei(1)];
           await expect(issueWithSlippage()).revertedWith('SI1c');
         });
       });
 
-      it('should revert when the issue quantity is 0', async () => {
+      it('should revert when the issue quantity is 0', async function () {
         issueQuantity = ZERO;
         await expect(issueWithSlippage()).revertedWith('SI1a');
       });
 
-      it('should revert when the MatrixToken is not enabled on the controller', async () => {
+      it('should revert when the MatrixToken is not enabled on the controller', async function () {
         const newToken = await systemFixture.createRawMatrixToken([systemFixture.weth.address], [ethToWei(1)], [slippageIssuance.address], owner.address);
         matrixTokenAddress = newToken.address;
         await expect(issueWithSlippage()).revertedWith('M3');
       });
     });
 
-    describe('redeemWithSlippage', () => {
+    describe('redeemWithSlippage', function () {
       const debtUnits = ethToWei(100);
 
       let to;
@@ -716,7 +716,7 @@ describe('contract SlippageIssuanceModule', () => {
       let checkedComponents;
       let minTokenAmountsOut;
 
-      beforeEach(async () => {
+      beforeEach(async function () {
         await debtModuleMock.addDebt(matrixToken.address, systemFixture.dai.address, debtUnits);
         await systemFixture.dai.transfer(debtModuleMock.address, ethToWei(100.5));
         const { totalEquityUnits } = await slippageIssuance.callStatic.getRequiredComponentRedemptionUnitsOffChain(matrixToken.address, ethToWei(1));
@@ -738,7 +738,7 @@ describe('contract SlippageIssuanceModule', () => {
         return slippageIssuance.connect(caller).redeemWithSlippage(matrixTokenAddress, testRedeemQuantity, checkedComponents, minTokenAmountsOut, to);
       }
 
-      it('should redeem MatrixToken to the correct addresses', async () => {
+      it('should redeem MatrixToken to the correct addresses', async function () {
         const oldBalanceOfCaller = await matrixToken.balanceOf(caller.address);
         const oldBalanceOfManager = await matrixToken.balanceOf(feeRecipient.address);
 
@@ -753,7 +753,7 @@ describe('contract SlippageIssuanceModule', () => {
         expect(oldBalanceOfCaller.sub(newBalanceOfCaller)).eq(testRedeemQuantity);
       });
 
-      it('should have the correct token balances', async () => {
+      it('should have the correct token balances', async function () {
         const oldWethBalanceOfTo = await systemFixture.weth.balanceOf(to);
         const oldDaiBalanceOfRedeemer = await systemFixture.dai.balanceOf(caller.address);
         const oldDaiBalanceOfMatrix = await systemFixture.dai.balanceOf(matrixTokenAddress);
@@ -780,31 +780,31 @@ describe('contract SlippageIssuanceModule', () => {
         expect(newDaiBalanceOfMatrix).eq(oldDaiBalanceOfMatrix);
       });
 
-      it('should have called the module issue hook', async () => {
+      it('should have called the module issue hook', async function () {
         await redeemWithSlippage();
         const hookCalled = await debtModuleMock.isModuleRedeemHookCalled();
         expect(hookCalled).is.true;
       });
 
-      it('should emit the correct RedeemMatrixToken event', async () => {
+      it('should emit the correct RedeemMatrixToken event', async function () {
         const feeQuantity = preciseMulCeilUint(testRedeemQuantity, issueFee);
         await expect(redeemWithSlippage())
           .emit(slippageIssuance, 'RedeemMatrixToken')
           .withArgs(matrixToken.address, caller.address, to, testRedeemQuantity, feeQuantity, ZERO);
       });
 
-      describe('when an external equity position is in place', () => {
+      describe('when an external equity position is in place', function () {
         const externalUnits = ethToWei(1);
 
-        before(async () => {
+        before(async function () {
           await externalPositionModule.addExternalPosition(matrixToken.address, systemFixture.weth.address, externalUnits);
         });
 
-        after(async () => {
+        after(async function () {
           await externalPositionModule.addExternalPosition(matrixToken.address, systemFixture.weth.address, ZERO);
         });
 
-        it('should have the correct token balances', async () => {
+        it('should have the correct token balances', async function () {
           const oldWethBalanceOfTo = await systemFixture.weth.balanceOf(to);
           const oldDaiBalanceOfRedeemer = await systemFixture.dai.balanceOf(caller.address);
           const oldDaiBalanceOfMatrix = await systemFixture.dai.balanceOf(matrixTokenAddress);
@@ -836,23 +836,23 @@ describe('contract SlippageIssuanceModule', () => {
         });
       });
 
-      describe('when the manager redemption fee is 0', () => {
-        before(async () => {
+      describe('when the manager redemption fee is 0', function () {
+        before(async function () {
           redeemFee = ZERO;
         });
 
-        after(async () => {
+        after(async function () {
           redeemFee = ethToWei(0.005);
         });
 
-        it('should mint MatrixToken to the correct addresses', async () => {
+        it('should mint MatrixToken to the correct addresses', async function () {
           const oldBalanceOfTo = await matrixToken.balanceOf(to);
           await redeemWithSlippage();
           const newBalanceOfTo = await matrixToken.balanceOf(to);
           expect(newBalanceOfTo.sub(oldBalanceOfTo)).eq(ZERO);
         });
 
-        it('should have the correct token balances', async () => {
+        it('should have the correct token balances', async function () {
           const oldWethBalanceOfTo = await systemFixture.weth.balanceOf(to);
           const oldDaiBalanceOfRedeemer = await systemFixture.dai.balanceOf(caller.address);
           const oldDaiBalanceOfMatrix = await systemFixture.dai.balanceOf(matrixTokenAddress);
@@ -880,7 +880,7 @@ describe('contract SlippageIssuanceModule', () => {
         });
       });
 
-      it('should mint MatrixToken to the correct addresses when protocol fees are enabled', async () => {
+      it('should mint MatrixToken to the correct addresses when protocol fees are enabled', async function () {
         const protocolFee = ethToWei(0.2);
         await systemFixture.controller.addFee(slippageIssuance.address, ZERO, protocolFee);
 
@@ -902,8 +902,8 @@ describe('contract SlippageIssuanceModule', () => {
         expect(newBalanceOfProtocol.sub(oldBalanceOfProtocol)).eq(protocolSplit);
       });
 
-      describe('when a min token amount out is submitted', () => {
-        beforeEach(async () => {
+      describe('when a min token amount out is submitted', function () {
+        beforeEach(async function () {
           const mintQuantity = preciseMul(testRedeemQuantity, ethToWei(1).sub(issueFee));
           const expectedWethFlows = preciseMul(mintQuantity, ethToWei(1));
 
@@ -911,7 +911,7 @@ describe('contract SlippageIssuanceModule', () => {
           minTokenAmountsOut = [expectedWethFlows];
         });
 
-        it('should redeem MatrixToken to the correct addresses', async () => {
+        it('should redeem MatrixToken to the correct addresses', async function () {
           const oldBalanceOfCaller = await matrixToken.balanceOf(caller.address);
           const oldBalanceOfManager = await matrixToken.balanceOf(feeRecipient.address);
 
@@ -926,7 +926,7 @@ describe('contract SlippageIssuanceModule', () => {
           expect(oldBalanceOfCaller.sub(newBalanceOfCaller)).eq(testRedeemQuantity);
         });
 
-        it('should have the correct token balances', async () => {
+        it('should have the correct token balances', async function () {
           const oldWethBalanceOfTo = await systemFixture.weth.balanceOf(to);
           const oldDaiBalanceOfRedeemer = await systemFixture.dai.balanceOf(caller.address);
           const oldDaiBalanceOfMatrix = await systemFixture.dai.balanceOf(matrixTokenAddress);
@@ -953,7 +953,7 @@ describe('contract SlippageIssuanceModule', () => {
           expect(newDaiBalanceOfMatrix).eq(oldDaiBalanceOfMatrix);
         });
 
-        it('should revert but the returned amount is not enough', async () => {
+        it('should revert but the returned amount is not enough', async function () {
           const mintQuantity = preciseMul(testRedeemQuantity, ethToWei(1).add(issueFee));
           const expectedWethFlows = preciseMul(mintQuantity, ethToWei(1));
           checkedComponents = [systemFixture.weth.address];
@@ -961,31 +961,31 @@ describe('contract SlippageIssuanceModule', () => {
           await expect(redeemWithSlippage()).revertedWith('SI0c');
         });
 
-        it('should revert but a specified component is not part of the Set', async () => {
+        it('should revert but a specified component is not part of the Set', async function () {
           checkedComponents = [systemFixture.usdc.address];
           minTokenAmountsOut = [usdToWei(100)];
           await expect(redeemWithSlippage()).revertedWith('SI0a');
         });
 
-        it('should revert but the array lengths mismatch', async () => {
+        it('should revert but the array lengths mismatch', async function () {
           checkedComponents = [systemFixture.weth.address];
           minTokenAmountsOut = [];
           await expect(redeemWithSlippage()).revertedWith('SI1b');
         });
 
-        it('should revert but there are duplicated in the components array', async () => {
+        it('should revert but there are duplicated in the components array', async function () {
           checkedComponents = [systemFixture.weth.address, systemFixture.weth.address];
           minTokenAmountsOut = [ethToWei(1), ethToWei(1)];
           await expect(redeemWithSlippage()).revertedWith('SI1c');
         });
       });
 
-      it('should revert when the redeem quantity is 0', async () => {
+      it('should revert when the redeem quantity is 0', async function () {
         testRedeemQuantity = ZERO;
         await expect(redeemWithSlippage()).revertedWith('SI1a');
       });
 
-      it('should revert when the MatrixToken is not enabled on the controller', async () => {
+      it('should revert when the MatrixToken is not enabled on the controller', async function () {
         const newToken = await systemFixture.createRawMatrixToken([systemFixture.weth.address], [ethToWei(1)], [slippageIssuance.address], owner.address);
         matrixTokenAddress = newToken.address;
         await expect(redeemWithSlippage()).revertedWith('M3');

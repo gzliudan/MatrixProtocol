@@ -13,7 +13,7 @@ const { SystemFixture } = require('../../../fixtures/systemFixture');
 const { snapshotBlockchain, revertBlockchain } = require('../../../helpers/evmUtil.js');
 const { ZERO, MAX_UINT_256, ZERO_ADDRESS, EMPTY_BYTES } = require('../../../helpers/constants');
 
-describe('contract KyberLegacyExchangeAdapter', () => {
+describe('contract KyberLegacyExchangeAdapter', function () {
   const [owner, protocolFeeRecipient, matrixTokenMock] = getSigners();
   const systemFixture = new SystemFixture(owner, protocolFeeRecipient);
   const wbtcRate = ethToWei(33); // 1 WBTC = 33 ETH
@@ -22,7 +22,7 @@ describe('contract KyberLegacyExchangeAdapter', () => {
   let kyberLegacyExchangeAdapter;
 
   let snapshotId;
-  before(async () => {
+  before(async function () {
     snapshotId = await snapshotBlockchain();
     await systemFixture.initAll();
 
@@ -33,18 +33,18 @@ describe('contract KyberLegacyExchangeAdapter', () => {
     kyberLegacyExchangeAdapter = await deployContract('KyberLegacyExchangeAdapter', [kyberNetworkProxy.address], owner);
   });
 
-  after(async () => {
+  after(async function () {
     await revertBlockchain(snapshotId);
   });
 
-  describe('getSpender', () => {
-    it('should return the correct spender address', async () => {
+  describe('getSpender', function () {
+    it('should return the correct spender address', async function () {
       const actualKyberAddress = await kyberLegacyExchangeAdapter.getSpender();
       expect(actualKyberAddress).eq(kyberNetworkProxy.address);
     });
   });
 
-  describe('getConversionRates', () => {
+  describe('getConversionRates', function () {
     async function getConversionRates() {
       const srcToken = systemFixture.wbtc.address;
       const destToken = systemFixture.weth.address;
@@ -52,13 +52,13 @@ describe('contract KyberLegacyExchangeAdapter', () => {
       return await kyberLegacyExchangeAdapter.getConversionRates(srcToken, destToken, srcQuantity);
     }
 
-    it('should return the correct exchange rate', async () => {
+    it('should return the correct exchange rate', async function () {
       const actualRates = await getConversionRates();
       expect(JSON.stringify(actualRates)).eq(JSON.stringify([wbtcRate, wbtcRate]));
     });
   });
 
-  describe('getTradeCalldata', () => {
+  describe('getTradeCalldata', function () {
     const srcQuantity = btcToWei(1); // Trade 1 WBTC
     const minDestQuantity = ethToWei(33); // Receive at least 33 ETH
     const pathBytes = EMPTY_BYTES;
@@ -67,7 +67,7 @@ describe('contract KyberLegacyExchangeAdapter', () => {
     let destToken;
     let matrixTokenAddress;
 
-    beforeEach(async () => {
+    beforeEach(async function () {
       srcToken = systemFixture.wbtc.address; // WBTC Address
       destToken = systemFixture.weth.address; // WETH Address
       matrixTokenAddress = matrixTokenMock.address;
@@ -77,7 +77,7 @@ describe('contract KyberLegacyExchangeAdapter', () => {
       return await kyberLegacyExchangeAdapter.getTradeCalldata(srcToken, destToken, matrixTokenAddress, srcQuantity, minDestQuantity, pathBytes);
     }
 
-    it('should return the correct trade calldata', async () => {
+    it('should return the correct trade calldata', async function () {
       const calldata = await getTradeCalldata();
       const expectedCallData = kyberNetworkProxy.interface.encodeFunctionData('trade', [
         srcToken,

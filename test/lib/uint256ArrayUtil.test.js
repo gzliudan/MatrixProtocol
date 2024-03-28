@@ -11,25 +11,25 @@ const { compareArray } = require('../helpers/arrayUtil');
 const { testCases } = require('../cases/uint256ArrayUtil.json');
 const { snapshotBlockchain, revertBlockchain } = require('../helpers/evmUtil.js');
 
-describe('library Uint256ArrayUtil', () => {
+describe('library Uint256ArrayUtil', function () {
   let arrayMock;
 
   let snapshotId;
-  before(async () => {
+  before(async function () {
     snapshotId = await snapshotBlockchain();
     arrayMock = await deployContract('Uint256ArrayMock');
   });
 
-  after(async () => {
+  after(async function () {
     await revertBlockchain(snapshotId);
   });
 
-  testCases.map((testCase, i) => {
-    describe(`test case ${i}`, () => {
+  testCases.map(function (testCase, i) {
+    describe(`test case ${i}`, function () {
       const array1 = testCase.array1;
       const array2 = testCase.array2;
       const result1 = testCase.result;
-      it(`function merge(${JSON.stringify(array1)}, ${JSON.stringify(array2)})`, async () => {
+      it(`function merge(${JSON.stringify(array1)}, ${JSON.stringify(array2)})`, async function () {
         const result2 = await arrayMock.merge(array1, array2);
         expect(compareArray(result1, result2)).is.true;
       });

@@ -43,7 +43,7 @@ async function reconcileBalances(matrixToken, testFun, signer) {
   }
 }
 
-describe('contract NavIssuanceModule', () => {
+describe('contract NavIssuanceModule', function () {
   const [owner, protocolFeeRecipient, feeRecipient, recipient, randomAccount] = getSigners();
   const systemFixture = new SystemFixture(owner, protocolFeeRecipient);
   const protocolFeeRecipientAddress = protocolFeeRecipient.address;
@@ -53,28 +53,28 @@ describe('contract NavIssuanceModule', () => {
   let matrixTokenAddress;
 
   let snapshotId;
-  before(async () => {
+  before(async function () {
     snapshotId = await snapshotBlockchain();
     await systemFixture.initAll();
   });
 
-  after(async () => {
+  after(async function () {
     await revertBlockchain(snapshotId);
   });
 
-  describe('constructor', () => {
-    it('should set the correct controller', async () => {
+  describe('constructor', function () {
+    it('should set the correct controller', async function () {
       const controller = await systemFixture.navIssuanceModule.getController();
       expect(controller).eq(systemFixture.controller.address);
     });
 
-    it('should set the correct weth contract', async () => {
+    it('should set the correct weth contract', async function () {
       const weth = await systemFixture.navIssuanceModule.getWeth();
       expect(weth).eq(systemFixture.weth.address);
     });
   });
 
-  describe('initialize', () => {
+  describe('initialize', function () {
     const managerFees = [ethToWei(0.001), ethToWei(0.002)]; // Set manager issue fee to 0.1% and redeem to 0.2%
     const maxManagerFee = ethToWei(0.02); // Set max managerFee to 2%
     const premiumPercentage = ethToWei(0.01); // Set premium to 1%
@@ -90,17 +90,17 @@ describe('contract NavIssuanceModule', () => {
     let components;
 
     let snapshotId;
-    before(async () => {
+    before(async function () {
       snapshotId = await snapshotBlockchain();
       managerIssuanceHook = await getRandomAddress();
       managerRedemptionHook = await getRandomAddress();
     });
 
-    after(async () => {
+    after(async function () {
       await revertBlockchain(snapshotId);
     });
 
-    beforeEach(async () => {
+    beforeEach(async function () {
       caller = owner;
       components = [systemFixture.weth.address];
       const modules = [systemFixture.navIssuanceModule.address];
@@ -127,13 +127,13 @@ describe('contract NavIssuanceModule', () => {
       return systemFixture.navIssuanceModule.connect(caller).initialize(matrixTokenAddress, navIssuanceSetting);
     }
 
-    it('should set the correct reserve assets', async () => {
+    it('should set the correct reserve assets', async function () {
       await initialize();
       const result = await systemFixture.navIssuanceModule.getReserveAssets(matrixTokenAddress);
       expect(compareArray(result, reserveAssets)).is.true;
     });
 
-    it('should set the correct manager fees', async () => {
+    it('should set the correct manager fees', async function () {
       await initialize();
       const managerIssueFee = await systemFixture.navIssuanceModule.getManagerFee(matrixTokenAddress, ZERO);
       expect(managerIssueFee).eq(managerFees[0]);
@@ -141,7 +141,7 @@ describe('contract NavIssuanceModule', () => {
       expect(managerRedeemFee).eq(managerFees[1]);
     });
 
-    it('should set the correct NAV issuance settings', async () => {
+    it('should set the correct NAV issuance settings', async function () {
       await initialize();
       const result = await systemFixture.navIssuanceModule.getIssuanceSetting(matrixTokenAddress);
       expect(result.managerIssuanceHook).eq(managerIssuanceHook);
@@ -153,13 +153,13 @@ describe('contract NavIssuanceModule', () => {
       expect(result.minMatrixTokenSupply).eq(minMatrixTokenSupply);
     });
 
-    it('should enable the Module on the MatrixToken', async () => {
+    it('should enable the Module on the MatrixToken', async function () {
       await initialize();
       const result = await matrixToken.isInitializedModule(systemFixture.navIssuanceModule.address);
       expect(result).is.true;
     });
 
-    it('should properly set reserve assets mapping', async () => {
+    it('should properly set reserve assets mapping', async function () {
       await initialize();
       const usdcIsReserveAsset = await systemFixture.navIssuanceModule.isReserveAsset(matrixTokenAddress, systemFixture.usdc.address);
       expect(usdcIsReserveAsset).is.true;
@@ -167,12 +167,12 @@ describe('contract NavIssuanceModule', () => {
       expect(wethIsReserveAsset).is.true;
     });
 
-    it('should revert when the caller is not the MatrixToken manager', async () => {
+    it('should revert when the caller is not the MatrixToken manager', async function () {
       caller = await randomAccount;
       await expect(initialize()).revertedWith('M2');
     });
 
-    it('should revert when MatrixToken is not in pending state', async () => {
+    it('should revert when MatrixToken is not in pending state', async function () {
       const newModule = await getRandomAddress();
       await systemFixture.controller.addModule(newModule);
       const newToken = await systemFixture.createMatrixToken(components, units, [newModule], owner.address);
@@ -180,69 +180,69 @@ describe('contract NavIssuanceModule', () => {
       await expect(initialize()).revertedWith('M5b');
     });
 
-    it('should revert when the MatrixToken is not enabled on the controller', async () => {
+    it('should revert when the MatrixToken is not enabled on the controller', async function () {
       const newToken = await systemFixture.createRawMatrixToken(components, units, [systemFixture.navIssuanceModule.address], owner.address);
       matrixTokenAddress = newToken.address;
       await expect(initialize()).revertedWith('M5a');
     });
 
-    it('should revert when no reserve assets are specified', async () => {
+    it('should revert when no reserve assets are specified', async function () {
       navIssuanceSetting.reserveAssets = [];
       await expect(initialize()).revertedWith('N0a');
     });
 
-    it('should revert when reserve asset is duplicated', async () => {
+    it('should revert when reserve asset is duplicated', async function () {
       navIssuanceSetting.reserveAssets = [systemFixture.weth.address, systemFixture.weth.address];
       await expect(initialize()).revertedWith('N0i');
     });
 
-    it('should revert when manager issue fee is greater than max', async () => {
+    it('should revert when manager issue fee is greater than max', async function () {
       navIssuanceSetting.managerFees = [ethToWei(1), ethToWei(0.002)]; // Set to 100%
       await expect(initialize()).revertedWith('N0d');
     });
 
-    it('should revert when manager redeem fee is greater than max', async () => {
+    it('should revert when manager redeem fee is greater than max', async function () {
       navIssuanceSetting.managerFees = [ethToWei(0.001), ethToWei(1)]; // Set to 100%
       await expect(initialize()).revertedWith('N0e');
     });
 
-    it('should revert when max manager fee is greater than 100%', async () => {
+    it('should revert when max manager fee is greater than 100%', async function () {
       navIssuanceSetting.maxManagerFee = ethToWei(2); // Set to 200%
       await expect(initialize()).revertedWith('N0b');
     });
 
-    it('should revert when premium is greater than max', async () => {
+    it('should revert when premium is greater than max', async function () {
       navIssuanceSetting.premiumPercentage = ethToWei(1); // Set to 100%
       await expect(initialize()).revertedWith('N0f');
     });
 
-    it('should revert when premium is greater than 100%', async () => {
+    it('should revert when premium is greater than 100%', async function () {
       navIssuanceSetting.maxPremiumPercentage = ethToWei(2); // Set to 100%
       await expect(initialize()).revertedWith('N0c');
     });
 
-    it('should revert when feeRecipient is zero address', async () => {
+    it('should revert when feeRecipient is zero address', async function () {
       navIssuanceSetting.feeRecipient = ZERO_ADDRESS;
       await expect(initialize()).revertedWith('N0g');
     });
 
-    it('should revert when min MatrixToken supply is 0', async () => {
+    it('should revert when min MatrixToken supply is 0', async function () {
       navIssuanceSetting.minMatrixTokenSupply = ZERO;
       await expect(initialize()).revertedWith('N0h');
     });
   });
 
-  describe('removeModule', () => {
+  describe('removeModule', function () {
     let snapshotId;
-    before(async () => {
+    before(async function () {
       snapshotId = await snapshotBlockchain();
     });
 
-    after(async () => {
+    after(async function () {
       await revertBlockchain(snapshotId);
     });
 
-    beforeEach(async () => {
+    beforeEach(async function () {
       matrixToken = await systemFixture.createMatrixToken(
         [systemFixture.weth.address],
         [ethToWei(1)],
@@ -270,7 +270,7 @@ describe('contract NavIssuanceModule', () => {
       return matrixToken.removeModule(systemFixture.navIssuanceModule.address);
     }
 
-    it('should delete reserve assets state', async () => {
+    it('should delete reserve assets state', async function () {
       await removeModule();
       const isUsdcReserveAsset = await systemFixture.navIssuanceModule.isReserveAsset(matrixToken.address, systemFixture.usdc.address);
       expect(isUsdcReserveAsset).is.false;
@@ -278,13 +278,13 @@ describe('contract NavIssuanceModule', () => {
       expect(isWethReserveAsset).is.false;
     });
 
-    it('should delete the reserve assets', async () => {
+    it('should delete the reserve assets', async function () {
       await removeModule();
       const retrievedReserveAssets = await systemFixture.navIssuanceModule.getReserveAssets(matrixTokenAddress);
       expect(retrievedReserveAssets).is.empty;
     });
 
-    it('should delete the manager fees', async () => {
+    it('should delete the manager fees', async function () {
       await removeModule();
       const managerIssueFee = await systemFixture.navIssuanceModule.getManagerFee(matrixTokenAddress, ZERO);
       expect(managerIssueFee).eq(ZERO);
@@ -292,7 +292,7 @@ describe('contract NavIssuanceModule', () => {
       expect(managerRedeemFee).eq(ZERO);
     });
 
-    it('should delete the NAV issuance settings', async () => {
+    it('should delete the NAV issuance settings', async function () {
       await removeModule();
       const result = await systemFixture.navIssuanceModule.getIssuanceSetting(matrixTokenAddress);
       expect(result.managerIssuanceHook).eq(ZERO_ADDRESS);
@@ -305,19 +305,19 @@ describe('contract NavIssuanceModule', () => {
     });
   });
 
-  describe('getReserveAssets', () => {
+  describe('getReserveAssets', function () {
     let reserveAssets;
 
     let snapshotId;
-    before(async () => {
+    before(async function () {
       snapshotId = await snapshotBlockchain();
     });
 
-    after(async () => {
+    after(async function () {
       await revertBlockchain(snapshotId);
     });
 
-    beforeEach(async () => {
+    beforeEach(async function () {
       matrixToken = await systemFixture.createMatrixToken(
         [systemFixture.weth.address],
         [ethToWei(1)],
@@ -343,25 +343,25 @@ describe('contract NavIssuanceModule', () => {
       await systemFixture.navIssuanceModule.initialize(matrixToken.address, navIssuanceSetting);
     });
 
-    it('should return the valid reserve assets', async () => {
+    it('should return the valid reserve assets', async function () {
       const result = await systemFixture.navIssuanceModule.getReserveAssets(matrixTokenAddress);
       expect(compareArray(result, reserveAssets)).is.true;
     });
   });
 
-  describe('getIssuePremium', () => {
+  describe('getIssuePremium', function () {
     let premiumPercentage;
 
     let snapshotId;
-    before(async () => {
+    before(async function () {
       snapshotId = await snapshotBlockchain();
     });
 
-    after(async () => {
+    after(async function () {
       await revertBlockchain(snapshotId);
     });
 
-    beforeEach(async () => {
+    beforeEach(async function () {
       matrixToken = await systemFixture.createMatrixToken(
         [systemFixture.weth.address],
         [ethToWei(1)],
@@ -386,7 +386,7 @@ describe('contract NavIssuanceModule', () => {
       await systemFixture.navIssuanceModule.initialize(matrixToken.address, navIssuanceSetting);
     });
 
-    it('should return the correct premium', async () => {
+    it('should return the correct premium', async function () {
       const reserveAsset = await getRandomAddress(); // Unused in NavIssuanceModule V1
       const reserveQuantity = ethToWei(1); // Unused in NAVIssuanceModule V1
       const result = await systemFixture.navIssuanceModule.getIssuePremium(matrixTokenAddress, reserveAsset, reserveQuantity);
@@ -394,19 +394,19 @@ describe('contract NavIssuanceModule', () => {
     });
   });
 
-  describe('getRedeemPremium', () => {
+  describe('getRedeemPremium', function () {
     let premiumPercentage;
 
     let snapshotId;
-    before(async () => {
+    before(async function () {
       snapshotId = await snapshotBlockchain();
     });
 
-    after(async () => {
+    after(async function () {
       await revertBlockchain(snapshotId);
     });
 
-    beforeEach(async () => {
+    beforeEach(async function () {
       matrixToken = await systemFixture.createMatrixToken(
         [systemFixture.weth.address],
         [ethToWei(1)],
@@ -431,7 +431,7 @@ describe('contract NavIssuanceModule', () => {
       await systemFixture.navIssuanceModule.initialize(matrixToken.address, navIssuanceSetting);
     });
 
-    it('should return the correct premium', async () => {
+    it('should return the correct premium', async function () {
       const reserveAsset = await getRandomAddress(); // Unused in NavIssuanceModule V1
       const matrixTokenQuantity = ethToWei(1); // Unused in NAVIssuanceModule V1
       const result = await systemFixture.navIssuanceModule.getRedeemPremium(matrixTokenAddress, reserveAsset, matrixTokenQuantity);
@@ -439,19 +439,19 @@ describe('contract NavIssuanceModule', () => {
     });
   });
 
-  describe('getManagerFee', () => {
+  describe('getManagerFee', function () {
     let managerFees;
 
     let snapshotId;
-    before(async () => {
+    before(async function () {
       snapshotId = await snapshotBlockchain();
     });
 
-    after(async () => {
+    after(async function () {
       await revertBlockchain(snapshotId);
     });
 
-    beforeEach(async () => {
+    beforeEach(async function () {
       matrixToken = await systemFixture.createMatrixToken(
         [systemFixture.weth.address],
         [ethToWei(1)],
@@ -476,27 +476,27 @@ describe('contract NavIssuanceModule', () => {
       await systemFixture.navIssuanceModule.initialize(matrixToken.address, navIssuanceSetting);
     });
 
-    it('should return the manager fee', async () => {
+    it('should return the manager fee', async function () {
       const result = await systemFixture.navIssuanceModule.getManagerFee(matrixTokenAddress, ZERO);
       expect(result).eq(managerFees[0]);
     });
   });
 
-  describe('getExpectedMatrixTokenIssueQuantity', () => {
+  describe('getExpectedMatrixTokenIssueQuantity', function () {
     let managerFees;
     let protocolDirectFee;
     let premiumPercentage;
 
     let snapshotId;
-    before(async () => {
+    before(async function () {
       snapshotId = await snapshotBlockchain();
     });
 
-    after(async () => {
+    after(async function () {
       await revertBlockchain(snapshotId);
     });
 
-    beforeEach(async () => {
+    beforeEach(async function () {
       matrixToken = await systemFixture.createMatrixToken(
         [systemFixture.weth.address],
         [ethToWei(1)],
@@ -528,7 +528,7 @@ describe('contract NavIssuanceModule', () => {
       await systemFixture.controller.addFee(systemFixture.navIssuanceModule.address, ZERO, protocolManagerFee);
     });
 
-    it('should return the correct expected MatrixToken issue quantity', async () => {
+    it('should return the correct expected MatrixToken issue quantity', async function () {
       const reserveAsset = systemFixture.usdc.address;
       const reserveQuantity = ethToWei(1);
       const result = await systemFixture.navIssuanceModule.getExpectedMatrixTokenIssueQuantity(matrixTokenAddress, reserveAsset, reserveQuantity);
@@ -547,21 +547,21 @@ describe('contract NavIssuanceModule', () => {
     });
   });
 
-  describe('getExpectedReserveRedeemQuantity', () => {
+  describe('getExpectedReserveRedeemQuantity', function () {
     let managerFees;
     let protocolDirectFee;
     let premiumPercentage;
 
     let snapshotId;
-    before(async () => {
+    before(async function () {
       snapshotId = await snapshotBlockchain();
     });
 
-    after(async () => {
+    after(async function () {
       await revertBlockchain(snapshotId);
     });
 
-    beforeEach(async () => {
+    beforeEach(async function () {
       const components = [systemFixture.weth.address, systemFixture.usdc.address, systemFixture.wbtc.address, systemFixture.dai.address];
       const units = [ethToWei(1), usdToWei(270), btcToWei(1).div(10), ethToWei(600)];
       const modules = [systemFixture.basicIssuanceModule.address, systemFixture.navIssuanceModule.address];
@@ -601,7 +601,7 @@ describe('contract NavIssuanceModule', () => {
       await systemFixture.controller.addFee(systemFixture.navIssuanceModule.address, ONE, protocolManagerFee);
     });
 
-    it('should return the correct expected reserve asset redeem quantity', async () => {
+    it('should return the correct expected reserve asset redeem quantity', async function () {
       const reserveAsset = systemFixture.usdc.address;
       const matrixTokenQuantity = ethToWei(1);
 
@@ -620,12 +620,12 @@ describe('contract NavIssuanceModule', () => {
     });
   });
 
-  describe('isIssueValid', () => {
+  describe('isIssueValid', function () {
     let reserveAsset;
     let reserveQuantity;
 
     let snapshotId;
-    before(async () => {
+    before(async function () {
       snapshotId = await snapshotBlockchain();
 
       const protocolDirectFee = ethToWei(0.02);
@@ -635,11 +635,11 @@ describe('contract NavIssuanceModule', () => {
       await systemFixture.controller.addFee(systemFixture.navIssuanceModule.address, ZERO, protocolManagerFee);
     });
 
-    after(async () => {
+    after(async function () {
       await revertBlockchain(snapshotId);
     });
 
-    beforeEach(async () => {
+    beforeEach(async function () {
       const components = [systemFixture.weth.address, systemFixture.usdc.address, systemFixture.wbtc.address, systemFixture.dai.address];
       const uints = [ethToWei(1), usdToWei(270), btcToWei(1).div(10), ethToWei(600)];
       const modules = [systemFixture.basicIssuanceModule.address, systemFixture.navIssuanceModule.address];
@@ -677,37 +677,37 @@ describe('contract NavIssuanceModule', () => {
       return systemFixture.navIssuanceModule.isValidIssue(matrixTokenAddress, reserveAsset, reserveQuantity);
     }
 
-    it('should return true', async () => {
+    it('should return true', async function () {
       const result = await isValidIssue();
       expect(result).is.true;
     });
 
-    it('returns false when total supply is less than min required for NAV issuance', async () => {
+    it('returns false when total supply is less than min required for NAV issuance', async function () {
       // Redeem below required
       await systemFixture.basicIssuanceModule.connect(owner).redeem(matrixToken.address, ethToWei(9.5), owner.address);
       const result = await isValidIssue();
       expect(result).is.false;
     });
 
-    it('returns false when the issue quantity is 0', async () => {
+    it('returns false when the issue quantity is 0', async function () {
       reserveQuantity = ZERO;
       const result = await isValidIssue();
       expect(result).is.false;
     });
 
-    it('returns false when the reserve asset is not valid', async () => {
+    it('returns false when the reserve asset is not valid', async function () {
       reserveAsset = systemFixture.wbtc.address;
       const result = await isValidIssue();
       expect(result).is.false;
     });
   });
 
-  describe('isRedeemValid', () => {
+  describe('isRedeemValid', function () {
     let reserveAsset;
     let matrixTokenQuantity;
 
     let snapshotId;
-    before(async () => {
+    before(async function () {
       snapshotId = await snapshotBlockchain();
 
       const protocolDirectFee = ethToWei(0.02);
@@ -717,11 +717,11 @@ describe('contract NavIssuanceModule', () => {
       await systemFixture.controller.addFee(systemFixture.navIssuanceModule.address, ONE, protocolManagerFee);
     });
 
-    after(async () => {
+    after(async function () {
       await revertBlockchain(snapshotId);
     });
 
-    beforeEach(async () => {
+    beforeEach(async function () {
       const components = [systemFixture.weth.address, systemFixture.usdc.address, systemFixture.wbtc.address, systemFixture.dai.address];
       const uints = [ethToWei(1), usdToWei(270), btcToWei(1).div(10), ethToWei(600)];
       const modules = [systemFixture.basicIssuanceModule.address, systemFixture.navIssuanceModule.address];
@@ -759,12 +759,12 @@ describe('contract NavIssuanceModule', () => {
       return systemFixture.navIssuanceModule.isValidRedeem(matrixTokenAddress, reserveAsset, matrixTokenQuantity);
     }
 
-    it('should return true', async () => {
+    it('should return true', async function () {
       const result = await isValidRedeem();
       expect(result).is.true;
     });
 
-    it('returns false when total supply is less than min required for NAV issuance', async () => {
+    it('returns false when total supply is less than min required for NAV issuance', async function () {
       // Redeem below required
       await systemFixture.basicIssuanceModule.connect(owner).redeem(matrixToken.address, ethToWei(9), owner.address);
       matrixTokenQuantity = ethToWei(0.01);
@@ -772,7 +772,7 @@ describe('contract NavIssuanceModule', () => {
       expect(result).is.false;
     });
 
-    it('returns false when there is not sufficient reserve asset for withdraw', async () => {
+    it('returns false when there is not sufficient reserve asset for withdraw', async function () {
       // Add self as module and update the position state
       await systemFixture.controller.addModule(owner.address);
       await matrixToken.connect(owner).addModule(owner.address);
@@ -786,13 +786,13 @@ describe('contract NavIssuanceModule', () => {
       expect(result).is.false;
     });
 
-    it('returns false when the redeem quantity is 0', async () => {
+    it('returns false when the redeem quantity is 0', async function () {
       matrixTokenQuantity = ZERO;
       const result = await isValidRedeem();
       expect(result).is.false;
     });
 
-    it('returns false when the reserve asset is not valid', async () => {
+    it('returns false when the reserve asset is not valid', async function () {
       await systemFixture.wbtc.approve(systemFixture.controller.address, btcToWei(1000000));
       reserveAsset = systemFixture.wbtc.address;
       const result = await isValidRedeem();
@@ -800,7 +800,7 @@ describe('contract NavIssuanceModule', () => {
     });
   });
 
-  describe('issue', () => {
+  describe('issue', function () {
     const units = [ethToWei(1), usdToWei(270), btcToWei(1).div(10), ethToWei(600)]; // Valued at 2000 USDC
 
     let reserveAsset;
@@ -814,16 +814,16 @@ describe('contract NavIssuanceModule', () => {
     let issueQuantity;
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
-    context('when there are 4 components and reserve asset is USDC', async () => {
-      const initContracts = async () => {
+    context('when there are 4 components and reserve asset is USDC', async function () {
+      const initContracts = async function () {
         const components = [systemFixture.weth.address, systemFixture.usdc.address, systemFixture.wbtc.address, systemFixture.dai.address];
         const modules = [systemFixture.basicIssuanceModule.address, systemFixture.navIssuanceModule.address];
         matrixToken = await systemFixture.createMatrixToken(components, units, modules, owner.address);
@@ -858,22 +858,22 @@ describe('contract NavIssuanceModule', () => {
         await systemFixture.usdc.approve(systemFixture.navIssuanceModule.address, issueQuantity);
       };
 
-      const initVariables = () => {
+      function initVariables() {
         reserveAsset = systemFixture.usdc.address;
         reserveQuantity = issueQuantity;
         minMatrixTokenReceived = ethToWei(0);
         to = recipient;
         caller = owner;
-      };
+      }
 
-      context('case 1: when there are no fees and no issuance hooks', async () => {
-        before(async () => {
+      context('case 1: when there are no fees and no issuance hooks', async function () {
+        before(async function () {
           managerIssuanceHook = ZERO_ADDRESS;
           managerFees = [ethToWei(0), ethToWei(0)]; // Set fees to 0
           premiumPercentage = ethToWei(0.005); // Set premium percentage to 50 bps
         });
 
-        beforeEach(async () => {
+        beforeEach(async function () {
           await initContracts();
           initVariables();
         });
@@ -882,7 +882,7 @@ describe('contract NavIssuanceModule', () => {
           return systemFixture.navIssuanceModule.connect(caller).issue(matrixTokenAddress, reserveAsset, reserveQuantity, minMatrixTokenReceived, to.address);
         }
 
-        it('case 1: should issue the MatrixToken to the recipient', async () => {
+        it('case 1: should issue the MatrixToken to the recipient', async function () {
           const expectedIssueQuantity = await getExpectedMatrixTokenIssueQuantity(
             matrixToken,
             systemFixture.matrixValuer,
@@ -901,14 +901,14 @@ describe('contract NavIssuanceModule', () => {
           expect(newBalance.sub(oldBalance)).eq(expectedIssueQuantity);
         });
 
-        it('case 1: should have deposited the reserve asset into the MatrixToken', async () => {
+        it('case 1: should have deposited the reserve asset into the MatrixToken', async function () {
           const oldBalance = await systemFixture.usdc.balanceOf(matrixToken.address);
           await issue();
           const newBalance = await systemFixture.usdc.balanceOf(matrixToken.address);
           expect(newBalance.sub(oldBalance)).eq(issueQuantity);
         });
 
-        it('case 1: should have updated the reserve asset position correctly', async () => {
+        it('case 1: should have updated the reserve asset position correctly', async function () {
           const oldTotalSupply = await matrixToken.totalSupply();
           await issue();
           const newTotalSupply = await matrixToken.totalSupply();
@@ -928,7 +928,7 @@ describe('contract NavIssuanceModule', () => {
           expect(positionUnit).eq(expectedPositionUnit);
         });
 
-        it('case 1: should have updated the position multiplier correctly', async () => {
+        it('case 1: should have updated the position multiplier correctly', async function () {
           const oldPositionMultiplier = await matrixToken.getPositionMultiplier();
           const oldTotalSupply = await matrixToken.totalSupply();
           await issue();
@@ -939,7 +939,7 @@ describe('contract NavIssuanceModule', () => {
           expect(newPositionMultiplier).eq(expectedPositionMultiplier);
         });
 
-        it('case 1: should emit the IssueMatrixTokenNav event', async () => {
+        it('case 1: should emit the IssueMatrixTokenNav event', async function () {
           const expectedTokenIssued = await systemFixture.navIssuanceModule.getExpectedMatrixTokenIssueQuantity(
             matrixTokenAddress,
             reserveAsset,
@@ -950,33 +950,33 @@ describe('contract NavIssuanceModule', () => {
             .withArgs(matrixTokenAddress, caller.address, to.address, reserveAsset, reserveQuantity, ZERO_ADDRESS, expectedTokenIssued, ZERO, ZERO);
         });
 
-        it('case 1: should reconcile balances', async () => {
+        it('case 1: should reconcile balances', async function () {
           await reconcileBalances(matrixToken, issue, owner);
         });
 
-        it('case 1: should revert when total supply is less than min required for NAV issuance', async () => {
+        it('case 1: should revert when total supply is less than min required for NAV issuance', async function () {
           // Redeem below required
           await systemFixture.basicIssuanceModule.connect(owner).redeem(matrixToken.address, ethToWei(1.5), owner.address);
           await expect(issue()).revertedWith('N9a');
         });
 
-        it('case 1: should revert when the issue quantity is 0', async () => {
+        it('case 1: should revert when the issue quantity is 0', async function () {
           reserveQuantity = ZERO;
           await expect(issue()).revertedWith('N8a');
         });
 
-        it('case 1: should revert when the reserve asset is not valid', async () => {
+        it('case 1: should revert when the reserve asset is not valid', async function () {
           await systemFixture.wbtc.approve(systemFixture.controller.address, btcToWei(1000000));
           reserveAsset = systemFixture.wbtc.address;
           await expect(issue()).revertedWith('N8b');
         });
 
-        it('case 1: should revert when MatrixToken received is less than min required', async () => {
+        it('case 1: should revert when MatrixToken received is less than min required', async function () {
           minMatrixTokenReceived = ethToWei(100);
           await expect(issue()).revertedWith('N9b');
         });
 
-        it('case 1: should revert when the MatrixToken is not enabled on the controller', async () => {
+        it('case 1: should revert when the MatrixToken is not enabled on the controller', async function () {
           const newToken = await systemFixture.createRawMatrixToken(
             [systemFixture.weth.address],
             [ethToWei(1)],
@@ -987,12 +987,12 @@ describe('contract NavIssuanceModule', () => {
           await expect(issue()).revertedWith('M3');
         });
 
-        describe('case 1.1: when the issue quantity is extremely small', () => {
-          beforeEach(async () => {
+        describe('case 1.1: when the issue quantity is extremely small', function () {
+          beforeEach(async function () {
             reserveQuantity = ONE;
           });
 
-          it('case 1.1: should issue the Set to the recipient', async () => {
+          it('case 1.1: should issue the Set to the recipient', async function () {
             const expectedIssueQuantity = await getExpectedMatrixTokenIssueQuantity(
               matrixToken,
               systemFixture.matrixValuer,
@@ -1011,14 +1011,14 @@ describe('contract NavIssuanceModule', () => {
             expect(newBalance.sub(oldBalance)).eq(expectedIssueQuantity);
           });
 
-          it('case 1.1: should have deposited the reserve asset into the MatrixToken', async () => {
+          it('case 1.1: should have deposited the reserve asset into the MatrixToken', async function () {
             const oldUsdcBalance = await systemFixture.usdc.balanceOf(matrixToken.address);
             await issue();
             const newUsdcBalance = await systemFixture.usdc.balanceOf(matrixToken.address);
             expect(newUsdcBalance.sub(oldUsdcBalance)).eq(reserveQuantity);
           });
 
-          it('case 1.1: should have updated the reserve asset position correctly', async () => {
+          it('case 1.1: should have updated the reserve asset position correctly', async function () {
             const oldTotalSupply = await matrixToken.totalSupply();
             await issue();
             const newTotalSupply = await matrixToken.totalSupply();
@@ -1038,7 +1038,7 @@ describe('contract NavIssuanceModule', () => {
             expect(usdcPositionUnit).eq(expectedPositionUnit);
           });
 
-          it('case 1.1: should have updated the position multiplier correctly', async () => {
+          it('case 1.1: should have updated the position multiplier correctly', async function () {
             const oldPositionMultiplier = await matrixToken.getPositionMultiplier();
             const oldTotalSupply = await matrixToken.totalSupply();
             await issue();
@@ -1048,13 +1048,13 @@ describe('contract NavIssuanceModule', () => {
             expect(newPositionMultiplier).eq(expectedPositionMultiplier);
           });
 
-          it('case 1.1: should reconcile balances', async () => {
+          it('case 1.1: should reconcile balances', async function () {
             await reconcileBalances(matrixToken, issue, owner);
           });
         });
 
-        describe('case 1.2: when a MatrixToken position is not in default state', () => {
-          beforeEach(async () => {
+        describe('case 1.2: when a MatrixToken position is not in default state', function () {
+          beforeEach(async function () {
             // Add self as module and update the position state
             await systemFixture.controller.addModule(owner.address);
             await matrixToken.connect(owner).addModule(owner.address);
@@ -1066,7 +1066,7 @@ describe('contract NavIssuanceModule', () => {
             await matrixToken.editExternalPositionUnit(systemFixture.usdc.address, ZERO_ADDRESS, units[1]);
           });
 
-          it('case 1.2: should have updated the reserve asset position correctly', async () => {
+          it('case 1.2: should have updated the reserve asset position correctly', async function () {
             const oldTotalSupply = await matrixToken.totalSupply();
             await issue();
             const newTotalSupply = await matrixToken.totalSupply();
@@ -1086,7 +1086,7 @@ describe('contract NavIssuanceModule', () => {
             expect(defaultUnit).eq(expectedPositionUnit);
           });
 
-          it('case 1.2: should have updated the position multiplier correctly', async () => {
+          it('case 1.2: should have updated the position multiplier correctly', async function () {
             const oldPositionMultiplier = await matrixToken.getPositionMultiplier();
             const oldTotalSupply = await matrixToken.totalSupply();
             await issue();
@@ -1096,23 +1096,23 @@ describe('contract NavIssuanceModule', () => {
             expect(newPositionMultiplier).eq(expectedPositionMultiplier);
           });
 
-          it('case 1.2: should reconcile balances', async () => {
+          it('case 1.2: should reconcile balances', async function () {
             await reconcileBalances(matrixToken, issue, owner);
           });
         });
       });
 
-      context('case 2: when there are fees enabled and no issuance hooks', async () => {
+      context('case 2: when there are fees enabled and no issuance hooks', async function () {
         let protocolDirectFee;
         let protocolManagerFee;
 
-        before(async () => {
+        before(async function () {
           managerIssuanceHook = ZERO_ADDRESS;
           managerFees = [ethToWei(0.1), ethToWei(0.1)];
           premiumPercentage = ethToWei(0.005);
         });
 
-        beforeEach(async () => {
+        beforeEach(async function () {
           await initContracts();
           initVariables();
 
@@ -1127,7 +1127,7 @@ describe('contract NavIssuanceModule', () => {
           return systemFixture.navIssuanceModule.connect(caller).issue(matrixTokenAddress, reserveAsset, reserveQuantity, minMatrixTokenReceived, to.address);
         }
 
-        it('case 2: should issue the MatrixToken to the recipient', async () => {
+        it('case 2: should issue the MatrixToken to the recipient', async function () {
           const expectedIssueQuantity = await getExpectedMatrixTokenIssueQuantity(
             matrixToken,
             systemFixture.matrixValuer,
@@ -1145,7 +1145,7 @@ describe('contract NavIssuanceModule', () => {
           expect(newBalance.sub(oldBalance)).eq(expectedIssueQuantity);
         });
 
-        it('case 2: should have deposited the reserve asset into the MatrixToken', async () => {
+        it('case 2: should have deposited the reserve asset into the MatrixToken', async function () {
           const oldUsdcBalance = await systemFixture.usdc.balanceOf(matrixToken.address);
           await issue();
           const newUsdcBalance = await systemFixture.usdc.balanceOf(matrixToken.address);
@@ -1153,7 +1153,7 @@ describe('contract NavIssuanceModule', () => {
           expect(newUsdcBalance.sub(oldUsdcBalance)).eq(postFeeQuantity);
         });
 
-        it('case 2: should have updated the reserve asset position correctly', async () => {
+        it('case 2: should have updated the reserve asset position correctly', async function () {
           const oldTotalSupply = await matrixToken.totalSupply();
           await issue();
           const newTotalSupply = await matrixToken.totalSupply();
@@ -1174,7 +1174,7 @@ describe('contract NavIssuanceModule', () => {
           expect(usdcPositionUnit).eq(expectedPositionUnit);
         });
 
-        it('case 2: should have updated the position multiplier correctly', async () => {
+        it('case 2: should have updated the position multiplier correctly', async function () {
           const oldPositionMultiplier = await matrixToken.getPositionMultiplier();
           const oldTotalSupply = await matrixToken.totalSupply();
           await issue();
@@ -1185,7 +1185,7 @@ describe('contract NavIssuanceModule', () => {
           expect(newPositionMultiplier).eq(expectedPositionMultiplier);
         });
 
-        it('case 2: should have properly distributed the protocol fee', async () => {
+        it('case 2: should have properly distributed the protocol fee', async function () {
           const oldBalance = await systemFixture.usdc.balanceOf(protocolFeeRecipientAddress);
           await issue();
           const newBalance = await systemFixture.usdc.balanceOf(protocolFeeRecipientAddress);
@@ -1194,7 +1194,7 @@ describe('contract NavIssuanceModule', () => {
           expect(newBalance.sub(oldBalance)).eq(protocolFeeAmount);
         });
 
-        it('case 2: should have properly distributed the management fee', async () => {
+        it('case 2: should have properly distributed the management fee', async function () {
           const oldBalance = await systemFixture.usdc.balanceOf(feeRecipient.address);
           await issue();
           const newBalance = await systemFixture.usdc.balanceOf(feeRecipient.address);
@@ -1203,15 +1203,15 @@ describe('contract NavIssuanceModule', () => {
           expect(newBalance.sub(oldBalance)).eq(managerFeeAmount);
         });
 
-        it('case 2: should reconcile balances', async () => {
+        it('case 2: should reconcile balances', async function () {
           await reconcileBalances(matrixToken, issue, owner);
         });
       });
 
-      context('case 3: when there are fees, premiums and an issuance hooks', async () => {
+      context('case 3: when there are fees, premiums and an issuance hooks', async function () {
         let issuanceHookContract;
 
-        before(async () => {
+        before(async function () {
           managerIssuanceHook = ZERO_ADDRESS;
           managerFees = [ethToWei(0), ethToWei(0)];
           premiumPercentage = ethToWei(0.005);
@@ -1220,7 +1220,7 @@ describe('contract NavIssuanceModule', () => {
           managerIssuanceHook = issuanceHookContract.address;
         });
 
-        beforeEach(async () => {
+        beforeEach(async function () {
           await initContracts();
           initVariables();
         });
@@ -1229,7 +1229,7 @@ describe('contract NavIssuanceModule', () => {
           return systemFixture.navIssuanceModule.issue(matrixTokenAddress, reserveAsset, reserveQuantity, minMatrixTokenReceived, to.address);
         }
 
-        it('case 3: should properly call the pre-issue hooks', async () => {
+        it('case 3: should properly call the pre-issue hooks', async function () {
           await issue();
           expect(await issuanceHookContract.getToken()).eq(matrixTokenAddress);
           expect(await issuanceHookContract.getReserveAsset()).eq(reserveAsset);
@@ -1241,7 +1241,7 @@ describe('contract NavIssuanceModule', () => {
     });
   });
 
-  describe('issueWithEther', () => {
+  describe('issueWithEther', function () {
     const units = [ethToWei(1), usdToWei(270), btcToWei(1).div(10), ethToWei(600)]; // Valued at 2000 USDC
 
     let minMatrixTokenReceived;
@@ -1254,16 +1254,16 @@ describe('contract NavIssuanceModule', () => {
     let issueQuantity;
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
-    context('when there are 4 components and reserve asset is ETH', async () => {
-      const initContracts = async () => {
+    context('when there are 4 components and reserve asset is ETH', async function () {
+      const initContracts = async function () {
         const components = [systemFixture.weth.address, systemFixture.usdc.address, systemFixture.wbtc.address, systemFixture.dai.address];
         const modules = [systemFixture.basicIssuanceModule.address, systemFixture.navIssuanceModule.address];
         matrixToken = await systemFixture.createMatrixToken(components, units, modules, owner.address);
@@ -1297,21 +1297,21 @@ describe('contract NavIssuanceModule', () => {
         issueQuantity = ethToWei(0.1);
       };
 
-      const initVariables = () => {
+      function initVariables() {
         minMatrixTokenReceived = ethToWei(0);
         to = recipient;
         value = issueQuantity;
         caller = owner;
-      };
+      }
 
-      context('case 1: when there are no fees and no issuance hooks', async () => {
-        before(async () => {
+      context('case 1: when there are no fees and no issuance hooks', async function () {
+        before(async function () {
           managerIssuanceHook = ZERO_ADDRESS;
           managerFees = [ethToWei(0), ethToWei(0)]; // Set fees to 0
           premiumPercentage = ethToWei(0.005);
         });
 
-        beforeEach(async () => {
+        beforeEach(async function () {
           await initContracts();
           initVariables();
         });
@@ -1322,7 +1322,7 @@ describe('contract NavIssuanceModule', () => {
           });
         }
 
-        it('case 1: should issue the MatrixToken to the recipient', async () => {
+        it('case 1: should issue the MatrixToken to the recipient', async function () {
           const expectedIssueQuantity = await getExpectedMatrixTokenIssueQuantity(
             matrixToken,
             systemFixture.matrixValuer,
@@ -1341,14 +1341,14 @@ describe('contract NavIssuanceModule', () => {
           expect(newBalance.sub(oldBalance)).eq(expectedIssueQuantity);
         });
 
-        it('case 1: should have deposited WETH into the MatrixToken', async () => {
+        it('case 1: should have deposited WETH into the MatrixToken', async function () {
           const oldWETHBalance = await systemFixture.weth.balanceOf(matrixToken.address);
           await issueWithEther();
           const newWETHBalance = await systemFixture.weth.balanceOf(matrixToken.address);
           expect(newWETHBalance.sub(oldWETHBalance)).eq(issueQuantity);
         });
 
-        it('case 1: should have updated the reserve asset position correctly', async () => {
+        it('case 1: should have updated the reserve asset position correctly', async function () {
           const oldTokenSupply = await matrixToken.totalSupply();
           await issueWithEther();
           const newTokenSupply = await matrixToken.totalSupply();
@@ -1368,7 +1368,7 @@ describe('contract NavIssuanceModule', () => {
           expect(defaultPositionUnit).eq(expectedPositionUnit);
         });
 
-        it('case 1: should have updated the position multiplier correctly', async () => {
+        it('case 1: should have updated the position multiplier correctly', async function () {
           const oldPositionMultiplier = await matrixToken.getPositionMultiplier();
           const oldTokenSupply = await matrixToken.totalSupply();
           await issueWithEther();
@@ -1379,7 +1379,7 @@ describe('contract NavIssuanceModule', () => {
           expect(newPositionMultiplier).eq(expectedPositionMultiplier);
         });
 
-        it('case 1: should emit the IssueMatrixTokenNav event', async () => {
+        it('case 1: should emit the IssueMatrixTokenNav event', async function () {
           const expectedTokenIssued = await systemFixture.navIssuanceModule.getExpectedMatrixTokenIssueQuantity(
             matrixTokenAddress,
             systemFixture.weth.address,
@@ -1390,27 +1390,27 @@ describe('contract NavIssuanceModule', () => {
             .withArgs(matrixTokenAddress, caller.address, to.address, systemFixture.weth.address, value, ZERO_ADDRESS, expectedTokenIssued, ZERO, ZERO);
         });
 
-        it('case 1: should reconcile balances', async () => {
+        it('case 1: should reconcile balances', async function () {
           await reconcileBalances(matrixToken, issueWithEther, owner);
         });
 
-        it('case 1: should revert when total supply is less than min required for NAV issuance', async () => {
+        it('case 1: should revert when total supply is less than min required for NAV issuance', async function () {
           // Redeem below required
           await systemFixture.basicIssuanceModule.connect(owner).redeem(matrixToken.address, ethToWei(1.5), owner.address);
           await expect(issueWithEther()).revertedWith('N9a');
         });
 
-        it('case 1: should revert when the value is 0', async () => {
+        it('case 1: should revert when the value is 0', async function () {
           value = ZERO;
           await expect(issueWithEther()).revertedWith('N8a');
         });
 
-        it('case 1: should revert when MatrixToken received is less than minimum', async () => {
+        it('case 1: should revert when MatrixToken received is less than minimum', async function () {
           minMatrixTokenReceived = ethToWei(100);
           await expect(issueWithEther()).revertedWith('N9b');
         });
 
-        it('case 1: should revert when the MatrixToken is not enabled on the controller', async () => {
+        it('case 1: should revert when the MatrixToken is not enabled on the controller', async function () {
           const newToken = await systemFixture.createRawMatrixToken(
             [systemFixture.weth.address],
             [ethToWei(1)],
@@ -1421,8 +1421,8 @@ describe('contract NavIssuanceModule', () => {
           await expect(issueWithEther()).revertedWith('M3');
         });
 
-        describe('case 1.1: when a MatrixToken position is not in default state', () => {
-          beforeEach(async () => {
+        describe('case 1.1: when a MatrixToken position is not in default state', function () {
+          beforeEach(async function () {
             // Add self as module and update the position state
             await systemFixture.controller.addModule(owner.address);
             matrixToken = matrixToken.connect(owner);
@@ -1436,7 +1436,7 @@ describe('contract NavIssuanceModule', () => {
             await matrixToken.editExternalPositionUnit(systemFixture.weth.address, ZERO_ADDRESS, units[0]);
           });
 
-          it('case 1.1: should have updated the reserve asset position correctly', async () => {
+          it('case 1.1: should have updated the reserve asset position correctly', async function () {
             const oldTokenSupply = await matrixToken.totalSupply();
 
             await issueWithEther();
@@ -1459,7 +1459,7 @@ describe('contract NavIssuanceModule', () => {
             expect(defaultUnit).eq(expectedPositionUnit);
           });
 
-          it('case 1.1: should have updated the position multiplier correctly', async () => {
+          it('case 1.1: should have updated the position multiplier correctly', async function () {
             const oldTokenSupply = await matrixToken.totalSupply();
             const oldPositionMultiplier = await matrixToken.getPositionMultiplier();
 
@@ -1472,23 +1472,23 @@ describe('contract NavIssuanceModule', () => {
             expect(newPositionMultiplier).eq(expectedPositionMultiplier);
           });
 
-          it('case 1.1: should reconcile balances', async () => {
+          it('case 1.1: should reconcile balances', async function () {
             await reconcileBalances(matrixToken, issueWithEther, owner);
           });
         });
       });
 
-      context('case 2: when there are fees enabled and no issuance hooks', async () => {
+      context('case 2: when there are fees enabled and no issuance hooks', async function () {
         let protocolDirectFee;
         let protocolManagerFee;
 
-        before(async () => {
+        before(async function () {
           managerIssuanceHook = ZERO_ADDRESS;
           managerFees = [ethToWei(0.1), ethToWei(0.1)];
           premiumPercentage = ethToWei(0.1);
         });
 
-        beforeEach(async () => {
+        beforeEach(async function () {
           await initContracts();
           initVariables();
 
@@ -1505,7 +1505,7 @@ describe('contract NavIssuanceModule', () => {
           });
         }
 
-        it('case 2: should issue the MatrixToken to the recipient', async () => {
+        it('case 2: should issue the MatrixToken to the recipient', async function () {
           const expectedIssueQuantity = await getExpectedMatrixTokenIssueQuantity(
             matrixToken,
             systemFixture.matrixValuer,
@@ -1523,7 +1523,7 @@ describe('contract NavIssuanceModule', () => {
           expect(issuedBalance).eq(expectedIssueQuantity);
         });
 
-        it('case 2: should have deposited the reserve asset into the MatrixToken', async () => {
+        it('case 2: should have deposited the reserve asset into the MatrixToken', async function () {
           const oldWETHBalance = await systemFixture.weth.balanceOf(matrixToken.address);
           await issueWithEther();
           const newWETHBalance = await systemFixture.weth.balanceOf(matrixToken.address);
@@ -1531,7 +1531,7 @@ describe('contract NavIssuanceModule', () => {
           expect(newWETHBalance.sub(oldWETHBalance)).eq(expectedPostFeeQuantity);
         });
 
-        it('case 2: should have updated the reserve asset position correctly', async () => {
+        it('case 2: should have updated the reserve asset position correctly', async function () {
           const oldTokenSupply = await matrixToken.totalSupply();
           await issueWithEther();
           const newTokenSupply = await matrixToken.totalSupply();
@@ -1552,7 +1552,7 @@ describe('contract NavIssuanceModule', () => {
           expect(wethPositionUnit).eq(expectedPositionUnit);
         });
 
-        it('case 2: should have updated the position multiplier correctly', async () => {
+        it('case 2: should have updated the position multiplier correctly', async function () {
           const oldPositionMultiplier = await matrixToken.getPositionMultiplier();
           const oldTokenSupply = await matrixToken.totalSupply();
           await issueWithEther();
@@ -1563,7 +1563,7 @@ describe('contract NavIssuanceModule', () => {
           expect(newPositionMultiplier).eq(expectedPositionMultiplier);
         });
 
-        it('case 2: should have properly distributed the protocol fee in WETH', async () => {
+        it('case 2: should have properly distributed the protocol fee in WETH', async function () {
           const oldProtocolFeeRecipientBalance = await systemFixture.weth.balanceOf(protocolFeeRecipientAddress);
           await issueWithEther();
           const newProtocolFeeRecipientBalance = await systemFixture.weth.balanceOf(protocolFeeRecipientAddress);
@@ -1573,7 +1573,7 @@ describe('contract NavIssuanceModule', () => {
           expect(newProtocolFeeRecipientBalance.sub(oldProtocolFeeRecipientBalance)).eq(protocolFeeAmount);
         });
 
-        it('case 2: should have properly distributed the management fee in WETH', async () => {
+        it('case 2: should have properly distributed the management fee in WETH', async function () {
           const oldManagerBalance = await systemFixture.weth.balanceOf(feeRecipient.address);
           await issueWithEther();
           const newManagerBalance = await systemFixture.weth.balanceOf(feeRecipient.address);
@@ -1583,14 +1583,14 @@ describe('contract NavIssuanceModule', () => {
           expect(newManagerBalance.sub(oldManagerBalance)).eq(managerFeeAmount);
         });
 
-        it('case 2: should reconcile balances', async () => {
+        it('case 2: should reconcile balances', async function () {
           await reconcileBalances(matrixToken, issueWithEther, owner);
         });
       });
     });
   });
 
-  describe('redeem', () => {
+  describe('redeem', function () {
     const units = [ethToWei(1), usdToWei(570), btcToWei(1).div(10), ethToWei(300)]; // Valued at 2000 USDC
 
     let reserveAsset;
@@ -1604,16 +1604,16 @@ describe('contract NavIssuanceModule', () => {
     let redeemQuantity;
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
-    context('when there are 4 components and reserve asset is USDC', async () => {
-      const initContracts = async () => {
+    context('when there are 4 components and reserve asset is USDC', async function () {
+      const initContracts = async function () {
         const components = [systemFixture.weth.address, systemFixture.usdc.address, systemFixture.wbtc.address, systemFixture.dai.address];
         const modules = [systemFixture.basicIssuanceModule.address, systemFixture.navIssuanceModule.address];
         matrixToken = await systemFixture.createMatrixToken(components, units, modules, owner.address);
@@ -1646,23 +1646,23 @@ describe('contract NavIssuanceModule', () => {
         redeemQuantity = ethToWei(2.8);
       };
 
-      const initVariables = () => {
+      function initVariables() {
         matrixTokenAddress = matrixToken.address;
         reserveAsset = systemFixture.usdc.address;
         matrixTokenQuantity = redeemQuantity;
         minReserveQuantityReceived = ethToWei(0);
         to = recipient;
         caller = owner;
-      };
+      }
 
-      context('case 1: when there are no fees and no redemption hooks', async () => {
-        before(async () => {
+      context('case 1: when there are no fees and no redemption hooks', async function () {
+        before(async function () {
           managerRedemptionHook = ZERO_ADDRESS;
           managerFees = [ethToWei(0), ethToWei(0)]; // Set fees to 0
           premiumPercentage = ethToWei(0.005); // Set premium percentage to 50 bps
         });
 
-        beforeEach(async () => {
+        beforeEach(async function () {
           await initContracts();
           initVariables();
         });
@@ -1673,7 +1673,7 @@ describe('contract NavIssuanceModule', () => {
             .redeem(matrixTokenAddress, reserveAsset, matrixTokenQuantity, minReserveQuantityReceived, to.address);
         }
 
-        it('case 1: should reduce the MatrixToken supply', async () => {
+        it('case 1: should reduce the MatrixToken supply', async function () {
           const oldBalance = await matrixToken.balanceOf(owner.address);
           const oldSupply = await matrixToken.totalSupply();
           await redeem();
@@ -1682,7 +1682,7 @@ describe('contract NavIssuanceModule', () => {
           expect(oldBalance.sub(newBalance)).eq(oldSupply.sub(newSupply));
         });
 
-        it('case 1: should have redeemed the reserve asset to the recipient', async () => {
+        it('case 1: should have redeemed the reserve asset to the recipient', async function () {
           const matrixTokenValuation = await systemFixture.matrixValuer.calculateMatrixTokenValuation(matrixTokenAddress, reserveAsset);
           const expectedRedeemQuantity = getExpectedReserveRedeemQuantity(
             matrixTokenQuantity,
@@ -1700,7 +1700,7 @@ describe('contract NavIssuanceModule', () => {
           expect(newBalance.sub(oldBalance)).eq(expectedRedeemQuantity);
         });
 
-        it('case 1: should have updated the reserve asset position correctly', async () => {
+        it('case 1: should have updated the reserve asset position correctly', async function () {
           const matrixTokenValuation = await systemFixture.matrixValuer.calculateMatrixTokenValuation(matrixTokenAddress, reserveAsset);
           const oldSupply = await matrixToken.totalSupply();
           await redeem();
@@ -1723,7 +1723,7 @@ describe('contract NavIssuanceModule', () => {
           expect(defaultPositionUnit).eq(expectedPositionUnit);
         });
 
-        it('case 1: should have updated the position multiplier correctly', async () => {
+        it('case 1: should have updated the position multiplier correctly', async function () {
           const oldPositionMultiplier = await matrixToken.getPositionMultiplier();
           const oldSupply = await matrixToken.totalSupply();
           await redeem();
@@ -1734,7 +1734,7 @@ describe('contract NavIssuanceModule', () => {
           expect(newPositionMultiplier).eq(expectedPositionMultiplier);
         });
 
-        it('case 1: should emit the RedeemMatrixTokenNav event', async () => {
+        it('case 1: should emit the RedeemMatrixTokenNav event', async function () {
           const matrixTokenValuation = await systemFixture.matrixValuer.calculateMatrixTokenValuation(matrixTokenAddress, reserveAsset);
           const expectedRedeemQuantity = getExpectedReserveRedeemQuantity(
             matrixTokenQuantity,
@@ -1750,18 +1750,18 @@ describe('contract NavIssuanceModule', () => {
             .withArgs(matrixTokenAddress, caller.address, to.address, reserveAsset, expectedRedeemQuantity, ZERO_ADDRESS, matrixTokenQuantity, ZERO, ZERO);
         });
 
-        it('case 1: should reconcile balances', async () => {
+        it('case 1: should reconcile balances', async function () {
           await reconcileBalances(matrixToken, redeem, owner);
         });
 
-        it('case 1: should revert when total supply is less than min required for NAV issuance', async () => {
+        it('case 1: should revert when total supply is less than min required for NAV issuance', async function () {
           // Redeem below required
           await systemFixture.basicIssuanceModule.connect(owner).redeem(matrixToken.address, ethToWei(9), owner.address);
           matrixTokenQuantity = ethToWei(0.01);
           await expect(redeem()).revertedWith('N10a');
         });
 
-        it('case 1: should revert when there is not sufficient reserve asset for withdraw', async () => {
+        it('case 1: should revert when there is not sufficient reserve asset for withdraw', async function () {
           // Add self as module and update the position state
           await systemFixture.controller.addModule(owner.address);
           await matrixToken.connect(owner).addModule(owner.address);
@@ -1774,23 +1774,23 @@ describe('contract NavIssuanceModule', () => {
           await expect(redeem()).revertedWith('N11');
         });
 
-        it('case 1: should revert when the redeem quantity is 0', async () => {
+        it('case 1: should revert when the redeem quantity is 0', async function () {
           matrixTokenQuantity = ZERO;
           await expect(redeem()).revertedWith('N8a');
         });
 
-        it('case 1: should revert when the reserve asset is not valid', async () => {
+        it('case 1: should revert when the reserve asset is not valid', async function () {
           await systemFixture.wbtc.approve(systemFixture.controller.address, btcToWei(1000000));
           reserveAsset = systemFixture.wbtc.address;
           await expect(redeem()).revertedWith('N8b');
         });
 
-        it('case 1: should revert when reserve asset received is less than min required', async () => {
+        it('case 1: should revert when reserve asset received is less than min required', async function () {
           minReserveQuantityReceived = ethToWei(100);
           await expect(redeem()).revertedWith('N10b');
         });
 
-        it('case 1: should revert when the MatrixToken is not enabled on the controller', async () => {
+        it('case 1: should revert when the MatrixToken is not enabled on the controller', async function () {
           const newToken = await systemFixture.createRawMatrixToken(
             [systemFixture.weth.address],
             [ethToWei(1)],
@@ -1801,12 +1801,12 @@ describe('contract NavIssuanceModule', () => {
           await expect(redeem()).revertedWith('M3');
         });
 
-        describe('case 1.1: when the redeem quantity is extremely small', () => {
-          beforeEach(async () => {
+        describe('case 1.1: when the redeem quantity is extremely small', function () {
+          beforeEach(async function () {
             matrixTokenQuantity = ONE;
           });
 
-          it('case 1.1: should reduce the MatrixToken supply', async () => {
+          it('case 1.1: should reduce the MatrixToken supply', async function () {
             const oldBalance = await matrixToken.balanceOf(owner.address);
             const oldSupply = await matrixToken.totalSupply();
             await redeem();
@@ -1815,7 +1815,7 @@ describe('contract NavIssuanceModule', () => {
             expect(oldBalance.sub(newBalance)).eq(oldSupply.sub(newSupply));
           });
 
-          it('case 1.1: should have redeemed the reserve asset to the recipient', async () => {
+          it('case 1.1: should have redeemed the reserve asset to the recipient', async function () {
             const matrixTokenValuation = await systemFixture.matrixValuer.calculateMatrixTokenValuation(matrixTokenAddress, reserveAsset);
             const expectedRedeemQuantity = getExpectedReserveRedeemQuantity(
               matrixTokenQuantity,
@@ -1833,7 +1833,7 @@ describe('contract NavIssuanceModule', () => {
             expect(newUsdcBalance.sub(oldUsdcBalance)).eq(expectedRedeemQuantity);
           });
 
-          it('case 1.1: should have updated the reserve asset position correctly', async () => {
+          it('case 1.1: should have updated the reserve asset position correctly', async function () {
             const matrixTokenValuation = await systemFixture.matrixValuer.calculateMatrixTokenValuation(matrixTokenAddress, reserveAsset);
             const oldSupply = await matrixToken.totalSupply();
             await redeem();
@@ -1856,7 +1856,7 @@ describe('contract NavIssuanceModule', () => {
             expect(defaultPositionUnit).eq(expectedPositionUnit);
           });
 
-          it('case 1.1: should have updated the position multiplier correctly', async () => {
+          it('case 1.1: should have updated the position multiplier correctly', async function () {
             const oldPositionMultiplier = await matrixToken.getPositionMultiplier();
             const oldSupply = await matrixToken.totalSupply();
             await redeem();
@@ -1866,13 +1866,13 @@ describe('contract NavIssuanceModule', () => {
             expect(newPositionMultiplier).eq(expectedPositionMultiplier);
           });
 
-          it('case 1.1: should reconcile balances', async () => {
+          it('case 1.1: should reconcile balances', async function () {
             await reconcileBalances(matrixToken, redeem, owner);
           });
         });
 
-        describe('case 1.2: when a MatrixToken position is not in default state', () => {
-          beforeEach(async () => {
+        describe('case 1.2: when a MatrixToken position is not in default state', function () {
+          beforeEach(async function () {
             // Add self as module and update the position state
             await systemFixture.controller.addModule(owner.address);
             await matrixToken.connect(owner).addModule(owner.address);
@@ -1886,7 +1886,7 @@ describe('contract NavIssuanceModule', () => {
             matrixTokenQuantity = ethToWei(0.1);
           });
 
-          it('case 1.2: should have updated the reserve asset position correctly', async () => {
+          it('case 1.2: should have updated the reserve asset position correctly', async function () {
             const matrixTokenValuation = await systemFixture.matrixValuer.calculateMatrixTokenValuation(matrixTokenAddress, reserveAsset);
             const oldSupply = await matrixToken.totalSupply();
             await redeem();
@@ -1909,7 +1909,7 @@ describe('contract NavIssuanceModule', () => {
             expect(defaultPositionUnit).eq(expectedPositionUnit);
           });
 
-          it('case 1.2: should have updated the position multiplier correctly', async () => {
+          it('case 1.2: should have updated the position multiplier correctly', async function () {
             const oldPositionMultiplier = await matrixToken.getPositionMultiplier();
             const oldSupply = await matrixToken.totalSupply();
             await redeem();
@@ -1919,23 +1919,23 @@ describe('contract NavIssuanceModule', () => {
             expect(newPositionMultiplier).eq(expectedPositionMultiplier);
           });
 
-          it('case 1.2: should reconcile balances', async () => {
+          it('case 1.2: should reconcile balances', async function () {
             await reconcileBalances(matrixToken, redeem, owner);
           });
         });
       });
 
-      context('case 2: when there are fees enabled and no redemption hooks', async () => {
+      context('case 2: when there are fees enabled and no redemption hooks', async function () {
         let protocolDirectFee;
         let protocolManagerFee;
 
-        before(async () => {
+        before(async function () {
           managerRedemptionHook = ZERO_ADDRESS;
           managerFees = [ethToWei(0.1), ethToWei(0.1)];
           premiumPercentage = ethToWei(0.005);
         });
 
-        beforeEach(async () => {
+        beforeEach(async function () {
           await initContracts();
           initVariables();
 
@@ -1952,7 +1952,7 @@ describe('contract NavIssuanceModule', () => {
             .redeem(matrixTokenAddress, reserveAsset, matrixTokenQuantity, minReserveQuantityReceived, to.address);
         }
 
-        it('case 2: should reduce the MatrixToken supply in', async () => {
+        it('case 2: should reduce the MatrixToken supply in', async function () {
           const oldSupply = await matrixToken.totalSupply();
           const oldBalance = await matrixToken.balanceOf(owner.address);
           await redeem();
@@ -1962,7 +1962,7 @@ describe('contract NavIssuanceModule', () => {
           expect(oldBalance.sub(newBalance)).eq(oldSupply.sub(newSupply));
         });
 
-        it('case 2: should have redeemed the reserve asset to the recipient', async () => {
+        it('case 2: should have redeemed the reserve asset to the recipient', async function () {
           const matrixTokenValuation = await systemFixture.matrixValuer.calculateMatrixTokenValuation(matrixTokenAddress, reserveAsset);
           const expectedRedeemQuantity = getExpectedReserveRedeemQuantity(
             matrixTokenQuantity,
@@ -1980,7 +1980,7 @@ describe('contract NavIssuanceModule', () => {
           expect(newUsdcBalance.sub(oldUsdcBalance)).eq(expectedRedeemQuantity);
         });
 
-        it('case 2: should have updated the reserve asset position correctly', async () => {
+        it('case 2: should have updated the reserve asset position correctly', async function () {
           const oldSupply = await matrixToken.totalSupply();
           const matrixTokenValuation = await systemFixture.matrixValuer.calculateMatrixTokenValuation(matrixTokenAddress, reserveAsset);
           await redeem();
@@ -2003,7 +2003,7 @@ describe('contract NavIssuanceModule', () => {
           expect(defaultPositionUnit).eq(expectedPositionUnit);
         });
 
-        it('case 2: should have updated the position multiplier correctly', async () => {
+        it('case 2: should have updated the position multiplier correctly', async function () {
           const oldPositionMultiplier = await matrixToken.getPositionMultiplier();
           const oldSupply = await matrixToken.totalSupply();
           await redeem();
@@ -2014,7 +2014,7 @@ describe('contract NavIssuanceModule', () => {
           expect(newPositionMultiplier).eq(expectedPositionMultiplier);
         });
 
-        it('case 2: should have properly distributed the protocol fee', async () => {
+        it('case 2: should have properly distributed the protocol fee', async function () {
           const oldProtocolFeeRecipientBalance = await systemFixture.usdc.balanceOf(protocolFeeRecipientAddress);
           const oldMatrixTokenBalance = await systemFixture.usdc.balanceOf(matrixToken.address);
           await redeem();
@@ -2027,7 +2027,7 @@ describe('contract NavIssuanceModule', () => {
           expect(newProtocolFeeRecipientBalance.sub(oldProtocolFeeRecipientBalance)).eq(protocolFeeAmount);
         });
 
-        it('case 2: should have properly distributed the management fee', async () => {
+        it('case 2: should have properly distributed the management fee', async function () {
           const oldMatrixTokenBalance = await systemFixture.usdc.balanceOf(matrixToken.address);
           const oldFeeRecipientBalance = await systemFixture.usdc.balanceOf(feeRecipient.address);
           await redeem();
@@ -2040,15 +2040,15 @@ describe('contract NavIssuanceModule', () => {
           expect(newFeeRecipientBalance.sub(oldFeeRecipientBalance)).eq(managerFeeAmount);
         });
 
-        it('case 2: should reconcile balances', async () => {
+        it('case 2: should reconcile balances', async function () {
           await reconcileBalances(matrixToken, redeem, owner);
         });
       });
 
-      context('case 3: when there are fees, premiums and an redemption hook', async () => {
+      context('case 3: when there are fees, premiums and an redemption hook', async function () {
         let issuanceHookContract; // ManagerIssuanceHookMock;
 
-        beforeEach(async () => {
+        beforeEach(async function () {
           managerFees = [ethToWei(0), ethToWei(0)];
           premiumPercentage = ethToWei(0.005);
 
@@ -2064,7 +2064,7 @@ describe('contract NavIssuanceModule', () => {
             .redeem(matrixTokenAddress, reserveAsset, matrixTokenQuantity, minReserveQuantityReceived, to.address);
         }
 
-        it('case 3: should properly call the pre-issue hooks', async () => {
+        it('case 3: should properly call the pre-issue hooks', async function () {
           await redeem();
           expect(await issuanceHookContract.getToken()).eq(matrixTokenAddress);
           expect(await issuanceHookContract.getQuantity()).eq(matrixTokenQuantity);
@@ -2075,7 +2075,7 @@ describe('contract NavIssuanceModule', () => {
     });
   });
 
-  describe('redeemIntoEther', () => {
+  describe('redeemIntoEther', function () {
     const units = [ethToWei(1), usdToWei(270), btcToWei(1).div(10), ethToWei(600)]; // Valued at 2000 USDC
 
     let matrixToken;
@@ -2089,16 +2089,16 @@ describe('contract NavIssuanceModule', () => {
     let redeemQuantity;
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
-    context('when there are 4 components and reserve asset is USDC', async () => {
-      const initContracts = async () => {
+    context('when there are 4 components and reserve asset is USDC', async function () {
+      const initContracts = async function () {
         const components = [systemFixture.weth.address, systemFixture.usdc.address, systemFixture.wbtc.address, systemFixture.dai.address];
         const modules = [systemFixture.basicIssuanceModule.address, systemFixture.navIssuanceModule.address];
         matrixToken = await systemFixture.createMatrixToken(components, units, modules, owner.address);
@@ -2132,22 +2132,22 @@ describe('contract NavIssuanceModule', () => {
         redeemQuantity = ethToWei(1);
       };
 
-      const initVariables = () => {
+      function initVariables() {
         matrixTokenAddress = matrixToken.address;
         matrixTokenQuantity = redeemQuantity;
         minReserveQuantityReceived = ethToWei(0);
         to = recipient;
         caller = owner;
-      };
+      }
 
-      context('case 1: when there are no fees and no redemption hooks', async () => {
-        before(async () => {
+      context('case 1: when there are no fees and no redemption hooks', async function () {
+        before(async function () {
           managerRedemptionHook = ZERO_ADDRESS;
           managerFees = [ethToWei(0), ethToWei(0)]; // Set fees to 0
           premiumPercentage = ethToWei(0.005); // Set premium percentage to 50 bps
         });
 
-        beforeEach(async () => {
+        beforeEach(async function () {
           await initContracts();
           initVariables();
         });
@@ -2158,7 +2158,7 @@ describe('contract NavIssuanceModule', () => {
             .redeemIntoEther(matrixTokenAddress, matrixTokenQuantity, minReserveQuantityReceived, to.address);
         }
 
-        it('case 1: should reduce the MatrixToken supply', async () => {
+        it('case 1: should reduce the MatrixToken supply', async function () {
           const oldBalance = await matrixToken.balanceOf(owner.address);
           const oldSupply = await matrixToken.totalSupply();
           await redeemIntoEther();
@@ -2167,7 +2167,7 @@ describe('contract NavIssuanceModule', () => {
           expect(oldBalance.sub(newBalance)).eq(oldSupply.sub(newSupply));
         });
 
-        it('case 1: should have redeemed the reserve asset to the recipient', async () => {
+        it('case 1: should have redeemed the reserve asset to the recipient', async function () {
           const matrixTokenValuation = await systemFixture.matrixValuer.calculateMatrixTokenValuation(matrixTokenAddress, systemFixture.weth.address);
           const expectedRedeemQuantity = getExpectedReserveRedeemQuantity(
             matrixTokenQuantity,
@@ -2185,7 +2185,7 @@ describe('contract NavIssuanceModule', () => {
           expect(newEthBalance.sub(oldEthBalance)).eq(expectedRedeemQuantity);
         });
 
-        it('case 1: should have updated the reserve asset position correctly', async () => {
+        it('case 1: should have updated the reserve asset position correctly', async function () {
           const matrixTokenValuation = await systemFixture.matrixValuer.calculateMatrixTokenValuation(matrixTokenAddress, systemFixture.weth.address);
 
           const oldSupply = await matrixToken.totalSupply();
@@ -2208,7 +2208,7 @@ describe('contract NavIssuanceModule', () => {
           expect(defaultPositionUnit).eq(expectedPositionUnit);
         });
 
-        it('case 1: should have updated the position multiplier correctly', async () => {
+        it('case 1: should have updated the position multiplier correctly', async function () {
           const oldPositionMultiplier = await matrixToken.getPositionMultiplier();
           const oldSupply = await matrixToken.totalSupply();
           await redeemIntoEther();
@@ -2218,7 +2218,7 @@ describe('contract NavIssuanceModule', () => {
           expect(newPositionMultiplier).eq(expectedPositionMultiplier);
         });
 
-        it('case 1: should emit the RedeemMatrixTokenNav event', async () => {
+        it('case 1: should emit the RedeemMatrixTokenNav event', async function () {
           const reserveAsset = systemFixture.weth.address;
           const matrixTokenValuation = await systemFixture.matrixValuer.calculateMatrixTokenValuation(matrixTokenAddress, reserveAsset);
           const expectedRedeemQuantity = getExpectedReserveRedeemQuantity(
@@ -2245,18 +2245,18 @@ describe('contract NavIssuanceModule', () => {
             );
         });
 
-        it('case 1: should reconcile balances', async () => {
+        it('case 1: should reconcile balances', async function () {
           await reconcileBalances(matrixToken, redeemIntoEther, owner);
         });
 
-        it('case 1: should revert when total supply is less than min required for NAV issuance', async () => {
+        it('case 1: should revert when total supply is less than min required for NAV issuance', async function () {
           // Redeem below required
           await systemFixture.basicIssuanceModule.connect(owner).redeem(matrixToken.address, ethToWei(9), owner.address);
           matrixTokenQuantity = ethToWei(0.01);
           await expect(redeemIntoEther()).revertedWith('N10a');
         });
 
-        it('case 1: should revert when there is not sufficient reserve asset for withdraw', async () => {
+        it('case 1: should revert when there is not sufficient reserve asset for withdraw', async function () {
           // Add self as module and update the position state
           await systemFixture.controller.addModule(owner.address);
           await matrixToken.connect(owner).addModule(owner.address);
@@ -2269,17 +2269,17 @@ describe('contract NavIssuanceModule', () => {
           await expect(redeemIntoEther()).revertedWith('N11');
         });
 
-        it('case 1: should revert when the redeem quantity is 0', async () => {
+        it('case 1: should revert when the redeem quantity is 0', async function () {
           matrixTokenQuantity = ZERO;
           await expect(redeemIntoEther()).revertedWith('N8a');
         });
 
-        it('case 1: should revert when reserve asset received is less than min required', async () => {
+        it('case 1: should revert when reserve asset received is less than min required', async function () {
           minReserveQuantityReceived = ethToWei(100);
           await expect(redeemIntoEther()).revertedWith('N10b');
         });
 
-        it('case 1: should revert when the MatrixToken is not enabled on the controller', async () => {
+        it('case 1: should revert when the MatrixToken is not enabled on the controller', async function () {
           const newToken = await systemFixture.createRawMatrixToken(
             [systemFixture.weth.address],
             [ethToWei(1)],
@@ -2291,17 +2291,17 @@ describe('contract NavIssuanceModule', () => {
         });
       });
 
-      context('case 2: when there are fees enabled and no redemption hooks', async () => {
+      context('case 2: when there are fees enabled and no redemption hooks', async function () {
         let protocolDirectFee;
         let protocolManagerFee;
 
-        before(async () => {
+        before(async function () {
           managerRedemptionHook = ZERO_ADDRESS;
           managerFees = [ethToWei(0.1), ethToWei(0.1)];
           premiumPercentage = ethToWei(0.005);
         });
 
-        beforeEach(async () => {
+        beforeEach(async function () {
           await initContracts();
           initVariables();
 
@@ -2318,7 +2318,7 @@ describe('contract NavIssuanceModule', () => {
             .redeemIntoEther(matrixTokenAddress, matrixTokenQuantity, minReserveQuantityReceived, to.address);
         }
 
-        it('case 2: should reduce the MatrixToken supply', async () => {
+        it('case 2: should reduce the MatrixToken supply', async function () {
           const oldBalance = await matrixToken.balanceOf(owner.address);
           const oldSupply = await matrixToken.totalSupply();
           await redeemIntoEther();
@@ -2327,7 +2327,7 @@ describe('contract NavIssuanceModule', () => {
           expect(oldBalance.sub(newBalance)).eq(oldSupply.sub(newSupply));
         });
 
-        it('case 2: should have redeemed the reserve asset to the recipient', async () => {
+        it('case 2: should have redeemed the reserve asset to the recipient', async function () {
           const matrixTokenValuation = await systemFixture.matrixValuer.calculateMatrixTokenValuation(matrixTokenAddress, systemFixture.weth.address);
 
           const oldEthBalance = await getEthBalance(recipient.address);
@@ -2346,7 +2346,7 @@ describe('contract NavIssuanceModule', () => {
           expect(newEthBalance.sub(oldEthBalance)).eq(expectedETHBalance);
         });
 
-        it('case 2: should have updated the reserve asset position correctly', async () => {
+        it('case 2: should have updated the reserve asset position correctly', async function () {
           const matrixTokenValuation = await systemFixture.matrixValuer.calculateMatrixTokenValuation(matrixTokenAddress, systemFixture.weth.address);
 
           const oldSupply = await matrixToken.totalSupply();
@@ -2370,7 +2370,7 @@ describe('contract NavIssuanceModule', () => {
           expect(defaultPositionUnit).eq(expectedPositionUnit);
         });
 
-        it('case 2: should have updated the position multiplier correctly', async () => {
+        it('case 2: should have updated the position multiplier correctly', async function () {
           const oldPositionMultiplier = await matrixToken.getPositionMultiplier();
           const oldSupply = await matrixToken.totalSupply();
           await redeemIntoEther();
@@ -2380,7 +2380,7 @@ describe('contract NavIssuanceModule', () => {
           expect(newPositionMultiplier).eq(expectedPositionMultiplier);
         });
 
-        it('case 2: should have properly distributed the protocol fee in WETH', async () => {
+        it('case 2: should have properly distributed the protocol fee in WETH', async function () {
           const oldProtocolFeeRecipientBalance = await systemFixture.weth.balanceOf(protocolFeeRecipientAddress);
           const oldMatrixTokenBalance = await systemFixture.weth.balanceOf(matrixToken.address);
           await redeemIntoEther();
@@ -2393,7 +2393,7 @@ describe('contract NavIssuanceModule', () => {
           expect(newProtocolFeeRecipientBalance.sub(oldProtocolFeeRecipientBalance)).eq(protocolFeeAmount);
         });
 
-        it('case 2: should have properly distributed the management fee in WETH', async () => {
+        it('case 2: should have properly distributed the management fee in WETH', async function () {
           const oldMatrixTokenBalance = await systemFixture.weth.balanceOf(matrixToken.address);
           const oldManagerBalance = await systemFixture.weth.balanceOf(feeRecipient.address);
           await redeemIntoEther();
@@ -2406,23 +2406,23 @@ describe('contract NavIssuanceModule', () => {
           expect(newManagerBalance.sub(oldManagerBalance)).eq(managerFeeAmount);
         });
 
-        it('case 2: should reconcile balances', async () => {
+        it('case 2: should reconcile balances', async function () {
           await reconcileBalances(matrixToken, redeemIntoEther, owner);
         });
       });
     });
   });
 
-  context('Manager admin functions', async () => {
+  context('Manager admin functions', async function () {
     function shouldRevertIfTheCallerIsNotTheManager(testFun) {
-      it('should revert when the caller is not the manager', async () => {
+      it('should revert when the caller is not the manager', async function () {
         caller = randomAccount;
         await expect(testFun()).revertedWith('M1a');
       });
     }
 
     function shouldRevertIfMatrixTokenIsInvalid(testFun) {
-      it('should revert when the MatrixToken is not enabled on the controller', async () => {
+      it('should revert when the MatrixToken is not enabled on the controller', async function () {
         const newToken = await systemFixture.createRawMatrixToken(
           [systemFixture.weth.address],
           [ethToWei(1)],
@@ -2435,14 +2435,14 @@ describe('contract NavIssuanceModule', () => {
     }
 
     function shouldRevertIfModuleDisabled(testFun) {
-      it('should revert when the module is disabled', async () => {
+      it('should revert when the module is disabled', async function () {
         await matrixToken.removeModule(systemFixture.navIssuanceModule.address);
         await expect(testFun()).revertedWith('M1b');
       });
     }
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
 
       matrixToken = await systemFixture.createMatrixToken(
@@ -2473,14 +2473,14 @@ describe('contract NavIssuanceModule', () => {
       await systemFixture.controller.addFee(systemFixture.navIssuanceModule.address, ZERO, protocolManagerFee);
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
-    describe('addReserveAsset', () => {
+    describe('addReserveAsset', function () {
       let reserveAsset;
 
-      beforeEach(async () => {
+      beforeEach(async function () {
         matrixTokenAddress = matrixToken.address;
         reserveAsset = systemFixture.dai.address;
         caller = owner;
@@ -2490,7 +2490,7 @@ describe('contract NavIssuanceModule', () => {
         return systemFixture.navIssuanceModule.connect(caller).addReserveAsset(matrixTokenAddress, reserveAsset);
       }
 
-      it('should add the reserve asset', async () => {
+      it('should add the reserve asset', async function () {
         await addReserveAsset();
         const reserveAssets = await systemFixture.navIssuanceModule.getReserveAssets(matrixTokenAddress);
         expect(reserveAssets.length).eq(3);
@@ -2498,11 +2498,11 @@ describe('contract NavIssuanceModule', () => {
         expect(isReserveAssetAdded).is.true;
       });
 
-      it('should emit correct AddReserveAsset event', async () => {
+      it('should emit correct AddReserveAsset event', async function () {
         await expect(addReserveAsset()).emit(systemFixture.navIssuanceModule, 'AddReserveAsset').withArgs(matrixTokenAddress, reserveAsset);
       });
 
-      it('should revert when the reserve asset exists', async () => {
+      it('should revert when the reserve asset exists', async function () {
         reserveAsset = systemFixture.weth.address;
         await expect(addReserveAsset()).revertedWith('N2');
       });
@@ -2512,10 +2512,10 @@ describe('contract NavIssuanceModule', () => {
       shouldRevertIfModuleDisabled(addReserveAsset);
     });
 
-    describe('removeReserveAsset', () => {
+    describe('removeReserveAsset', function () {
       let reserveAsset;
 
-      beforeEach(async () => {
+      beforeEach(async function () {
         matrixTokenAddress = matrixToken.address;
         reserveAsset = systemFixture.usdc.address;
         caller = owner;
@@ -2525,7 +2525,7 @@ describe('contract NavIssuanceModule', () => {
         return systemFixture.navIssuanceModule.connect(caller).removeReserveAsset(matrixTokenAddress, reserveAsset);
       }
 
-      it('should remove the reserve asset', async () => {
+      it('should remove the reserve asset', async function () {
         await removeReserveAsset();
         const isReserveAsset = await systemFixture.navIssuanceModule.isReserveAsset(matrixTokenAddress, reserveAsset);
         const reserveAssets = await systemFixture.navIssuanceModule.getReserveAssets(matrixTokenAddress);
@@ -2534,11 +2534,11 @@ describe('contract NavIssuanceModule', () => {
         expect(JSON.stringify(reserveAssets)).eq(JSON.stringify([systemFixture.weth.address]));
       });
 
-      it('should emit correct RemoveReserveAsset event', async () => {
+      it('should emit correct RemoveReserveAsset event', async function () {
         await expect(removeReserveAsset()).emit(systemFixture.navIssuanceModule, 'RemoveReserveAsset').withArgs(matrixTokenAddress, reserveAsset);
       });
 
-      it('should revert when the reserve asset does not exist', async () => {
+      it('should revert when the reserve asset does not exist', async function () {
         reserveAsset = systemFixture.wbtc.address;
         await expect(removeReserveAsset()).revertedWith('N4');
       });
@@ -2548,10 +2548,10 @@ describe('contract NavIssuanceModule', () => {
       shouldRevertIfModuleDisabled(removeReserveAsset);
     });
 
-    describe('editPremium', () => {
+    describe('editPremium', function () {
       let premium;
 
-      beforeEach(async () => {
+      beforeEach(async function () {
         matrixTokenAddress = matrixToken.address;
         premium = ethToWei(0.02);
         caller = owner;
@@ -2561,17 +2561,17 @@ describe('contract NavIssuanceModule', () => {
         return systemFixture.navIssuanceModule.connect(caller).editPremium(matrixTokenAddress, premium);
       }
 
-      it('should edit the premium', async () => {
+      it('should edit the premium', async function () {
         await editPremium();
         const retrievedPremium = await systemFixture.navIssuanceModule.getIssuePremium(matrixTokenAddress, ZERO_ADDRESS, ZERO);
         expect(retrievedPremium).eq(premium);
       });
 
-      it('should emit correct EditPremium event', async () => {
+      it('should emit correct EditPremium event', async function () {
         await expect(editPremium()).emit(systemFixture.navIssuanceModule, 'EditPremium').withArgs(matrixTokenAddress, premium);
       });
 
-      it('should revert when the premium is greater than maximum allowed', async () => {
+      it('should revert when the premium is greater than maximum allowed', async function () {
         premium = ethToWei(1);
         await expect(editPremium()).revertedWith('N5');
       });
@@ -2581,11 +2581,11 @@ describe('contract NavIssuanceModule', () => {
       shouldRevertIfModuleDisabled(editPremium);
     });
 
-    describe('editManagerFee', () => {
+    describe('editManagerFee', function () {
       let managerFee;
       let feeIndex;
 
-      beforeEach(async () => {
+      beforeEach(async function () {
         matrixTokenAddress = matrixToken.address;
         managerFee = ethToWei(0.01);
         feeIndex = ZERO;
@@ -2596,17 +2596,17 @@ describe('contract NavIssuanceModule', () => {
         return systemFixture.navIssuanceModule.connect(caller).editManagerFee(matrixTokenAddress, managerFee, feeIndex);
       }
 
-      it('should edit the manager issue fee', async () => {
+      it('should edit the manager issue fee', async function () {
         await editManagerFee();
         const managerIssueFee = await systemFixture.navIssuanceModule.getManagerFee(matrixTokenAddress, feeIndex);
         expect(managerIssueFee).eq(managerFee);
       });
 
-      it('should emit correct EditManagerFee event', async () => {
+      it('should emit correct EditManagerFee event', async function () {
         await expect(editManagerFee()).emit(systemFixture.navIssuanceModule, 'EditManagerFee').withArgs(matrixTokenAddress, managerFee, feeIndex);
       });
 
-      it('should edit the manager redeem fee when editing the redeem fee', async () => {
+      it('should edit the manager redeem fee when editing the redeem fee', async function () {
         managerFee = ethToWei(0.002);
         feeIndex = ONE;
         await editManagerFee();
@@ -2614,7 +2614,7 @@ describe('contract NavIssuanceModule', () => {
         expect(managerRedeemFee).eq(managerFee);
       });
 
-      it('should revert when the manager fee is greater than maximum allowed', async () => {
+      it('should revert when the manager fee is greater than maximum allowed', async function () {
         managerFee = ethToWei(1);
         await expect(editManagerFee()).revertedWith('N6');
       });
@@ -2624,10 +2624,10 @@ describe('contract NavIssuanceModule', () => {
       shouldRevertIfModuleDisabled(editManagerFee);
     });
 
-    describe('editFeeRecipient', () => {
+    describe('editFeeRecipient', function () {
       let feeRecipientAddress;
 
-      beforeEach(async () => {
+      beforeEach(async function () {
         matrixTokenAddress = matrixToken.address;
         feeRecipientAddress = feeRecipient.address;
         caller = owner;
@@ -2637,17 +2637,17 @@ describe('contract NavIssuanceModule', () => {
         return systemFixture.navIssuanceModule.connect(caller).editFeeRecipient(matrixTokenAddress, feeRecipientAddress);
       }
 
-      it('should edit the manager fee recipient', async () => {
+      it('should edit the manager fee recipient', async function () {
         await editFeeRecipient();
         const navIssuanceSetting = await systemFixture.navIssuanceModule.getIssuanceSetting(matrixTokenAddress);
         expect(navIssuanceSetting.feeRecipient).eq(feeRecipientAddress);
       });
 
-      it('should emit correct EditFeeRecipient event', async () => {
+      it('should emit correct EditFeeRecipient event', async function () {
         await expect(editFeeRecipient()).emit(systemFixture.navIssuanceModule, 'EditFeeRecipient').withArgs(matrixTokenAddress, feeRecipientAddress);
       });
 
-      it('should revert when the manager fee is greater than maximum allowed', async () => {
+      it('should revert when the manager fee is greater than maximum allowed', async function () {
         feeRecipientAddress = ZERO_ADDRESS;
         await expect(editFeeRecipient()).revertedWith('N7');
       });

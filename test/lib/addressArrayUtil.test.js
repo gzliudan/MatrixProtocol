@@ -11,61 +11,61 @@ const { testCases, others } = require('../cases/addressArrayUtil.json');
 const { compareArray, quickPopArrayItem } = require('../helpers/arrayUtil');
 const { snapshotBlockchain, revertBlockchain } = require('../helpers/evmUtil.js');
 
-describe('library AddressArrayUtil', () => {
+describe('library AddressArrayUtil', function () {
   let arrayMock;
 
   let snapshotId;
-  before(async () => {
+  before(async function () {
     snapshotId = await snapshotBlockchain();
     arrayMock = await deployContract('AddressArrayMock');
   });
 
-  after(async () => {
+  after(async function () {
     await revertBlockchain(snapshotId);
   });
 
-  testCases.map((testCase, i) => {
-    context(`test case ${i}`, async () => {
+  testCases.map(function (testCase, i) {
+    context(`test case ${i}`, async function () {
       for (let j = 0; j < testCase.length; j++) {
-        it(`test function indexOf(array, ${testCase[j]}) - exist address`, async () => {
+        it(`test function indexOf(array, ${testCase[j]}) - exist address`, async function () {
           expect((await arrayMock.indexOf(testCase, testCase[j])).index).eq(j);
         });
       }
 
       for (let j = 0; j < others.length; j++) {
-        it(`test function indexOf(array, ${others[j]}) - nonexist address`, async () => {
+        it(`test function indexOf(array, ${others[j]}) - nonexist address`, async function () {
           expect((await arrayMock.indexOf(testCase, others[j])).found).is.false;
         });
       }
 
       for (let j = 0; j < testCase.length; j++) {
-        it(`test function contain(array, ${testCase[j]}) - exist address`, async () => {
+        it(`test function contain(array, ${testCase[j]}) - exist address`, async function () {
           expect(await arrayMock.contain(testCase, testCase[j])).is.true;
         });
       }
 
       for (let j = 0; j < others.length; j++) {
-        it(`test function contain(array, ${others[j]}) - nonexist address`, async () => {
+        it(`test function contain(array, ${others[j]}) - nonexist address`, async function () {
           expect(await arrayMock.contain(testCase, others[j])).is.false;
         });
       }
 
       for (let j = 0; j < testCase.length; j++) {
-        it(`test function hasDuplicate(array) - No`, async () => {
+        it(`test function hasDuplicate(array) - No`, async function () {
           expect(await arrayMock.hasDuplicate(testCase.slice(0, j))).is.false;
           expect(await arrayMock.hasDuplicate(testCase.slice(j, testCase.length))).is.false;
         });
       }
 
       for (let j = 0; j < testCase.length; j++) {
-        it(`test function hasDuplicate(array) - Yes`, async () => {
+        it(`test function hasDuplicate(array) - Yes`, async function () {
           expect(await arrayMock.hasDuplicate(testCase.concat(testCase.slice(0, j + 1)))).is.true;
           expect(await arrayMock.hasDuplicate(testCase.concat(testCase.slice(j, testCase.length)))).is.true;
         });
       }
 
       for (let j = 0; j < testCase.length; j++) {
-        it(`test function hasDuplicateItem(array) - No`, async () => {
+        it(`test function hasDuplicateItem(array) - No`, async function () {
           const testArray = testCase.slice(0, j);
           await arrayMock.setTestArray(testArray);
           expect(await arrayMock.hasDuplicateItem()).is.false;
@@ -73,7 +73,7 @@ describe('library AddressArrayUtil', () => {
       }
 
       for (let j = 0; j < testCase.length; j++) {
-        it(`test function hasDuplicateItem(array) - No`, async () => {
+        it(`test function hasDuplicateItem(array) - No`, async function () {
           const testArray = testCase.slice(j, testCase.length);
           await arrayMock.setTestArray(testArray);
           expect(await arrayMock.hasDuplicateItem()).is.false;
@@ -81,7 +81,7 @@ describe('library AddressArrayUtil', () => {
       }
 
       for (let j = 0; j < testCase.length; j++) {
-        it(`test function hasDuplicateItem(array) - Yes`, async () => {
+        it(`test function hasDuplicateItem(array) - Yes`, async function () {
           const testArray = testCase.concat(testCase.slice(0, j + 1));
           await arrayMock.setTestArray(testArray);
           expect(await arrayMock.hasDuplicateItem()).is.true;
@@ -89,7 +89,7 @@ describe('library AddressArrayUtil', () => {
       }
 
       for (let j = 0; j < testCase.length; j++) {
-        it(`test function hasDuplicateItem(array) - Yes`, async () => {
+        it(`test function hasDuplicateItem(array) - Yes`, async function () {
           const testArray = testCase.concat(testCase.slice(j, testCase.length));
           await arrayMock.setTestArray(testArray);
           expect(await arrayMock.hasDuplicateItem()).is.true;
@@ -97,7 +97,7 @@ describe('library AddressArrayUtil', () => {
       }
 
       for (let j = 0; j < testCase.length; j++) {
-        it(`test function removeValue(array, ${testCase[j]})) - exist address`, async () => {
+        it(`test function removeValue(array, ${testCase[j]})) - exist address`, async function () {
           const result = await arrayMock.removeValue(testCase, testCase[j]);
           const expected = testCase.slice(0, j).concat(testCase.slice(j + 1, testCase.length));
           expect(compareArray(result, expected)).is.true;
@@ -105,13 +105,13 @@ describe('library AddressArrayUtil', () => {
       }
 
       for (let j = 0; j < others.length; j++) {
-        it(`test function removeValue(array, ${others[j]}) - nonexist address`, async () => {
+        it(`test function removeValue(array, ${others[j]}) - nonexist address`, async function () {
           await expect(arrayMock.removeValue(testCase, others[j])).revertedWith('A0');
         });
       }
 
       for (let j = 0; j < testCase.length; j++) {
-        it(`test function removeItem(array, ${testCase[j]})) - exist address`, async () => {
+        it(`test function removeItem(array, ${testCase[j]})) - exist address`, async function () {
           await arrayMock.setTestArray(testCase);
           await arrayMock.removeItem(testCase[j]);
           const result = await arrayMock.getTestArray();
@@ -121,14 +121,14 @@ describe('library AddressArrayUtil', () => {
       }
 
       for (let j = 0; j < others.length; j++) {
-        it(`test function removeItem(array, ${others[j]}) - nonexist address`, async () => {
+        it(`test function removeItem(array, ${others[j]}) - nonexist address`, async function () {
           await arrayMock.setTestArray(testCase);
           await expect(arrayMock.removeItem(others[j])).revertedWith('A1');
         });
       }
 
       for (let j = 0; j < testCase.length; j++) {
-        it(`test function quickRemoveItem(array, ${testCase[j]})) - exist address`, async () => {
+        it(`test function quickRemoveItem(array, ${testCase[j]})) - exist address`, async function () {
           await arrayMock.setTestArray(testCase);
           await arrayMock.quickRemoveItem(testCase[j]);
           const result = await arrayMock.getTestArray();
@@ -138,14 +138,14 @@ describe('library AddressArrayUtil', () => {
       }
 
       for (let j = 0; j < others.length; j++) {
-        it(`test function quickRemoveItem(array, ${others[j]}) - nonexist address`, async () => {
+        it(`test function quickRemoveItem(array, ${others[j]}) - nonexist address`, async function () {
           await arrayMock.setTestArray(testCase);
           await expect(arrayMock.quickRemoveItem(others[j])).revertedWith('A2');
         });
       }
 
       for (let j = 0; j < others.length; j++) {
-        it(`test function merge(array1, array2)`, async () => {
+        it(`test function merge(array1, array2)`, async function () {
           const newArray = others.slice(j, others.length);
           const result = await arrayMock.merge(testCase, newArray);
           const expected = testCase.concat(newArray);

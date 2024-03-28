@@ -19,7 +19,7 @@ const { snapshotBlockchain, revertBlockchain } = require('../../helpers/evmUtil.
 const { deployContract, deployContractAndLinkLibraries } = require('../../helpers/deploy');
 const { ZERO, ZERO_ADDRESS, EMPTY_BYTES, MAX_UINT_256 } = require('../../helpers/constants');
 
-describe('contract AaveLeverageModule', () => {
+describe('contract AaveLeverageModule', function () {
   const [owner, protocolFeeRecipient, mockModule, randomAccount] = getSigners();
   const systemFixture = new SystemFixture(owner, protocolFeeRecipient);
   const protocolFeeRecipientAddress = protocolFeeRecipient.address;
@@ -44,7 +44,7 @@ describe('contract AaveLeverageModule', () => {
   let oneInchExchangeAdapterFromWeth; // OneInchExchangeAdapter
 
   let snapshotId;
-  before(async () => {
+  before(async function () {
     snapshotId = await snapshotBlockchain();
     await systemFixture.initAll();
     await aaveV2Fixture.init(systemFixture.weth.address, systemFixture.dai.address);
@@ -181,17 +181,17 @@ describe('contract AaveLeverageModule', () => {
     await systemFixture.integrationRegistry.addIntegration(aaveLeverageModule.address, 'DEFAULT_ISSUANCE_MODULE', debtIssuanceMock.address);
   });
 
-  after(async () => {
+  after(async function () {
     await revertBlockchain(snapshotId);
   });
 
-  describe('constructor', () => {
-    it('should set the correct controller', async () => {
+  describe('constructor', function () {
+    it('should set the correct controller', async function () {
       const controller = await aaveLeverageModule.getController();
       expect(controller).eq(systemFixture.controller.address);
     });
 
-    it('should set the correct Aave contracts', async () => {
+    it('should set the correct Aave contracts', async function () {
       const lendingPoolAddressesProvider = await aaveLeverageModule.getLendingPoolAddressesProvider();
       const protocolDataProvider = await aaveLeverageModule.getProtocolDataProvider();
 
@@ -199,7 +199,7 @@ describe('contract AaveLeverageModule', () => {
       expect(protocolDataProvider).eq(aaveV2Fixture.protocolDataProvider.address);
     });
 
-    it('should set the correct underlying to reserve tokens mappings', async () => {
+    it('should set the correct underlying to reserve tokens mappings', async function () {
       const wethReserveTokens = await aaveLeverageModule.getUnderlyingToReserveTokens(systemFixture.weth.address);
       const daiReserveTokens = await aaveLeverageModule.getUnderlyingToReserveTokens(systemFixture.dai.address);
 
@@ -210,7 +210,7 @@ describe('contract AaveLeverageModule', () => {
     });
   });
 
-  describe('initialize', () => {
+  describe('initialize', function () {
     let caller;
     let isAllowed;
     let matrixToken;
@@ -219,11 +219,11 @@ describe('contract AaveLeverageModule', () => {
     let borrowAssets;
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
@@ -252,20 +252,20 @@ describe('contract AaveLeverageModule', () => {
       return aaveLeverageModule.connect(caller).initialize(matrixTokenAddress, collateralAssets, borrowAssets);
     }
 
-    describe('when isAllowed is true', () => {
-      beforeEach(async () => {
+    describe('when isAllowed is true', function () {
+      beforeEach(async function () {
         isAllowed = true;
         await initContracts();
         initVariables();
       });
 
-      it('should enable the Module on the MatrixToken', async () => {
+      it('should enable the Module on the MatrixToken', async function () {
         await initialize();
         const isModuleEnabled = await matrixToken.isInitializedModule(aaveLeverageModule.address);
         expect(isModuleEnabled).is.true;
       });
 
-      it('should set the Aave settings and mappings', async () => {
+      it('should set the Aave settings and mappings', async function () {
         await initialize();
 
         const [realCollateralAssets, realBorrowAssets] = await aaveLeverageModule.getEnabledAssets(matrixToken.address);
@@ -283,48 +283,48 @@ describe('contract AaveLeverageModule', () => {
         expect(isWethBorrow).is.true;
       });
 
-      it('should register on the debt issuance module', async () => {
+      it('should register on the debt issuance module', async function () {
         await initialize();
         const isRegistered = await debtIssuanceMock.isRegistered(matrixToken.address);
         expect(isRegistered).is.true;
       });
 
-      describe('when debt issuance module is not added to integration registry', () => {
-        beforeEach(async () => {
+      describe('when debt issuance module is not added to integration registry', function () {
+        beforeEach(async function () {
           await systemFixture.integrationRegistry.removeIntegration(aaveLeverageModule.address, 'DEFAULT_ISSUANCE_MODULE');
         });
 
-        afterEach(async () => {
+        afterEach(async function () {
           // Add debt issuance address to integration
           await systemFixture.integrationRegistry.addIntegration(aaveLeverageModule.address, 'DEFAULT_ISSUANCE_MODULE', debtIssuanceMock.address);
         });
 
-        it('should revert when debt issuance module is not added to integration registry', async () => {
+        it('should revert when debt issuance module is not added to integration registry', async function () {
           await expect(initialize()).revertedWith('M0');
         });
       });
 
-      describe('when debt issuance module is not initialized on MatrixToken', () => {
-        beforeEach(async () => {
+      describe('when debt issuance module is not initialized on MatrixToken', function () {
+        beforeEach(async function () {
           await matrixToken.removeModule(debtIssuanceMock.address);
         });
 
-        afterEach(async () => {
+        afterEach(async function () {
           await matrixToken.addModule(debtIssuanceMock.address);
           await debtIssuanceMock.initialize(matrixToken.address);
         });
 
-        it('should revert when debt issuance module is not initialized on MatrixToken', async () => {
+        it('should revert when debt issuance module is not initialized on MatrixToken', async function () {
           await expect(initialize()).revertedWith('L1b');
         });
       });
 
-      it('should revert when the caller is not the MatrixToken manager', async () => {
+      it('should revert when the caller is not the MatrixToken manager', async function () {
         caller = randomAccount;
         await expect(initialize()).revertedWith('M2');
       });
 
-      it('should revert when MatrixToken is not in pending state', async () => {
+      it('should revert when MatrixToken is not in pending state', async function () {
         const newModule = await getRandomAddress();
         await systemFixture.controller.addModule(newModule);
         const newToken = await systemFixture.createMatrixToken([systemFixture.weth.address], [ethToWei(1)], [newModule], owner);
@@ -332,7 +332,7 @@ describe('contract AaveLeverageModule', () => {
         await expect(initialize()).revertedWith('M5b');
       });
 
-      it('should revert when the MatrixToken is not enabled on the controller', async () => {
+      it('should revert when the MatrixToken is not enabled on the controller', async function () {
         const nonEnabledToken = await systemFixture.createRawMatrixToken([systemFixture.weth.address], [ethToWei(1)], [aaveLeverageModule.address], owner);
 
         matrixTokenAddress = nonEnabledToken.address;
@@ -340,18 +340,18 @@ describe('contract AaveLeverageModule', () => {
       });
     });
 
-    describe('when isAllowed is false', () => {
-      beforeEach(async () => {
+    describe('when isAllowed is false', function () {
+      beforeEach(async function () {
         isAllowed = false;
         await initContracts();
         initVariables();
       });
 
-      it('should revert when MatrixToken is not allowlisted', async () => {
+      it('should revert when MatrixToken is not allowlisted', async function () {
         await expect(initialize()).revertedWith('L1a');
       });
 
-      it('should enable the Module on the MatrixToken when any Matrix can initialize this module', async () => {
+      it('should enable the Module on the MatrixToken when any Matrix can initialize this module', async function () {
         await aaveLeverageModule.updateAnyMatrixAllowed(true);
         await initialize();
         const isModuleEnabled = await matrixToken.isInitializedModule(aaveLeverageModule.address);
@@ -360,7 +360,7 @@ describe('contract AaveLeverageModule', () => {
     });
   });
 
-  describe('lever', () => {
+  describe('lever', function () {
     const destTokenQuantity = ethToWei(1);
     const minCollateralQuantity = ethToWei(1);
 
@@ -375,15 +375,15 @@ describe('contract AaveLeverageModule', () => {
     let matrixTokenAddress;
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
-    context('when aWETH is collateral asset and borrow positions is 0', async () => {
+    context('when aWETH is collateral asset and borrow positions is 0', async function () {
       async function initContracts() {
         matrixToken = await systemFixture.createMatrixToken(
           [aWETH.address],
@@ -419,7 +419,7 @@ describe('contract AaveLeverageModule', () => {
         await systemFixture.basicIssuanceModule.issue(matrixToken.address, ethToWei(1), owner.address);
       }
 
-      const initVariables = () => {
+      function initVariables() {
         caller = owner;
         matrixTokenAddress = matrixToken.address;
         borrowAsset = systemFixture.dai.address;
@@ -439,7 +439,7 @@ describe('contract AaveLeverageModule', () => {
           [ZERO],
           [ZERO],
         ]);
-      };
+      }
 
       async function lever() {
         return aaveLeverageModule
@@ -447,14 +447,14 @@ describe('contract AaveLeverageModule', () => {
           .lever(matrixTokenAddress, borrowAsset, collateralAsset, borrowQuantity, minCollateralQuantity, tradeAdapterName, tradeData);
       }
 
-      describe('when module is initialized', () => {
-        beforeEach(async () => {
+      describe('when module is initialized', function () {
+        beforeEach(async function () {
           notInitialized = true;
           await initContracts();
           initVariables();
         });
 
-        it('should update the collateral position on the MatrixToken correctly', async () => {
+        it('should update the collateral position on the MatrixToken correctly', async function () {
           const oldPositions = await matrixToken.getPositions();
           expect(oldPositions.length).eq(1);
 
@@ -472,7 +472,7 @@ describe('contract AaveLeverageModule', () => {
           expect(newFirstPosition.unit).eq(expectedFirstPositionUnit);
         });
 
-        it('should update the borrow position on the MatrixToken correctly', async () => {
+        it('should update the borrow position on the MatrixToken correctly', async function () {
           const oldPositions = await matrixToken.getPositions();
           expect(oldPositions.length).eq(1);
 
@@ -490,60 +490,60 @@ describe('contract AaveLeverageModule', () => {
           expect(newSecondPosition.unit).eq(expectedSecondPositionUnit);
         });
 
-        it('should transfer the correct components to the exchange', async () => {
+        it('should transfer the correct components to the exchange', async function () {
           const oldSrcTokenBalance = await systemFixture.dai.balanceOf(oneInchExchangeMockToWeth.address);
           await lever();
           const newSrcTokenBalance = await systemFixture.dai.balanceOf(oneInchExchangeMockToWeth.address);
           expect(newSrcTokenBalance.sub(oldSrcTokenBalance)).eq(borrowQuantity);
         });
 
-        it('should transfer the correct components from the exchange', async () => {
+        it('should transfer the correct components from the exchange', async function () {
           const oldDestTokenBalance = await systemFixture.weth.balanceOf(oneInchExchangeMockToWeth.address);
           await lever();
           const newDestTokenBalance = await systemFixture.weth.balanceOf(oneInchExchangeMockToWeth.address);
           expect(oldDestTokenBalance.sub(newDestTokenBalance)).eq(destTokenQuantity);
         });
 
-        it('should revert when the exchange is not valid', async () => {
+        it('should revert when the exchange is not valid', async function () {
           tradeAdapterName = 'INVALID_EXCHANGE';
           await expect(lever()).revertedWith('M0');
         });
 
-        it('should revert when collateral asset is not enabled', async () => {
+        it('should revert when collateral asset is not enabled', async function () {
           collateralAsset = systemFixture.wbtc.address;
           await expect(lever()).revertedWith('L11a');
         });
 
-        it('should revert when borrow asset is not enabled', async () => {
+        it('should revert when borrow asset is not enabled', async function () {
           borrowAsset = await getRandomAddress();
           await expect(lever()).revertedWith('L11b');
         });
 
-        it('should revert when borrow asset is same as collateral asset', async () => {
+        it('should revert when borrow asset is same as collateral asset', async function () {
           borrowAsset = systemFixture.weth.address;
           await expect(lever()).revertedWith('L11c');
         });
 
-        it('should revert when quantity of token to sell is 0', async () => {
+        it('should revert when quantity of token to sell is 0', async function () {
           borrowQuantity = ZERO;
           await expect(lever()).revertedWith('L11d');
         });
 
-        it('should revert when the caller is not the MatrixToken manager', async () => {
+        it('should revert when the caller is not the MatrixToken manager', async function () {
           caller = randomAccount;
           await expect(lever()).revertedWith('M1a');
         });
 
-        it('should revert when MatrixToken is not valid', async () => {
+        it('should revert when MatrixToken is not valid', async function () {
           const nonEnabledToken = await systemFixture.createRawMatrixToken([systemFixture.weth.address], [ethToWei(1)], [aaveLeverageModule.address], owner);
           matrixTokenAddress = nonEnabledToken.address;
           await expect(lever()).revertedWith('M1b');
         });
 
-        describe('when the leverage position has been liquidated', () => {
+        describe('when the leverage position has been liquidated', function () {
           const ethSeized = ethToWei(1);
 
-          beforeEach(async () => {
+          beforeEach(async function () {
             // Lever up
             await aaveLeverageModule
               .connect(caller)
@@ -567,14 +567,14 @@ describe('contract AaveLeverageModule', () => {
             borrowQuantity = ethToWei(1000);
           });
 
-          it('should transfer the correct components to the exchange', async () => {
+          it('should transfer the correct components to the exchange', async function () {
             const oldSrcTokenBalance = await systemFixture.dai.balanceOf(oneInchExchangeMockToWeth.address);
             await lever();
             const newSrcTokenBalance = await systemFixture.dai.balanceOf(oneInchExchangeMockToWeth.address);
             expect(newSrcTokenBalance.sub(oldSrcTokenBalance)).eq(borrowQuantity);
           });
 
-          it('should update the collateral position on the MatrixToken correctly', async () => {
+          it('should update the collateral position on the MatrixToken correctly', async function () {
             const oldPositions = await matrixToken.getPositions();
             expect(oldPositions.length).eq(2);
 
@@ -594,7 +594,7 @@ describe('contract AaveLeverageModule', () => {
             expect(newFirstPosition.unit).eq(expectedPostLiquidationUnit);
           });
 
-          it('should update the borrow position on the MatrixToken correctly', async () => {
+          it('should update the borrow position on the MatrixToken correctly', async function () {
             const oldPositions = await matrixToken.getPositions();
             expect(oldPositions.length).eq(2);
 
@@ -613,10 +613,10 @@ describe('contract AaveLeverageModule', () => {
           });
         });
 
-        describe('when there is a protocol fee charged', () => {
+        describe('when there is a protocol fee charged', function () {
           const feePercentage = ethToWei(0.05);
 
-          beforeEach(async () => {
+          beforeEach(async function () {
             await systemFixture.controller.connect(owner).addFee(
               aaveLeverageModule.address,
               ZERO, // Fee type on trade function denoted as 0
@@ -624,14 +624,14 @@ describe('contract AaveLeverageModule', () => {
             );
           });
 
-          it('should transfer the correct components to the exchange', async () => {
+          it('should transfer the correct components to the exchange', async function () {
             const oldSrcTokenBalance = await systemFixture.dai.balanceOf(oneInchExchangeMockToWeth.address);
             await lever();
             const newSrcTokenBalance = await systemFixture.dai.balanceOf(oneInchExchangeMockToWeth.address);
             expect(newSrcTokenBalance.sub(oldSrcTokenBalance)).eq(borrowQuantity);
           });
 
-          it('should transfer the correct protocol fee to the protocol', async () => {
+          it('should transfer the correct protocol fee to the protocol', async function () {
             const oldFeeRecipientBalance = await systemFixture.weth.balanceOf(protocolFeeRecipientAddress);
             await lever();
             const newFeeRecipientBalance = await systemFixture.weth.balanceOf(protocolFeeRecipientAddress);
@@ -639,7 +639,7 @@ describe('contract AaveLeverageModule', () => {
             expect(newFeeRecipientBalance.sub(oldFeeRecipientBalance)).eq(preciseMul(destTokenQuantity, feePercentage));
           });
 
-          it('should update the collateral position on the MatrixToken correctly', async () => {
+          it('should update the collateral position on the MatrixToken correctly', async function () {
             const oldPositions = await matrixToken.getPositions();
             expect(oldPositions.length).eq(1);
 
@@ -659,7 +659,7 @@ describe('contract AaveLeverageModule', () => {
             expect(newFirstPosition.unit).eq(expectedFirstPositionUnit);
           });
 
-          it('should update the borrow position on the MatrixToken correctly', async () => {
+          it('should update the borrow position on the MatrixToken correctly', async function () {
             const oldPositions = await matrixToken.getPositions();
             expect(oldPositions.length).eq(1);
 
@@ -677,7 +677,7 @@ describe('contract AaveLeverageModule', () => {
             expect(newSecondPosition.unit).eq(expectedSecondPositionUnit);
           });
 
-          it('should emit the correct IncreaseLeverage event', async () => {
+          it('should emit the correct IncreaseLeverage event', async function () {
             const totalBorrowQuantity = borrowQuantity;
             const totalCollateralQuantity = destTokenQuantity;
             const totalProtocolFee = feePercentage.mul(totalCollateralQuantity).div(ethToWei(1));
@@ -696,7 +696,7 @@ describe('contract AaveLeverageModule', () => {
           });
         });
 
-        it('should revert when slippage is greater than allowed', async () => {
+        it('should revert when slippage is greater than allowed', async function () {
           // Add MatrixToken as token sender / recipient
           await oneInchExchangeMockWithSlippage.connect(owner).addMatrixTokenAddress(matrixToken.address);
 
@@ -723,21 +723,21 @@ describe('contract AaveLeverageModule', () => {
         });
       });
 
-      describe('when module is not initialized', () => {
-        beforeEach(async () => {
+      describe('when module is not initialized', function () {
+        beforeEach(async function () {
           notInitialized = false;
           await initContracts();
           initVariables();
         });
 
-        it('should revert when module is not initialized', async () => {
+        it('should revert when module is not initialized', async function () {
           await expect(lever()).revertedWith('M1b');
         });
       });
     });
 
-    context('when DAI is borrow asset, and is a default position', async () => {
-      beforeEach(async () => {
+    context('when DAI is borrow asset, and is a default position', async function () {
+      beforeEach(async function () {
         notInitialized = true;
 
         matrixToken = await systemFixture.createMatrixToken(
@@ -779,7 +779,7 @@ describe('contract AaveLeverageModule', () => {
         await systemFixture.basicIssuanceModule.issue(matrixToken.address, ethToWei(1), owner.address);
       });
 
-      beforeEach(() => {
+      beforeEach(function () {
         caller = owner;
         borrowQuantity = ethToWei(1000);
         tradeAdapterName = 'ONE_INCH_TO_WETH';
@@ -807,7 +807,7 @@ describe('contract AaveLeverageModule', () => {
           .lever(matrixTokenAddress, borrowAsset, collateralAsset, borrowQuantity, minCollateralQuantity, tradeAdapterName, tradeData);
       }
 
-      it('should update the collateral position on the MatrixToken correctly', async () => {
+      it('should update the collateral position on the MatrixToken correctly', async function () {
         const oldPositions = await matrixToken.getPositions();
         expect(oldPositions.length).eq(2);
 
@@ -830,7 +830,7 @@ describe('contract AaveLeverageModule', () => {
         expect(newSecondPosition.unit).eq(ethToWei(1));
       });
 
-      it('should update the borrow position on the MatrixToken correctly', async () => {
+      it('should update the borrow position on the MatrixToken correctly', async function () {
         const oldPositions = await matrixToken.getPositions();
         expect(oldPositions.length).eq(2);
 
@@ -850,7 +850,7 @@ describe('contract AaveLeverageModule', () => {
     });
   });
 
-  describe('delever', () => {
+  describe('delever', function () {
     let redeemQuantity;
 
     let caller;
@@ -865,11 +865,11 @@ describe('contract AaveLeverageModule', () => {
     let matrixTokenAddress;
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
@@ -975,14 +975,14 @@ describe('contract AaveLeverageModule', () => {
         .delever(matrixTokenAddress, collateralAsset, repayAsset, redeemQuantity, minRepayQuantity, tradeAdapterName, tradeData);
     }
 
-    describe('when module is initialized', () => {
-      beforeEach(async () => {
+    describe('when module is initialized', function () {
+      beforeEach(async function () {
         notInitialized = true;
         await initContracts();
         initVariables();
       });
 
-      it('should update the collateral position on the MatrixToken correctly', async () => {
+      it('should update the collateral position on the MatrixToken correctly', async function () {
         const oldPositions = await matrixToken.getPositions();
         expect(oldPositions.length).eq(2);
 
@@ -1000,7 +1000,7 @@ describe('contract AaveLeverageModule', () => {
         expect(newFirstPosition.unit).eq(expectedFirstPositionUnit);
       });
 
-      it('should update the borrow position on the MatrixToken correctly', async () => {
+      it('should update the borrow position on the MatrixToken correctly', async function () {
         const oldPositions = await matrixToken.getPositions();
         expect(oldPositions.length).eq(2);
 
@@ -1018,60 +1018,60 @@ describe('contract AaveLeverageModule', () => {
         expect(newSecondPosition.unit).eq(expectedSecondPositionUnit);
       });
 
-      it('should transfer the correct components to the exchange', async () => {
+      it('should transfer the correct components to the exchange', async function () {
         const oldSrcTokenBalance = await systemFixture.weth.balanceOf(oneInchExchangeMockFromWeth.address);
         await delever();
         const newSrcTokenBalance = await systemFixture.weth.balanceOf(oneInchExchangeMockFromWeth.address);
         expect(newSrcTokenBalance.sub(oldSrcTokenBalance)).eq(redeemQuantity);
       });
 
-      it('should transfer the correct components from the exchange', async () => {
+      it('should transfer the correct components from the exchange', async function () {
         const oldDestTokenBalance = await systemFixture.dai.balanceOf(oneInchExchangeMockFromWeth.address);
         await delever();
         const newDestTokenBalance = await systemFixture.dai.balanceOf(oneInchExchangeMockFromWeth.address);
         expect(oldDestTokenBalance.sub(newDestTokenBalance)).eq(destTokenQuantity);
       });
 
-      it('should revert when the exchange is not valid', async () => {
+      it('should revert when the exchange is not valid', async function () {
         tradeAdapterName = 'INVALID_EXCHANGE';
         await expect(delever()).revertedWith('M0');
       });
 
-      it('should revert when quantity of token to sell is 0', async () => {
+      it('should revert when quantity of token to sell is 0', async function () {
         redeemQuantity = ZERO;
         await expect(delever()).revertedWith('L11d');
       });
 
-      it('should revert when borrow / repay asset is not enabled', async () => {
+      it('should revert when borrow / repay asset is not enabled', async function () {
         repayAsset = systemFixture.wbtc.address;
         await expect(delever()).revertedWith('L11b');
       });
 
-      it('should revert when collateral asset is not enabled', async () => {
+      it('should revert when collateral asset is not enabled', async function () {
         collateralAsset = await getRandomAddress();
         await expect(delever()).revertedWith('L11a');
       });
 
-      it('should revert when borrow asset is same as collateral asset', async () => {
+      it('should revert when borrow asset is same as collateral asset', async function () {
         repayAsset = systemFixture.weth.address;
         await expect(delever()).revertedWith('L11c');
       });
 
-      it('should revert when the caller is not the MatrixToken manager', async () => {
+      it('should revert when the caller is not the MatrixToken manager', async function () {
         caller = randomAccount;
         await expect(delever()).revertedWith('M1a');
       });
 
-      it('should revert when MatrixToken is not valid', async () => {
+      it('should revert when MatrixToken is not valid', async function () {
         const nonEnabledToken = await systemFixture.createRawMatrixToken([systemFixture.weth.address], [ethToWei(1)], [aaveLeverageModule.address], owner);
         matrixTokenAddress = nonEnabledToken.address;
         await expect(delever()).revertedWith('M1b');
       });
 
-      describe('when there is a protocol fee charged', () => {
+      describe('when there is a protocol fee charged', function () {
         let feePercentage;
 
-        beforeEach(async () => {
+        beforeEach(async function () {
           feePercentage = ethToWei(0.05);
           await systemFixture.controller.connect(owner).addFee(
             aaveLeverageModule.address,
@@ -1080,21 +1080,21 @@ describe('contract AaveLeverageModule', () => {
           );
         });
 
-        it('should transfer the correct components to the exchange', async () => {
+        it('should transfer the correct components to the exchange', async function () {
           const oldSrcTokenBalance = await systemFixture.weth.balanceOf(oneInchExchangeMockFromWeth.address);
           await delever();
           const newSrcTokenBalance = await systemFixture.weth.balanceOf(oneInchExchangeMockFromWeth.address);
           expect(newSrcTokenBalance.sub(oldSrcTokenBalance)).eq(redeemQuantity);
         });
 
-        it('should transfer the correct protocol fee to the protocol', async () => {
+        it('should transfer the correct protocol fee to the protocol', async function () {
           const oldFeeRecipientBalance = await systemFixture.dai.balanceOf(protocolFeeRecipientAddress);
           await delever();
           const newFeeRecipientBalance = await systemFixture.dai.balanceOf(protocolFeeRecipientAddress);
           expect(newFeeRecipientBalance.sub(oldFeeRecipientBalance)).eq(preciseMul(feePercentage, destTokenQuantity));
         });
 
-        it('should update the collateral position on the MatrixToken correctly', async () => {
+        it('should update the collateral position on the MatrixToken correctly', async function () {
           const oldPositions = await matrixToken.getPositions();
           expect(oldPositions.length).eq(2);
 
@@ -1112,7 +1112,7 @@ describe('contract AaveLeverageModule', () => {
           expect(newFirstPosition.unit).eq(expectedFirstPositionUnit);
         });
 
-        it('should update the borrow position on the MatrixToken correctly', async () => {
+        it('should update the borrow position on the MatrixToken correctly', async function () {
           const oldPositions = await matrixToken.getPositions();
           expect(oldPositions.length).eq(2);
 
@@ -1130,7 +1130,7 @@ describe('contract AaveLeverageModule', () => {
           expect(newSecondPosition.unit).eq(expectedSecondPositionUnit);
         });
 
-        it('should emit the correct DecreaseLeverage event', async () => {
+        it('should emit the correct DecreaseLeverage event', async function () {
           const totalRepayQuantity = destTokenQuantity;
           const totalProtocolFee = feePercentage.mul(totalRepayQuantity).div(ethToWei(1));
 
@@ -1148,8 +1148,8 @@ describe('contract AaveLeverageModule', () => {
         });
       });
 
-      describe('when used to delever to zero', () => {
-        beforeEach(async () => {
+      describe('when used to delever to zero', function () {
+        beforeEach(async function () {
           minRepayQuantity = ethToWei(1001);
           await oneInchExchangeMockFromWeth.updateReceiveAmount(minRepayQuantity);
 
@@ -1167,14 +1167,14 @@ describe('contract AaveLeverageModule', () => {
           ]);
         });
 
-        it('should transfer the correct components to the exchange', async () => {
+        it('should transfer the correct components to the exchange', async function () {
           const oldSrcTokenBalance = await systemFixture.weth.balanceOf(oneInchExchangeMockFromWeth.address);
           await delever();
           const newSrcTokenBalance = await systemFixture.weth.balanceOf(oneInchExchangeMockFromWeth.address);
           expect(newSrcTokenBalance.sub(oldSrcTokenBalance)).eq(redeemQuantity);
         });
 
-        it('should update the collateral position on the MatrixToken correctly', async () => {
+        it('should update the collateral position on the MatrixToken correctly', async function () {
           const oldPositions = await matrixToken.getPositions();
           expect(oldPositions.length).eq(2);
 
@@ -1192,7 +1192,7 @@ describe('contract AaveLeverageModule', () => {
           expect(newFirstPosition.unit).eq(expectedFirstPositionUnit);
         });
 
-        it('should update the borrow position on the MatrixToken correctly', async () => {
+        it('should update the borrow position on the MatrixToken correctly', async function () {
           const oldPositions = await matrixToken.getPositions();
           expect(oldPositions.length).eq(2);
 
@@ -1210,7 +1210,7 @@ describe('contract AaveLeverageModule', () => {
           expect(newSecondPosition.unit).eq(expectedSecondPositionUnit);
         });
 
-        it('should emit the correct DecreaseLeverage event', async () => {
+        it('should emit the correct DecreaseLeverage event', async function () {
           await expect(delever())
             .emit(aaveLeverageModule, 'DecreaseLeverage')
             .withArgs(matrixToken.address, collateralAsset, repayAsset, oneInchExchangeAdapterFromWeth.address, redeemQuantity, minRepayQuantity, ZERO);
@@ -1218,20 +1218,20 @@ describe('contract AaveLeverageModule', () => {
       });
     });
 
-    describe('when module is not initialized', () => {
-      beforeEach(async () => {
+    describe('when module is not initialized', function () {
+      beforeEach(async function () {
         notInitialized = false;
         await initContracts();
         initVariables();
       });
 
-      it('should revert when module is not initialized', async () => {
+      it('should revert when module is not initialized', async function () {
         await expect(delever()).revertedWith('M1b');
       });
     });
   });
 
-  describe('deleverToZeroBorrowBalance', () => {
+  describe('deleverToZeroBorrowBalance', function () {
     const uniswapFixture = new UniswapFixture(owner);
 
     let caller;
@@ -1246,11 +1246,11 @@ describe('contract AaveLeverageModule', () => {
     let uniswapV2ExchangeAdapterV2;
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
@@ -1356,14 +1356,14 @@ describe('contract AaveLeverageModule', () => {
         .deleverToZeroBorrowBalance(matrixTokenAddress, collateralAsset, repayAsset, redeemQuantity, tradeAdapterName, tradeData);
     }
 
-    describe('when module is initialized', () => {
-      beforeEach(async () => {
+    describe('when module is initialized', function () {
+      beforeEach(async function () {
         notInitialized = true;
         await initContracts();
         await initVariables();
       });
 
-      it('should update the collateral position on the MatrixToken correctly', async () => {
+      it('should update the collateral position on the MatrixToken correctly', async function () {
         const oldPositions = await matrixToken.getPositions();
         expect(oldPositions.length).eq(2);
 
@@ -1381,13 +1381,13 @@ describe('contract AaveLeverageModule', () => {
         expect(newFirstPosition.unit).eq(expectedFirstPositionUnit);
       });
 
-      it('should wipe the debt on Aave', async () => {
+      it('should wipe the debt on Aave', async function () {
         await deleverToZeroBorrowBalance();
         const borrowDebt = await variableDebtDAI.balanceOf(matrixToken.address);
         expect(borrowDebt).eq(ZERO);
       });
 
-      it('should remove external positions on the borrow asset', async () => {
+      it('should remove external positions on the borrow asset', async function () {
         await deleverToZeroBorrowBalance();
 
         const borrowAssetExternalModules = await matrixToken.getExternalPositionModules(systemFixture.dai.address);
@@ -1399,7 +1399,7 @@ describe('contract AaveLeverageModule', () => {
         expect(isPositionModule).is.false;
       });
 
-      it('should update the borrow asset equity on the MatrixToken correctly', async () => {
+      it('should update the borrow asset equity on the MatrixToken correctly', async function () {
         const oldPositions = await matrixToken.getPositions();
         expect(oldPositions.length).eq(2);
 
@@ -1409,7 +1409,7 @@ describe('contract AaveLeverageModule', () => {
 
         // Fetch total repay amount
         const res = await tx.wait();
-        const decreaseLeverageEvent = res.events?.find((value) => {
+        const decreaseLeverageEvent = res.events?.find(function (value) {
           return value.event == 'DecreaseLeverage';
         });
         const totalRepayAmount = decreaseLeverageEvent?.args?.[5];
@@ -1426,14 +1426,14 @@ describe('contract AaveLeverageModule', () => {
         expect(newSecondPosition.unit).eq(expectedSecondPositionUnit);
       });
 
-      it('should transfer the correct components to the exchange', async () => {
+      it('should transfer the correct components to the exchange', async function () {
         const oldSrcTokenBalance = await systemFixture.weth.balanceOf(uniswapFixture.wethDaiPool.address);
         await deleverToZeroBorrowBalance();
         const newSrcTokenBalance = await systemFixture.weth.balanceOf(uniswapFixture.wethDaiPool.address);
         expect(newSrcTokenBalance.sub(oldSrcTokenBalance)).eq(redeemQuantity);
       });
 
-      it('should transfer the correct components from the exchange', async () => {
+      it('should transfer the correct components from the exchange', async function () {
         const [, repayAssetAmountOut] = await uniswapFixture.router.getAmountsOut(redeemQuantity, [systemFixture.weth.address, systemFixture.dai.address]);
 
         const oldDestTokenBalance = await systemFixture.dai.balanceOf(uniswapFixture.wethDaiPool.address);
@@ -1443,59 +1443,59 @@ describe('contract AaveLeverageModule', () => {
         expect(oldDestTokenBalance.sub(newDestTokenBalance)).eq(repayAssetAmountOut);
       });
 
-      it('should revert when the exchange is not valid', async () => {
+      it('should revert when the exchange is not valid', async function () {
         tradeAdapterName = 'INVALID_EXCHANGE';
         await expect(deleverToZeroBorrowBalance()).revertedWith('M0');
       });
 
-      it('should revert when borrow / repay asset is not enabled', async () => {
+      it('should revert when borrow / repay asset is not enabled', async function () {
         repayAsset = systemFixture.wbtc.address;
         await expect(deleverToZeroBorrowBalance()).revertedWith('L0a');
       });
 
-      it('should revert when borrow balance is 0', async () => {
+      it('should revert when borrow balance is 0', async function () {
         await aaveLeverageModule.connect(owner).addBorrowAssets(matrixToken.address, [systemFixture.wbtc.address]);
         repayAsset = systemFixture.wbtc.address;
         await expect(deleverToZeroBorrowBalance()).revertedWith('L0b');
       });
 
-      it('should revert when the caller is not the MatrixToken manager', async () => {
+      it('should revert when the caller is not the MatrixToken manager', async function () {
         caller = randomAccount;
         await expect(deleverToZeroBorrowBalance()).revertedWith('M1a');
       });
 
-      it('should revert when MatrixToken is not valid', async () => {
+      it('should revert when MatrixToken is not valid', async function () {
         const nonEnabledToken = await systemFixture.createRawMatrixToken([systemFixture.weth.address], [ethToWei(1)], [aaveLeverageModule.address], owner);
         matrixTokenAddress = nonEnabledToken.address;
         await expect(deleverToZeroBorrowBalance()).revertedWith('M1b');
       });
     });
 
-    describe('when module is not initialized', () => {
-      beforeEach(async () => {
+    describe('when module is not initialized', function () {
+      beforeEach(async function () {
         notInitialized = false;
         await initContracts();
         await initVariables();
       });
 
-      it('should revert when module is not initialized', async () => {
+      it('should revert when module is not initialized', async function () {
         await expect(deleverToZeroBorrowBalance()).revertedWith('M1b');
       });
     });
   });
 
-  describe('sync', () => {
+  describe('sync', function () {
     let caller;
     let matrixToken;
     let notInitialized;
     let matrixTokenAddress;
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
@@ -1508,8 +1508,8 @@ describe('contract AaveLeverageModule', () => {
       return aaveLeverageModule.connect(caller).sync(matrixTokenAddress);
     }
 
-    context('when aWETH and aDAI are collateral and WETH and DAI are borrow assets', async () => {
-      const initContracts = async () => {
+    context('when aWETH and aDAI are collateral and WETH and DAI are borrow assets', async function () {
+      const initContracts = async function () {
         matrixToken = await systemFixture.createMatrixToken(
           [aWETH.address, aDAI.address],
           [ethToWei(2), ethToWei(1000)],
@@ -1602,14 +1602,14 @@ describe('contract AaveLeverageModule', () => {
         }
       };
 
-      describe('when module is initialized', () => {
-        beforeEach(async () => {
+      describe('when module is initialized', function () {
+        beforeEach(async function () {
           notInitialized = true;
           await initContracts();
           initVariables();
         });
 
-        it('should update the collateral positions on the MatrixToken correctly', async () => {
+        it('should update the collateral positions on the MatrixToken correctly', async function () {
           const oldPositions = await matrixToken.getPositions();
           expect(oldPositions.length).eq(4);
 
@@ -1635,7 +1635,7 @@ describe('contract AaveLeverageModule', () => {
           expect(newSecondPosition.unit).eq(expectedSecondPositionUnit);
         });
 
-        it('should update the borrow positions on the MatrixToken correctly', async () => {
+        it('should update the borrow positions on the MatrixToken correctly', async function () {
           const oldPositions = await matrixToken.getPositions();
           expect(oldPositions.length).eq(4);
 
@@ -1661,10 +1661,10 @@ describe('contract AaveLeverageModule', () => {
           expect(newFourthPosition.unit).eq(expectedFourthPositionUnit);
         });
 
-        describe('when leverage position has been liquidated', () => {
+        describe('when leverage position has been liquidated', function () {
           let liquidationRepayQuantity;
 
-          beforeEach(async () => {
+          beforeEach(async function () {
             // Leverage aWETH again
             const leverEthTradeData = oneInchExchangeMockToWeth.interface.encodeFunctionData('swap', [
               systemFixture.dai.address, // Send token
@@ -1690,7 +1690,7 @@ describe('contract AaveLeverageModule', () => {
             );
           });
 
-          beforeEach(async () => {
+          beforeEach(async function () {
             // ETH decreases to $100
             const liquidationDaiPriceInEth = ethToWei(0.01); // 1/100 = 0.01
             await aaveV2Fixture.setAssetPriceInOracle(systemFixture.dai.address, liquidationDaiPriceInEth);
@@ -1704,7 +1704,7 @@ describe('contract AaveLeverageModule', () => {
               .liquidationCall(systemFixture.weth.address, systemFixture.dai.address, matrixToken.address, liquidationRepayQuantity, true);
           });
 
-          it('should update the collateral positions on the MatrixToken correctly', async () => {
+          it('should update the collateral positions on the MatrixToken correctly', async function () {
             const oldPositions = await matrixToken.getPositions();
             expect(oldPositions.length).eq(4);
 
@@ -1729,7 +1729,7 @@ describe('contract AaveLeverageModule', () => {
             expect(newSecondPosition.module).eq(ZERO_ADDRESS);
           });
 
-          it('should update the borrow position on the MatrixToken correctly', async () => {
+          it('should update the borrow position on the MatrixToken correctly', async function () {
             const oldPositions = await matrixToken.getPositions();
             expect(oldPositions.length).eq(4);
 
@@ -1756,22 +1756,22 @@ describe('contract AaveLeverageModule', () => {
           });
         });
 
-        it('should revert when MatrixToken is not valid', async () => {
+        it('should revert when MatrixToken is not valid', async function () {
           const nonEnabledToken = await systemFixture.createRawMatrixToken([systemFixture.weth.address], [ethToWei(1)], [aaveLeverageModule.address], owner);
           matrixTokenAddress = nonEnabledToken.address;
           await expect(sync()).revertedWith('M3');
         });
       });
 
-      describe('when module is not initialized', () => {
-        it('should revert when module is not initialized', async () => {
+      describe('when module is not initialized', function () {
+        it('should revert when module is not initialized', async function () {
           notInitialized = false;
           await expect(sync()).revertedWith('M3');
         });
       });
     });
 
-    describe('when MatrixToken total supply is 0', () => {
+    describe('when MatrixToken total supply is 0', function () {
       async function initContracts() {
         matrixToken = await systemFixture.createMatrixToken(
           [aWETH.address, aDAI.address],
@@ -1791,12 +1791,12 @@ describe('contract AaveLeverageModule', () => {
         );
       }
 
-      beforeEach(async () => {
+      beforeEach(async function () {
         await initContracts();
         initVariables();
       });
 
-      it('should preserve default positions', async () => {
+      it('should preserve default positions', async function () {
         const oldPositions = await matrixToken.getPositions();
         expect(oldPositions.length).eq(2);
 
@@ -1818,7 +1818,7 @@ describe('contract AaveLeverageModule', () => {
     });
   });
 
-  describe('addCollateralAssets', () => {
+  describe('addCollateralAssets', function () {
     let caller;
     let matrixToken;
     let notInitialized;
@@ -1826,11 +1826,11 @@ describe('contract AaveLeverageModule', () => {
     let matrixTokenAddress;
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
@@ -1861,14 +1861,14 @@ describe('contract AaveLeverageModule', () => {
       return aaveLeverageModule.connect(caller).addCollateralAssets(matrixTokenAddress, collateralAssets);
     }
 
-    describe('when module is initialized', () => {
-      beforeEach(async () => {
+    describe('when module is initialized', function () {
+      beforeEach(async function () {
         notInitialized = true;
         await initContracts();
         initVariables();
       });
 
-      it('should add the collateral asset to mappings', async () => {
+      it('should add the collateral asset to mappings', async function () {
         await addCollateralAssets();
         const realCollateralAssets = (await aaveLeverageModule.getEnabledAssets(matrixToken.address))[0];
         const isDaiCollateral = await aaveLeverageModule.isEnabledCollateralAsset(matrixToken.address, systemFixture.dai.address);
@@ -1877,12 +1877,12 @@ describe('contract AaveLeverageModule', () => {
         expect(isDaiCollateral).is.true;
       });
 
-      it('should emit the correct UpdateCollateralAssets event', async () => {
+      it('should emit the correct UpdateCollateralAssets event', async function () {
         await expect(addCollateralAssets()).emit(aaveLeverageModule, 'UpdateCollateralAssets').withArgs(matrixTokenAddress, true, collateralAssets);
       });
 
-      context('before first issuance, aToken balance is zero', async () => {
-        it('should not be able to enable collateral asset to be used as collateral on Aave', async () => {
+      context('before first issuance, aToken balance is zero', async function () {
+        it('should not be able to enable collateral asset to be used as collateral on Aave', async function () {
           const oldUserReserveData = await aaveV2Fixture.protocolDataProvider.getUserReserveData(systemFixture.dai.address, matrixToken.address);
           expect(oldUserReserveData.usageAsCollateralEnabled).is.false;
 
@@ -1893,8 +1893,8 @@ describe('contract AaveLeverageModule', () => {
         });
       });
 
-      describe('when re-adding a removed collateral asset', () => {
-        beforeEach(async () => {
+      describe('when re-adding a removed collateral asset', function () {
+        beforeEach(async function () {
           // Mint aTokens
           await systemFixture.weth.approve(aaveV2Fixture.lendingPool.address, ethToWei(1000));
           await aaveV2Fixture.lendingPool.connect(owner).deposit(systemFixture.weth.address, ethToWei(1000), owner.address, ZERO);
@@ -1912,7 +1912,7 @@ describe('contract AaveLeverageModule', () => {
           collateralAssets = [systemFixture.weth.address]; // re-add weth
         });
 
-        it('should re-enable asset to be used as collateral on Aave', async () => {
+        it('should re-enable asset to be used as collateral on Aave', async function () {
           const oldUserReserveData = await aaveV2Fixture.protocolDataProvider.getUserReserveData(systemFixture.weth.address, matrixToken.address);
           expect(oldUserReserveData.usageAsCollateralEnabled).is.false;
 
@@ -1923,13 +1923,13 @@ describe('contract AaveLeverageModule', () => {
         });
       });
 
-      it('should revert when collateral asset is duplicated', async () => {
+      it('should revert when collateral asset is duplicated', async function () {
         collateralAssets = [systemFixture.weth.address, systemFixture.weth.address];
         await expect(addCollateralAssets()).revertedWith('L12a');
       });
 
-      describe('when a new Aave reserve is added as collateral', () => {
-        beforeEach(async () => {
+      describe('when a new Aave reserve is added as collateral', function () {
+        beforeEach(async function () {
           // Create a new reserve
           await aaveV2Fixture.createAndEnableReserve(
             systemFixture.usdc.address,
@@ -1946,11 +1946,11 @@ describe('contract AaveLeverageModule', () => {
           collateralAssets = [systemFixture.usdc.address];
         });
 
-        it('should revert when a new Aave reserve is added as collateral', async () => {
+        it('should revert when a new Aave reserve is added as collateral', async function () {
           await expect(addCollateralAssets()).revertedWith('L12b');
         });
 
-        it('should add collateral asset to mappings when updateUnderlyingToReserveTokenMappings is called before', async () => {
+        it('should add collateral asset to mappings when updateUnderlyingToReserveTokenMappings is called before', async function () {
           await aaveLeverageModule.addUnderlyingToReserveTokensMapping(systemFixture.usdc.address);
           await addCollateralAssets();
           const realCollateralAssets = (await aaveLeverageModule.getEnabledAssets(matrixToken.address))[0];
@@ -1961,26 +1961,26 @@ describe('contract AaveLeverageModule', () => {
         });
       });
 
-      it('should revert when collateral asset does not exist on Aave', async () => {
+      it('should revert when collateral asset does not exist on Aave', async function () {
         collateralAssets = [await getRandomAddress()];
         await expect(addCollateralAssets()).revertedWith('L12c');
       });
 
-      describe('when collateral asset reserve is frozen on Aave', () => {
-        beforeEach(async () => {
+      describe('when collateral asset reserve is frozen on Aave', function () {
+        beforeEach(async function () {
           await aaveV2Fixture.lendingPoolConfigurator.connect(owner).freezeReserve(systemFixture.dai.address);
         });
 
-        afterEach(async () => {
+        afterEach(async function () {
           await aaveV2Fixture.lendingPoolConfigurator.connect(owner).unfreezeReserve(systemFixture.dai.address);
         });
 
-        it('should revert when collateral asset reserve is frozen on Aave', async () => {
+        it('should revert when collateral asset reserve is frozen on Aave', async function () {
           await expect(addCollateralAssets()).revertedWith('L12d');
         });
       });
 
-      it('should revert when LTV is zero and asset can not be used as collateral', async () => {
+      it('should revert when LTV is zero and asset can not be used as collateral', async function () {
         await aaveV2Fixture.createAndEnableReserve(
           systemFixture.usdc.address,
           'USDC',
@@ -1999,26 +1999,26 @@ describe('contract AaveLeverageModule', () => {
         await expect(addCollateralAssets()).revertedWith('L12e');
       });
 
-      it('should revert when the caller is not the MatrixToken manager', async () => {
+      it('should revert when the caller is not the MatrixToken manager', async function () {
         caller = randomAccount;
         await expect(addCollateralAssets()).revertedWith('M1a');
       });
     });
 
-    describe('when module is not initialized', () => {
-      beforeEach(async () => {
+    describe('when module is not initialized', function () {
+      beforeEach(async function () {
         notInitialized = false;
         await initContracts();
         initVariables();
       });
 
-      it('should revert when module is not initialized', async () => {
+      it('should revert when module is not initialized', async function () {
         await expect(addCollateralAssets()).revertedWith('M1b');
       });
     });
   });
 
-  describe('addBorrowAssets', () => {
+  describe('addBorrowAssets', function () {
     let caller;
     let matrixToken;
     let borrowAssets;
@@ -2026,11 +2026,11 @@ describe('contract AaveLeverageModule', () => {
     let matrixTokenAddress;
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
@@ -2061,14 +2061,14 @@ describe('contract AaveLeverageModule', () => {
       return aaveLeverageModule.connect(caller).addBorrowAssets(matrixTokenAddress, borrowAssets);
     }
 
-    describe('when module is initialized', () => {
-      beforeEach(async () => {
+    describe('when module is initialized', function () {
+      beforeEach(async function () {
         notInitialized = true;
         await initContracts();
         initVariables();
       });
 
-      it('should add the borrow asset to mappings', async () => {
+      it('should add the borrow asset to mappings', async function () {
         await addBorrowAssets();
         const realBorrowAssets = (await aaveLeverageModule.getEnabledAssets(matrixToken.address))[1];
         const isDAIBorrow = await aaveLeverageModule.isEnabledBorrowAsset(matrixToken.address, systemFixture.dai.address);
@@ -2077,21 +2077,21 @@ describe('contract AaveLeverageModule', () => {
         expect(isDAIBorrow).is.true;
       });
 
-      it('should emit the correct UpdateBorrowAssets event', async () => {
+      it('should emit the correct UpdateBorrowAssets event', async function () {
         await expect(addBorrowAssets()).emit(aaveLeverageModule, 'UpdateBorrowAssets').withArgs(matrixTokenAddress, true, borrowAssets);
       });
 
-      it('should revert when borrow asset is duplicated', async () => {
+      it('should revert when borrow asset is duplicated', async function () {
         borrowAssets = [systemFixture.dai.address, systemFixture.dai.address];
         await expect(addBorrowAssets()).revertedWith('L13a');
       });
 
-      it('should revert when borrow asset reserve does not exist on Aave', async () => {
+      it('should revert when borrow asset reserve does not exist on Aave', async function () {
         borrowAssets = [await getRandomAddress()];
         await expect(addBorrowAssets()).revertedWith('L13c');
       });
 
-      it('should revert when borrowing is disabled for an asset on Aave', async () => {
+      it('should revert when borrowing is disabled for an asset on Aave', async function () {
         await aaveV2Fixture.createAndEnableReserve(
           systemFixture.usdc.address,
           'USDC',
@@ -2109,27 +2109,27 @@ describe('contract AaveLeverageModule', () => {
         await expect(addBorrowAssets()).revertedWith('L13e');
       });
 
-      it('should revert when the caller is not the MatrixToken manager', async () => {
+      it('should revert when the caller is not the MatrixToken manager', async function () {
         caller = randomAccount;
         await expect(addBorrowAssets()).revertedWith('M1a');
       });
 
-      describe('when borrow asset reserve is frozen on Aave', () => {
-        beforeEach(async () => {
+      describe('when borrow asset reserve is frozen on Aave', function () {
+        beforeEach(async function () {
           await aaveV2Fixture.lendingPoolConfigurator.connect(owner).freezeReserve(systemFixture.dai.address);
         });
 
-        afterEach(async () => {
+        afterEach(async function () {
           await aaveV2Fixture.lendingPoolConfigurator.connect(owner).unfreezeReserve(systemFixture.dai.address);
         });
 
-        it('should revert', async () => {
+        it('should revert', async function () {
           await expect(addBorrowAssets()).revertedWith('L13d');
         });
       });
 
-      describe('when a new Aave reserve is added as borrow', () => {
-        beforeEach(async () => {
+      describe('when a new Aave reserve is added as borrow', function () {
+        beforeEach(async function () {
           // Create a new reserve
           await aaveV2Fixture.createAndEnableReserve(
             systemFixture.usdc.address,
@@ -2146,11 +2146,11 @@ describe('contract AaveLeverageModule', () => {
           borrowAssets = [systemFixture.usdc.address];
         });
 
-        it('should revert when a new Aave reserve is added as borrow', async () => {
+        it('should revert when a new Aave reserve is added as borrow', async function () {
           await expect(addBorrowAssets()).revertedWith('L13b');
         });
 
-        it('should add collateral asset to mappings when updateUnderlyingToReserveTokenMappings is called before', async () => {
+        it('should add collateral asset to mappings when updateUnderlyingToReserveTokenMappings is called before', async function () {
           await aaveLeverageModule.addUnderlyingToReserveTokensMapping(systemFixture.usdc.address);
           await addBorrowAssets();
           const realBorrowAssets = (await aaveLeverageModule.getEnabledAssets(matrixToken.address))[1];
@@ -2162,20 +2162,20 @@ describe('contract AaveLeverageModule', () => {
       });
     });
 
-    describe('when module is not initialized', () => {
-      beforeEach(async () => {
+    describe('when module is not initialized', function () {
+      beforeEach(async function () {
         notInitialized = false;
         await initContracts();
         await initVariables();
       });
 
-      it('should revert', async () => {
+      it('should revert', async function () {
         await expect(addBorrowAssets()).revertedWith('M1b');
       });
     });
   });
 
-  describe('registerToModule', () => {
+  describe('registerToModule', function () {
     let matrixToken;
     let notInitialized;
     let matrixTokenAddress;
@@ -2183,11 +2183,11 @@ describe('contract AaveLeverageModule', () => {
     let subjectDebtIssuanceModule;
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
@@ -2229,65 +2229,66 @@ describe('contract AaveLeverageModule', () => {
       return aaveLeverageModule.registerToModule(matrixTokenAddress, subjectDebtIssuanceModule);
     }
 
-    describe('when module is initialized', () => {
-      beforeEach(async () => {
+    describe('when module is initialized', function () {
+      beforeEach(async function () {
         notInitialized = true;
         await initContracts();
         initVariables();
       });
 
-      it('should register on the other issuance module', async () => {
+      it('should register on the other issuance module', async function () {
         expect(await otherIssuanceModule.isRegistered(matrixToken.address)).is.false;
         await registerToModule();
         expect(await otherIssuanceModule.isRegistered(matrixToken.address)).is.true;
       });
 
-      it('should revert when MatrixToken is not valid', async () => {
+      it('should revert when MatrixToken is not valid', async function () {
         const nonEnabledToken = await systemFixture.createRawMatrixToken([systemFixture.weth.address], [ethToWei(1)], [aaveLeverageModule.address], owner);
         matrixTokenAddress = nonEnabledToken.address;
         await expect(registerToModule()).revertedWith('M1b');
       });
 
-      it('should revert when debt issuance module is not initialized on MatrixToken', async () => {
+      it('should revert when debt issuance module is not initialized on MatrixToken', async function () {
         await matrixToken.removeModule(otherIssuanceModule.address);
         await expect(registerToModule()).revertedWith('L3');
       });
     });
 
-    describe('when module is not initialized', () => {
-      beforeEach(async () => {
+    describe('when module is not initialized', function () {
+      beforeEach(async function () {
         notInitialized = false;
         await initContracts();
         initVariables();
       });
 
-      it('should revert', async () => {
+      it('should revert', async function () {
         await expect(registerToModule()).revertedWith('M1b');
       });
     });
   });
 
-  describe('moduleIssueHook', () => {
+  describe('moduleIssueHook', function () {
     let caller;
     let matrixToken;
     let notInitialized;
     let matrixTokenAddress;
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
+      revertBlockchain(snapshotId);
     });
 
-    context('when aWETH and aDAI are collateral and WETH and DAI are borrow assets', async () => {
-      before(async () => {
+    context('when aWETH and aDAI are collateral and WETH and DAI are borrow assets', async function () {
+      before(async function () {
         notInitialized = true;
       });
 
-      beforeEach(async () => {
+      beforeEach(async function () {
         // Add mock module to controller
         await systemFixture.controller.addModule(mockModule.address);
 
@@ -2393,7 +2394,7 @@ describe('contract AaveLeverageModule', () => {
         return aaveLeverageModule.connect(caller).moduleIssueHook(matrixTokenAddress, ZERO);
       }
 
-      it('should update the collateral positions on the MatrixToken correctly', async () => {
+      it('should update the collateral positions on the MatrixToken correctly', async function () {
         const oldPositions = await matrixToken.getPositions();
         expect(oldPositions.length).eq(4);
 
@@ -2417,7 +2418,7 @@ describe('contract AaveLeverageModule', () => {
         expect(newSecondPosition.unit).eq(expectedSecondPositionUnit);
       });
 
-      it('should update the borrow positions on the MatrixToken correctly', async () => {
+      it('should update the borrow positions on the MatrixToken correctly', async function () {
         const oldPositions = await matrixToken.getPositions();
         expect(oldPositions.length).eq(4);
 
@@ -2441,39 +2442,39 @@ describe('contract AaveLeverageModule', () => {
         expect(newFourthPosition.unit).eq(expectedFourthPositionUnit);
       });
 
-      it('should revert when caller is not module', async () => {
+      it('should revert when caller is not module', async function () {
         caller = owner;
         await expect(moduleIssueHook()).revertedWith('M4a');
       });
 
-      it('should revert if disabled module is caller', async () => {
+      it('should revert if disabled module is caller', async function () {
         await systemFixture.controller.removeModule(mockModule.address);
         await expect(moduleIssueHook()).revertedWith('M4b');
       });
     });
   });
 
-  describe('moduleRedeemHook', () => {
+  describe('moduleRedeemHook', function () {
     let caller;
     let matrixToken;
     let notInitialized;
     let matrixTokenAddress;
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
-    context('when aWETH and aDAI are collateral and WETH and DAI are borrow assets', async () => {
-      before(async () => {
+    context('when aWETH and aDAI are collateral and WETH and DAI are borrow assets', async function () {
+      before(async function () {
         notInitialized = true;
       });
 
-      beforeEach(async () => {
+      beforeEach(async function () {
         // Add mock module to controller
         await systemFixture.controller.addModule(mockModule.address);
 
@@ -2579,7 +2580,7 @@ describe('contract AaveLeverageModule', () => {
         return aaveLeverageModule.connect(caller).moduleRedeemHook(matrixTokenAddress, ZERO);
       }
 
-      it('should update the collateral positions on the MatrixToken correctly', async () => {
+      it('should update the collateral positions on the MatrixToken correctly', async function () {
         const oldPositions = await matrixToken.getPositions();
         expect(oldPositions.length).eq(4);
 
@@ -2603,7 +2604,7 @@ describe('contract AaveLeverageModule', () => {
         expect(newSecondPosition.unit).eq(expectedSecondPositionUnit);
       });
 
-      it('should update the borrow positions on the MatrixToken correctly', async () => {
+      it('should update the borrow positions on the MatrixToken correctly', async function () {
         const oldPositions = await matrixToken.getPositions();
         expect(oldPositions.length).eq(4);
 
@@ -2627,19 +2628,19 @@ describe('contract AaveLeverageModule', () => {
         expect(newFourthPosition.unit).eq(expectedFourthPositionUnit);
       });
 
-      it('should revert when caller is not module', async () => {
+      it('should revert when caller is not module', async function () {
         caller = owner;
         await expect(moduleRedeemHook()).revertedWith('M4a');
       });
 
-      it('should revert if disabled module is caller', async () => {
+      it('should revert if disabled module is caller', async function () {
         await systemFixture.controller.removeModule(mockModule.address);
         await expect(moduleRedeemHook()).revertedWith('M4b');
       });
     });
   });
 
-  describe('componentIssueHook', () => {
+  describe('componentIssueHook', function () {
     const issueQuantity = ethToWei(1);
 
     let caller;
@@ -2652,20 +2653,20 @@ describe('contract AaveLeverageModule', () => {
     let matrixTokenQuantity;
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
-    context('when aWETH is collateral and DAI is borrow asset', async () => {
-      before(async () => {
+    context('when aWETH is collateral and DAI is borrow asset', async function () {
+      before(async function () {
         notInitialized = true;
       });
 
-      beforeEach(async () => {
+      beforeEach(async function () {
         // Add mock module to controller
         await systemFixture.controller.addModule(mockModule.address);
 
@@ -2745,37 +2746,37 @@ describe('contract AaveLeverageModule', () => {
         return aaveLeverageModule.connect(caller).componentIssueHook(matrixTokenAddress, matrixTokenQuantity, component, isEquity);
       }
 
-      it('should increase borrowed quantity on the MatrixToken', async () => {
+      it('should increase borrowed quantity on the MatrixToken', async function () {
         expect(await systemFixture.dai.balanceOf(matrixToken.address)).eq(ZERO);
         await componentIssueHook();
         expect(await systemFixture.dai.balanceOf(matrixToken.address)).eq(preciseMul(borrowQuantity, matrixTokenQuantity));
       });
 
-      it('should revert when isEquity is false and component has positive unit (should not happen)', async () => {
+      it('should revert when isEquity is false and component has positive unit (should not happen)', async function () {
         component = aWETH.address;
         await expect(componentIssueHook()).revertedWith('L8');
       });
 
-      it('should NOT increase borrowed quantity on the MatrixToken when isEquity is true', async () => {
+      it('should NOT increase borrowed quantity on the MatrixToken when isEquity is true', async function () {
         isEquity = true;
         expect(await systemFixture.dai.balanceOf(matrixToken.address)).eq(ZERO);
         await componentIssueHook();
         expect(await systemFixture.dai.balanceOf(matrixToken.address)).eq(ZERO);
       });
 
-      it('should revert when caller is not module', async () => {
+      it('should revert when caller is not module', async function () {
         caller = owner;
         await expect(componentIssueHook()).revertedWith('M4a');
       });
 
-      it('should revert if disabled module is caller', async () => {
+      it('should revert if disabled module is caller', async function () {
         await systemFixture.controller.removeModule(mockModule.address);
         await expect(componentIssueHook()).revertedWith('M4b');
       });
     });
   });
 
-  describe('componentRedeemHook', () => {
+  describe('componentRedeemHook', function () {
     const issueQuantity = ethToWei(1);
 
     let caller;
@@ -2788,20 +2789,20 @@ describe('contract AaveLeverageModule', () => {
     let matrixTokenQuantity;
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
-    context('when aWETH is collateral and DAI is borrow asset', async () => {
-      before(async () => {
+    context('when aWETH is collateral and DAI is borrow asset', async function () {
+      before(async function () {
         notInitialized = true;
       });
 
-      beforeEach(async () => {
+      beforeEach(async function () {
         // Add mock module to controller
         await systemFixture.controller.addModule(mockModule.address);
 
@@ -2887,42 +2888,42 @@ describe('contract AaveLeverageModule', () => {
         return aaveLeverageModule.connect(caller).componentRedeemHook(matrixTokenAddress, matrixTokenQuantity, component, isEquity);
       }
 
-      it('should decrease borrowed quantity on the MatrixToken', async () => {
+      it('should decrease borrowed quantity on the MatrixToken', async function () {
         expect(await systemFixture.dai.balanceOf(matrixToken.address)).eq(repayQuantity);
         await componentRedeemHook();
         expect(await systemFixture.dai.balanceOf(matrixToken.address)).eq(ZERO);
       });
 
-      it('should revert when _isEquity is false and component has positive unit', async () => {
+      it('should revert when _isEquity is false and component has positive unit', async function () {
         component = aWETH.address;
         await expect(componentRedeemHook()).revertedWith('L9');
       });
 
-      it('should NOT decrease borrowed quantity on the MatrixToken when isEquity is true', async () => {
+      it('should NOT decrease borrowed quantity on the MatrixToken when isEquity is true', async function () {
         isEquity = true;
         expect(await systemFixture.dai.balanceOf(matrixToken.address)).eq(repayQuantity);
         await componentRedeemHook();
         expect(await systemFixture.dai.balanceOf(matrixToken.address)).eq(repayQuantity);
       });
 
-      it('should revert when caller is not module', async () => {
+      it('should revert when caller is not module', async function () {
         caller = owner;
         await expect(componentRedeemHook()).revertedWith('M4a');
       });
 
-      it('should revert if disabled module is caller', async () => {
+      it('should revert if disabled module is caller', async function () {
         await systemFixture.controller.removeModule(mockModule.address);
         await expect(componentRedeemHook()).revertedWith('M4b');
       });
     });
   });
 
-  describe('removeModule', () => {
+  describe('removeModule', function () {
     let module;
     let matrixToken;
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
 
       matrixToken = await systemFixture.createMatrixToken(
@@ -2949,7 +2950,7 @@ describe('contract AaveLeverageModule', () => {
       module = aaveLeverageModule.address;
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
@@ -2957,13 +2958,13 @@ describe('contract AaveLeverageModule', () => {
       return matrixToken.removeModule(module);
     }
 
-    it('should remove the Module on the MatrixToken', async () => {
+    it('should remove the Module on the MatrixToken', async function () {
       await removeModule();
       const isModuleEnabled = await matrixToken.isInitializedModule(aaveLeverageModule.address);
       expect(isModuleEnabled).is.false;
     });
 
-    it('should delete the mappings', async () => {
+    it('should delete the mappings', async function () {
       await removeModule();
 
       const realCollateralAssets = (await aaveLeverageModule.getEnabledAssets(matrixToken.address))[0];
@@ -2981,12 +2982,12 @@ describe('contract AaveLeverageModule', () => {
       expect(isEtherBorrow).is.false;
     });
 
-    it('should unregister on the debt issuance module', async () => {
+    it('should unregister on the debt issuance module', async function () {
       await removeModule();
       expect(await debtIssuanceMock.isRegistered(matrixToken.address)).is.false;
     });
 
-    it('should revert when borrow balance exists', async () => {
+    it('should revert when borrow balance exists', async function () {
       // Add MatrixToken as token sender / recipient
       oneInchExchangeMockToWeth = oneInchExchangeMockToWeth.connect(owner);
       await oneInchExchangeMockToWeth.addMatrixTokenAddress(matrixToken.address);
@@ -3022,7 +3023,7 @@ describe('contract AaveLeverageModule', () => {
     });
   });
 
-  describe('removeCollateralAssets', () => {
+  describe('removeCollateralAssets', function () {
     let caller;
     let matrixToken;
     let notInitialized;
@@ -3030,11 +3031,11 @@ describe('contract AaveLeverageModule', () => {
     let matrixTokenAddress;
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
@@ -3065,17 +3066,17 @@ describe('contract AaveLeverageModule', () => {
       return await aaveLeverageModule.connect(caller).removeCollateralAssets(matrixTokenAddress, collateralAssets);
     }
 
-    describe('when module is initialized', () => {
-      before(async () => {
+    describe('when module is initialized', function () {
+      before(async function () {
         notInitialized = true;
       });
 
-      beforeEach(async () => {
+      beforeEach(async function () {
         await initContracts();
         initVariables();
       });
 
-      it('should remove the collateral asset from mappings', async () => {
+      it('should remove the collateral asset from mappings', async function () {
         await removeCollateralAssets();
         const realCollateralAssets = (await aaveLeverageModule.getEnabledAssets(matrixToken.address))[0];
         const isDAICollateral = await aaveLeverageModule.isEnabledCollateralAsset(matrixToken.address, systemFixture.dai.address);
@@ -3083,22 +3084,22 @@ describe('contract AaveLeverageModule', () => {
         expect(isDAICollateral).is.false;
       });
 
-      it('should emit the correct UpdateCollateralAssets event', async () => {
+      it('should emit the correct UpdateCollateralAssets event', async function () {
         await expect(removeCollateralAssets()).emit(aaveLeverageModule, 'UpdateCollateralAssets').withArgs(matrixTokenAddress, false, collateralAssets);
       });
 
-      it('should revert when collateral asset is not enabled on module', async () => {
+      it('should revert when collateral asset is not enabled on module', async function () {
         collateralAssets = [systemFixture.weth.address, systemFixture.usdc.address];
         await expect(removeCollateralAssets()).revertedWith('L5');
       });
 
-      it('should revert when the caller is not the MatrixToken manager', async () => {
+      it('should revert when the caller is not the MatrixToken manager', async function () {
         caller = randomAccount;
         await expect(removeCollateralAssets()).revertedWith('M1a');
       });
 
-      describe('when removing a collateral asset which has been enabled to be used as collateral on aave', () => {
-        beforeEach(async () => {
+      describe('when removing a collateral asset which has been enabled to be used as collateral on aave', function () {
+        beforeEach(async function () {
           // Mint aTokens
           await systemFixture.weth.approve(aaveV2Fixture.lendingPool.address, ethToWei(1000));
           await aaveV2Fixture.lendingPool.connect(owner).deposit(systemFixture.weth.address, ethToWei(1000), owner.address, ZERO);
@@ -3113,7 +3114,7 @@ describe('contract AaveLeverageModule', () => {
           collateralAssets = [systemFixture.weth.address]; // remove weth
         });
 
-        it('should disable the asset to be used as collateral on aave', async () => {
+        it('should disable the asset to be used as collateral on aave', async function () {
           const oldUserReserveData = await aaveV2Fixture.protocolDataProvider.getUserReserveData(systemFixture.weth.address, matrixToken.address);
           expect(oldUserReserveData.usageAsCollateralEnabled).is.true;
 
@@ -3125,20 +3126,20 @@ describe('contract AaveLeverageModule', () => {
       });
     });
 
-    describe('when module is not initialized', () => {
-      beforeEach(async () => {
+    describe('when module is not initialized', function () {
+      beforeEach(async function () {
         notInitialized = false;
         await initContracts();
         initVariables();
       });
 
-      it('should revert', async () => {
+      it('should revert', async function () {
         await expect(removeCollateralAssets()).revertedWith('M1b');
       });
     });
   });
 
-  describe('removeBorrowAssets', () => {
+  describe('removeBorrowAssets', function () {
     let caller;
     let matrixToken;
     let borrowAssets;
@@ -3146,11 +3147,11 @@ describe('contract AaveLeverageModule', () => {
     let matrixTokenAddress;
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
@@ -3192,17 +3193,17 @@ describe('contract AaveLeverageModule', () => {
       return aaveLeverageModule.connect(caller).removeBorrowAssets(matrixTokenAddress, borrowAssets);
     }
 
-    describe('when module is initialized', () => {
-      before(() => {
+    describe('when module is initialized', function () {
+      before(function () {
         notInitialized = true;
       });
 
-      beforeEach(async () => {
+      beforeEach(async function () {
         await initContracts();
         initVariables();
       });
 
-      it('should remove the borrow asset from mappings', async () => {
+      it('should remove the borrow asset from mappings', async function () {
         await removeBorrowAssets();
         const realBorrowAssets = (await aaveLeverageModule.getEnabledAssets(matrixToken.address))[1];
         const isDAIBorrow = await aaveLeverageModule.isEnabledBorrowAsset(matrixToken.address, systemFixture.dai.address);
@@ -3210,17 +3211,17 @@ describe('contract AaveLeverageModule', () => {
         expect(isDAIBorrow).is.false;
       });
 
-      it('should emit the correct UpdateBorrowAssets event', async () => {
+      it('should emit the correct UpdateBorrowAssets event', async function () {
         await expect(removeBorrowAssets()).emit(aaveLeverageModule, 'UpdateBorrowAssets').withArgs(matrixTokenAddress, false, borrowAssets);
       });
 
-      it('should revert when borrow asset is not enabled on module', async () => {
+      it('should revert when borrow asset is not enabled on module', async function () {
         borrowAssets = [systemFixture.dai.address, systemFixture.dai.address];
         await expect(removeBorrowAssets()).revertedWith('L6a');
       });
 
-      describe('when borrow balance exists', () => {
-        beforeEach(async () => {
+      describe('when borrow balance exists', function () {
+        beforeEach(async function () {
           // Add MatrixToken as token sender / recipient
           await oneInchExchangeMockToWeth.connect(owner).addMatrixTokenAddress(matrixToken.address);
 
@@ -3252,38 +3253,38 @@ describe('contract AaveLeverageModule', () => {
           );
         });
 
-        it('should revert when borrow balance exists', async () => {
+        it('should revert when borrow balance exists', async function () {
           await expect(removeBorrowAssets()).revertedWith('L6b');
         });
       });
 
-      it('should revert when the caller is not the MatrixToken manager', async () => {
+      it('should revert when the caller is not the MatrixToken manager', async function () {
         caller = randomAccount;
         await expect(removeBorrowAssets()).revertedWith('M1a');
       });
     });
 
-    describe('when module is not initialized', () => {
-      beforeEach(async () => {
+    describe('when module is not initialized', function () {
+      beforeEach(async function () {
         notInitialized = false;
         await initContracts();
         initVariables();
       });
 
-      it('should revert when module is not initialized', async () => {
+      it('should revert when module is not initialized', async function () {
         await expect(removeBorrowAssets()).revertedWith('M1b');
       });
     });
   });
 
-  describe('updateAllowedMatrixToken', () => {
+  describe('updateAllowedMatrixToken', function () {
     let caller;
     let status;
     let matrixToken;
     let matrixTokenAddress;
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
 
       matrixToken = matrixToken = await systemFixture.createMatrixToken(
@@ -3298,7 +3299,7 @@ describe('contract AaveLeverageModule', () => {
       matrixTokenAddress = matrixToken.address;
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
@@ -3306,61 +3307,61 @@ describe('contract AaveLeverageModule', () => {
       return aaveLeverageModule.connect(caller).updateAllowedMatrixToken(matrixTokenAddress, status);
     }
 
-    it('should add MatrixToken to allow list', async () => {
+    it('should add MatrixToken to allow list', async function () {
       await updateAllowedMatrixToken();
       expect(await aaveLeverageModule.isAllowedMatrixToken(matrixTokenAddress)).is.true;
     });
 
-    it('should emit the correct UpdateMatrixTokenStatus event', async () => {
+    it('should emit the correct UpdateMatrixTokenStatus event', async function () {
       await expect(updateAllowedMatrixToken()).emit(aaveLeverageModule, 'UpdateMatrixTokenStatus').withArgs(matrixTokenAddress, status);
     });
 
-    describe('when disabling a MatrixToken', () => {
-      beforeEach(async () => {
+    describe('when disabling a MatrixToken', function () {
+      beforeEach(async function () {
         await updateAllowedMatrixToken();
         status = false;
       });
 
-      it('should remove MatrixToken from allow list', async () => {
+      it('should remove MatrixToken from allow list', async function () {
         await updateAllowedMatrixToken();
         expect(await aaveLeverageModule.isAllowedMatrixToken(matrixTokenAddress)).is.false;
       });
 
-      it('should emit the correct UpdateMatrixTokenStatus event', async () => {
+      it('should emit the correct UpdateMatrixTokenStatus event', async function () {
         await expect(updateAllowedMatrixToken()).emit(aaveLeverageModule, 'UpdateMatrixTokenStatus').withArgs(matrixTokenAddress, status);
       });
 
-      it('should remove the MatrixToken from allow list when MatrixToken is removed on controller', async () => {
+      it('should remove the MatrixToken from allow list when MatrixToken is removed on controller', async function () {
         await systemFixture.controller.removeMatrix(matrixToken.address);
         await updateAllowedMatrixToken();
         expect(await aaveLeverageModule.isAllowedMatrixToken(matrixTokenAddress)).is.false;
       });
     });
 
-    it('should revert when MatrixToken is removed on controller', async () => {
+    it('should revert when MatrixToken is removed on controller', async function () {
       await systemFixture.controller.removeMatrix(matrixToken.address);
       await expect(updateAllowedMatrixToken()).revertedWith('L7');
     });
 
-    it('should revert when not called by owner', async () => {
+    it('should revert when not called by owner', async function () {
       caller = randomAccount;
       await expect(updateAllowedMatrixToken()).revertedWith('L14');
     });
   });
 
-  describe('updateAnyMatrixAllowed', () => {
+  describe('updateAnyMatrixAllowed', function () {
     let caller;
     let isAnyMatrixAllowed;
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
 
       caller = owner;
       isAnyMatrixAllowed = true;
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
@@ -3368,28 +3369,28 @@ describe('contract AaveLeverageModule', () => {
       return aaveLeverageModule.connect(caller).updateAnyMatrixAllowed(isAnyMatrixAllowed);
     }
 
-    it('should remove MatrixToken from allow list', async () => {
+    it('should remove MatrixToken from allow list', async function () {
       await updateAnyMatrixAllowed();
       expect(await aaveLeverageModule.isAnyMatrixAllowed()).is.true;
     });
 
-    it('should emit the correct UpdateAnyMatrixAllowed event', async () => {
+    it('should emit the correct UpdateAnyMatrixAllowed event', async function () {
       await expect(updateAnyMatrixAllowed()).emit(aaveLeverageModule, 'UpdateAnyMatrixAllowed').withArgs(isAnyMatrixAllowed);
     });
 
-    it('should revert when not called by owner', async () => {
+    it('should revert when not called by owner', async function () {
       caller = randomAccount;
       await expect(updateAnyMatrixAllowed()).revertedWith('L14');
     });
   });
 
-  describe('addUnderlyingToReserveTokensMappings', () => {
+  describe('addUnderlyingToReserveTokensMappings', function () {
     let caller;
     let underlying;
     let usdcReserveTokens; // ReserveTokens
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
 
       usdcReserveTokens = await aaveV2Fixture.createAndEnableReserve(
@@ -3408,7 +3409,7 @@ describe('contract AaveLeverageModule', () => {
       underlying = systemFixture.usdc.address;
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
@@ -3416,7 +3417,7 @@ describe('contract AaveLeverageModule', () => {
       return aaveLeverageModule.connect(caller).addUnderlyingToReserveTokensMapping(underlying);
     }
 
-    it('should add the underlying to reserve tokens mappings', async () => {
+    it('should add the underlying to reserve tokens mappings', async function () {
       await addUnderlyingToReserveTokensMapping();
 
       const reserveTokens = await aaveLeverageModule.getUnderlyingToReserveTokens(systemFixture.usdc.address);
@@ -3424,18 +3425,18 @@ describe('contract AaveLeverageModule', () => {
       expect(reserveTokens.variableDebtToken).eq(usdcReserveTokens.variableDebtToken.address);
     });
 
-    it('should emit UpdateReserveTokens event', async () => {
+    it('should emit UpdateReserveTokens event', async function () {
       await expect(addUnderlyingToReserveTokensMapping())
         .emit(aaveLeverageModule, 'UpdateReserveTokens')
         .withArgs(systemFixture.usdc.address, usdcReserveTokens.aToken.address, usdcReserveTokens.variableDebtToken.address);
     });
 
-    it('should revert when mapping already exists', async () => {
+    it('should revert when mapping already exists', async function () {
       underlying = systemFixture.weth.address;
       await expect(addUnderlyingToReserveTokensMapping()).revertedWith('L4a');
     });
 
-    it('should revert when reserve is invalid', async () => {
+    it('should revert when reserve is invalid', async function () {
       underlying = await getRandomAddress();
       await expect(addUnderlyingToReserveTokensMapping()).revertedWith('L4b');
     });

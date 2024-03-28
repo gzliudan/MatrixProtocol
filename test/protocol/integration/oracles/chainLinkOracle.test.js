@@ -12,7 +12,7 @@ const { deployContract } = require('../../../helpers/deploy');
 const { getSigners, getRandomAddress } = require('../../../helpers/accountUtil');
 const { snapshotBlockchain, revertBlockchain } = require('../../../helpers/evmUtil.js');
 
-describe('contract ChainlinkOracle', () => {
+describe('contract ChainlinkOracle', function () {
   const [owner] = getSigners();
   const name = 'TEST/USD';
   const price = 1000;
@@ -22,19 +22,19 @@ describe('contract ChainlinkOracle', () => {
   let oracle;
 
   let snapshotId;
-  before(async () => {
+  before(async function () {
     snapshotId = await snapshotBlockchain();
   });
 
-  after(async () => {
+  after(async function () {
     await revertBlockchain(snapshotId);
   });
 
-  describe('constructor', () => {
+  describe('constructor', function () {
     let priceFeedAddress;
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
 
       decimals = 18;
@@ -42,7 +42,7 @@ describe('contract ChainlinkOracle', () => {
       priceFeedAddress = priceFeedMock.address;
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
@@ -50,31 +50,31 @@ describe('contract ChainlinkOracle', () => {
       return deployContract('ChainlinkOracle', [name, priceFeedAddress], owner);
     }
 
-    it('should reverted when priceFeed is invalid', async () => {
+    it('should reverted when priceFeed is invalid', async function () {
       priceFeedAddress = await getRandomAddress();
       await expect(createOracle()).reverted;
     });
 
-    it('should return the correct name', async () => {
+    it('should return the correct name', async function () {
       oracle = await createOracle();
       const result = await oracle.getName();
       expect(result).eq(name);
     });
 
-    it('should return the correct getPriceFeed', async () => {
+    it('should return the correct getPriceFeed', async function () {
       oracle = await createOracle();
       const result = await oracle.getPriceFeed();
       expect(result).eq(priceFeedAddress);
     });
   });
 
-  describe('read from ChainlinkPriceFeedMock', () => {
+  describe('read from ChainlinkPriceFeedMock', function () {
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
@@ -85,7 +85,7 @@ describe('contract ChainlinkOracle', () => {
     }
 
     for (let i = 0; i <= 18; i += 2) {
-      it(`when decimals is ${i}`, async () => {
+      it(`when decimals is ${i}`, async function () {
         decimals = i;
         const result = await read();
         expect(result).eq(expectedPrice);
@@ -93,13 +93,13 @@ describe('contract ChainlinkOracle', () => {
     }
   });
 
-  describe('read from ChainlinkAggregatorMock', () => {
+  describe('read from ChainlinkAggregatorMock', function () {
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
@@ -111,7 +111,7 @@ describe('contract ChainlinkOracle', () => {
     }
 
     for (let i = 0; i <= 18; i += 2) {
-      it(`when decimals is ${i}`, async () => {
+      it(`when decimals is ${i}`, async function () {
         decimals = i;
         const result = await read();
         expect(result).eq(expectedPrice);

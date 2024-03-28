@@ -14,7 +14,7 @@ const { AaveV2Fixture } = require('../../../fixtures/aaveV2Fixture');
 const { getSigners, getRandomAddress } = require('../../../helpers/accountUtil');
 const { snapshotBlockchain, revertBlockchain } = require('../../../helpers/evmUtil.js');
 
-describe('contract AaveV2WrapV2Adapter', () => {
+describe('contract AaveV2WrapV2Adapter', function () {
   const [owner, protocolFeeRecipient, INVALID_TOKEN] = getSigners();
   const systemFixture = new SystemFixture(owner, protocolFeeRecipient);
   const aaveV2Fixture = new AaveV2Fixture(owner);
@@ -24,7 +24,7 @@ describe('contract AaveV2WrapV2Adapter', () => {
   let aaveV2WrapV2Adapter;
 
   let snapshotId;
-  before(async () => {
+  before(async function () {
     snapshotId = await snapshotBlockchain();
 
     await systemFixture.initAll();
@@ -36,23 +36,23 @@ describe('contract AaveV2WrapV2Adapter', () => {
     aaveV2WrapV2Adapter = await deployContract('AaveV2WrapV2Adapter', [aaveV2Fixture.lendingPoolAddressesProvider.address], owner);
   });
 
-  after(async () => {
+  after(async function () {
     await revertBlockchain(snapshotId);
   });
 
-  describe('constructor', () => {
-    it('should have the correct lending pool addresses provider', async () => {
+  describe('constructor', function () {
+    it('should have the correct lending pool addresses provider', async function () {
       expect(await aaveV2WrapV2Adapter.ADDRESSES_PROVIDER()).eq(aaveV2Fixture.lendingPoolAddressesProvider.address);
     });
   });
 
-  describe('getSpenderAddress', () => {
-    it('should return the correct spender address', async () => {
+  describe('getSpenderAddress', function () {
+    it('should return the correct spender address', async function () {
       expect(await aaveV2WrapV2Adapter.getSpenderAddress(underlyingToken.address, wrappedToken.address)).eq(aaveV2Fixture.lendingPool.address);
     });
   });
 
-  describe('getWrapCallData', () => {
+  describe('getWrapCallData', function () {
     const subjectUnderlyingUnits = ethToWei(2);
     const subjectWrapData = ZERO_BYTES;
 
@@ -60,7 +60,7 @@ describe('contract AaveV2WrapV2Adapter', () => {
     let wrappedTokenAddress;
     let underlyingTokenAddress;
 
-    beforeEach(async () => {
+    beforeEach(async function () {
       to = await getRandomAddress();
       wrappedTokenAddress = wrappedToken.address;
       underlyingTokenAddress = underlyingToken.address;
@@ -70,7 +70,7 @@ describe('contract AaveV2WrapV2Adapter', () => {
       return aaveV2WrapV2Adapter.getWrapCallData(underlyingTokenAddress, wrappedTokenAddress, subjectUnderlyingUnits, to, subjectWrapData);
     }
 
-    it('should return correct data for valid pair', async () => {
+    it('should return correct data for valid pair', async function () {
       const { target, value, callData } = await getWrapCallData();
       const expectedCallData = aaveV2Fixture.lendingPool.interface.encodeFunctionData('deposit', [underlyingTokenAddress, subjectUnderlyingUnits, to, 0]);
 
@@ -79,18 +79,18 @@ describe('contract AaveV2WrapV2Adapter', () => {
       expect(callData).eq(expectedCallData);
     });
 
-    it('should revert when wrapped underlying token is invalid', async () => {
+    it('should revert when wrapped underlying token is invalid', async function () {
       underlyingTokenAddress = INVALID_TOKEN.address;
       await expect(getWrapCallData()).revertedWith('A2Wb0');
     });
 
-    it('should revert when wrapped wrapped token is invalid', async () => {
+    it('should revert when wrapped wrapped token is invalid', async function () {
       wrappedTokenAddress = aaveV2Fixture.wethReserveTokens.aToken.address;
       await expect(getWrapCallData()).revertedWith('A2Wb0');
     });
   });
 
-  describe('getUnwrapCallData', () => {
+  describe('getUnwrapCallData', function () {
     let unwrapData = ZERO_BYTES;
     let wrappedTokenUnits = ethToWei(2);
 
@@ -98,7 +98,7 @@ describe('contract AaveV2WrapV2Adapter', () => {
     let wrappedTokenAddress;
     let underlyingTokenAddress;
 
-    beforeEach(async () => {
+    beforeEach(async function () {
       to = await getRandomAddress();
       wrappedTokenAddress = wrappedToken.address;
       underlyingTokenAddress = underlyingToken.address;
@@ -108,7 +108,7 @@ describe('contract AaveV2WrapV2Adapter', () => {
       return aaveV2WrapV2Adapter.getUnwrapCallData(underlyingTokenAddress, wrappedTokenAddress, wrappedTokenUnits, to, unwrapData);
     }
 
-    it('should return correct data for valid pair', async () => {
+    it('should return correct data for valid pair', async function () {
       const { target, value, callData } = await getUnwrapCallData();
       const expectedCallData = aaveV2Fixture.lendingPool.interface.encodeFunctionData('withdraw', [underlyingTokenAddress, wrappedTokenUnits, to]);
 
@@ -117,12 +117,12 @@ describe('contract AaveV2WrapV2Adapter', () => {
       expect(callData).eq(expectedCallData);
     });
 
-    it('should revert when underlying token is invalid', async () => {
+    it('should revert when underlying token is invalid', async function () {
       underlyingTokenAddress = INVALID_TOKEN.address;
       await expect(getUnwrapCallData()).revertedWith('A2Wb0');
     });
 
-    it('should revert when wrapped token is invalid', async () => {
+    it('should revert when wrapped token is invalid', async function () {
       wrappedTokenAddress = aaveV2Fixture.wethReserveTokens.aToken.address;
       await expect(getUnwrapCallData()).revertedWith('A2Wb0');
     });

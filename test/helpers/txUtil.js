@@ -12,13 +12,15 @@ function encodeData(contract, functionName, args) {
 async function approve(signer, tokenContract, spender, amount) {
   const data = encodeData(tokenContract, 'approve', [spender, amount]);
 
-  return signer.sendTransaction({
+  return await signer.sendTransaction({
     to: tokenContract.address,
     data,
   });
 }
 
-const sendEth = async (signer, to, value) => signer.sendTransaction({ to, value });
+async function sendEth(signer, to, value) {
+  await signer.sendTransaction({ to, value });
+}
 
 /// @dev get transaction timestamp
 async function getTransactionTimestamp(txFunc) {

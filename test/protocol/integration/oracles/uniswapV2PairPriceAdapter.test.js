@@ -15,7 +15,7 @@ const { preciseMul, preciseDiv } = require('../../../helpers/mathUtil');
 const { ZERO_ADDRESS, ZERO, MAX_UINT_256 } = require('../../../helpers/constants');
 const { snapshotBlockchain, revertBlockchain } = require('../../../helpers/evmUtil.js');
 
-describe('contract UniswapV2PairPriceAdapter', () => {
+describe('contract UniswapV2PairPriceAdapter', function () {
   const [owner, protocolFeeRecipient, attacker] = getSigners();
   const systemFixture = new SystemFixture(owner, protocolFeeRecipient);
   const uniswapFixture = new UniswapFixture(owner);
@@ -24,7 +24,7 @@ describe('contract UniswapV2PairPriceAdapter', () => {
   let uniswapPriceAdapter;
 
   let snapshotId;
-  before(async () => {
+  before(async function () {
     snapshotId = await snapshotBlockchain();
 
     await systemFixture.initAll();
@@ -71,21 +71,21 @@ describe('contract UniswapV2PairPriceAdapter', () => {
     );
   });
 
-  after(async () => {
+  after(async function () {
     await revertBlockchain(snapshotId);
   });
 
-  describe('constructor', () => {
+  describe('constructor', function () {
     let uniswapPools;
 
     // let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
 
       uniswapPools = [uniswapFixture.wethDaiPool.address, uniswapFixture.wethWbtcPool.address];
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
@@ -95,19 +95,19 @@ describe('contract UniswapV2PairPriceAdapter', () => {
       return priceAdapter;
     }
 
-    it('should have the correct priceOracle address', async () => {
+    it('should have the correct priceOracle address', async function () {
       const priceAdapter = await createUniswapV2PairPriceAdapter();
       const priceOracle = await priceAdapter.getPriceOracle();
       expect(priceOracle).eq(systemFixture.priceOracle.address);
     });
 
-    it('should have the correct Uniswap pools array', async () => {
+    it('should have the correct Uniswap pools array', async function () {
       const priceAdapter = await createUniswapV2PairPriceAdapter();
       const actualAllowedPools = await priceAdapter.getAllowedUniswapPools();
       expect(JSON.stringify(actualAllowedPools)).eq(JSON.stringify(uniswapPools));
     });
 
-    it('should have the correct Uniswap pool 1 settings', async () => {
+    it('should have the correct Uniswap pool 1 settings', async function () {
       const priceAdapter = await createUniswapV2PairPriceAdapter();
       const actualWethDaiPoolSetting = await priceAdapter.getUniswapPoolSetting(uniswapPools[0]);
       const [expectedTokenOne, expectedTokenTwo] = uniswapFixture.getTokenOrder(systemFixture.weth.address, systemFixture.dai.address);
@@ -119,7 +119,7 @@ describe('contract UniswapV2PairPriceAdapter', () => {
       expect(actualWethDaiPoolSetting.isValid).is.true;
     });
 
-    it('should have the correct Uniswap pool 2 settings', async () => {
+    it('should have the correct Uniswap pool 2 settings', async function () {
       const priceAdapter = await createUniswapV2PairPriceAdapter();
       const actualWethWbtcPoolSetting = await priceAdapter.getUniswapPoolSetting(uniswapPools[1]);
       const [expectedTokenOne, expectedTokenTwo] = uniswapFixture.getTokenOrder(systemFixture.weth.address, systemFixture.wbtc.address);
@@ -133,27 +133,27 @@ describe('contract UniswapV2PairPriceAdapter', () => {
       expect(actualWethWbtcPoolSetting.isValid).is.true;
     });
 
-    it('should revert when passed uniswap pool address is not unique', async () => {
+    it('should revert when passed uniswap pool address is not unique', async function () {
       uniswapPools = [uniswapFixture.wethDaiPool.address, uniswapFixture.wethDaiPool.address];
       await expect(createUniswapV2PairPriceAdapter()).revertedWith('UPPA2');
     });
   });
 
-  describe('getPrice', () => {
+  describe('getPrice', function () {
     let asset1;
     let asset2;
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
-    context('when a Uniswap pool is the base asset', async () => {
-      beforeEach(async () => {
+    context('when a Uniswap pool is the base asset', async function () {
+      beforeEach(async function () {
         caller = owner;
         asset1 = uniswapFixture.wethDaiPool.address;
         asset2 = systemFixture.usdc.address;
@@ -163,7 +163,7 @@ describe('contract UniswapV2PairPriceAdapter', () => {
         return uniswapPriceAdapter.connect(caller).getPrice(asset1, asset2);
       }
 
-      it('should return the price', async () => {
+      it('should return the price', async function () {
         const { found, price } = await getPrice();
 
         // Get oracle prices
@@ -191,12 +191,12 @@ describe('contract UniswapV2PairPriceAdapter', () => {
         expect(price).eq(expectedPrice);
       });
 
-      // it('should revert when the caller is not a system contract', async () => {
+      // it('should revert when the caller is not a system contract', async function () {
       //   caller = attacker;
       //   await expect(getPrice()).revertedWith('UPPA3');
       // });
 
-      it('should return false and 0 when both base and quote asset are not Uniswap pools', async () => {
+      it('should return false and 0 when both base and quote asset are not Uniswap pools', async function () {
         asset1 = systemFixture.dai.address;
         const returnedValue = await getPrice();
         expect(returnedValue[0]).is.false;
@@ -204,8 +204,8 @@ describe('contract UniswapV2PairPriceAdapter', () => {
       });
     });
 
-    context('when a Uniswap pool is the quote asset', async () => {
-      beforeEach(async () => {
+    context('when a Uniswap pool is the quote asset', async function () {
+      beforeEach(async function () {
         caller = owner;
         asset1 = systemFixture.dai.address;
         asset2 = uniswapFixture.wethWbtcPool.address;
@@ -215,7 +215,7 @@ describe('contract UniswapV2PairPriceAdapter', () => {
         return uniswapPriceAdapter.connect(caller).getPrice(asset1, asset2);
       }
 
-      it('should return the price', async () => {
+      it('should return the price', async function () {
         const { found, price } = await getPrice();
 
         // Get oracle prices
@@ -244,8 +244,8 @@ describe('contract UniswapV2PairPriceAdapter', () => {
       });
     });
 
-    context('when Uniswap pools are both the base and quote asset', async () => {
-      beforeEach(async () => {
+    context('when Uniswap pools are both the base and quote asset', async function () {
+      beforeEach(async function () {
         asset1 = uniswapFixture.wethDaiPool.address;
         asset2 = uniswapFixture.wethWbtcPool.address;
         caller = owner;
@@ -255,7 +255,7 @@ describe('contract UniswapV2PairPriceAdapter', () => {
         return uniswapPriceAdapter.connect(caller).getPrice(asset1, asset2);
       }
 
-      it('should return the price', async () => {
+      it('should return the price', async function () {
         const { found, price } = await getPrice();
 
         // Get oracle prices
@@ -301,13 +301,13 @@ describe('contract UniswapV2PairPriceAdapter', () => {
     });
   });
 
-  describe('addPool', () => {
+  describe('addPool', function () {
     let poolAddress;
     let token1Address;
     let token2Address;
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
 
       const token1 = await deployContract('Erc20Mock', ['Mock1', 'M1', 18], this.owner);
@@ -323,7 +323,7 @@ describe('contract UniswapV2PairPriceAdapter', () => {
       caller = owner;
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
@@ -331,7 +331,7 @@ describe('contract UniswapV2PairPriceAdapter', () => {
       return uniswapPriceAdapter.connect(caller).addPool(poolAddress);
     }
 
-    it('adds the address to the pools list', async () => {
+    it('adds the address to the pools list', async function () {
       let existingPools = await uniswapPriceAdapter.getAllowedUniswapPools();
       await addPool();
       const newPools = await uniswapPriceAdapter.getAllowedUniswapPools();
@@ -339,7 +339,7 @@ describe('contract UniswapV2PairPriceAdapter', () => {
       expect(newPools).deep.equal(existingPools);
     });
 
-    it('adds the pool settings to the allowed pools mapping', async () => {
+    it('adds the pool settings to the allowed pools mapping', async function () {
       await addPool();
 
       const newSetting = await uniswapPriceAdapter.getUniswapPoolSetting(poolAddress);
@@ -353,22 +353,22 @@ describe('contract UniswapV2PairPriceAdapter', () => {
       expect(newSetting.isValid).is.true;
     });
 
-    it('should revert when someone other than the owner tries to add an address', async () => {
+    it('should revert when someone other than the owner tries to add an address', async function () {
       caller = attacker;
       await expect(addPool()).reverted;
     });
 
-    it('should revert when the address is already in the allowList', async () => {
+    it('should revert when the address is already in the allowList', async function () {
       poolAddress = uniswapFixture.wethWbtcPool.address;
       await expect(addPool()).revertedWith('UPPA2');
     });
   });
 
-  describe('removePair', () => {
+  describe('removePair', function () {
     let poolAddress;
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
 
       const token1 = await deployContract('Erc20Mock', ['Mock1', 'M1', 18], this.owner);
@@ -384,7 +384,7 @@ describe('contract UniswapV2PairPriceAdapter', () => {
       caller = owner;
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
@@ -392,7 +392,7 @@ describe('contract UniswapV2PairPriceAdapter', () => {
       return uniswapPriceAdapter.connect(caller).removePool(poolAddress);
     }
 
-    it('removes the address from the addresses list', async () => {
+    it('removes the address from the addresses list', async function () {
       await removePool();
 
       const newAddresses = await uniswapPriceAdapter.getAllowedUniswapPools();
@@ -400,7 +400,7 @@ describe('contract UniswapV2PairPriceAdapter', () => {
       expect(addressIndex).eq(-1);
     });
 
-    it('updates the address in the settings mapping to null', async () => {
+    it('updates the address in the settings mapping to null', async function () {
       await removePool();
       const poolSetting = await uniswapPriceAdapter.getUniswapPoolSetting(poolAddress);
 
@@ -411,12 +411,12 @@ describe('contract UniswapV2PairPriceAdapter', () => {
       expect(poolSetting.isValid).is.false;
     });
 
-    it('should revert when someone other than the owner tries to remove an address', async () => {
+    it('should revert when someone other than the owner tries to remove an address', async function () {
       caller = attacker;
       await expect(removePool()).reverted;
     });
 
-    it('should revert when the address is not in the allowList', async () => {
+    it('should revert when the address is not in the allowList', async function () {
       poolAddress = owner.address;
       await expect(removePool()).revertedWith('UPPA3');
     });

@@ -13,29 +13,29 @@ const { getSigners } = require('../helpers/accountUtil');
 const { ZERO, MAX_UINT_256 } = require('../helpers/constants');
 const { snapshotBlockchain, revertBlockchain } = require('../helpers/evmUtil.js');
 
-describe('class UniswapFixture', () => {
+describe('class UniswapFixture', function () {
   const [owner, protocolFeeRecipient] = getSigners();
   const systemFixture = new SystemFixture(owner, protocolFeeRecipient);
   const uniswapFixture = new UniswapFixture(owner);
 
   let snapshotId;
-  before(async () => {
+  before(async function () {
     snapshotId = await snapshotBlockchain();
 
     await systemFixture.initAll();
   });
 
-  after(async () => {
+  after(async function () {
     await revertBlockchain(snapshotId);
   });
 
-  describe('init', () => {
+  describe('init', function () {
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
@@ -43,7 +43,7 @@ describe('class UniswapFixture', () => {
       await uniswapFixture.init(systemFixture.weth.address, systemFixture.wbtc.address, systemFixture.dai.address);
     }
 
-    it('should deploy a WETH/DAI pool and staking rewards', async () => {
+    it('should deploy a WETH/DAI pool and staking rewards', async function () {
       await init();
 
       const pairTokenOne = await uniswapFixture.wethDaiPool.token0();
@@ -59,7 +59,7 @@ describe('class UniswapFixture', () => {
       expect(stakingToken).eq(uniswapFixture.wethDaiPool.address);
     });
 
-    it('should deploy a WETH/WBTC pool and staking rewards', async () => {
+    it('should deploy a WETH/WBTC pool and staking rewards', async function () {
       await init();
 
       const pairTokenOne = await uniswapFixture.wethWbtcPool.token0();
@@ -76,9 +76,9 @@ describe('class UniswapFixture', () => {
     });
   });
 
-  describe('addLiquidity', () => {
+  describe('addLiquidity', function () {
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
 
       await uniswapFixture.init(systemFixture.weth.address, systemFixture.wbtc.address, systemFixture.dai.address);
@@ -86,7 +86,7 @@ describe('class UniswapFixture', () => {
       await systemFixture.dai.approve(uniswapFixture.router.address, ethToWei(350));
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
@@ -103,7 +103,7 @@ describe('class UniswapFixture', () => {
       );
     }
 
-    it('should return lp token to owner and decrement amounts', async () => {
+    it('should return lp token to owner and decrement amounts', async function () {
       const oldDaiBalance = await systemFixture.dai.balanceOf(owner.address);
       const oldWethBalance = await systemFixture.weth.balanceOf(owner.address);
       await addLiquidity();
@@ -118,10 +118,10 @@ describe('class UniswapFixture', () => {
     });
   });
 
-  describe('stake', () => {
+  describe('stake', function () {
     let stakeAmount;
 
-    beforeEach(async () => {
+    beforeEach(async function () {
       await uniswapFixture.init(systemFixture.weth.address, systemFixture.wbtc.address, systemFixture.dai.address);
 
       await systemFixture.weth.approve(uniswapFixture.router.address, ethToWei(1));
@@ -147,7 +147,7 @@ describe('class UniswapFixture', () => {
       await uniswapFixture.wethDaiStakingRewards.stake(stakeAmount);
     }
 
-    it('should stake lp tokens', async () => {
+    it('should stake lp tokens', async function () {
       const oldRewards = await uniswapFixture.wethDaiStakingRewards.balanceOf(owner.address);
       await stake();
       const newRewards = await uniswapFixture.wethDaiStakingRewards.balanceOf(owner.address);

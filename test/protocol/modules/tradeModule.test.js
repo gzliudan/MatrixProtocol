@@ -20,7 +20,7 @@ const { getSigners, getRandomAddress } = require('../../helpers/accountUtil');
 const { snapshotBlockchain, revertBlockchain } = require('../../helpers/evmUtil.js');
 const { ZERO, MAX_UINT_256, ZERO_ADDRESS, EMPTY_BYTES } = require('../../helpers/constants');
 
-describe('contract TradeModule', () => {
+describe('contract TradeModule', function () {
   const [owner, protocolFeeRecipient, manager, mockModule, randomAccount] = getSigners();
   const systemFixture = new SystemFixture(owner, protocolFeeRecipient);
   const uniswapFixture = new UniswapFixture(owner);
@@ -52,7 +52,7 @@ describe('contract TradeModule', () => {
   let uniswapV2TransferFeeExchangeAdapter;
 
   let snapshotId;
-  before(async () => {
+  before(async function () {
     snapshotId = await snapshotBlockchain();
 
     await systemFixture.initAll();
@@ -107,18 +107,18 @@ describe('contract TradeModule', () => {
     await systemFixture.integrationRegistry.addIntegration(tradeModule.address, uniswapV2TransferFeeAdapterName, uniswapV2TransferFeeExchangeAdapter.address);
   });
 
-  after(async () => {
+  after(async function () {
     await revertBlockchain(snapshotId);
   });
 
-  describe('constructor', () => {
-    it('should have the correct controller', async () => {
+  describe('constructor', function () {
+    it('should have the correct controller', async function () {
       const controller = await tradeModule.getController();
       expect(controller).eq(systemFixture.controller.address);
     });
   });
 
-  context('when there is a deployed MatrixToken with enabled TradeModule', async () => {
+  context('when there is a deployed MatrixToken with enabled TradeModule', async function () {
     const wbtcUnits = btcToWei(1); // 1 WBTC in base units 10 ** 8
 
     let srcToken; // StandardTokenMock
@@ -128,7 +128,7 @@ describe('contract TradeModule', () => {
     let managerIssuanceHookMock;
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
 
       srcToken = systemFixture.wbtc;
@@ -142,14 +142,14 @@ describe('contract TradeModule', () => {
       );
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
-    describe('initialize', () => {
+    describe('initialize', function () {
       let matrixTokenAddress;
 
-      beforeEach(async () => {
+      beforeEach(async function () {
         caller = manager;
         matrixTokenAddress = matrixToken.address;
       });
@@ -158,30 +158,30 @@ describe('contract TradeModule', () => {
         return tradeModule.connect(caller).initialize(matrixTokenAddress);
       }
 
-      it('should enable the Module on the MatrixToken', async () => {
+      it('should enable the Module on the MatrixToken', async function () {
         await initialize();
         const isModuleEnabled = await matrixToken.isInitializedModule(tradeModule.address);
         expect(isModuleEnabled).is.true;
       });
 
-      it('should revert when the caller is not the MatrixToken manager', async () => {
+      it('should revert when the caller is not the MatrixToken manager', async function () {
         caller = randomAccount;
         await expect(initialize()).revertedWith('M2');
       });
 
-      it('should revert when the module is not pending', async () => {
+      it('should revert when the module is not pending', async function () {
         await initialize();
         await expect(initialize()).revertedWith('M5b');
       });
 
-      it('should revert when the MatrixToken is not enabled on the controller', async () => {
+      it('should revert when the MatrixToken is not enabled on the controller', async function () {
         const newToken = await systemFixture.createRawMatrixToken([systemFixture.dai.address], [ethToWei(1)], [tradeModule.address], manager.address);
         matrixTokenAddress = newToken.address;
         await expect(initialize()).revertedWith('M5a');
       });
     });
 
-    describe('trade', () => {
+    describe('trade', function () {
       let dataBytes;
       let adapterName;
       let srcQuantity;
@@ -194,8 +194,8 @@ describe('contract TradeModule', () => {
       let destTokenQuantity;
       let matrixTokenAddress;
 
-      context('when trading a Default component on Kyber Legacy', async () => {
-        const initContracts = async () => {
+      context('when trading a Default component on Kyber Legacy', async function () {
+        const initContracts = async function () {
           // Fund Kyber reserve with destToken WETH
           await destToken.connect(owner).transfer(kyberNetworkProxyMock.address, ethToWei(1000));
 
@@ -222,7 +222,7 @@ describe('contract TradeModule', () => {
           await systemFixture.basicIssuanceModule.connect(manager).issue(matrixToken.address, issueQuantity, owner.address);
         };
 
-        const initVariables = () => {
+        function initVariables() {
           caller = manager;
           dataBytes = EMPTY_BYTES;
           srcQuantity = srcTokenQuantity;
@@ -231,32 +231,32 @@ describe('contract TradeModule', () => {
           destTokenAddress = destToken.address;
           matrixTokenAddress = matrixToken.address;
           minDestQuantity = destTokenQuantity.sub(ethToWei(0.5)); // Receive a min of 16 WETH for 0.5 WBTC
-        };
+        }
 
         async function trade() {
           return tradeModule.connect(caller).trade(matrixTokenAddress, adapterName, srcTokenAddress, srcQuantity, destTokenAddress, minDestQuantity, dataBytes);
         }
 
-        describe('when the module is not initialized', () => {
-          beforeEach(async () => {
+        describe('when the module is not initialized', function () {
+          beforeEach(async function () {
             notInitialized = false;
             await initContracts();
             initVariables();
           });
 
-          it('should revert when module is not initialized', async () => {
+          it('should revert when module is not initialized', async function () {
             await expect(trade()).revertedWith('M1b');
           });
         });
 
-        describe('when the module is initialized', () => {
-          beforeEach(async () => {
+        describe('when the module is initialized', function () {
+          beforeEach(async function () {
             notInitialized = true;
             await initContracts();
             initVariables();
           });
 
-          it('should transfer the correct components to the MatrixToken', async () => {
+          it('should transfer the correct components to the MatrixToken', async function () {
             const oldDestTokenBalance = await destToken.balanceOf(matrixToken.address);
             await trade();
             const newDestTokenBalance = await destToken.balanceOf(matrixToken.address);
@@ -265,7 +265,7 @@ describe('contract TradeModule', () => {
             expect(newDestTokenBalance.sub(oldDestTokenBalance)).eq(totalDestQuantity);
           });
 
-          it('should transfer the correct components from the MatrixToken', async () => {
+          it('should transfer the correct components from the MatrixToken', async function () {
             const oldSrcTokenBalance = await srcToken.balanceOf(matrixToken.address);
             await trade();
             const newSrcTokenBalance = await srcToken.balanceOf(matrixToken.address);
@@ -274,7 +274,7 @@ describe('contract TradeModule', () => {
             expect(oldSrcTokenBalance.sub(newSrcTokenBalance)).eq(totalSrcQuantity);
           });
 
-          it('should transfer the correct components to the exchange', async () => {
+          it('should transfer the correct components to the exchange', async function () {
             const oldSrcTokenBalance = await srcToken.balanceOf(kyberNetworkProxyMock.address);
             await trade();
             const newSrcTokenBalance = await srcToken.balanceOf(kyberNetworkProxyMock.address);
@@ -283,7 +283,7 @@ describe('contract TradeModule', () => {
             expect(newSrcTokenBalance.sub(oldSrcTokenBalance)).eq(totalSrcQuantity);
           });
 
-          it('should transfer the correct components from the exchange', async () => {
+          it('should transfer the correct components from the exchange', async function () {
             const oldDestTokenBalance = await destToken.balanceOf(kyberNetworkProxyMock.address);
             await trade();
             const newDestTokenBalance = await destToken.balanceOf(kyberNetworkProxyMock.address);
@@ -292,7 +292,7 @@ describe('contract TradeModule', () => {
             expect(oldDestTokenBalance.sub(newDestTokenBalance)).eq(totalDestQuantity);
           });
 
-          it('should update the positions on the MatrixToken correctly', async () => {
+          it('should update the positions on the MatrixToken correctly', async function () {
             const oldPositions = await matrixToken.getPositions();
             expect(oldPositions.length).eq(1);
             const oldFirstPosition = oldPositions[0];
@@ -313,15 +313,15 @@ describe('contract TradeModule', () => {
             expect(newSecondPosition.component).eq(destToken.address);
           });
 
-          describe('when there is a protocol fee charged', () => {
+          describe('when there is a protocol fee charged', function () {
             let feePercentage;
 
-            beforeEach(async () => {
+            beforeEach(async function () {
               feePercentage = ethToWei(0.05); // fee is 5%
               await systemFixture.controller.connect(owner).addFee(tradeModule.address, ZERO, feePercentage); // Fee type on trade function denoted as 0
             });
 
-            it('should transfer the correct components minus fee to the MatrixToken', async () => {
+            it('should transfer the correct components minus fee to the MatrixToken', async function () {
               const oldDestTokenBalance = await destToken.balanceOf(matrixToken.address);
               await trade();
               const newDestTokenBalance = await destToken.balanceOf(matrixToken.address);
@@ -331,7 +331,7 @@ describe('contract TradeModule', () => {
               expect(newDestTokenBalance.sub(oldDestTokenBalance)).eq(totalDestQuantity.sub(totalProtocolFee));
             });
 
-            it('should transfer the correct components from the MatrixToken to the exchange', async () => {
+            it('should transfer the correct components from the MatrixToken to the exchange', async function () {
               const oldSrcTokenBalance = await srcToken.balanceOf(matrixToken.address);
               await trade();
               const newSrcTokenBalance = await srcToken.balanceOf(matrixToken.address);
@@ -340,7 +340,7 @@ describe('contract TradeModule', () => {
               expect(oldSrcTokenBalance.sub(newSrcTokenBalance)).eq(totalSrcQuantity);
             });
 
-            it('should update the positions on the MatrixToken correctly', async () => {
+            it('should update the positions on the MatrixToken correctly', async function () {
               const oldPositions = await matrixToken.getPositions();
               expect(oldPositions.length).eq(1);
               const oldFirstPosition = oldPositions[0];
@@ -362,7 +362,7 @@ describe('contract TradeModule', () => {
               expect(newSecondPosition.unit).eq(destTokenQuantity.sub(unitProtocolFee));
             });
 
-            it('should emit the correct ExchangeComponent event', async () => {
+            it('should emit the correct ExchangeComponent event', async function () {
               const totalSrcQuantity = issueQuantity.mul(srcTokenQuantity).div(ethToWei(1));
               const totalDestQuantity = issueQuantity.mul(destTokenQuantity).div(ethToWei(1));
               const totalProtocolFee = feePercentage.mul(totalDestQuantity).div(ethToWei(1));
@@ -380,15 +380,15 @@ describe('contract TradeModule', () => {
                 );
             });
 
-            describe('when receive token is more than total position units tracked on MatrixToken', () => {
+            describe('when receive token is more than total position units tracked on MatrixToken', function () {
               let extraTokenQuantity;
 
-              beforeEach(async () => {
+              beforeEach(async function () {
                 extraTokenQuantity = ethToWei(1);
                 await destToken.connect(owner).transfer(matrixToken.address, extraTokenQuantity); // Transfer destination token to MatrixToken
               });
 
-              it('should transfer the correct components minus fee to the MatrixToken', async () => {
+              it('should transfer the correct components minus fee to the MatrixToken', async function () {
                 const oldDestTokenBalance = await destToken.balanceOf(matrixToken.address);
                 await trade();
                 const newDestTokenBalance = await destToken.balanceOf(matrixToken.address);
@@ -398,7 +398,7 @@ describe('contract TradeModule', () => {
                 expect(newDestTokenBalance.sub(oldDestTokenBalance)).eq(totalDestQuantity.sub(totalProtocolFee));
               });
 
-              it('should update the positions on the MatrixToken correctly', async () => {
+              it('should update the positions on the MatrixToken correctly', async function () {
                 const oldPositions = await matrixToken.getPositions();
                 expect(oldPositions.length).eq(1);
                 const oldFirstPosition = oldPositions[0];
@@ -420,15 +420,15 @@ describe('contract TradeModule', () => {
               });
             });
 
-            describe('when send token is more than total position units tracked on MatrixToken', () => {
+            describe('when send token is more than total position units tracked on MatrixToken', function () {
               let extraTokenQuantity;
 
-              beforeEach(async () => {
+              beforeEach(async function () {
                 extraTokenQuantity = ethToWei(1);
                 await srcToken.connect(owner).transfer(matrixToken.address, extraTokenQuantity); // Transfer source token to MatrixToken
               });
 
-              it('should transfer the correct components from the MatrixToken', async () => {
+              it('should transfer the correct components from the MatrixToken', async function () {
                 const oldSrcTokenBalance = await srcToken.balanceOf(matrixToken.address);
                 await trade();
                 const newSrcTokenBalance = await srcToken.balanceOf(matrixToken.address);
@@ -437,7 +437,7 @@ describe('contract TradeModule', () => {
                 expect(oldSrcTokenBalance.sub(newSrcTokenBalance)).eq(totalSrcQuantity);
               });
 
-              it('should update the positions on the MatrixToken correctly', async () => {
+              it('should update the positions on the MatrixToken correctly', async function () {
                 const oldPositions = await matrixToken.getPositions();
                 expect(oldPositions.length).eq(1);
                 const oldFirstPosition = oldPositions[0];
@@ -461,7 +461,7 @@ describe('contract TradeModule', () => {
             });
           });
 
-          it('should revert when MatrixToken is locked', async () => {
+          it('should revert when MatrixToken is locked', async function () {
             await systemFixture.controller.connect(owner).addModule(mockModule.address); // Add mock module to controller
             await matrixToken.connect(manager).addModule(mockModule.address); // Add new mock module to MatrixToken
             await matrixToken.connect(mockModule).initializeModule(); // initialize module
@@ -469,32 +469,32 @@ describe('contract TradeModule', () => {
             await expect(trade()).revertedWith('T13');
           });
 
-          it('should revert when the exchange is not valid', async () => {
+          it('should revert when the exchange is not valid', async function () {
             adapterName = 'INVALID_EXCHANGE';
             await expect(trade()).revertedWith('M0');
           });
 
-          it('should revert when quantity of token to sell is 0', async () => {
+          it('should revert when quantity of token to sell is 0', async function () {
             srcQuantity = ZERO;
             await expect(trade()).revertedWith('TM0a');
           });
 
-          it('should revert when quantity sold is more than total units available', async () => {
+          it('should revert when quantity sold is more than total units available', async function () {
             srcQuantity = wbtcUnits.add(1); // Set to 1 base unit more WBTC
             await expect(trade()).revertedWith('TM0b');
           });
 
-          it('should revert when slippage is greater than allowed', async () => {
+          it('should revert when slippage is greater than allowed', async function () {
             minDestQuantity = wbtcRate.add(1); // Set to 1 base unit above the exchange rate
             await expect(trade()).revertedWith('TM1');
           });
 
-          it('should revert when the caller is not the MatrixToken manager', async () => {
+          it('should revert when the caller is not the MatrixToken manager', async function () {
             caller = randomAccount;
             await expect(trade()).revertedWith('M1a');
           });
 
-          it('should revert when MatrixToken is not valid', async () => {
+          it('should revert when MatrixToken is not valid', async function () {
             const newToken = await systemFixture.createRawMatrixToken([systemFixture.weth.address], [ethToWei(1)], [tradeModule.address], manager.address);
             matrixTokenAddress = newToken.address;
             await expect(trade()).revertedWith('M1b');
@@ -502,8 +502,8 @@ describe('contract TradeModule', () => {
         });
       });
 
-      context('when trading a Default component on Kyber V1', async () => {
-        beforeEach(async () => {
+      context('when trading a Default component on Kyber V1', async function () {
+        beforeEach(async function () {
           await systemFixture.weth.connect(owner).approve(kyberV1Fixture.router.address, ethToWei(4400));
           await systemFixture.wbtc.connect(owner).approve(kyberV1Fixture.router.address, btcToWei(100));
           await systemFixture.dai.connect(owner).approve(kyberV1Fixture.router.address, ethToWei(1000000));
@@ -574,7 +574,7 @@ describe('contract TradeModule', () => {
           return tradeModule.connect(caller).trade(matrixTokenAddress, adapterName, srcTokenAddress, srcQuantity, destTokenAddress, minDestQuantity, dataBytes);
         }
 
-        it('should transfer the correct components to the MatrixToken', async () => {
+        it('should transfer the correct components to the MatrixToken', async function () {
           const poolsPath = [kyberV1Fixture.wethWbtcPool.address];
           const [, expectedReceiveQuantity] = await kyberV1Fixture.router.getAmountsOut(srcQuantity, poolsPath, [srcTokenAddress, destTokenAddress]);
 
@@ -585,7 +585,7 @@ describe('contract TradeModule', () => {
           expect(newDestTokenBalance.sub(oldDestTokenBalance)).eq(expectedReceiveQuantity);
         });
 
-        it('should transfer the correct components from the MatrixToken', async () => {
+        it('should transfer the correct components from the MatrixToken', async function () {
           const oldSrcTokenBalance = await srcToken.balanceOf(matrixToken.address);
           await trade();
           const newSrcTokenBalance = await srcToken.balanceOf(matrixToken.address);
@@ -594,7 +594,7 @@ describe('contract TradeModule', () => {
           expect(oldSrcTokenBalance.sub(newSrcTokenBalance)).eq(totalSrcQuantity);
         });
 
-        it('should update the positions on the MatrixToken correctly', async () => {
+        it('should update the positions on the MatrixToken correctly', async function () {
           const oldPositions = await matrixToken.getPositions();
           expect(oldPositions.length).eq(1);
 
@@ -613,14 +613,14 @@ describe('contract TradeModule', () => {
           expect(newFirstPosition.unit).eq(expectedReceiveQuantity);
         });
 
-        describe('when path is through multiple trading pairs', () => {
-          beforeEach(async () => {
+        describe('when path is through multiple trading pairs', function () {
+          beforeEach(async function () {
             destTokenAddress = systemFixture.dai.address;
             const tradePath = [srcTokenAddress, systemFixture.weth.address, destTokenAddress];
             dataBytes = ethers.utils.defaultAbiCoder.encode(['address[]'], [tradePath]);
           });
 
-          it('should transfer the correct components to the MatrixToken', async () => {
+          it('should transfer the correct components to the MatrixToken', async function () {
             const poolsPath = [kyberV1Fixture.wethWbtcPool.address, kyberV1Fixture.wethDaiPool.address];
             const [, , expectedReceiveQuantity] = await kyberV1Fixture.router.getAmountsOut(srcQuantity, poolsPath, [
               srcTokenAddress,
@@ -638,10 +638,10 @@ describe('contract TradeModule', () => {
         });
       });
 
-      context('when trading a Default component with a transfer fee on Kyber V1', async () => {
+      context('when trading a Default component with a transfer fee on Kyber V1', async function () {
         let kyberFeeWbtcPool;
 
-        beforeEach(async () => {
+        beforeEach(async function () {
           tokenWithFee = await deployContract('Erc20WithFeeMock', ['Erc20WithFeeMock', 'TEST', 10], owner);
           await tokenWithFee.mint(owner.address, ethToWei(10000));
 
@@ -707,7 +707,7 @@ describe('contract TradeModule', () => {
           return tradeModule.connect(caller).trade(matrixTokenAddress, adapterName, srcTokenAddress, srcQuantity, destTokenAddress, minDestQuantity, dataBytes);
         }
 
-        it('should transfer the correct components to the MatrixToken', async () => {
+        it('should transfer the correct components to the MatrixToken', async function () {
           const [, expectedReceiveQuantity] = await kyberV1Fixture.router.getAmountsOut(
             srcQuantity.mul(90).div(100), // Sub transfer fee
             [kyberFeeWbtcPool.address],
@@ -723,7 +723,7 @@ describe('contract TradeModule', () => {
           expect(newDestTokenBalance.sub(oldDestTokenBalance)).lte(expectedReceiveQuantity);
         });
 
-        it('should transfer the correct components from the MatrixToken', async () => {
+        it('should transfer the correct components from the MatrixToken', async function () {
           const oldSrcTokenBalance = await tokenWithFee.balanceOf(matrixToken.address);
           await trade();
           const newSrcTokenBalance = await tokenWithFee.balanceOf(matrixToken.address);
@@ -732,7 +732,7 @@ describe('contract TradeModule', () => {
           expect(oldSrcTokenBalance.sub(newSrcTokenBalance)).eq(totalSrcQuantity);
         });
 
-        it('should update the positions on the MatrixToken correctly', async () => {
+        it('should update the positions on the MatrixToken correctly', async function () {
           const oldPositions = await matrixToken.getPositions();
           expect(oldPositions.length).eq(1);
 
@@ -755,10 +755,10 @@ describe('contract TradeModule', () => {
           expect(newSecondPosition.unit).lte(expectedReceiveQuantity);
         });
 
-        describe('when path is through multiple trading pairs', () => {
+        describe('when path is through multiple trading pairs', function () {
           let kyberWbtcDaiPool;
 
-          beforeEach(async () => {
+          beforeEach(async function () {
             await systemFixture.wbtc.connect(owner).approve(kyberV1Fixture.router.address, btcToWei(1000));
             await systemFixture.dai.connect(owner).approve(kyberV1Fixture.router.address, ethToWei(1000000));
 
@@ -789,7 +789,7 @@ describe('contract TradeModule', () => {
             dataBytes = ethers.utils.defaultAbiCoder.encode(['address[]'], [tradePath]);
           });
 
-          it('should transfer the correct components to the MatrixToken', async () => {
+          it('should transfer the correct components to the MatrixToken', async function () {
             const [, , expectedReceiveQuantity] = await kyberV1Fixture.router.getAmountsOut(
               srcQuantity.mul(90).div(100), // Sub transfer fee
               [kyberFeeWbtcPool.address, kyberWbtcDaiPool.address],
@@ -805,8 +805,8 @@ describe('contract TradeModule', () => {
         });
       });
 
-      context('when trading a Default component on Kyber V1 version 2 adapter', async () => {
-        beforeEach(async () => {
+      context('when trading a Default component on Kyber V1 version 2 adapter', async function () {
+        beforeEach(async function () {
           await systemFixture.weth.connect(owner).approve(kyberV1Fixture.router.address, ethToWei(10000));
           await systemFixture.wbtc.connect(owner).approve(kyberV1Fixture.router.address, btcToWei(100));
           await systemFixture.dai.connect(owner).approve(kyberV1Fixture.router.address, ethToWei(1000000));
@@ -868,8 +868,8 @@ describe('contract TradeModule', () => {
           return tradeModule.connect(caller).trade(matrixTokenAddress, adapterName, srcTokenAddress, srcQuantity, destTokenAddress, minDestQuantity, dataBytes);
         }
 
-        describe('when path is through one pair and swaps exact tokens for tokens', () => {
-          beforeEach(async () => {
+        describe('when path is through one pair and swaps exact tokens for tokens', function () {
+          beforeEach(async function () {
             const shouldSwapExactTokenForToken = true;
             const tradePath = [srcToken.address, destToken.address];
 
@@ -883,7 +883,7 @@ describe('contract TradeModule', () => {
             dataBytes = await kyberV1ExchangeAdapterV2.getExchangeData(tradePath, shouldSwapExactTokenForToken);
           });
 
-          it('should transfer the correct components to the MatrixToken', async () => {
+          it('should transfer the correct components to the MatrixToken', async function () {
             const poolsPath = [kyberV1Fixture.wethWbtcPool.address];
             const [, expectedReceiveQuantity] = await kyberV1Fixture.router.getAmountsOut(srcQuantity, poolsPath, [srcTokenAddress, destTokenAddress]);
 
@@ -894,7 +894,7 @@ describe('contract TradeModule', () => {
             expect(newDestTokenBalance.sub(oldDestTokenBalance)).eq(expectedReceiveQuantity);
           });
 
-          it('should transfer the correct components from the MatrixToken', async () => {
+          it('should transfer the correct components from the MatrixToken', async function () {
             const oldSrcTokenBalance = await srcToken.balanceOf(matrixToken.address);
             await trade();
             const newSrcTokenBalance = await srcToken.balanceOf(matrixToken.address);
@@ -903,7 +903,7 @@ describe('contract TradeModule', () => {
             expect(oldSrcTokenBalance.sub(newSrcTokenBalance)).eq(totalSrcQuantity);
           });
 
-          it('should update the positions on the MatrixToken correctly', async () => {
+          it('should update the positions on the MatrixToken correctly', async function () {
             const poolsPath = [kyberV1Fixture.wethWbtcPool.address];
             const [, expectedReceiveQuantity] = await kyberV1Fixture.router.getAmountsOut(srcQuantity, poolsPath, [srcTokenAddress, destTokenAddress]);
 
@@ -920,8 +920,8 @@ describe('contract TradeModule', () => {
           });
         });
 
-        describe('when path is through one pair and swaps for exact tokens', () => {
-          beforeEach(async () => {
+        describe('when path is through one pair and swaps for exact tokens', function () {
+          beforeEach(async function () {
             const shouldSwapExactTokenForToken = false;
             const tradePath = [srcToken.address, destToken.address];
 
@@ -935,7 +935,7 @@ describe('contract TradeModule', () => {
             dataBytes = await kyberV1ExchangeAdapterV2.getExchangeData(tradePath, shouldSwapExactTokenForToken);
           });
 
-          it('should transfer the correct components to the MatrixToken', async () => {
+          it('should transfer the correct components to the MatrixToken', async function () {
             const poolsPath = [kyberV1Fixture.wethWbtcPool.address];
             const [notionalSendQuantity] = await kyberV1Fixture.router.getAmountsIn(minDestQuantity, poolsPath, [srcTokenAddress, destTokenAddress]);
 
@@ -947,8 +947,8 @@ describe('contract TradeModule', () => {
           });
         });
 
-        describe('when path is through multiple trading pairs and swaps exact tokens for tokens', () => {
-          beforeEach(async () => {
+        describe('when path is through multiple trading pairs and swaps exact tokens for tokens', function () {
+          beforeEach(async function () {
             const shouldSwapExactTokenForToken = true;
             const tradePath = [srcToken.address, systemFixture.weth.address, systemFixture.dai.address];
 
@@ -962,7 +962,7 @@ describe('contract TradeModule', () => {
             dataBytes = await kyberV1ExchangeAdapterV2.getExchangeData(tradePath, shouldSwapExactTokenForToken);
           });
 
-          it('should transfer the correct components to the MatrixToken', async () => {
+          it('should transfer the correct components to the MatrixToken', async function () {
             const poolsPath = [kyberV1Fixture.wethWbtcPool.address, kyberV1Fixture.wethDaiPool.address];
             const [, , expectedReceiveQuantity] = await kyberV1Fixture.router.getAmountsOut(srcQuantity, poolsPath, [
               srcTokenAddress,
@@ -978,8 +978,8 @@ describe('contract TradeModule', () => {
           });
         });
 
-        describe('when path is through multiple trading pairs and swaps for exact tokens', () => {
-          beforeEach(async () => {
+        describe('when path is through multiple trading pairs and swaps for exact tokens', function () {
+          beforeEach(async function () {
             const shouldSwapExactTokenForToken = false;
             const tradePath = [srcToken.address, systemFixture.weth.address, systemFixture.dai.address];
 
@@ -993,7 +993,7 @@ describe('contract TradeModule', () => {
             dataBytes = await kyberV1ExchangeAdapterV2.getExchangeData(tradePath, shouldSwapExactTokenForToken);
           });
 
-          it('should transfer the correct components to the MatrixToken', async () => {
+          it('should transfer the correct components to the MatrixToken', async function () {
             const poolsPath = [kyberV1Fixture.wethWbtcPool.address, kyberV1Fixture.wethDaiPool.address];
             const [notionalSendQuantity] = await kyberV1Fixture.router.getAmountsIn(minDestQuantity, poolsPath, [
               srcTokenAddress,
@@ -1010,7 +1010,7 @@ describe('contract TradeModule', () => {
             expect(oldSrcTokenBalance.sub(newSrcTokenBalance)).eq(notionalSendQuantity);
           });
 
-          it('should update the positions on the MatrixToken correctly', async () => {
+          it('should update the positions on the MatrixToken correctly', async function () {
             const poolsPath = [kyberV1Fixture.wethWbtcPool.address, kyberV1Fixture.wethDaiPool.address];
             const [sendQuantity] = await kyberV1Fixture.router.getAmountsIn(minDestQuantity, poolsPath, [
               srcTokenAddress,
@@ -1040,8 +1040,8 @@ describe('contract TradeModule', () => {
         });
       });
 
-      context('when trading a Default component on One Inch', async () => {
-        beforeEach(async () => {
+      context('when trading a Default component on One Inch', async function () {
+        beforeEach(async function () {
           // Add MatrixToken as token sender / recipient
           await oneInchExchangeMock.connect(owner).addMatrixTokenAddress(matrixToken.address);
 
@@ -1070,7 +1070,7 @@ describe('contract TradeModule', () => {
           await systemFixture.basicIssuanceModule.issue(matrixToken.address, issueQuantity, owner.address);
         });
 
-        beforeEach(() => {
+        beforeEach(function () {
           caller = manager;
           adapterName = oneInchAdapterName;
           srcTokenAddress = srcToken.address;
@@ -1098,7 +1098,7 @@ describe('contract TradeModule', () => {
           return tradeModule.connect(caller).trade(matrixTokenAddress, adapterName, srcTokenAddress, srcQuantity, destTokenAddress, minDestQuantity, dataBytes);
         }
 
-        it('should transfer the correct components to the MatrixToken', async () => {
+        it('should transfer the correct components to the MatrixToken', async function () {
           const oldDestTokenBalance = await destToken.balanceOf(matrixToken.address);
           await trade();
           const newDestTokenBalance = await destToken.balanceOf(matrixToken.address);
@@ -1107,7 +1107,7 @@ describe('contract TradeModule', () => {
           expect(newDestTokenBalance.sub(oldDestTokenBalance)).eq(totalDestQuantity);
         });
 
-        it('should transfer the correct components from the MatrixToken', async () => {
+        it('should transfer the correct components from the MatrixToken', async function () {
           const oldSrcTokenBalance = await srcToken.balanceOf(matrixToken.address);
           await trade();
           const newSrcTokenBalance = await srcToken.balanceOf(matrixToken.address);
@@ -1116,7 +1116,7 @@ describe('contract TradeModule', () => {
           expect(oldSrcTokenBalance.sub(newSrcTokenBalance)).eq(totalSrcQuantity);
         });
 
-        it('should transfer the correct components to the exchange', async () => {
+        it('should transfer the correct components to the exchange', async function () {
           const oldSrcTokenBalance = await srcToken.balanceOf(oneInchExchangeMock.address);
           await trade();
           const newSrcTokenBalance = await srcToken.balanceOf(oneInchExchangeMock.address);
@@ -1125,7 +1125,7 @@ describe('contract TradeModule', () => {
           expect(newSrcTokenBalance.sub(oldSrcTokenBalance)).eq(totalSrcQuantity);
         });
 
-        it('should transfer the correct components from the exchange', async () => {
+        it('should transfer the correct components from the exchange', async function () {
           const oldDestTokenBalance = await destToken.balanceOf(oneInchExchangeMock.address);
           await trade();
           const newDestTokenBalance = await destToken.balanceOf(oneInchExchangeMock.address);
@@ -1134,7 +1134,7 @@ describe('contract TradeModule', () => {
           expect(oldDestTokenBalance.sub(newDestTokenBalance)).eq(totalDestQuantity);
         });
 
-        it('should update the positions on the MatrixToken correctly', async () => {
+        it('should update the positions on the MatrixToken correctly', async function () {
           const oldPositions = await matrixToken.getPositions();
           expect(oldPositions.length).eq(1);
 
@@ -1150,13 +1150,13 @@ describe('contract TradeModule', () => {
           expect(newFirstPosition.module).eq(ZERO_ADDRESS);
         });
 
-        it('should revert when function signature does not match one inch', async () => {
+        it('should revert when function signature does not match one inch', async function () {
           // Encode random function
           dataBytes = oneInchExchangeMock.interface.encodeFunctionData('addMatrixTokenAddress', [ZERO_ADDRESS]);
           await expect(trade()).revertedWith('OIEA0a');
         });
 
-        it('should revert when send token does not match calldata', async () => {
+        it('should revert when send token does not match calldata', async function () {
           dataBytes = oneInchExchangeMock.interface.encodeFunctionData('swap', [
             await getRandomAddress(), // Send token
             destToken.address, // Receive token
@@ -1173,7 +1173,7 @@ describe('contract TradeModule', () => {
           await expect(trade()).revertedWith('OIEA0b');
         });
 
-        it('should revert when receive token does not match calldata', async () => {
+        it('should revert when receive token does not match calldata', async function () {
           dataBytes = oneInchExchangeMock.interface.encodeFunctionData('swap', [
             srcToken.address, // Send token
             await getRandomAddress(), // Receive token
@@ -1190,7 +1190,7 @@ describe('contract TradeModule', () => {
           await expect(trade()).revertedWith('OIEA0c');
         });
 
-        it('should revert when send token quantity does not match calldata', async () => {
+        it('should revert when send token quantity does not match calldata', async function () {
           dataBytes = oneInchExchangeMock.interface.encodeFunctionData('swap', [
             srcToken.address, // Send token
             destToken.address, // Receive token
@@ -1207,7 +1207,7 @@ describe('contract TradeModule', () => {
           await expect(trade()).revertedWith('OIEA0d');
         });
 
-        it('should revert when min receive token quantity does not match calldata', async () => {
+        it('should revert when min receive token quantity does not match calldata', async function () {
           dataBytes = oneInchExchangeMock.interface.encodeFunctionData('swap', [
             srcToken.address, // Send token
             destToken.address, // Receive token
@@ -1225,8 +1225,8 @@ describe('contract TradeModule', () => {
         });
       });
 
-      context('when trading a Default component on Uniswap', async () => {
-        beforeEach(async () => {
+      context('when trading a Default component on Uniswap', async function () {
+        beforeEach(async function () {
           await systemFixture.weth.connect(owner).approve(uniswapFixture.router.address, ethToWei(3400));
           await systemFixture.wbtc.connect(owner).approve(uniswapFixture.router.address, btcToWei(100));
 
@@ -1274,7 +1274,7 @@ describe('contract TradeModule', () => {
           return tradeModule.connect(caller).trade(matrixTokenAddress, adapterName, srcTokenAddress, srcQuantity, destTokenAddress, minDestQuantity, dataBytes);
         }
 
-        it('should transfer the correct components to the MatrixToken', async () => {
+        it('should transfer the correct components to the MatrixToken', async function () {
           const [, expectedReceiveQuantity] = await uniswapFixture.router.getAmountsOut(srcQuantity, [srcTokenAddress, destTokenAddress]);
 
           const oldDestTokenBalance = await destToken.balanceOf(matrixToken.address);
@@ -1284,7 +1284,7 @@ describe('contract TradeModule', () => {
           expect(newDestTokenBalance.sub(oldDestTokenBalance)).eq(expectedReceiveQuantity);
         });
 
-        it('should transfer the correct components from the MatrixToken', async () => {
+        it('should transfer the correct components from the MatrixToken', async function () {
           const oldSrcTokenBalance = await srcToken.balanceOf(matrixToken.address);
           await trade();
           const newSrcTokenBalance = await srcToken.balanceOf(matrixToken.address);
@@ -1293,7 +1293,7 @@ describe('contract TradeModule', () => {
           expect(oldSrcTokenBalance.sub(newSrcTokenBalance)).eq(totalSrcQuantity);
         });
 
-        it('should update the positions on the MatrixToken correctly', async () => {
+        it('should update the positions on the MatrixToken correctly', async function () {
           const oldPositions = await matrixToken.getPositions();
           expect(oldPositions.length).eq(1);
 
@@ -1311,8 +1311,8 @@ describe('contract TradeModule', () => {
           expect(newFirstPosition.unit).eq(expectedReceiveQuantity);
         });
 
-        describe('when path is through multiple trading pairs', () => {
-          beforeEach(async () => {
+        describe('when path is through multiple trading pairs', function () {
+          beforeEach(async function () {
             await systemFixture.weth.connect(owner).approve(uniswapFixture.router.address, ethToWei(1000));
             await systemFixture.dai.connect(owner).approve(uniswapFixture.router.address, ethToWei(1000000));
 
@@ -1332,7 +1332,7 @@ describe('contract TradeModule', () => {
             dataBytes = ethers.utils.defaultAbiCoder.encode(['address[]'], [tradePath]);
           });
 
-          it('should transfer the correct components to the MatrixToken', async () => {
+          it('should transfer the correct components to the MatrixToken', async function () {
             const [, , expectedReceiveQuantity] = await uniswapFixture.router.getAmountsOut(srcQuantity, [
               srcTokenAddress,
               systemFixture.weth.address,
@@ -1349,8 +1349,8 @@ describe('contract TradeModule', () => {
         });
       });
 
-      context('when trading a Default component with a transfer fee on Uniswap', async () => {
-        beforeEach(async () => {
+      context('when trading a Default component with a transfer fee on Uniswap', async function () {
+        beforeEach(async function () {
           tokenWithFee = await deployContract('Erc20WithFeeMock', ['Erc20WithFeeMock', 'TEST', 10], owner);
           await tokenWithFee.mint(owner.address, ethToWei(10000));
 
@@ -1407,7 +1407,7 @@ describe('contract TradeModule', () => {
           return tradeModule.connect(caller).trade(matrixTokenAddress, adapterName, srcTokenAddress, srcQuantity, destTokenAddress, minDestQuantity, dataBytes);
         }
 
-        it('should transfer the correct components to the MatrixToken', async () => {
+        it('should transfer the correct components to the MatrixToken', async function () {
           const [, expectedReceiveQuantity] = await uniswapFixture.router.getAmountsOut(
             srcQuantity.mul(90).div(100), // Sub transfer fee
             [srcTokenAddress, destTokenAddress]
@@ -1420,7 +1420,7 @@ describe('contract TradeModule', () => {
           expect(newDestTokenBalance.sub(oldDestTokenBalance)).eq(expectedReceiveQuantity);
         });
 
-        it('should transfer the correct components from the MatrixToken', async () => {
+        it('should transfer the correct components from the MatrixToken', async function () {
           const oldSrcTokenBalance = await tokenWithFee.balanceOf(matrixToken.address);
           await trade();
           const newSrcTokenBalance = await tokenWithFee.balanceOf(matrixToken.address);
@@ -1429,7 +1429,7 @@ describe('contract TradeModule', () => {
           expect(oldSrcTokenBalance.sub(newSrcTokenBalance)).eq(totalSrcQuantity);
         });
 
-        it('should update the positions on the MatrixToken correctly', async () => {
+        it('should update the positions on the MatrixToken correctly', async function () {
           const oldPositions = await matrixToken.getPositions();
           expect(oldPositions.length).eq(1);
 
@@ -1449,8 +1449,8 @@ describe('contract TradeModule', () => {
           expect(newSecondPosition.unit).eq(expectedReceiveQuantity);
         });
 
-        describe('when path is through multiple trading pairs', () => {
-          beforeEach(async () => {
+        describe('when path is through multiple trading pairs', function () {
+          beforeEach(async function () {
             await systemFixture.wbtc.connect(owner).approve(uniswapFixture.router.address, btcToWei(1000));
             await systemFixture.dai.connect(owner).approve(uniswapFixture.router.address, ethToWei(1000000));
 
@@ -1470,7 +1470,7 @@ describe('contract TradeModule', () => {
             dataBytes = ethers.utils.defaultAbiCoder.encode(['address[]'], [tradePath]);
           });
 
-          it('should transfer the correct components to the MatrixToken', async () => {
+          it('should transfer the correct components to the MatrixToken', async function () {
             const [, , expectedReceiveQuantity] = await uniswapFixture.router.getAmountsOut(
               srcQuantity.mul(90).div(100), // Sub transfer fee
               [srcTokenAddress, systemFixture.wbtc.address, destTokenAddress]
@@ -1485,8 +1485,8 @@ describe('contract TradeModule', () => {
         });
       });
 
-      context('when trading a Default component on Uniswap version 2 adapter', async () => {
-        beforeEach(async () => {
+      context('when trading a Default component on Uniswap version 2 adapter', async function () {
+        beforeEach(async function () {
           await systemFixture.weth.connect(owner).approve(uniswapFixture.router.address, ethToWei(10000));
           await systemFixture.wbtc.connect(owner).approve(uniswapFixture.router.address, btcToWei(100));
 
@@ -1538,8 +1538,8 @@ describe('contract TradeModule', () => {
           return tradeModule.connect(caller).trade(matrixTokenAddress, adapterName, srcTokenAddress, srcQuantity, destTokenAddress, minDestQuantity, dataBytes);
         }
 
-        describe('when path is through one pair and swaps exact tokens for tokens', () => {
-          beforeEach(async () => {
+        describe('when path is through one pair and swaps exact tokens for tokens', function () {
+          beforeEach(async function () {
             const shouldSwapExactTokenForToken = true;
             const tradePath = [srcToken.address, destToken.address];
 
@@ -1553,7 +1553,7 @@ describe('contract TradeModule', () => {
             dataBytes = await uniswapV2ExchangeAdapterV2.getExchangeData(tradePath, shouldSwapExactTokenForToken);
           });
 
-          it('should transfer the correct components to the MatrixToken', async () => {
+          it('should transfer the correct components to the MatrixToken', async function () {
             const [, expectedReceiveQuantity] = await uniswapFixture.router.getAmountsOut(srcQuantity, [srcTokenAddress, destTokenAddress]);
 
             const oldDestTokenBalance = await destToken.balanceOf(matrixToken.address);
@@ -1563,7 +1563,7 @@ describe('contract TradeModule', () => {
             expect(newDestTokenBalance.sub(oldDestTokenBalance)).eq(expectedReceiveQuantity);
           });
 
-          it('should transfer the correct components from the MatrixToken', async () => {
+          it('should transfer the correct components from the MatrixToken', async function () {
             const oldSrcTokenBalance = await srcToken.balanceOf(matrixToken.address);
             await trade();
             const newSrcTokenBalance = await srcToken.balanceOf(matrixToken.address);
@@ -1572,7 +1572,7 @@ describe('contract TradeModule', () => {
             expect(oldSrcTokenBalance.sub(newSrcTokenBalance)).eq(totalSrcQuantity);
           });
 
-          it('should update the positions on the MatrixToken correctly', async () => {
+          it('should update the positions on the MatrixToken correctly', async function () {
             const [, expectedReceiveQuantity] = await uniswapFixture.router.getAmountsOut(srcQuantity, [srcTokenAddress, destTokenAddress]);
 
             const oldPositions = await matrixToken.getPositions();
@@ -1588,8 +1588,8 @@ describe('contract TradeModule', () => {
           });
         });
 
-        describe('when path is through one pair and swaps for exact tokens', () => {
-          beforeEach(async () => {
+        describe('when path is through one pair and swaps for exact tokens', function () {
+          beforeEach(async function () {
             const shouldSwapExactTokenForToken = false;
             const tradePath = [srcToken.address, destToken.address];
 
@@ -1603,7 +1603,7 @@ describe('contract TradeModule', () => {
             dataBytes = await uniswapV2ExchangeAdapterV2.getExchangeData(tradePath, shouldSwapExactTokenForToken);
           });
 
-          it('should transfer the correct components to the MatrixToken', async () => {
+          it('should transfer the correct components to the MatrixToken', async function () {
             // In this case, this is the exact destination quantity
             const [notionalSendQuantity] = await uniswapFixture.router.getAmountsIn(minDestQuantity, [srcTokenAddress, destTokenAddress]);
 
@@ -1615,8 +1615,8 @@ describe('contract TradeModule', () => {
           });
         });
 
-        describe('when path is through multiple trading pairs and swaps exact tokens for tokens', () => {
-          beforeEach(async () => {
+        describe('when path is through multiple trading pairs and swaps exact tokens for tokens', function () {
+          beforeEach(async function () {
             const shouldSwapExactTokenForToken = true;
             const tradePath = [srcToken.address, systemFixture.weth.address, systemFixture.dai.address];
 
@@ -1630,7 +1630,7 @@ describe('contract TradeModule', () => {
             dataBytes = await uniswapV2ExchangeAdapterV2.getExchangeData(tradePath, shouldSwapExactTokenForToken);
           });
 
-          it('should transfer the correct components to the MatrixToken', async () => {
+          it('should transfer the correct components to the MatrixToken', async function () {
             const [, , expectedReceiveQuantity] = await uniswapFixture.router.getAmountsOut(srcQuantity, [
               srcTokenAddress,
               systemFixture.weth.address,
@@ -1645,8 +1645,8 @@ describe('contract TradeModule', () => {
           });
         });
 
-        describe('when path is through multiple trading pairs and swaps for exact tokens', () => {
-          beforeEach(async () => {
+        describe('when path is through multiple trading pairs and swaps for exact tokens', function () {
+          beforeEach(async function () {
             const shouldSwapExactTokenForToken = false;
             const tradePath = [srcToken.address, systemFixture.weth.address, systemFixture.dai.address];
 
@@ -1660,7 +1660,7 @@ describe('contract TradeModule', () => {
             dataBytes = await uniswapV2ExchangeAdapterV2.getExchangeData(tradePath, shouldSwapExactTokenForToken);
           });
 
-          it('should transfer the correct components to the MatrixToken', async () => {
+          it('should transfer the correct components to the MatrixToken', async function () {
             // In this case, this is the exact destination quantity
             const [notionalSendQuantity] = await uniswapFixture.router.getAmountsIn(minDestQuantity, [
               srcTokenAddress,
@@ -1677,7 +1677,7 @@ describe('contract TradeModule', () => {
             expect(oldSrcTokenBalance.sub(newSrcTokenBalance)).eq(notionalSendQuantity);
           });
 
-          it('should update the positions on the MatrixToken correctly', async () => {
+          it('should update the positions on the MatrixToken correctly', async function () {
             // In this case, this is the exact destination quantity
             const [sendQuantity] = await uniswapFixture.router.getAmountsIn(minDestQuantity, [srcTokenAddress, systemFixture.weth.address, destTokenAddress]);
 
@@ -1704,10 +1704,10 @@ describe('contract TradeModule', () => {
       });
     });
 
-    describe('removeModule', () => {
+    describe('removeModule', function () {
       let tradeModuleAddress;
 
-      beforeEach(async () => {
+      beforeEach(async function () {
         await tradeModule.connect(manager).initialize(matrixToken.address);
         tradeModuleAddress = tradeModule.address;
       });
@@ -1716,7 +1716,7 @@ describe('contract TradeModule', () => {
         return matrixToken.connect(manager).removeModule(tradeModuleAddress);
       }
 
-      it('should remove the module', async () => {
+      it('should remove the module', async function () {
         await removeModule();
         const isModuleEnabled = await matrixToken.isInitializedModule(tradeModuleAddress);
         expect(isModuleEnabled).is.false;

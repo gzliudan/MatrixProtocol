@@ -11,7 +11,7 @@ const { deployContract } = require('../../../helpers/deploy');
 const { getSigners, getRandomAddress } = require('../../../helpers/accountUtil');
 const { snapshotBlockchain, revertBlockchain } = require('../../../helpers/evmUtil.js');
 
-describe('contract ChainlinkSerialOracleAdapter', () => {
+describe('contract ChainlinkSerialOracleAdapter', function () {
   const [owner] = getSigners();
   const price1 = BigNumber.from(1000);
   const price2 = BigNumber.from(10);
@@ -29,7 +29,7 @@ describe('contract ChainlinkSerialOracleAdapter', () => {
   let chainlinkSerialOracleAdapter;
 
   let snapshotId;
-  before(async () => {
+  before(async function () {
     BTC = await getRandomAddress();
     ETH = await getRandomAddress();
     USD = await getRandomAddress();
@@ -40,25 +40,25 @@ describe('contract ChainlinkSerialOracleAdapter', () => {
     chainlinkSerialOracleAdapter = await deployContract('ChainlinkSerialOracleAdapter', [chainlinkFeedRegistryMock.address, intermediaryAsset], owner);
   });
 
-  after(async () => {
+  after(async function () {
     await revertBlockchain(snapshotId);
   });
 
-  describe('getFeedRegistry', () => {
-    it('should return the correct registry address', async () => {
+  describe('getFeedRegistry', function () {
+    it('should return the correct registry address', async function () {
       expect(await chainlinkSerialOracleAdapter.getFeedRegistry()).eq(chainlinkFeedRegistryMock.address);
     });
   });
 
-  describe('getIntermediaryAsset', () => {
-    it('should return the correct intermediary asset', async () => {
+  describe('getIntermediaryAsset', function () {
+    it('should return the correct intermediary asset', async function () {
       expect(await chainlinkSerialOracleAdapter.getIntermediaryAsset()).eq(intermediaryAsset);
     });
   });
 
-  describe('getPrice', () => {
+  describe('getPrice', function () {
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
 
       baseAsset = BTC;
@@ -67,7 +67,7 @@ describe('contract ChainlinkSerialOracleAdapter', () => {
       decimals2 = 18;
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
@@ -83,7 +83,7 @@ describe('contract ChainlinkSerialOracleAdapter', () => {
 
     for (let i = 0; i <= 18; i++) {
       for (let j = 0; j <= 18; j++) {
-        it(`when decimals1 is ${i} and decimals2 is ${j}`, async () => {
+        it(`when decimals1 is ${i} and decimals2 is ${j}`, async function () {
           decimals1 = i;
           decimals2 = j;
           const { found, price } = await getPrice();
@@ -93,13 +93,13 @@ describe('contract ChainlinkSerialOracleAdapter', () => {
       }
     }
 
-    it(`should return false when base asset is wrong`, async () => {
+    it(`should return false when base asset is wrong`, async function () {
       baseAsset = await getRandomAddress();
       const { found } = await getPrice();
       expect(found).is.true;
     });
 
-    it(`should return false when quota asset is wrong`, async () => {
+    it(`should return false when quota asset is wrong`, async function () {
       quotaAsset = await getRandomAddress();
       const { found } = await getPrice();
       expect(found).is.true;

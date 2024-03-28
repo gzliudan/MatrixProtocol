@@ -11,7 +11,7 @@ const { deployContract } = require('../../../helpers/deploy');
 const { getSigners, getRandomAddress } = require('../../../helpers/accountUtil');
 const { snapshotBlockchain, revertBlockchain } = require('../../../helpers/evmUtil.js');
 
-describe('contract ChainlinkSerialOracle', () => {
+describe('contract ChainlinkSerialOracle', function () {
   const [owner] = getSigners();
   const name = 'BTC/ETH/USD';
   const price1 = BigNumber.from(1000);
@@ -27,17 +27,17 @@ describe('contract ChainlinkSerialOracle', () => {
   let oracle;
 
   let snapshotId;
-  before(async () => {
+  before(async function () {
     snapshotId = await snapshotBlockchain();
   });
 
-  after(async () => {
+  after(async function () {
     await revertBlockchain(snapshotId);
   });
 
-  describe('constructor', () => {
+  describe('constructor', function () {
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
 
       decimals1 = 18;
@@ -49,7 +49,7 @@ describe('contract ChainlinkSerialOracle', () => {
       priceFeed2Address = priceFeedMock2.address;
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
@@ -57,42 +57,42 @@ describe('contract ChainlinkSerialOracle', () => {
       return deployContract('ChainlinkSerialOracle', [name, priceFeed1Address, priceFeed2Address], owner);
     }
 
-    it('should reverted when priceFeed1 is invalid', async () => {
+    it('should reverted when priceFeed1 is invalid', async function () {
       priceFeed1Address = await getRandomAddress();
       await expect(createOracle()).reverted;
     });
 
-    it('should reverted when priceFeed1 is invalid', async () => {
+    it('should reverted when priceFeed1 is invalid', async function () {
       priceFeed2Address = await getRandomAddress();
       await expect(createOracle()).reverted;
     });
 
-    it('should return the correct name', async () => {
+    it('should return the correct name', async function () {
       oracle = await createOracle();
       const result = await oracle.getName();
       expect(result).eq(name);
     });
 
-    it('should return the correct getPriceFeed1', async () => {
+    it('should return the correct getPriceFeed1', async function () {
       oracle = await createOracle();
       const priceFeed1 = await oracle.getPriceFeed1();
       expect(priceFeed1).eq(priceFeed1Address);
     });
 
-    it('should return the correct getPriceFeed2', async () => {
+    it('should return the correct getPriceFeed2', async function () {
       oracle = await createOracle();
       const priceFeed2 = await oracle.getPriceFeed2();
       expect(priceFeed2).eq(priceFeed2Address);
     });
   });
 
-  describe('read', () => {
+  describe('read', function () {
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
@@ -107,7 +107,7 @@ describe('contract ChainlinkSerialOracle', () => {
 
     for (let i = 0; i <= 18; i++) {
       for (let j = 0; j <= 18; j++) {
-        it(`when decimals1 is ${i} and decimals2 is ${j}`, async () => {
+        it(`when decimals1 is ${i} and decimals2 is ${j}`, async function () {
           decimals1 = i;
           decimals2 = j;
           const result = await read();

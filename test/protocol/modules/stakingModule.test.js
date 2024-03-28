@@ -15,7 +15,7 @@ const { ethToWei, btcToWei } = require('../../helpers/unitUtil');
 const { preciseMul } = require('../../helpers/mathUtil');
 const { snapshotBlockchain, revertBlockchain } = require('../../helpers/evmUtil.js');
 
-describe('contract StakingModule', async () => {
+describe('contract StakingModule', async function () {
   const [owner, protocolFeeRecipient, dummyIssuanceModule, randomAccount] = getSigners();
   const systemFixture = new SystemFixture(owner, protocolFeeRecipient);
   const STAKE_NAME1 = 'WETH_STAKER1';
@@ -27,7 +27,7 @@ describe('contract StakingModule', async () => {
   let stakingAdapterMock2; // StakingAdapterMock
 
   let rootSnapshotId;
-  before(async () => {
+  before(async function () {
     rootSnapshotId = await snapshotBlockchain();
 
     await systemFixture.initAll();
@@ -52,17 +52,17 @@ describe('contract StakingModule', async () => {
     await matrixToken.connect(dummyIssuanceModule).initializeModule();
   });
 
-  after(async () => {
+  after(async function () {
     await revertBlockchain(rootSnapshotId);
   });
 
-  describe('initialize', () => {
+  describe('initialize', function () {
     let caller;
     let matrixToken;
     let matrixTokenAddress;
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
 
       matrixToken = await systemFixture.createMatrixToken([systemFixture.wbtc.address], [ethToWei(1)], [stakingModule.address], owner);
@@ -70,7 +70,7 @@ describe('contract StakingModule', async () => {
       caller = owner;
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
@@ -78,33 +78,33 @@ describe('contract StakingModule', async () => {
       return stakingModule.connect(caller).initialize(matrixTokenAddress);
     }
 
-    it('should enable the Module on the MatrixToken', async () => {
+    it('should enable the Module on the MatrixToken', async function () {
       await initialize();
       expect(await matrixToken.isInitializedModule(stakingModule.address)).is.true;
     });
 
-    it('should revert when the caller is not the MatrixToken manager', async () => {
+    it('should revert when the caller is not the MatrixToken manager', async function () {
       caller = randomAccount;
       await expect(initialize()).revertedWith('M2');
     });
 
-    it('should revert when the module is not pending', async () => {
+    it('should revert when the module is not pending', async function () {
       await initialize();
       await expect(initialize()).revertedWith('M5b');
     });
 
-    it('should revert when the MatrixToken is not enabled on the controller', async () => {
+    it('should revert when the MatrixToken is not enabled on the controller', async function () {
       const nonEnabledToken = await systemFixture.createRawMatrixToken([systemFixture.dai.address], [ethToWei(1)], [stakingModule.address], owner);
       matrixTokenAddress = nonEnabledToken.address;
       await expect(initialize()).revertedWith('M5a');
     });
   });
 
-  describe('removeModule', () => {
+  describe('removeModule', function () {
     let module;
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
 
       module = stakingModule.address;
@@ -112,7 +112,7 @@ describe('contract StakingModule', async () => {
       await stakingModule.initialize(matrixToken.address);
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
@@ -120,19 +120,19 @@ describe('contract StakingModule', async () => {
       return matrixToken.removeModule(module);
     }
 
-    it('should remove the module from the MatrixToken', async () => {
+    it('should remove the module from the MatrixToken', async function () {
       await removeModule();
       const modules = await matrixToken.getModules();
       expect(modules).not.contain(module);
     });
 
-    it('should transfer the staked tokens to the staking contract when the there is an open external position', async () => {
+    it('should transfer the staked tokens to the staking contract when the there is an open external position', async function () {
       await stakingModule.stake(matrixToken.address, stakingAdapterMock1.address, systemFixture.weth.address, STAKE_NAME1, ethToWei(0.5));
       await expect(removeModule()).revertedWith('SM2');
     });
   });
 
-  describe('stake', () => {
+  describe('stake', function () {
     const issuedSupply = ethToWei(2);
 
     let caller;
@@ -143,12 +143,12 @@ describe('contract StakingModule', async () => {
     let matrixTokenAddress;
     let componentPositionUnits;
 
-    before(async () => {
+    before(async function () {
       notInitialized = true;
     });
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
 
       if (notInitialized) {
@@ -165,7 +165,7 @@ describe('contract StakingModule', async () => {
       stakeContract = stakingAdapterMock1.address;
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
@@ -173,7 +173,7 @@ describe('contract StakingModule', async () => {
       return stakingModule.connect(caller).stake(matrixTokenAddress, stakeContract, component, adapterName, componentPositionUnits);
     }
 
-    it('should transfer the staked tokens to the staking contract', async () => {
+    it('should transfer the staked tokens to the staking contract', async function () {
       const oldTokenBalance = await systemFixture.weth.balanceOf(stakeContract);
       await stake();
       const newTokenBalance = await systemFixture.weth.balanceOf(stakeContract);
@@ -181,14 +181,14 @@ describe('contract StakingModule', async () => {
       expect(newTokenBalance.sub(oldTokenBalance)).eq(expectedTokensStaked);
     });
 
-    it('should update the Default units on the MatrixToken correctly', async () => {
+    it('should update the Default units on the MatrixToken correctly', async function () {
       const oldPositionUnit = await matrixToken.getDefaultPositionRealUnit(component);
       await stake();
       const newPositionUnit = await matrixToken.getDefaultPositionRealUnit(component);
       expect(oldPositionUnit.sub(newPositionUnit)).eq(componentPositionUnits);
     });
 
-    it('should update the External units and state on the MatrixToken correctly', async () => {
+    it('should update the External units and state on the MatrixToken correctly', async function () {
       const oldPositionUnit = await matrixToken.getExternalPositionRealUnit(component, stakingModule.address);
       await stake();
       const newPositionUnit = await matrixToken.getExternalPositionRealUnit(component, stakingModule.address);
@@ -202,7 +202,7 @@ describe('contract StakingModule', async () => {
       expect(data).eq(EMPTY_BYTES);
     });
 
-    it('should create the correct ComponentPosition struct on the StakingModule', async () => {
+    it('should create the correct ComponentPosition struct on the StakingModule', async function () {
       await stake();
       const stakingContracts = await stakingModule.getStakingContracts(matrixTokenAddress, component);
       const position = await stakingModule.getStakingPosition(matrixTokenAddress, component, stakeContract);
@@ -213,39 +213,39 @@ describe('contract StakingModule', async () => {
       expect(position.adapterHash).eq(hashAdapterName(STAKE_NAME1));
     });
 
-    it('should emit the correct StakeComponent event', async () => {
+    it('should emit the correct StakeComponent event', async function () {
       await expect(stake())
         .emit(stakingModule, 'StakeComponent')
         .withArgs(matrixTokenAddress, component, stakeContract, componentPositionUnits, stakingAdapterMock1.address);
     });
 
-    it('should emit the correct StakeComponent event when trying to stake more tokens than available in Default state', async () => {
+    it('should emit the correct StakeComponent event when trying to stake more tokens than available in Default state', async function () {
       componentPositionUnits = ethToWei(1.1);
       await expect(stake()).revertedWith('SM0');
     });
 
-    it('should revert when passed adapterName is not valid', async () => {
+    it('should revert when passed adapterName is not valid', async function () {
       adapterName = 'invalid_adapter';
       await expect(stake()).revertedWith('M0');
     });
 
-    it('should revert when caller is not manager', async () => {
+    it('should revert when caller is not manager', async function () {
       caller = randomAccount;
       await expect(stake()).revertedWith('M1a');
     });
 
-    it('should revert when MatrixToken is not valid', async () => {
+    it('should revert when MatrixToken is not valid', async function () {
       const nonEnabledToken = await systemFixture.createRawMatrixToken([systemFixture.weth.address], [ethToWei(1)], [stakingModule.address], owner);
       matrixTokenAddress = nonEnabledToken.address;
       await expect(stake()).revertedWith('M1b');
     });
 
-    describe('when the position is being added to', () => {
-      beforeEach(async () => {
+    describe('when the position is being added to', function () {
+      beforeEach(async function () {
         await stake();
       });
 
-      it('should transfer the staked tokens to the staking contract', async () => {
+      it('should transfer the staked tokens to the staking contract', async function () {
         const oldTokenBalance = await systemFixture.weth.balanceOf(stakeContract);
         await stake();
         const newTokenBalance = await systemFixture.weth.balanceOf(stakeContract);
@@ -253,14 +253,14 @@ describe('contract StakingModule', async () => {
         expect(newTokenBalance.sub(oldTokenBalance)).eq(expectedTokensStaked);
       });
 
-      it('should update the Default units on the MatrixToken correctly', async () => {
+      it('should update the Default units on the MatrixToken correctly', async function () {
         const oldPositionUnit = await matrixToken.getDefaultPositionRealUnit(component);
         await stake();
         const newPositionUnit = await matrixToken.getDefaultPositionRealUnit(component);
         expect(oldPositionUnit.sub(newPositionUnit)).eq(componentPositionUnits);
       });
 
-      it('should update the External units and state on the MatrixToken correctly', async () => {
+      it('should update the External units and state on the MatrixToken correctly', async function () {
         const oldExternalModules = await matrixToken.getExternalPositionModules(component);
         expect(oldExternalModules.length).eq(1);
         expect(oldExternalModules[0]).eq(stakingModule.address);
@@ -275,7 +275,7 @@ describe('contract StakingModule', async () => {
         expect(newExternalModules[0]).eq(stakingModule.address);
       });
 
-      it('should create the correct ComponentPosition struct on the StakingModule', async () => {
+      it('should create the correct ComponentPosition struct on the StakingModule', async function () {
         await stake();
 
         const stakingContracts = await stakingModule.getStakingContracts(matrixTokenAddress, component);
@@ -286,29 +286,29 @@ describe('contract StakingModule', async () => {
         expect(position.componentPositionUnits).eq(componentPositionUnits.mul(2));
       });
 
-      it('should emit the correct StakeComponent event', async () => {
+      it('should emit the correct StakeComponent event', async function () {
         await expect(stake())
           .emit(stakingModule, 'StakeComponent')
           .withArgs(matrixTokenAddress, component, stakeContract, componentPositionUnits, stakingAdapterMock1.address);
       });
     });
 
-    describe('when module is not initialized', () => {
-      before(async () => {
+    describe('when module is not initialized', function () {
+      before(async function () {
         notInitialized = false;
       });
 
-      after(async () => {
+      after(async function () {
         notInitialized = true;
       });
 
-      it('should revert when module is not initialized', async () => {
+      it('should revert when module is not initialized', async function () {
         await expect(stake()).revertedWith('M1b');
       });
     });
   });
 
-  describe('unstake', () => {
+  describe('unstake', function () {
     let issuedSupply = ethToWei(2);
 
     let caller;
@@ -319,12 +319,12 @@ describe('contract StakingModule', async () => {
     let matrixTokenAddress;
     let componentPositionUnits;
 
-    before(async () => {
+    before(async function () {
       notInitialized = true;
     });
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
 
       caller = owner;
@@ -342,7 +342,7 @@ describe('contract StakingModule', async () => {
       }
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
@@ -350,7 +350,7 @@ describe('contract StakingModule', async () => {
       return stakingModule.connect(caller).unstake(matrixTokenAddress, stakeContract, component, adapterName, componentPositionUnits);
     }
 
-    it('should transfer the staked tokens to the matrixToken', async () => {
+    it('should transfer the staked tokens to the matrixToken', async function () {
       const oldTokenBalance = await systemFixture.weth.balanceOf(matrixTokenAddress);
       await unstake();
       const newTokenBalance = await systemFixture.weth.balanceOf(matrixTokenAddress);
@@ -358,14 +358,14 @@ describe('contract StakingModule', async () => {
       expect(newTokenBalance.sub(oldTokenBalance)).eq(expectedTokensStaked);
     });
 
-    it('should update the Default units on the MatrixToken correctly', async () => {
+    it('should update the Default units on the MatrixToken correctly', async function () {
       const oldPositionUnit = await matrixToken.getDefaultPositionRealUnit(component);
       await unstake();
       const newPositionUnit = await matrixToken.getDefaultPositionRealUnit(component);
       expect(newPositionUnit.sub(oldPositionUnit)).eq(componentPositionUnits);
     });
 
-    it('should update the External units and state on the MatrixToken correctly', async () => {
+    it('should update the External units and state on the MatrixToken correctly', async function () {
       const oldExternalModules = await matrixToken.getExternalPositionModules(component);
       expect(oldExternalModules.length).eq(1);
       expect(oldExternalModules[0]).eq(stakingModule.address);
@@ -382,7 +382,7 @@ describe('contract StakingModule', async () => {
       expect(data).eq(EMPTY_BYTES);
     });
 
-    it("should remove the stakingContract from the component's stakingContracts", async () => {
+    it("should remove the stakingContract from the component's stakingContracts", async function () {
       const oldStakingContracts = await stakingModule.getStakingContracts(matrixTokenAddress, component);
       expect(oldStakingContracts.length).eq(1);
       expect(oldStakingContracts[0]).eq(stakeContract);
@@ -393,51 +393,51 @@ describe('contract StakingModule', async () => {
       expect(newStakingContracts.length).eq(0);
     });
 
-    it('should delete the StakingPosition associated with the staking contract', async () => {
+    it('should delete the StakingPosition associated with the staking contract', async function () {
       await unstake();
       const position = await stakingModule.getStakingPosition(matrixTokenAddress, component, stakeContract);
       expect(position.adapterHash).eq(ZERO_HASH);
       expect(position.componentPositionUnits).eq(ZERO);
     });
 
-    it('should emit the correct UnstakeComponent event', async () => {
+    it('should emit the correct UnstakeComponent event', async function () {
       await expect(unstake())
         .emit(stakingModule, 'UnstakeComponent')
         .withArgs(matrixTokenAddress, component, stakeContract, componentPositionUnits, stakingAdapterMock1.address);
     });
 
-    it('should revert when staking contract not return the expected amount of tokens', async () => {
+    it('should revert when staking contract not return the expected amount of tokens', async function () {
       await stakingAdapterMock1.setUnstakeFee(ethToWei(0.01));
       await expect(unstake()).revertedWith('SM3');
     });
 
-    it('should revert when trying to unstake more tokens than staked', async () => {
+    it('should revert when trying to unstake more tokens than staked', async function () {
       componentPositionUnits = ethToWei(0.6);
       await expect(unstake()).revertedWith('SM1');
     });
 
-    it('should revert when passed adapterName is not valid', async () => {
+    it('should revert when passed adapterName is not valid', async function () {
       adapterName = 'invalid_adapter';
       await expect(unstake()).revertedWith('M0');
     });
 
-    it('should revert when caller is not manager', async () => {
+    it('should revert when caller is not manager', async function () {
       caller = randomAccount;
       await expect(unstake()).revertedWith('M1a');
     });
 
-    it('should revert when MatrixToken is not valid', async () => {
+    it('should revert when MatrixToken is not valid', async function () {
       const nonEnabledToken = await systemFixture.createRawMatrixToken([systemFixture.weth.address], [ethToWei(1)], [stakingModule.address], owner);
       matrixTokenAddress = nonEnabledToken.address;
       await expect(unstake()).revertedWith('M1b');
     });
 
-    describe('when the full position is not being removed', () => {
-      beforeEach(async () => {
+    describe('when the full position is not being removed', function () {
+      beforeEach(async function () {
         componentPositionUnits = ethToWei(0.25);
       });
 
-      it('should transfer the staked tokens to the MatrixToken', async () => {
+      it('should transfer the staked tokens to the MatrixToken', async function () {
         const oldTokenBalance = await systemFixture.weth.balanceOf(matrixTokenAddress);
         await unstake();
         const newTokenBalance = await systemFixture.weth.balanceOf(matrixTokenAddress);
@@ -445,14 +445,14 @@ describe('contract StakingModule', async () => {
         expect(newTokenBalance.sub(oldTokenBalance)).eq(expectedTokensStaked);
       });
 
-      it('should update the Default units on the MatrixToken correctly', async () => {
+      it('should update the Default units on the MatrixToken correctly', async function () {
         const oldPositionUnit = await matrixToken.getDefaultPositionRealUnit(component);
         await unstake();
         const newPositionUnit = await matrixToken.getDefaultPositionRealUnit(component);
         expect(newPositionUnit.sub(oldPositionUnit)).eq(componentPositionUnits);
       });
 
-      it('should update the External units and state on the MatrixToken correctly', async () => {
+      it('should update the External units and state on the MatrixToken correctly', async function () {
         const oldExternalModules = await matrixToken.getExternalPositionModules(component);
         expect(oldExternalModules[0]).eq(stakingModule.address);
         expect(oldExternalModules.length).eq(1);
@@ -467,7 +467,7 @@ describe('contract StakingModule', async () => {
         expect(newExternalModules[0]).eq(oldExternalModules[0]);
       });
 
-      it('should update the ComponentPosition struct on the StakingModule', async () => {
+      it('should update the ComponentPosition struct on the StakingModule', async function () {
         await unstake();
 
         const stakingContracts = await stakingModule.getStakingContracts(matrixTokenAddress, component);
@@ -478,29 +478,29 @@ describe('contract StakingModule', async () => {
         expect(position.componentPositionUnits).eq(ethToWei(0.5).sub(componentPositionUnits));
       });
 
-      it('should emit the correct StakeComponent event', async () => {
+      it('should emit the correct StakeComponent event', async function () {
         await expect(unstake())
           .emit(stakingModule, 'UnstakeComponent')
           .withArgs(matrixTokenAddress, component, stakeContract, componentPositionUnits, stakingAdapterMock1.address);
       });
     });
 
-    describe('when module is not initialized', () => {
-      before(async () => {
+    describe('when module is not initialized', function () {
+      before(async function () {
         notInitialized = false;
       });
 
-      after(async () => {
+      after(async function () {
         notInitialized = true;
       });
 
-      it('should revert when module is not initialized', async () => {
+      it('should revert when module is not initialized', async function () {
         await expect(unstake()).revertedWith('M1b');
       });
     });
   });
 
-  describe('issueHook', () => {
+  describe('issueHook', function () {
     const tokenTransferAmount = ethToWei(0.5);
 
     let caller;
@@ -511,12 +511,12 @@ describe('contract StakingModule', async () => {
     let matrixTokenAddress;
     let matrixTokenQuantity;
 
-    before(async () => {
+    before(async function () {
       notInitialized = true;
     });
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
 
       matrixTokenAddress = matrixToken.address;
@@ -537,7 +537,7 @@ describe('contract StakingModule', async () => {
       await systemFixture.weth.transfer(matrixToken.address, tokenTransferAmount);
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
@@ -545,7 +545,7 @@ describe('contract StakingModule', async () => {
       return stakingModule.connect(caller).componentIssueHook(matrixTokenAddress, matrixTokenQuantity, component, isEquity);
     }
 
-    it('should transfer tokens from matrixToken to staking contract(s)', async () => {
+    it('should transfer tokens from matrixToken to staking contract(s)', async function () {
       const oldMatrixTokenBalance = await systemFixture.weth.balanceOf(matrixTokenAddress);
       const oldWeth1Balance = await systemFixture.weth.balanceOf(stakingAdapterMock1.address);
       const oldWeth2Balance = await systemFixture.weth.balanceOf(stakingAdapterMock2.address);
@@ -563,18 +563,18 @@ describe('contract StakingModule', async () => {
       expect(newWeth2Balance.sub(oldWeth2Balance)).eq(expectedTokensTransferred.div(2));
     });
 
-    it('should revert if non-module is caller', async () => {
+    it('should revert if non-module is caller', async function () {
       caller = owner;
       await expect(componentIssueHook()).revertedWith('M4a');
     });
 
-    it('should revert if disabled module is caller', async () => {
+    it('should revert if disabled module is caller', async function () {
       await systemFixture.controller.removeModule(dummyIssuanceModule.address);
       await expect(componentIssueHook()).revertedWith('M4b');
     });
   });
 
-  describe('redeemHook', () => {
+  describe('redeemHook', function () {
     const tokenTransferAmount = ethToWei(0.5);
     const matrixTokenQuantity = ethToWei(0.5);
 
@@ -585,12 +585,12 @@ describe('contract StakingModule', async () => {
     let notInitialized;
     let matrixTokenAddress;
 
-    before(async () => {
+    before(async function () {
       notInitialized = true;
     });
 
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
 
       isEquity = true; // Unused by module
@@ -610,7 +610,7 @@ describe('contract StakingModule', async () => {
       await systemFixture.weth.transfer(matrixToken.address, tokenTransferAmount);
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
@@ -618,7 +618,7 @@ describe('contract StakingModule', async () => {
       return stakingModule.connect(caller).componentRedeemHook(matrixTokenAddress, matrixTokenQuantity, component, isEquity);
     }
 
-    it('should transfer tokens from staking contract(s) to matrixToken', async () => {
+    it('should transfer tokens from staking contract(s) to matrixToken', async function () {
       const oldMatrixTokenBalance = await systemFixture.weth.balanceOf(matrixTokenAddress);
       const oldWeth1Balance = await systemFixture.weth.balanceOf(stakingAdapterMock1.address);
       const oldWeth2Balance = await systemFixture.weth.balanceOf(stakingAdapterMock2.address);
@@ -635,17 +635,17 @@ describe('contract StakingModule', async () => {
       expect(oldWeth2Balance.sub(newWeth2Balance)).eq(expectedTokensTransferred.div(2));
     });
 
-    it('should revert when staking contract not return the expected amount of tokens', async () => {
+    it('should revert when staking contract not return the expected amount of tokens', async function () {
       await stakingAdapterMock1.setUnstakeFee(ethToWei(0.01));
       await expect(componentRedeemHook()).revertedWith('SM3');
     });
 
-    it('should revert if non-module is caller', async () => {
+    it('should revert if non-module is caller', async function () {
       caller = owner;
       await expect(componentRedeemHook()).revertedWith('M4a');
     });
 
-    it('should revert if disabled module is caller', async () => {
+    it('should revert if disabled module is caller', async function () {
       await systemFixture.controller.removeModule(dummyIssuanceModule.address);
       await expect(componentRedeemHook()).revertedWith('M4b');
     });

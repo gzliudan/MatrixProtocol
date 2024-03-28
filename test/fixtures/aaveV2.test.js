@@ -13,28 +13,28 @@ const { AaveV2Fixture } = require('./aaveV2Fixture');
 const { getSigners } = require('../helpers/accountUtil');
 const { snapshotBlockchain, revertBlockchain } = require('../helpers/evmUtil.js');
 
-describe('AaveV2Fixture', () => {
+describe('AaveV2Fixture', function () {
   const [owner, protocolFeeRecipient] = getSigners();
   const systemFixture = new SystemFixture(owner, protocolFeeRecipient);
   const aaveV2Fixture = new AaveV2Fixture(owner);
 
   let snapshotId;
-  before(async () => {
+  before(async function () {
     snapshotId = await snapshotBlockchain();
     await systemFixture.initAll();
   });
 
-  after(async () => {
+  after(async function () {
     await revertBlockchain(snapshotId);
   });
 
-  describe('init', () => {
+  describe('init', function () {
     let snapshotId;
-    beforeEach(async () => {
+    beforeEach(async function () {
       snapshotId = await snapshotBlockchain();
     });
 
-    afterEach(async () => {
+    afterEach(async function () {
       await revertBlockchain(snapshotId);
     });
 
@@ -42,7 +42,7 @@ describe('AaveV2Fixture', () => {
       await aaveV2Fixture.init(systemFixture.weth.address, systemFixture.dai.address);
     }
 
-    it('should deploy all contracts and set their addresses in the LendingPoolAddressProvider', async () => {
+    it('should deploy all contracts and set their addresses in the LendingPoolAddressProvider', async function () {
       await init();
 
       const addressProvider = aaveV2Fixture.lendingPoolAddressesProvider;
@@ -57,7 +57,7 @@ describe('AaveV2Fixture', () => {
       expect(protocolDataProvider).eq(aaveV2Fixture.protocolDataProvider.address);
     });
 
-    it('should set initial asset prices and market rates', async () => {
+    it('should set initial asset prices and market rates', async function () {
       const oneRay = BigNumber.from(10).pow(27); // 1e27
 
       await init();
@@ -73,7 +73,7 @@ describe('AaveV2Fixture', () => {
       expect(daiMarketBorrowRate).eq(oneRay.mul(39).div(1000));
     });
 
-    it('should deploy WETH reserve with correct configuration', async () => {
+    it('should deploy WETH reserve with correct configuration', async function () {
       await init();
 
       const wethReserveTokens = aaveV2Fixture.wethReserveTokens;
@@ -99,7 +99,7 @@ describe('AaveV2Fixture', () => {
       expect(config.stableBorrowRateEnabled).is.true;
     });
 
-    it('should deploy DAI reserve with correct configuration', async () => {
+    it('should deploy DAI reserve with correct configuration', async function () {
       await init();
 
       const daiReserveTokens = aaveV2Fixture.daiReserveTokens;

@@ -23,58 +23,58 @@ const {
   preciseDivFloorInt,
 } = require('../helpers/mathUtil');
 
-describe('library PreciseUnitMath', () => {
+describe('library PreciseUnitMath', function () {
   let mathMock;
 
   let snapshotId;
-  before(async () => {
+  before(async function () {
     snapshotId = await snapshotBlockchain();
     mathMock = await deployContract('PreciseUnitMathMock');
   });
 
-  after(async () => {
+  after(async function () {
     await revertBlockchain(snapshotId);
   });
 
-  describe('test constant functions', () => {
-    it('test preciseUnit()', async () => {
+  describe('test constant functions', function () {
+    it('test preciseUnit()', async function () {
       expect(await mathMock.preciseUnit()).eq(PRECISE_UNIT);
     });
 
-    it('test preciseUnitInt()', async () => {
+    it('test preciseUnitInt()', async function () {
       expect(await mathMock.preciseUnitInt()).eq(PRECISE_UNIT);
     });
 
-    it('test maxUint256()', async () => {
+    it('test maxUint256()', async function () {
       expect(await mathMock.maxUint256()).eq(MAX_UINT_256);
     });
 
-    it('test minInt256()', async () => {
+    it('test minInt256()', async function () {
       expect(await mathMock.minInt256()).eq(MIN_INT_256);
     });
 
-    it('test maxInt256()', async () => {
+    it('test maxInt256()', async function () {
       expect(await mathMock.maxInt256()).eq(MAX_INT_256);
     });
   });
 
-  UintValues.map((UintValue, i) => {
+  UintValues.map(function (UintValue, i) {
     const preciseNumber1 = BigNumber.from(UintValue);
     const preciseNumber2 = ethToWei(i + 1);
 
-    context(`test case ${i}`, () => {
-      describe('test preciseMul(uint256, uint256)', () => {
-        it(`test preciseMul(${preciseNumber1}, ${ZERO})`, async () => {
+    context(`test case ${i}`, function () {
+      describe('test preciseMul(uint256, uint256)', function () {
+        it(`test preciseMul(${preciseNumber1}, ${ZERO})`, async function () {
           const result = await mathMock.preciseMul(preciseNumber1, ZERO);
           expect(result).eq(ZERO);
         });
 
-        it(`test preciseMul(${ZERO}, ${preciseNumber1})`, async () => {
+        it(`test preciseMul(${ZERO}, ${preciseNumber1})`, async function () {
           const result = await mathMock.preciseMul(ZERO, preciseNumber1);
           expect(result).eq(ZERO);
         });
 
-        it(`test preciseMul(${preciseNumber1}, One)`, async () => {
+        it(`test preciseMul(${preciseNumber1}, One)`, async function () {
           const a = preciseNumber1;
           const b = PRECISE_UNIT;
           if (a.mul(b).lte(MAX_UINT_256)) {
@@ -85,7 +85,7 @@ describe('library PreciseUnitMath', () => {
           }
         });
 
-        it(`test preciseMul(One, ${preciseNumber1})`, async () => {
+        it(`test preciseMul(One, ${preciseNumber1})`, async function () {
           const a = PRECISE_UNIT;
           const b = preciseNumber1;
           if (a.mul(b).lte(MAX_UINT_256)) {
@@ -96,7 +96,7 @@ describe('library PreciseUnitMath', () => {
           }
         });
 
-        it(`test preciseMul(${preciseNumber1}, ${preciseNumber2})`, async () => {
+        it(`test preciseMul(${preciseNumber1}, ${preciseNumber2})`, async function () {
           const a = preciseNumber1;
           const b = preciseNumber2;
           if (a.mul(b).lte(MAX_UINT_256)) {
@@ -108,7 +108,7 @@ describe('library PreciseUnitMath', () => {
           }
         });
 
-        it(`test preciseMul(${preciseNumber2}, ${preciseNumber1})`, async () => {
+        it(`test preciseMul(${preciseNumber2}, ${preciseNumber1})`, async function () {
           const a = preciseNumber2;
           const b = preciseNumber1;
           if (a.mul(b).lte(MAX_UINT_256)) {
@@ -121,18 +121,18 @@ describe('library PreciseUnitMath', () => {
         });
       });
 
-      describe('test preciseMulCeil(uint256, uint256)', () => {
-        it(`test preciseMulCeil(${preciseNumber1}, ${ZERO})`, async () => {
+      describe('test preciseMulCeil(uint256, uint256)', function () {
+        it(`test preciseMulCeil(${preciseNumber1}, ${ZERO})`, async function () {
           const result = await mathMock.preciseMulCeil(preciseNumber1, ZERO);
           expect(result).eq(ZERO);
         });
 
-        it(`test preciseMulCeil(${ZERO}, ${preciseNumber1})`, async () => {
+        it(`test preciseMulCeil(${ZERO}, ${preciseNumber1})`, async function () {
           const result = await mathMock.preciseMulCeil(ZERO, preciseNumber1);
           expect(result).eq(ZERO);
         });
 
-        it(`test preciseMulCeil(${preciseNumber1}, One)`, async () => {
+        it(`test preciseMulCeil(${preciseNumber1}, One)`, async function () {
           const a = preciseNumber1;
           const b = PRECISE_UNIT;
           if (a.mul(b).lte(MAX_UINT_256)) {
@@ -144,7 +144,7 @@ describe('library PreciseUnitMath', () => {
           }
         });
 
-        it(`test preciseMulCeil(One, ${preciseNumber1})`, async () => {
+        it(`test preciseMulCeil(One, ${preciseNumber1})`, async function () {
           const a = PRECISE_UNIT;
           const b = preciseNumber1;
           if (a.mul(b).lte(MAX_UINT_256)) {
@@ -156,7 +156,7 @@ describe('library PreciseUnitMath', () => {
           }
         });
 
-        it(`test preciseMulCeil(${preciseNumber1}, ${preciseNumber2})`, async () => {
+        it(`test preciseMulCeil(${preciseNumber1}, ${preciseNumber2})`, async function () {
           const a = preciseNumber1;
           const b = preciseNumber2;
           if (a.mul(b).lte(MAX_UINT_256)) {
@@ -168,7 +168,7 @@ describe('library PreciseUnitMath', () => {
           }
         });
 
-        it(`test preciseMulCeil(${preciseNumber2}, ${preciseNumber1})`, async () => {
+        it(`test preciseMulCeil(${preciseNumber2}, ${preciseNumber1})`, async function () {
           const a = preciseNumber2;
           const b = preciseNumber1;
           if (a.mul(b).lte(MAX_UINT_256)) {
@@ -181,14 +181,14 @@ describe('library PreciseUnitMath', () => {
         });
       });
 
-      describe('test preciseDiv(uint256, uint256)', () => {
-        it(`test preciseDiv(${preciseNumber1}, ${ZERO})`, async () => {
+      describe('test preciseDiv(uint256, uint256)', function () {
+        it(`test preciseDiv(${preciseNumber1}, ${ZERO})`, async function () {
           const a = preciseNumber1;
           const b = ZERO;
           await expect(mathMock.preciseDiv(a, b)).revertedWith('PM0');
         });
 
-        it(`test preciseDiv(${ZERO}, ${preciseNumber1})`, async () => {
+        it(`test preciseDiv(${ZERO}, ${preciseNumber1})`, async function () {
           const a = ZERO;
           const b = preciseNumber1;
           if (b.isZero()) {
@@ -199,7 +199,7 @@ describe('library PreciseUnitMath', () => {
           }
         });
 
-        it(`test preciseDiv(${preciseNumber1}, One)`, async () => {
+        it(`test preciseDiv(${preciseNumber1}, One)`, async function () {
           const a = preciseNumber1;
           const b = PRECISE_UNIT;
           if (a.mul(PRECISE_UNIT).lte(MAX_UINT_256)) {
@@ -210,7 +210,7 @@ describe('library PreciseUnitMath', () => {
           }
         });
 
-        it(`test preciseDiv(One, ${preciseNumber1})`, async () => {
+        it(`test preciseDiv(One, ${preciseNumber1})`, async function () {
           const a = PRECISE_UNIT;
           const b = preciseNumber1;
           if (b.isZero()) {
@@ -224,7 +224,7 @@ describe('library PreciseUnitMath', () => {
           }
         });
 
-        it(`test preciseDiv(${preciseNumber1}, ${preciseNumber2})`, async () => {
+        it(`test preciseDiv(${preciseNumber1}, ${preciseNumber2})`, async function () {
           const a = preciseNumber1;
           const b = preciseNumber2;
           if (a.mul(PRECISE_UNIT).lte(MAX_UINT_256)) {
@@ -236,7 +236,7 @@ describe('library PreciseUnitMath', () => {
           }
         });
 
-        it(`test preciseDiv(${preciseNumber2}, ${preciseNumber1})`, async () => {
+        it(`test preciseDiv(${preciseNumber2}, ${preciseNumber1})`, async function () {
           const a = preciseNumber2;
           const b = preciseNumber1;
           if (b.isZero()) {
@@ -251,12 +251,12 @@ describe('library PreciseUnitMath', () => {
         });
       });
 
-      describe('test preciseDivCeil(uint256, uint256)', () => {
-        it(`test preciseDivCeil(${preciseNumber1}, ${ZERO})`, async () => {
+      describe('test preciseDivCeil(uint256, uint256)', function () {
+        it(`test preciseDivCeil(${preciseNumber1}, ${ZERO})`, async function () {
           await expect(mathMock.preciseDivCeil(preciseNumber1, ZERO)).revertedWith('PM2');
         });
 
-        it(`test preciseDivCeil(${ZERO}, ${preciseNumber1})`, async () => {
+        it(`test preciseDivCeil(${ZERO}, ${preciseNumber1})`, async function () {
           const a = ZERO;
           const b = preciseNumber1;
           if (b.isZero()) {
@@ -267,7 +267,7 @@ describe('library PreciseUnitMath', () => {
           }
         });
 
-        it(`test preciseDivCeil(${preciseNumber1}, One)`, async () => {
+        it(`test preciseDivCeil(${preciseNumber1}, One)`, async function () {
           const a = preciseNumber1;
           const b = PRECISE_UNIT;
           if (a.mul(PRECISE_UNIT).lte(MAX_UINT_256)) {
@@ -279,7 +279,7 @@ describe('library PreciseUnitMath', () => {
           }
         });
 
-        it(`test preciseDivCeil(One, ${preciseNumber1})`, async () => {
+        it(`test preciseDivCeil(One, ${preciseNumber1})`, async function () {
           const a = PRECISE_UNIT;
           const b = preciseNumber1;
           if (b.isZero()) {
@@ -293,7 +293,7 @@ describe('library PreciseUnitMath', () => {
           }
         });
 
-        it(`test preciseDivCeil(${preciseNumber1}, ${preciseNumber2})`, async () => {
+        it(`test preciseDivCeil(${preciseNumber1}, ${preciseNumber2})`, async function () {
           const a = preciseNumber1;
           const b = preciseNumber2;
           if (a.mul(PRECISE_UNIT).lte(MAX_UINT_256)) {
@@ -305,7 +305,7 @@ describe('library PreciseUnitMath', () => {
           }
         });
 
-        it(`test preciseDivCeil(${preciseNumber2}, ${preciseNumber1})`, async () => {
+        it(`test preciseDivCeil(${preciseNumber2}, ${preciseNumber1})`, async function () {
           const a = preciseNumber2;
           const b = preciseNumber1;
           if (b.isZero()) {
@@ -320,13 +320,13 @@ describe('library PreciseUnitMath', () => {
         });
       });
 
-      describe('test approximatelyEquals(uint256, uint256, uint256)', () => {
+      describe('test approximatelyEquals(uint256, uint256, uint256)', function () {
         const range = PRECISE_UNIT;
         const a = preciseNumber1;
 
         if (a.gt(range)) {
           const b = a.sub(range).sub(1);
-          it(`test approximatelyEquals(${a}, ${b}, ${range})`, async () => {
+          it(`test approximatelyEquals(${a}, ${b}, ${range})`, async function () {
             const result = await mathMock.approximatelyEquals(a, b, range);
             await expect(result).is.false;
           });
@@ -334,7 +334,7 @@ describe('library PreciseUnitMath', () => {
 
         if (a.gte(range)) {
           let b = a.sub(range);
-          it(`test approximatelyEquals(${a}, ${b}, ${range})`, async () => {
+          it(`test approximatelyEquals(${a}, ${b}, ${range})`, async function () {
             const result = await mathMock.approximatelyEquals(a, b, range);
             await expect(result).is.true;
           });
@@ -342,7 +342,7 @@ describe('library PreciseUnitMath', () => {
 
         if (a.gte(range.sub(1))) {
           let b = a.sub(range.sub(1));
-          it(`test approximatelyEquals(${a}, ${b}, ${range})`, async () => {
+          it(`test approximatelyEquals(${a}, ${b}, ${range})`, async function () {
             const result = await mathMock.approximatelyEquals(a, b, range);
             await expect(result).is.true;
           });
@@ -350,20 +350,20 @@ describe('library PreciseUnitMath', () => {
 
         if (a.gt(0)) {
           const b = a.sub(1);
-          it(`test approximatelyEquals(${a}, ${b}, ${range})`, async () => {
+          it(`test approximatelyEquals(${a}, ${b}, ${range})`, async function () {
             const result = await mathMock.approximatelyEquals(a, b, range);
             await expect(result).is.true;
           });
         }
 
-        it(`test approximatelyEquals(${a}, ${a}, ${range})`, async () => {
+        it(`test approximatelyEquals(${a}, ${a}, ${range})`, async function () {
           const result = await mathMock.approximatelyEquals(a, a, range);
           await expect(result).is.true;
         });
 
         if (a.lt(MAX_UINT_256)) {
           const b = a.add(1);
-          it(`test approximatelyEquals(${a}, ${b}, ${range})`, async () => {
+          it(`test approximatelyEquals(${a}, ${b}, ${range})`, async function () {
             const result = await mathMock.approximatelyEquals(a, b, range);
             await expect(result).is.true;
           });
@@ -371,7 +371,7 @@ describe('library PreciseUnitMath', () => {
 
         if (MAX_UINT_256.sub(range.sub(1)).gte(a)) {
           const b = a.add(range.sub(1));
-          it(`test approximatelyEquals(${a}, ${b}, ${range})`, async () => {
+          it(`test approximatelyEquals(${a}, ${b}, ${range})`, async function () {
             const result = await mathMock.approximatelyEquals(a, b, range);
             await expect(result).is.true;
           });
@@ -379,7 +379,7 @@ describe('library PreciseUnitMath', () => {
 
         if (MAX_UINT_256.sub(range).gte(a)) {
           const b = a.add(range);
-          it(`test approximatelyEquals(${a}, ${b}, ${range})`, async () => {
+          it(`test approximatelyEquals(${a}, ${b}, ${range})`, async function () {
             const result = await mathMock.approximatelyEquals(a, b, range);
             await expect(result).is.true;
           });
@@ -387,7 +387,7 @@ describe('library PreciseUnitMath', () => {
 
         if (MAX_UINT_256.sub(range).gt(a)) {
           const b = a.add(range).add(1);
-          it(`test approximatelyEquals(${a}, ${b}, ${range})`, async () => {
+          it(`test approximatelyEquals(${a}, ${b}, ${range})`, async function () {
             const result = await mathMock.approximatelyEquals(a, b, range);
             await expect(result).is.false;
           });
@@ -396,23 +396,23 @@ describe('library PreciseUnitMath', () => {
     });
   });
 
-  IntValues.map((IntValue, i) => {
+  IntValues.map(function (IntValue, i) {
     const preciseNumber1 = BigNumber.from(IntValue);
     const preciseNumber2 = ethToWei(i + 1);
 
-    context(`test case ${i}`, () => {
-      describe('test preciseMul(int256, int256)', () => {
-        it(`test preciseMul(${preciseNumber1}, ${ZERO})`, async () => {
+    context(`test case ${i}`, function () {
+      describe('test preciseMul(int256, int256)', function () {
+        it(`test preciseMul(${preciseNumber1}, ${ZERO})`, async function () {
           const result = await mathMock.preciseMulInt(preciseNumber1, ZERO);
           expect(result).eq(ZERO);
         });
 
-        it(`test preciseMul(${ZERO}, ${preciseNumber1})`, async () => {
+        it(`test preciseMul(${ZERO}, ${preciseNumber1})`, async function () {
           const result = await mathMock.preciseMulInt(ZERO, preciseNumber1);
           expect(result).eq(ZERO);
         });
 
-        it(`test preciseMul(${preciseNumber1}, One)`, async () => {
+        it(`test preciseMul(${preciseNumber1}, One)`, async function () {
           const a = preciseNumber1;
           const b = PRECISE_UNIT;
           const c = a.mul(b);
@@ -425,7 +425,7 @@ describe('library PreciseUnitMath', () => {
           }
         });
 
-        it(`test preciseMul(One, ${preciseNumber1})`, async () => {
+        it(`test preciseMul(One, ${preciseNumber1})`, async function () {
           const a = PRECISE_UNIT;
           const b = preciseNumber1;
           const c = a.mul(b);
@@ -438,7 +438,7 @@ describe('library PreciseUnitMath', () => {
           }
         });
 
-        it(`test preciseMul(${preciseNumber1}, ${preciseNumber2})`, async () => {
+        it(`test preciseMul(${preciseNumber1}, ${preciseNumber2})`, async function () {
           const a = preciseNumber1;
           const b = preciseNumber2;
           const c = a.mul(b);
@@ -451,7 +451,7 @@ describe('library PreciseUnitMath', () => {
           }
         });
 
-        it(`test preciseMul(${preciseNumber2}, ${preciseNumber1})`, async () => {
+        it(`test preciseMul(${preciseNumber2}, ${preciseNumber1})`, async function () {
           const a = preciseNumber2;
           const b = preciseNumber1;
           const c = a.mul(b);
@@ -467,18 +467,18 @@ describe('library PreciseUnitMath', () => {
 
       // Datatype int256 has no preciseMulCeil function
 
-      describe('test preciseMulFloor(int256, int256)', () => {
-        it(`test preciseMulFloor(${preciseNumber1}, ${ZERO})`, async () => {
+      describe('test preciseMulFloor(int256, int256)', function () {
+        it(`test preciseMulFloor(${preciseNumber1}, ${ZERO})`, async function () {
           const result = await mathMock.preciseMulFloorInt(preciseNumber1, ZERO);
           expect(result).eq(ZERO);
         });
 
-        it(`test preciseMulFloor(${ZERO}, ${preciseNumber1})`, async () => {
+        it(`test preciseMulFloor(${ZERO}, ${preciseNumber1})`, async function () {
           const result = await mathMock.preciseMulFloorInt(ZERO, preciseNumber1);
           expect(result).eq(ZERO);
         });
 
-        it(`test preciseMulFloor(${preciseNumber1}, One)`, async () => {
+        it(`test preciseMulFloor(${preciseNumber1}, One)`, async function () {
           const a = preciseNumber1;
           const b = PRECISE_UNIT;
           const c = a.mul(b);
@@ -491,7 +491,7 @@ describe('library PreciseUnitMath', () => {
           }
         });
 
-        it(`test preciseMulFloor(One, ${preciseNumber1})`, async () => {
+        it(`test preciseMulFloor(One, ${preciseNumber1})`, async function () {
           const a = PRECISE_UNIT;
           const b = preciseNumber1;
           const c = a.mul(b);
@@ -504,7 +504,7 @@ describe('library PreciseUnitMath', () => {
           }
         });
 
-        it(`test preciseMulFloor(${preciseNumber1}, ${preciseNumber2})`, async () => {
+        it(`test preciseMulFloor(${preciseNumber1}, ${preciseNumber2})`, async function () {
           const a = preciseNumber1;
           const b = preciseNumber2;
           const c = a.mul(b);
@@ -517,7 +517,7 @@ describe('library PreciseUnitMath', () => {
           }
         });
 
-        it(`test preciseMulFloor(${preciseNumber2}, ${preciseNumber1})`, async () => {
+        it(`test preciseMulFloor(${preciseNumber2}, ${preciseNumber1})`, async function () {
           const a = preciseNumber2;
           const b = preciseNumber1;
           const c = a.mul(b);
@@ -531,12 +531,12 @@ describe('library PreciseUnitMath', () => {
         });
       });
 
-      describe('test preciseDiv(int256, int256)', () => {
-        it(`test preciseDiv(${preciseNumber1}, ${ZERO})`, async () => {
+      describe('test preciseDiv(int256, int256)', function () {
+        it(`test preciseDiv(${preciseNumber1}, ${ZERO})`, async function () {
           await expect(mathMock.preciseDivInt(preciseNumber1, ZERO)).revertedWith('PM1');
         });
 
-        it(`test preciseDiv(${ZERO}, ${preciseNumber1})`, async () => {
+        it(`test preciseDiv(${ZERO}, ${preciseNumber1})`, async function () {
           const a = ZERO;
           const b = preciseNumber1;
           if (b.isZero()) {
@@ -547,7 +547,7 @@ describe('library PreciseUnitMath', () => {
           }
         });
 
-        it(`test preciseDiv(${preciseNumber1}, One)`, async () => {
+        it(`test preciseDiv(${preciseNumber1}, One)`, async function () {
           const a = preciseNumber1;
           const b = PRECISE_UNIT;
           const c = a.mul(PRECISE_UNIT);
@@ -560,7 +560,7 @@ describe('library PreciseUnitMath', () => {
           }
         });
 
-        it(`test preciseDiv(One, ${preciseNumber1})`, async () => {
+        it(`test preciseDiv(One, ${preciseNumber1})`, async function () {
           const a = PRECISE_UNIT;
           const b = preciseNumber1;
           if (b.isZero()) {
@@ -577,7 +577,7 @@ describe('library PreciseUnitMath', () => {
           }
         });
 
-        it(`test preciseDiv(${preciseNumber1}, ${preciseNumber2})`, async () => {
+        it(`test preciseDiv(${preciseNumber1}, ${preciseNumber2})`, async function () {
           const a = preciseNumber1;
           const b = preciseNumber2;
           const c = a.mul(PRECISE_UNIT);
@@ -590,7 +590,7 @@ describe('library PreciseUnitMath', () => {
           }
         });
 
-        it(`test preciseDiv(${preciseNumber2}, ${preciseNumber1})`, async () => {
+        it(`test preciseDiv(${preciseNumber2}, ${preciseNumber1})`, async function () {
           const a = preciseNumber2;
           const b = preciseNumber1;
           if (b.isZero()) {
@@ -608,12 +608,12 @@ describe('library PreciseUnitMath', () => {
         });
       });
 
-      describe('test preciseDivCeil(int256, int256)', () => {
-        it(`test preciseDivCeil(${preciseNumber1}, ${ZERO})`, async () => {
+      describe('test preciseDivCeil(int256, int256)', function () {
+        it(`test preciseDivCeil(${preciseNumber1}, ${ZERO})`, async function () {
           await expect(mathMock.preciseDivCeilInt(preciseNumber1, ZERO)).revertedWith('PM3');
         });
 
-        it(`test preciseDivCeil(${ZERO}, ${preciseNumber1})`, async () => {
+        it(`test preciseDivCeil(${ZERO}, ${preciseNumber1})`, async function () {
           const a = ZERO;
           const b = preciseNumber1;
           if (b.isZero()) {
@@ -624,7 +624,7 @@ describe('library PreciseUnitMath', () => {
           }
         });
 
-        it(`test preciseDivCeil(${preciseNumber1}, One)`, async () => {
+        it(`test preciseDivCeil(${preciseNumber1}, One)`, async function () {
           const a = preciseNumber1;
           const b = PRECISE_UNIT;
           const c = a.mul(PRECISE_UNIT);
@@ -637,7 +637,7 @@ describe('library PreciseUnitMath', () => {
           }
         });
 
-        it(`test preciseDivCeil(One, ${preciseNumber1})`, async () => {
+        it(`test preciseDivCeil(One, ${preciseNumber1})`, async function () {
           const a = PRECISE_UNIT;
           const b = preciseNumber1;
           if (b.isZero()) {
@@ -654,7 +654,7 @@ describe('library PreciseUnitMath', () => {
           }
         });
 
-        it(`test preciseDivCeil(${preciseNumber1}, ${preciseNumber2})`, async () => {
+        it(`test preciseDivCeil(${preciseNumber1}, ${preciseNumber2})`, async function () {
           const a = preciseNumber1;
           const b = preciseNumber2;
           const c = a.mul(PRECISE_UNIT);
@@ -667,7 +667,7 @@ describe('library PreciseUnitMath', () => {
           }
         });
 
-        it(`test preciseDivCeil(${preciseNumber2}, ${preciseNumber1})`, async () => {
+        it(`test preciseDivCeil(${preciseNumber2}, ${preciseNumber1})`, async function () {
           const a = preciseNumber2;
           const b = preciseNumber1;
           if (b.isZero()) {
@@ -682,12 +682,12 @@ describe('library PreciseUnitMath', () => {
         });
       });
 
-      describe('test preciseDivFloor(int256, int256)', () => {
-        it(`test preciseDivCeil(${preciseNumber1}, ${ZERO})`, async () => {
+      describe('test preciseDivFloor(int256, int256)', function () {
+        it(`test preciseDivCeil(${preciseNumber1}, ${ZERO})`, async function () {
           await expect(mathMock.preciseDivFloorInt(preciseNumber1, ZERO)).revertedWith('PM4');
         });
 
-        it(`test preciseDivFloor(${ZERO}, ${preciseNumber1})`, async () => {
+        it(`test preciseDivFloor(${ZERO}, ${preciseNumber1})`, async function () {
           const a = ZERO;
           const b = preciseNumber1;
           if (b.isZero()) {
@@ -698,7 +698,7 @@ describe('library PreciseUnitMath', () => {
           }
         });
 
-        it(`test preciseDivFloor(${preciseNumber1}, One)`, async () => {
+        it(`test preciseDivFloor(${preciseNumber1}, One)`, async function () {
           const a = preciseNumber1;
           const b = PRECISE_UNIT;
           const c = a.mul(PRECISE_UNIT);
@@ -711,7 +711,7 @@ describe('library PreciseUnitMath', () => {
           }
         });
 
-        it(`test preciseDivFloor(One, ${preciseNumber1})`, async () => {
+        it(`test preciseDivFloor(One, ${preciseNumber1})`, async function () {
           const a = PRECISE_UNIT;
           const b = preciseNumber1;
           if (b.isZero()) {
@@ -728,7 +728,7 @@ describe('library PreciseUnitMath', () => {
           }
         });
 
-        it(`test preciseDivFloor(${preciseNumber1}, ${preciseNumber2})`, async () => {
+        it(`test preciseDivFloor(${preciseNumber1}, ${preciseNumber2})`, async function () {
           const a = preciseNumber1;
           const b = preciseNumber2;
           const c = a.mul(PRECISE_UNIT);
@@ -741,7 +741,7 @@ describe('library PreciseUnitMath', () => {
           }
         });
 
-        it(`test preciseDivFloor(${preciseNumber2}, ${preciseNumber1})`, async () => {
+        it(`test preciseDivFloor(${preciseNumber2}, ${preciseNumber1})`, async function () {
           const a = preciseNumber2;
           const b = preciseNumber1;
           if (b.isZero()) {

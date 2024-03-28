@@ -14,7 +14,7 @@ const { getSigners, getRandomAddress } = require('../../helpers/accountUtil');
 const { ZERO_ADDRESS, ZERO, ONE, MODULE_STATE } = require('../../helpers/constants');
 const { snapshotBlockchain, revertBlockchain } = require('../../helpers/evmUtil.js');
 
-describe('contract BasicIssuanceModule', () => {
+describe('contract BasicIssuanceModule', function () {
   const [owner, feeRecipient, recipient, randomAccount] = getSigners();
   const systemFixture = new SystemFixture(owner, feeRecipient);
 
@@ -23,20 +23,20 @@ describe('contract BasicIssuanceModule', () => {
   let matrixTokenAddress;
 
   let snapshotId;
-  before(async () => {
+  before(async function () {
     snapshotId = await snapshotBlockchain();
     await systemFixture.initAll();
   });
 
-  after(async () => {
+  after(async function () {
     await revertBlockchain(snapshotId);
   });
 
-  describe('initialize', () => {
+  describe('initialize', function () {
     let preIssueHookAddress;
 
     let snapshotId;
-    before(async () => {
+    before(async function () {
       snapshotId = await snapshotBlockchain();
       const components = [systemFixture.weth.address];
       const units = [ethToWei(1)];
@@ -45,11 +45,11 @@ describe('contract BasicIssuanceModule', () => {
       preIssueHookAddress = await getRandomAddress();
     });
 
-    after(async () => {
+    after(async function () {
       await revertBlockchain(snapshotId);
     });
 
-    beforeEach(async () => {
+    beforeEach(async function () {
       caller = owner;
       matrixTokenAddress = matrixToken.address;
     });
@@ -58,23 +58,23 @@ describe('contract BasicIssuanceModule', () => {
       return systemFixture.basicIssuanceModule.connect(caller).initialize(matrixTokenAddress, preIssueHookAddress);
     }
 
-    it('should basicIssuanceModule be enabled in the MatrixToken', async () => {
+    it('should basicIssuanceModule be enabled in the MatrixToken', async function () {
       await initialize();
       const result = await matrixToken.isInitializedModule(systemFixture.basicIssuanceModule.address);
       expect(result).is.true;
     });
 
-    it('should properly set the issuance hooks', async () => {
+    it('should properly set the issuance hooks', async function () {
       const result = await systemFixture.basicIssuanceModule.getManagerIssuanceHook(matrixTokenAddress);
       expect(result).eq(preIssueHookAddress);
     });
 
-    it('should revert when the caller is not the MatrixToken manager', async () => {
+    it('should revert when the caller is not the MatrixToken manager', async function () {
       caller = await randomAccount;
       await expect(initialize()).revertedWith('M2');
     });
 
-    it('should revert when MatrixToken is not in pending state', async () => {
+    it('should revert when MatrixToken is not in pending state', async function () {
       const newModule = await getRandomAddress();
       await systemFixture.controller.addModule(newModule);
       const newToken = await systemFixture.createMatrixToken([systemFixture.weth.address], [ethToWei(1)], [newModule], owner.address);
@@ -82,7 +82,7 @@ describe('contract BasicIssuanceModule', () => {
       await expect(initialize()).revertedWith('M5b');
     });
 
-    it('should revert when the MatrixToken is not enabled on the controller', async () => {
+    it('should revert when the MatrixToken is not enabled on the controller', async function () {
       const newToken = await systemFixture.createRawMatrixToken(
         [systemFixture.weth.address],
         [ethToWei(1)],
@@ -94,13 +94,13 @@ describe('contract BasicIssuanceModule', () => {
     });
   });
 
-  describe('removeModule', () => {
-    it('should revert when remove BasicIssuanceModule', async () => {
+  describe('removeModule', function () {
+    it('should revert when remove BasicIssuanceModule', async function () {
       await expect(systemFixture.basicIssuanceModule.connect(owner).removeModule()).revertedWith('BI0');
     });
   });
 
-  describe('issue', () => {
+  describe('issue', function () {
     const units = [ethToWei(1), btcToWei(2)];
 
     let components;
@@ -112,7 +112,7 @@ describe('contract BasicIssuanceModule', () => {
     }
 
     let snapshotId;
-    before(async () => {
+    before(async function () {
       snapshotId = await snapshotBlockchain();
 
       const modules = [systemFixture.basicIssuanceModule.address];
@@ -124,34 +124,34 @@ describe('contract BasicIssuanceModule', () => {
       await systemFixture.wbtc.connect(owner).approve(systemFixture.basicIssuanceModule.address, btcToWei(200));
     });
 
-    after(async () => {
+    after(async function () {
       await revertBlockchain(snapshotId);
     });
 
-    beforeEach(async () => {
+    beforeEach(async function () {
       caller = owner;
       issueQuantity = ethToWei(2);
       matrixTokenAddress = matrixToken.address;
     });
 
-    context('when the components are WBTC and WETH and no hooks', async () => {
+    context('when the components are WBTC and WETH and no hooks', async function () {
       let snapshotId;
-      before(async () => {
+      before(async function () {
         snapshotId = await snapshotBlockchain();
         preIssueHookAddress = ZERO_ADDRESS;
         await systemFixture.basicIssuanceModule.connect(owner).initialize(matrixToken.address, preIssueHookAddress);
       });
 
-      after(async () => {
+      after(async function () {
         await revertBlockchain(snapshotId);
       });
 
-      it('should revert when the issue issueQuantity is 0', async () => {
+      it('should revert when the issue issueQuantity is 0', async function () {
         issueQuantity = ZERO;
         await expect(issue()).revertedWith('BI1');
       });
 
-      it('should revert when the MatrixToken is not enabled on the controller', async () => {
+      it('should revert when the MatrixToken is not enabled on the controller', async function () {
         const nonEnabledToken = await systemFixture.createRawMatrixToken(
           [systemFixture.weth.address],
           [ethToWei(1)],
@@ -162,28 +162,28 @@ describe('contract BasicIssuanceModule', () => {
         await expect(issue()).revertedWith('M3');
       });
 
-      it('should issue the Set to the recipient', async () => {
+      it('should issue the Set to the recipient', async function () {
         const oldBalance = await matrixToken.balanceOf(recipient.address);
         await issue();
         const newBalance = await matrixToken.balanceOf(recipient.address);
         expect(newBalance).eq(oldBalance.add(issueQuantity));
       });
 
-      it('should deposited correct quantity WETH into the MatrixToken', async () => {
+      it('should deposited correct quantity WETH into the MatrixToken', async function () {
         const oldBalance = await systemFixture.weth.balanceOf(matrixToken.address);
         await issue();
         const newBalance = await systemFixture.weth.balanceOf(matrixToken.address);
         expect(newBalance.sub(oldBalance)).eq(preciseMulCeilUint(issueQuantity, units[0]));
       });
 
-      it('should deposited correct quantity WBTC into the MatrixToken', async () => {
+      it('should deposited correct quantity WBTC into the MatrixToken', async function () {
         const oldBalance = await systemFixture.wbtc.balanceOf(matrixToken.address);
         await issue();
         const newBalance = await systemFixture.wbtc.balanceOf(matrixToken.address);
         expect(newBalance.sub(oldBalance)).eq(preciseMulCeilUint(issueQuantity, units[1]));
       });
 
-      it('should emit the IssueMatrixToken event', async () => {
+      it('should emit the IssueMatrixToken event', async function () {
         const componentQuantities = [preciseMul(units[0], issueQuantity), preciseMul(units[1], issueQuantity)];
 
         await expect(issue())
@@ -191,7 +191,7 @@ describe('contract BasicIssuanceModule', () => {
           .withArgs(matrixTokenAddress, caller.address, recipient.address, ZERO_ADDRESS, issueQuantity, components, componentQuantities);
       });
 
-      it('should deposited correct quantity WETH into the MatrixToken when issue extremely small', async () => {
+      it('should deposited correct quantity WETH into the MatrixToken when issue extremely small', async function () {
         const oldBalance = await systemFixture.weth.balanceOf(matrixToken.address);
         issueQuantity = ONE;
         await issue();
@@ -199,7 +199,7 @@ describe('contract BasicIssuanceModule', () => {
         expect(newBalance.sub(oldBalance)).eq(preciseMulCeilUint(issueQuantity, units[0]));
       });
 
-      it('should deposited correct quantity WBTC into the MatrixToken when issue extremely small', async () => {
+      it('should deposited correct quantity WBTC into the MatrixToken when issue extremely small', async function () {
         const oldBalance = await systemFixture.wbtc.balanceOf(matrixToken.address);
         issueQuantity = ONE;
         await issue();
@@ -207,7 +207,7 @@ describe('contract BasicIssuanceModule', () => {
         expect(newBalance.sub(oldBalance)).eq(preciseMulCeilUint(issueQuantity, units[1]));
       });
 
-      it('should add self as module and update the position state', async () => {
+      it('should add self as module and update the position state', async function () {
         await systemFixture.controller.addModule(owner.address);
         await matrixToken.addModule(owner.address);
         await matrixToken.initializeModule();
@@ -215,7 +215,7 @@ describe('contract BasicIssuanceModule', () => {
         expect(result).eq(MODULE_STATE['INITIALIZED']);
       });
 
-      it('should revert when one of the components has a recipient-related fee', async () => {
+      it('should revert when one of the components has a recipient-related fee', async function () {
         const tokenWithFee = await deployContract('Erc20WithFeeMock', ['Erc20WithFeeMock', 'TEST', 5], owner);
         await tokenWithFee.mint(owner.address, ethToWei(200));
         await tokenWithFee.approve(systemFixture.basicIssuanceModule.address, ethToWei(100));
@@ -227,7 +227,7 @@ describe('contract BasicIssuanceModule', () => {
         await expect(issue()).revertedWith('ES1');
       });
 
-      it('should revert when a MatrixToken position is not in default state', async () => {
+      it('should revert when a MatrixToken position is not in default state', async function () {
         const position = (await matrixToken.getPositions())[0];
         await matrixToken.addExternalPositionModule(position.component, position.module);
         await matrixToken.editExternalPositionUnit(position.component, position.module, position.unit);
@@ -235,22 +235,22 @@ describe('contract BasicIssuanceModule', () => {
       });
     });
 
-    context('when a preIssueHook has been set', async () => {
+    context('when a preIssueHook has been set', async function () {
       let preIssueHookContract;
 
       let snapshotId;
-      before(async () => {
+      before(async function () {
         snapshotId = await snapshotBlockchain();
         preIssueHookContract = await deployContract('ManagerIssuanceHookMock', [], owner);
         preIssueHookAddress = preIssueHookContract.address;
         await systemFixture.basicIssuanceModule.connect(owner).initialize(matrixToken.address, preIssueHookAddress);
       });
 
-      after(async () => {
+      after(async function () {
         await revertBlockchain(snapshotId);
       });
 
-      it('should properly call the pre-issue hooks', async () => {
+      it('should properly call the pre-issue hooks', async function () {
         await issue();
         expect(await preIssueHookContract.getToken()).eq(matrixTokenAddress);
         expect(await preIssueHookContract.getQuantity()).eq(issueQuantity);
@@ -258,7 +258,7 @@ describe('contract BasicIssuanceModule', () => {
         expect(await preIssueHookContract.getTo()).eq(recipient.address);
       });
 
-      it('should emit the IssueMatrixToken event', async () => {
+      it('should emit the IssueMatrixToken event', async function () {
         const componentQuantities = [preciseMul(units[0], issueQuantity), preciseMul(units[1], issueQuantity)];
 
         await expect(issue())
@@ -268,7 +268,7 @@ describe('contract BasicIssuanceModule', () => {
     });
   });
 
-  describe('redeem', () => {
+  describe('redeem', function () {
     const units = [ethToWei(1), btcToWei(2)];
 
     let components;
@@ -279,7 +279,7 @@ describe('contract BasicIssuanceModule', () => {
     }
 
     let snapshotId;
-    before(async () => {
+    before(async function () {
       snapshotId = await snapshotBlockchain();
 
       const modules = [systemFixture.basicIssuanceModule.address];
@@ -293,11 +293,11 @@ describe('contract BasicIssuanceModule', () => {
       await systemFixture.basicIssuanceModule.initialize(matrixToken.address, ZERO_ADDRESS);
     });
 
-    after(async () => {
+    after(async function () {
       await revertBlockchain(snapshotId);
     });
 
-    beforeEach(async () => {
+    beforeEach(async function () {
       const issueQuantity = ethToWei(2);
 
       caller = owner;
@@ -308,48 +308,48 @@ describe('contract BasicIssuanceModule', () => {
       await systemFixture.basicIssuanceModule.issue(matrixTokenAddress, issueQuantity, caller.address);
     });
 
-    it('should redeem MatrixToken', async () => {
+    it('should redeem MatrixToken', async function () {
       const oldBalance = await matrixToken.balanceOf(owner.address);
       await redeem();
       const newBalance = await matrixToken.balanceOf(owner.address);
       expect(oldBalance.sub(newBalance)).eq(redeemQuantity);
     });
 
-    it('should deposited correct quantity WETH to the recipient account', async () => {
+    it('should deposited correct quantity WETH to the recipient account', async function () {
       const oldBalance = await systemFixture.weth.balanceOf(recipient.address);
       await redeem();
       const newBalance = await systemFixture.weth.balanceOf(recipient.address);
       expect(newBalance.sub(oldBalance)).eq(preciseMul(redeemQuantity, units[0]));
     });
 
-    it('should deposited correct quantity WBTC to the recipient account', async () => {
+    it('should deposited correct quantity WBTC to the recipient account', async function () {
       const oldBalance = await systemFixture.wbtc.balanceOf(recipient.address);
       await redeem();
       const newBalance = await systemFixture.wbtc.balanceOf(recipient.address);
       expect(newBalance.sub(oldBalance)).eq(preciseMul(redeemQuantity, units[1]));
     });
 
-    it('should have subtracted WETH from the MatrixToken', async () => {
+    it('should have subtracted WETH from the MatrixToken', async function () {
       const oldBalance = await systemFixture.weth.balanceOf(matrixToken.address);
       await redeem();
       const newBalance = await systemFixture.weth.balanceOf(matrixToken.address);
       expect(oldBalance.sub(newBalance)).eq(preciseMul(redeemQuantity, units[0]));
     });
 
-    it('should have subtracted WBTC from the MatrixToken', async () => {
+    it('should have subtracted WBTC from the MatrixToken', async function () {
       const oldBalance = await systemFixture.wbtc.balanceOf(matrixToken.address);
       await redeem();
       const newBalance = await systemFixture.wbtc.balanceOf(matrixToken.address);
       expect(oldBalance.sub(newBalance)).eq(preciseMul(redeemQuantity, units[1]));
     });
 
-    it('should emit the RedeemMatrixToken event', async () => {
+    it('should emit the RedeemMatrixToken event', async function () {
       await expect(redeem())
         .emit(systemFixture.basicIssuanceModule, 'RedeemMatrixToken')
         .withArgs(matrixTokenAddress, caller.address, recipient.address, ZERO_ADDRESS, redeemQuantity, components, units);
     });
 
-    it('should deposited correct quantity WETH to recipient account when redeem extremely small', async () => {
+    it('should deposited correct quantity WETH to recipient account when redeem extremely small', async function () {
       const oldBalance = await systemFixture.weth.balanceOf(recipient.address);
       redeemQuantity = ONE;
       await redeem();
@@ -357,7 +357,7 @@ describe('contract BasicIssuanceModule', () => {
       expect(newBalance.sub(oldBalance)).eq(preciseMul(redeemQuantity, units[0]));
     });
 
-    it('should deposited correct quantity WBTC to recipient account when redeem extremely small', async () => {
+    it('should deposited correct quantity WBTC to recipient account when redeem extremely small', async function () {
       const oldBalance = await systemFixture.wbtc.balanceOf(recipient.address);
       redeemQuantity = ONE;
       await redeem();
@@ -365,17 +365,17 @@ describe('contract BasicIssuanceModule', () => {
       expect(newBalance.sub(oldBalance)).eq(preciseMul(redeemQuantity, units[1]));
     });
 
-    it('should revert when the issue quantity is greater than the callers balance', async () => {
+    it('should revert when the issue quantity is greater than the callers balance', async function () {
       redeemQuantity = ethToWei(10000);
       await expect(redeem()).revertedWith('ERC20: burn amount exceeds balance');
     });
 
-    it('should revert when the issue quantity is 0', async () => {
+    it('should revert when the issue quantity is 0', async function () {
       redeemQuantity = ZERO;
       await expect(redeem()).revertedWith('BI2a');
     });
 
-    it('should revert when the MatrixToken is not enabled on the controller', async () => {
+    it('should revert when the MatrixToken is not enabled on the controller', async function () {
       const nonEnabledToken = await systemFixture.createRawMatrixToken(
         [systemFixture.weth.address],
         [ethToWei(1)],
@@ -386,7 +386,7 @@ describe('contract BasicIssuanceModule', () => {
       await expect(redeem()).revertedWith('M3');
     });
 
-    it('should add self as module and update the position state', async () => {
+    it('should add self as module and update the position state', async function () {
       await systemFixture.controller.addModule(owner.address);
       await matrixToken.addModule(owner.address);
       await matrixToken.initializeModule();
@@ -394,7 +394,7 @@ describe('contract BasicIssuanceModule', () => {
       expect(result).eq(MODULE_STATE['INITIALIZED']);
     });
 
-    it('should revert when a MatrixToken position is not in default state', async () => {
+    it('should revert when a MatrixToken position is not in default state', async function () {
       const position = (await matrixToken.getPositions())[0];
       await matrixToken.addExternalPositionModule(position.component, position.module);
       await matrixToken.editExternalPositionUnit(position.component, position.module, position.unit);
@@ -402,7 +402,7 @@ describe('contract BasicIssuanceModule', () => {
       await matrixToken.removeExternalPositionModule(position.component, position.module);
     });
 
-    // it('should revert when one of the components has a recipient-related fee', async () => {
+    // it('should revert when one of the components has a recipient-related fee', async function () {
     //   const tokenWithFee = await deployContract('Erc20WithFeeMock', ['Erc20WithFeeMock', 'TEST', 5], owner);
     //   await tokenWithFee.mint(matrixToken.address, ethToWei(200));
 
