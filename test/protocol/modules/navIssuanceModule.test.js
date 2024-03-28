@@ -97,7 +97,7 @@ describe('contract NavIssuanceModule', () => {
     });
 
     after(async () => {
-      revertBlockchain(snapshotId);
+      await revertBlockchain(snapshotId);
     });
 
     beforeEach(async () => {
@@ -239,7 +239,7 @@ describe('contract NavIssuanceModule', () => {
     });
 
     after(async () => {
-      revertBlockchain(snapshotId);
+      await revertBlockchain(snapshotId);
     });
 
     beforeEach(async () => {
@@ -314,7 +314,7 @@ describe('contract NavIssuanceModule', () => {
     });
 
     after(async () => {
-      revertBlockchain(snapshotId);
+      await revertBlockchain(snapshotId);
     });
 
     beforeEach(async () => {
@@ -358,7 +358,7 @@ describe('contract NavIssuanceModule', () => {
     });
 
     after(async () => {
-      revertBlockchain(snapshotId);
+      await revertBlockchain(snapshotId);
     });
 
     beforeEach(async () => {
@@ -403,7 +403,7 @@ describe('contract NavIssuanceModule', () => {
     });
 
     after(async () => {
-      revertBlockchain(snapshotId);
+      await revertBlockchain(snapshotId);
     });
 
     beforeEach(async () => {
@@ -448,7 +448,7 @@ describe('contract NavIssuanceModule', () => {
     });
 
     after(async () => {
-      revertBlockchain(snapshotId);
+      await revertBlockchain(snapshotId);
     });
 
     beforeEach(async () => {
@@ -493,7 +493,7 @@ describe('contract NavIssuanceModule', () => {
     });
 
     after(async () => {
-      revertBlockchain(snapshotId);
+      await revertBlockchain(snapshotId);
     });
 
     beforeEach(async () => {
@@ -558,7 +558,7 @@ describe('contract NavIssuanceModule', () => {
     });
 
     after(async () => {
-      revertBlockchain(snapshotId);
+      await revertBlockchain(snapshotId);
     });
 
     beforeEach(async () => {
@@ -636,7 +636,7 @@ describe('contract NavIssuanceModule', () => {
     });
 
     after(async () => {
-      revertBlockchain(snapshotId);
+      await revertBlockchain(snapshotId);
     });
 
     beforeEach(async () => {
@@ -718,7 +718,7 @@ describe('contract NavIssuanceModule', () => {
     });
 
     after(async () => {
-      revertBlockchain(snapshotId);
+      await revertBlockchain(snapshotId);
     });
 
     beforeEach(async () => {
@@ -819,7 +819,7 @@ describe('contract NavIssuanceModule', () => {
     });
 
     afterEach(async () => {
-      revertBlockchain(snapshotId);
+      await revertBlockchain(snapshotId);
     });
 
     context('when there are 4 components and reserve asset is USDC', async () => {
@@ -1259,7 +1259,7 @@ describe('contract NavIssuanceModule', () => {
     });
 
     afterEach(async () => {
-      revertBlockchain(snapshotId);
+      await revertBlockchain(snapshotId);
     });
 
     context('when there are 4 components and reserve asset is ETH', async () => {
@@ -1609,7 +1609,7 @@ describe('contract NavIssuanceModule', () => {
     });
 
     afterEach(async () => {
-      revertBlockchain(snapshotId);
+      await revertBlockchain(snapshotId);
     });
 
     context('when there are 4 components and reserve asset is USDC', async () => {
@@ -2094,7 +2094,7 @@ describe('contract NavIssuanceModule', () => {
     });
 
     afterEach(async () => {
-      revertBlockchain(snapshotId);
+      await revertBlockchain(snapshotId);
     });
 
     context('when there are 4 components and reserve asset is USDC', async () => {
@@ -2474,7 +2474,7 @@ describe('contract NavIssuanceModule', () => {
     });
 
     afterEach(async () => {
-      revertBlockchain(snapshotId);
+      await revertBlockchain(snapshotId);
     });
 
     describe('addReserveAsset', () => {

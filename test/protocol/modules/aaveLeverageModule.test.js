@@ -870,7 +870,7 @@ describe('contract AaveLeverageModule', () => {
     });
 
     afterEach(async () => {
-      revertBlockchain(snapshotId);
+      await revertBlockchain(snapshotId);
     });
 
     async function initContracts() {
@@ -1251,7 +1251,7 @@ describe('contract AaveLeverageModule', () => {
     });
 
     afterEach(async () => {
-      revertBlockchain(snapshotId);
+      await revertBlockchain(snapshotId);
     });
 
     async function initContracts() {
@@ -1496,7 +1496,7 @@ describe('contract AaveLeverageModule', () => {
     });
 
     afterEach(async () => {
-      revertBlockchain(snapshotId);
+      await revertBlockchain(snapshotId);
     });
 
     function initVariables() {
@@ -1831,7 +1831,7 @@ describe('contract AaveLeverageModule', () => {
     });
 
     afterEach(async () => {
-      revertBlockchain(snapshotId);
+      await revertBlockchain(snapshotId);
     });
 
     async function initContracts() {
@@ -2031,7 +2031,7 @@ describe('contract AaveLeverageModule', () => {
     });
 
     afterEach(async () => {
-      revertBlockchain(snapshotId);
+      await revertBlockchain(snapshotId);
     });
 
     async function initContracts() {
@@ -2188,7 +2188,7 @@ describe('contract AaveLeverageModule', () => {
     });
 
     afterEach(async () => {
-      revertBlockchain(snapshotId);
+      await revertBlockchain(snapshotId);
     });
 
     async function initContracts() {
@@ -2279,7 +2279,7 @@ describe('contract AaveLeverageModule', () => {
     });
 
     afterEach(async () => {
-      revertBlockchain(snapshotId);
+      await revertBlockchain(snapshotId);
     });
 
     context('when aWETH and aDAI are collateral and WETH and DAI are borrow assets', async () => {
@@ -2465,7 +2465,7 @@ describe('contract AaveLeverageModule', () => {
     });
 
     afterEach(async () => {
-      revertBlockchain(snapshotId);
+      await revertBlockchain(snapshotId);
     });
 
     context('when aWETH and aDAI are collateral and WETH and DAI are borrow assets', async () => {
@@ -2657,7 +2657,7 @@ describe('contract AaveLeverageModule', () => {
     });
 
     afterEach(async () => {
-      revertBlockchain(snapshotId);
+      await revertBlockchain(snapshotId);
     });
 
     context('when aWETH is collateral and DAI is borrow asset', async () => {
@@ -2793,7 +2793,7 @@ describe('contract AaveLeverageModule', () => {
     });
 
     afterEach(async () => {
-      revertBlockchain(snapshotId);
+      await revertBlockchain(snapshotId);
     });
 
     context('when aWETH is collateral and DAI is borrow asset', async () => {
@@ -2950,7 +2950,7 @@ describe('contract AaveLeverageModule', () => {
     });
 
     afterEach(async () => {
-      revertBlockchain(snapshotId);
+      await revertBlockchain(snapshotId);
     });
 
     async function removeModule() {
@@ -3035,7 +3035,7 @@ describe('contract AaveLeverageModule', () => {
     });
 
     afterEach(async () => {
-      revertBlockchain(snapshotId);
+      await revertBlockchain(snapshotId);
     });
 
     async function initContracts() {
@@ -3151,7 +3151,7 @@ describe('contract AaveLeverageModule', () => {
     });
 
     afterEach(async () => {
-      revertBlockchain(snapshotId);
+      await revertBlockchain(snapshotId);
     });
 
     async function initContracts() {
@@ -3299,7 +3299,7 @@ describe('contract AaveLeverageModule', () => {
     });
 
     afterEach(async () => {
-      revertBlockchain(snapshotId);
+      await revertBlockchain(snapshotId);
     });
 
     async function updateAllowedMatrixToken() {
@@ -3361,7 +3361,7 @@ describe('contract AaveLeverageModule', () => {
     });
 
     afterEach(async () => {
-      revertBlockchain(snapshotId);
+      await revertBlockchain(snapshotId);
     });
 
     async function updateAnyMatrixAllowed() {
@@ -3409,7 +3409,7 @@ describe('contract AaveLeverageModule', () => {
     });
 
     afterEach(async () => {
-      revertBlockchain(snapshotId);
+      await revertBlockchain(snapshotId);
     });
 
     async function addUnderlyingToReserveTokensMapping() {

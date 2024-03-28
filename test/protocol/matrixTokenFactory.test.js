@@ -28,7 +28,7 @@ describe('contract MatrixTokenFactory', () => {
   });
 
   after(async () => {
-    revertBlockchain(snapshotId);
+    await revertBlockchain(snapshotId);
   });
 
   describe('constructor', () => {

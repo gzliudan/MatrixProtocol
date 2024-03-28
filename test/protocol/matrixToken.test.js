@@ -40,7 +40,7 @@ describe('contract MatrixToken', () => {
       });
 
       afterEach(async () => {
-        revertBlockchain(snapshotId);
+        await revertBlockchain(snapshotId);
       });
 
       it('should revert when the calling module is disabled', async () => {
@@ -65,7 +65,7 @@ describe('contract MatrixToken', () => {
       });
 
       afterEach(async () => {
-        revertBlockchain(snapshotId);
+        await revertBlockchain(snapshotId);
       });
 
       it('should revert when the MatrixToken is locked', async () => {

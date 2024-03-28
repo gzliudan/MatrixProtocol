@@ -28,7 +28,7 @@ describe('contract IntegrationRegistry', () => {
   });
 
   after(async () => {
-    revertBlockchain(snapshotId);
+    await revertBlockchain(snapshotId);
   });
 
   describe('addIntegration', () => {

@@ -46,7 +46,7 @@ describe('contract BasicIssuanceModule', () => {
     });
 
     after(async () => {
-      revertBlockchain(snapshotId);
+      await revertBlockchain(snapshotId);
     });
 
     beforeEach(async () => {
@@ -125,7 +125,7 @@ describe('contract BasicIssuanceModule', () => {
     });
 
     after(async () => {
-      revertBlockchain(snapshotId);
+      await revertBlockchain(snapshotId);
     });
 
     beforeEach(async () => {
@@ -143,7 +143,7 @@ describe('contract BasicIssuanceModule', () => {
       });
 
       after(async () => {
-        revertBlockchain(snapshotId);
+        await revertBlockchain(snapshotId);
       });
 
       it('should revert when the issue issueQuantity is 0', async () => {
@@ -247,7 +247,7 @@ describe('contract BasicIssuanceModule', () => {
       });
 
       after(async () => {
-        revertBlockchain(snapshotId);
+        await revertBlockchain(snapshotId);
       });
 
       it('should properly call the pre-issue hooks', async () => {
@@ -294,7 +294,7 @@ describe('contract BasicIssuanceModule', () => {
     });
 
     after(async () => {
-      revertBlockchain(snapshotId);
+      await revertBlockchain(snapshotId);
     });
 
     beforeEach(async () => {
