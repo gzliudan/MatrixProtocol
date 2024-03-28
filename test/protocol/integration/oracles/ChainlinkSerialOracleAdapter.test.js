@@ -19,7 +19,7 @@ describe('contract ChainlinkSerialOracleAdapter', () => {
   let BTC;
   let ETH;
   let USD;
-  const intermediaryAsset = ETH;
+  let intermediaryAsset;
 
   let baseAsset;
   let quotaAsset;
@@ -35,6 +35,7 @@ describe('contract ChainlinkSerialOracleAdapter', () => {
     USD = await getRandomAddress();
     snapshotId = await snapshotBlockchain();
 
+    intermediaryAsset = ETH;
     chainlinkFeedRegistryMock = await deployContract('ChainlinkFeedRegistryMock', [], owner);
     chainlinkSerialOracleAdapter = await deployContract('ChainlinkSerialOracleAdapter', [chainlinkFeedRegistryMock.address, intermediaryAsset], owner);
   });
