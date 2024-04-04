@@ -95,7 +95,7 @@
     "solhint-plugin-prettier": "^0.1.0",
     "solidity-coverage": "^0.8.11",
     "strip-ansi-cli": "^4.0.0",
-    "web3": "^1.10.4"
+    "web3": "^4.7.0"
   },
   "dependencies": {
     "@chainlink/contracts": "^1.0.0",
