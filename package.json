@@ -98,7 +98,7 @@
     "web3": "^1.10.4"
   },
   "dependencies": {
-    "@chainlink/contracts": "^0.4.0",
+    "@chainlink/contracts": "^1.0.0",
     "@openzeppelin/contracts": "4.9.6"
   }
 }
